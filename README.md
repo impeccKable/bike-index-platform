@@ -1,4 +1,6 @@
 # Bike Index Platform
+Spring/Summer 2023 Capstone
+
 Created by:
 - Bruce Truong
 - Cheng Lin
