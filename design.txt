@@ -1,0 +1,181 @@
+
+Frontend
+	Pages
+		Home/Login
+			Title
+			UsernameField
+			PasswordField
+			Button           // Login
+		Sign up
+			Title
+			EmailField       // Email
+			PasswordField    // Password
+			PasswordField    // Verify password
+			TextField        // First name
+			TextField        // Last name
+			TextField        // Title
+			PhoneField       // Phone
+			Button           // Submit
+			// Successful submition page? or back to login?
+		About
+			Title
+			InfoField        // About website (editable by admin)
+			StatsField
+			Button           // Back
+		ThiefList
+			// Title (?)
+			SearchField      // Search
+			Button           // New Thief Entry
+			Button           // Users (admin only)
+			Button           // Logout
+			Table            //   (order by recent if search is blank)
+		ThiefEdit
+			TextField        // Name
+			EmailField       // Email
+			UrlField         // Url
+			FullAddrField    // Addrs
+			PhoneField       // Phone
+			BikeSerialField  // BikeSerial
+			NotesField       // Phrase
+			NotesField       // Notes
+			// ?             // Files
+			Button           // Submit
+			VerifyButton     // Cancel
+			VerifyButton     // Delete
+		UserList
+			// Title (?)
+			SearchField      // Search
+			Button           // New Thief Entry
+			Button           // Users (admin only)
+			Button           // Logout
+			Table            //   (order by not banned, recent if search is blank)
+		UserEdit
+			EmailField       // Email
+			PasswordField    // Password
+			TextField        // FirstName
+			TextField        // LastName
+			TextField        // Title
+			PhoneField       // Phone
+			DropdownField    // Role     ["Read Only", "Read Write", "Admin"]
+			DropdownField    // Approved ["No", "Yes"]
+			DropdownField    // Banned   ["No", "Yes"]
+			Button           // Submit
+			Button           // Cancel
+	InputFields
+		// allowMultiple: includes a '+' button to add multiple fields
+		// should the inputs all have a [name: string] parameter? (text to the left of the field?)
+		// should the inputs all be row elements of a table so they line up with each other?
+		MenuBar (?)
+		Title           (text: string)
+		Table           (children: ReactNode, collapsibleColumns: bool = true)
+			HeaderRow    (children: ReactNode, collapsibleColumns: bool = true)
+			Row          (children: ReactNode) // Clickable
+		Button          (text: string)
+		VerifyButton    (text: string) // asks if you are sure (delete/cancel)
+		DropdownField   (options: string[], selected: string = null)
+		SearchField     (width: float)
+		TextField       (width: float,                allowMultiple: bool = true)
+		NotesField      (width: float, height: float, allowMultiple: bool = true) // resizeable, multi-line
+		PhoneField      (allowMultiple: bool = true)
+		EmailField      (allowMultiple: bool = true)
+		UrlField        (allowMultiple: bool = true)
+		BikeSerialField (allowMultiple: bool = true)
+		FullAddrField   (allowMultiple: bool = true) // includes: addr TextField, city TextField, state DropdownField, zip ZipField
+		ZipField        ()
+		UsernameField   () // use just EmailField instead?
+		PasswordField   ()
+		InfoField       (editableByAdmin: bool = true)
+		StatsField      ()
+Backend
+	help meeee
+API
+	ThiefIdsFromSearch(
+			search: string,
+			fieldName: string = null,
+			matchType: string = "exact"
+			) -> int[]
+		// matchType
+			// ['exact', 'within', 'similar']
+			// within: one field is inside the other
+			// similar: uses 'fuzzy' similarity (Levenshtein distance)
+		// I would prefer not having all these (unless/until they're needed)
+			ThiefIdsFromName      (name:       string) -> int[]
+			ThiefIdsFromEmail     (email:      string) -> int[]
+			ThiefIdsFromUrl       (url:        string) -> int[]
+			ThiefIdsFromAddr      (addr:       string) -> int[]
+			ThiefIdsFromCity      (city:       string) -> int[]
+			ThiefIdsFromState     (state:      string) -> int[]
+			ThiefIdsFromZip       (zip:        string) -> int[]
+			ThiefIdsFromPhone     (phone:      string) -> int[]
+			ThiefIdsFromBikeSerial(bikeSerial: string) -> int[]
+			ThiefIdsFromPhrase    (phrase:     string) -> int[]
+	ThiefInfoFromId(id: int) -> dict
+		// dict contains most info about thief
+	LogEvent(source: string, message: string)
+Database
+	thief
+		thiefId      int
+		name         text
+		email        text
+		url          text
+		-- What if there are multiple addresses?
+			-- Should each field have a list of the same length?
+			-- Should these 4 be separated into an addr table?
+		addr         text
+		city         text
+		state        text
+		zip          text
+		phone        text
+		bikeSerial   text
+		phrase       text
+		notes        text
+		-- files        text
+
+		-- (metadata)
+		editTime     timestamp
+		editUserId   int
+		approved     bool
+		deleted      bool
+	user
+		userId       int
+		email        text
+		password     text  -- hash
+		firstName    text
+		lastName     text
+		title        text
+		phone        text  -- only digits
+			-- text not int because searches need text for substrings
+		role         text  -- ["admin", "readWrite", "readOnly"]
+
+		-- (metadata)
+		editTime     timestamp
+		editUserId   int
+		approved     bool
+		banned       bool  -- acts as if user does not exist
+	event
+		-- all behaviors in the web system will be stored here
+		--   (errors, successes, failures, info, etc..)
+		eventId      int
+		datetime     timestamp
+		source       text
+		message      text
+	-- Separating these would make metadata/revision history complex
+		-- They could be separated out later on
+		-- But addr might need to be separate regardless
+		addr
+			addrId       int
+			thiefId      int
+			line1        text
+			line2        text
+			city         text
+			state        text
+			zip          text
+		url
+			-- there could be a lot of these for 1 thief
+			urlId        int
+			thiefId      int
+			url          text
+		notes
+			urlId        int
+			thiefId      int
+			url          text
