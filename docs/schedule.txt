@@ -1,0 +1,29 @@
+
+Schedule
+	Sprint 1 (5/23)
+		Mockup pages (Emerson/Cristian)
+			Visual
+			Hooks
+			Basic navigation
+			Basic structure
+		API (gets/posts/puts) (Matt/Cheng)
+			Design
+			Mock up database
+	Sprint 2 (6/6)
+		Search feature
+		Database (upload csv)
+	Sprint 3 (6/20)
+		Login (auth0?)
+		Authentication (session information)
+		Flesh out pages
+		Stats
+	Sprint 4 (7/4)
+		User management
+		Roles
+	Sprint 5 (7/18)
+		Site management (files on server)
+		Note fields
+	Sprint 6 (8/1)
+	Sprint 7 (8/15)
+	Presentation (8/29)
+	Finals week (9/3)
