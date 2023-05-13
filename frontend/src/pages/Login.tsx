@@ -1,9 +1,10 @@
 import { useState } from 'react'
+import { MultiField, TextField } from '../components/InputFields'
 import '../App.css'
 
 function Login() {
-  const [searchText, setSearchText] = useState("")
-  const [searchTextType, setSearchTextType] = useState("")
+  // const [searchText, setSearchText] = useState("")
+  // const [searchTextType, setSearchTextType] = useState("")
 
   // function isEmail(text: string) {
   //   return text.includes("@")
@@ -12,26 +13,30 @@ function Login() {
   //   return text.match(/^[0-9 +\-\.\(\)]*[0-9]+[0-9 +\-\.\(\)]*$/)
   // }
 
-  function handleSearchInput(e: any) {
-    let newSearchText = e.target.value
-    let newSearchTextType = ""
-    if (newSearchText.includes("@")) {
-      newSearchTextType = "email"
-    } else if (newSearchText.match(/^[0-9 +\-\.\(\)]*[0-9]+[0-9 +\-\.\(\)]*$/)) {
-      newSearchTextType = "phone"
-    } else {
-      newSearchTextType = ""
-    }
-    setSearchTextType(newSearchTextType)
-    setSearchText(newSearchText)
+  // function handleSearchInput(e: any) {
+  //   let newSearchText = e.target.value
+  //   let newSearchTextType = ""
+  //   if (newSearchText.includes("@")) {
+  //     newSearchTextType = "email"
+  //   } else if (newSearchText.match(/^[0-9 +\-\.\(\)]*[0-9]+[0-9 +\-\.\(\)]*$/)) {
+  //     newSearchTextType = "phone"
+  //   } else {
+  //     newSearchTextType = ""
+  //   }
+  //   setSearchTextType(newSearchTextType)
+  //   setSearchText(newSearchText)
+  // }
+
+  const [username, setUsername] = useState("")
+  function handleUsername(data: any) {
+    setUsername(data)
   }
 
   return (
     <>
       <h1>Login Page</h1>
-      Username <input type="text" value={searchText} onChange={handleSearchInput}/>
-      <br></br>
-      {searchTextType}
+      Username <MultiField componentType={TextField} onChange={handleUsername} />
+      <p>Entered: {username}</p>
     </>
   )
 }
