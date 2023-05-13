@@ -7,7 +7,7 @@ import './App.css'
 function App() {
   return (
     <div className="App">
-      <Navbar />
+      {/* <Navbar /> */}
       <Routes>
         <Route path='/'       element={<Login  />}></Route>
         <Route path='/signup' element={<Signup />}></Route>

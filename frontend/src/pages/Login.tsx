@@ -27,16 +27,68 @@ function Login() {
   //   setSearchText(newSearchText)
   // }
 
-  const [username, setUsername] = useState("")
-  function handleUsername(data: any) {
-    setUsername(data)
-  }
+
+
+
+  // const [username, setUsername] = useState("")
+  // function handleUsername(data: any) {
+  //   setUsername(data)
+  // }
+
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  function handleEmailChange(e: any) {
+    setEmail(e.target.value)
+  };
+
+  function handlePasswordChange(e: any) {
+    setPassword(e.target.value)
+  };
+
+  function handleFormSubmit(e: any) {
+    e.preventDefault()
+    // handle login logic here
+  };
 
   return (
     <>
-      <h1>Login Page</h1>
+      {/* <h1>Login Page</h1>
       Username <MultiField componentType={TextField} onChange={handleUsername} />
-      <p>Entered: {username}</p>
+      <p>Entered: {username}</p> */}
+
+      <div className="login-page">
+        <h1 className="title">Bike Index Platform</h1>
+        <form onSubmit={handleFormSubmit}>
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={handleEmailChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={handlePasswordChange}
+              required
+            />
+          </div>
+          <button className="btn-submit" type="submit">
+            Sign In
+          </button>
+        </form>
+        <div className="links">
+          <a href="#">Sign Up</a>
+          <a href="#">Forgot Password</a>
+        </div>
+      </div>
     </>
   )
 }
