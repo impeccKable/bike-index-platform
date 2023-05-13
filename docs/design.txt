@@ -63,15 +63,15 @@ Frontend
 			Button           // Cancel
 	InputFields
 		// allowMultiple: includes a '+' button to add multiple fields
-		// should the inputs all have a [name: string] parameter? (text to the left of the field?)
 		// should the inputs all be row elements of a table so they line up with each other?
 		MenuBar (?)
+		Modal           (text: string)
 		Title           (text: string)
 		Table           (children: ReactNode, collapsibleColumns: bool = true)
 			HeaderRow    (children: ReactNode, collapsibleColumns: bool = true)
 			Row          (children: ReactNode) // Clickable
 		Button          (text: string)
-		VerifyButton    (text: string) // asks if you are sure (delete/cancel)
+		VerifyButton    (text: string) // creates Modal to verify (delete/cancel)
 		DropdownField   (options: string[], selected: string = null)
 		SearchField     (width: float)
 		TextField       (width: float,                allowMultiple: bool = true)

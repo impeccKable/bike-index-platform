@@ -3,9 +3,26 @@ Schedule
 	Sprint 1 (5/23)
 		Mockup pages (Emerson/Cristian)
 			Visual
+				Bootstrap
+					ChatGPT??
 			Hooks
-			Basic navigation
+				useEffect
+					API calls
+				useState
+					ui variables
+			--Basic navigation
 			Basic structure
+				use design notes
+
+			Emerson
+				ThiefEdit
+				UserEdit
+				Home/Login
+				Sign up
+			Cristian
+				ThiefList
+				UserList
+				About
 		API (gets/posts/puts) (Matt/Cheng)
 			Design
 			Mock up database
