@@ -5,7 +5,7 @@
   text-align: center;
 }
 
-.login-page {
+.login-page, .signup-page {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -38,6 +38,22 @@ form {
   align-items: center;
   margin-bottom: 1rem;
 }
+
+ol {
+  padding: 0;
+  margin-left: 0rem;
+  list-style-type: none;
+}
+/*
+
+li {
+  display: flex;
+  align-items: center;
+}
+
+button {
+  margin: 0.5rem;
+} */
 
 label {
   font-size: 1rem;
