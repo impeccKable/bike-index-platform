@@ -95,7 +95,7 @@ interface FormButtonProps extends React.HTMLButtonElement {
   [key: string]: any
 }
 export function FormButton(props: FormButtonProps) {
-  return <div className='btn-group'>
+  return <div className='btn-div'>
     <button className={props.type === 'submit' ? 'btn-submit' : ''} {...props} />
   </div>
 }
@@ -141,7 +141,7 @@ interface LinkButtonProps extends React.HTMLButtonElement {
 }
 export function LinkButton(props: LinkButtonProps) {
   const { to, ...rest } = props
-  return <div className='btn-group'>
+  return <div className='btn-div'>
     <Link to={to}><button {...rest} /></Link>
   </div>
 }

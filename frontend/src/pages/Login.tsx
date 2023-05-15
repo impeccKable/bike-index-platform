@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import '../App.css'
 import { Form, FormInput, FormButton } from '../components/Form'
 import { useNavigate } from 'react-router-dom'
 
@@ -16,11 +15,11 @@ function Login() {
       <FormInput label="Email" name="email" type="text" />
       <FormInput label="Password" name="password" type="password" />
       <FormButton className="btn-submit" type="submit">Sign In</FormButton>
+      <div className="links">
+        <a href="/signup">Sign Up</a>
+        <a href="/">Forgot Password</a>
+      </div>
     </Form>
-    <div className="links">
-      <a href="/signup">Sign Up</a>
-      <a href="/">Forgot Password</a>
-    </div>
   </div>
 }
 

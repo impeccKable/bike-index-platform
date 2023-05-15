@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import '../App.css'
-import { Form, FormInput, FormButton } from '../components/Form'
+import { Form, FormInput, FormButton, LinkButton } from '../components/Form'
 
 function Signup() {
   const [ submitted, setSubmitted ] = useState(false)
@@ -24,12 +23,12 @@ function Signup() {
       <FormInput label="Password"   name="password"   required type="password" />
       <FormInput label="(again)"    name="verify"     required type="password" labelProps={{ style: { color: '#666' }}} />
       <FormInput label="Phone"      name="phone"      required placeholder="+1 222 333 4444" type="phone" />
-      <FormButton type="submit">Submit</FormButton>
+      <div className="links">
+        <LinkButton to="..">Back</LinkButton>
+        <FormButton type="submit">Submit</FormButton>
+      </div>
       {submitted && submitMessage}
     </Form>
-    <div className="links">
-      <a href="..">Back</a>
-    </div>
   </div>
 }
 
