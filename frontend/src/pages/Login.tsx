@@ -1,7 +1,57 @@
 import { useState } from 'react'
 import '../App.css'
+import { Form, FormInput, FormButton } from '../components/Form'
+import { useNavigate } from 'react-router-dom'
 
 function Login() {
+  const navigate = useNavigate()
+  function handleSubmit(e: any) {
+    e.preventDefault()
+    console.log(e.dataDict)
+    navigate('/thiefs')
+  }
+  return <div className="login-page">
+    <h1 className="title">Bike Index Platform</h1>
+    <Form onSubmit={handleSubmit}>
+      <FormInput label="Email" name="email" type="text" />
+      <FormInput label="Password" name="password" type="password" />
+      <FormButton className="btn-submit" type="submit">Sign In</FormButton>
+    </Form>
+    <div className="links">
+      <a href="/signup">Sign Up</a>
+      <a href="/">Forgot Password</a>
+    </div>
+  </div>
+}
+
+export default Login
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      // {/* <h1>Login Page</h1>
+      // Username <MultiField componentType={TextField} onChange={handleUsername} />
+      // <p>Entered: {username}</p> */}
+
+
+
+
   // const [searchText, setSearchText] = useState("")
   // const [searchTextType, setSearchTextType] = useState("")
 
@@ -34,65 +84,11 @@ function Login() {
   //   setUsername(data)
   // }
 
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
 
-  function handleEmailChange(e: any) {
-    setEmail(e.target.value)
-  };
 
-  function handlePasswordChange(e: any) {
-    setPassword(e.target.value)
-  };
 
-  function handleFormSubmit(e: any) {
-    e.preventDefault()
-    // handle login logic here
-  };
 
-  return (
-    <>
-      {/* <h1>Login Page</h1>
-      Username <MultiField componentType={TextField} onChange={handleUsername} />
-      <p>Entered: {username}</p> */}
 
-      <div className="login-page">
-        <h1 className="title">Bike Index Platform</h1>
-        <form onSubmit={handleFormSubmit}>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={handleEmailChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={handlePasswordChange}
-              required
-            />
-          </div>
-          <button className="btn-submit" type="submit">
-            Sign In
-          </button>
-        </form>
-        <div className="links">
-          <a href="#">Sign Up</a>
-          <a href="#">Forgot Password</a>
-        </div>
-      </div>
-    </>
-  )
-}
-
-export default Login
 
 // import { useState } from 'react'
 // import reactLogo from './assets/react.svg'

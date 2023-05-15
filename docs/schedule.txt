@@ -10,7 +10,7 @@ Schedule
 					API calls
 				useState
 					ui variables
-			--Basic navigation
+			Basic navigation
 			Basic structure
 				use design notes
 

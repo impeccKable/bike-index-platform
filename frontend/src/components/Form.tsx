@@ -1,12 +1,13 @@
-import React from 'react'
 import { useState } from 'react'
+import React, { Children } from 'react'
+import { Link } from 'react-router-dom'
 
+// A custom version of a form that compiles the form data into a dictionary
+//   and will later handle the submission and stuff
 interface FormProps {
   children: any
   onSubmit: (e: any) => void
 }
-// A custom version of a form that compiles the form data into a dictionary
-//   and will later handle the submission and stuff
 export function Form(props: FormProps) {
   const { children, onSubmit } = props
   const [data, setData] = useState({})
@@ -70,7 +71,7 @@ export function MultiField(props: MultiFieldProps) {
     }
   }
   return (
-    <div className='formGroup'>
+    <div className='form-group'>
       <label>{label}</label>
       <ol>
         {values.map((value, idx) => (
@@ -91,85 +92,56 @@ export function MultiField(props: MultiFieldProps) {
 }
 
 interface FormButtonProps extends React.HTMLButtonElement {
-  name: string
   [key: string]: any
 }
 export function FormButton(props: FormButtonProps) {
-  return <button {...props} />
+  return <div className='btn-group'>
+    <button className={props.type === 'submit' ? 'btn-submit' : ''} {...props} />
+  </div>
 }
 
 interface FormInputProps extends React.HTMLInputElement {
   name: string
   label?: string
+  labelProps?: React.HTMLElement
   type?: string
   [key: string]: any
 }
 export function FormInput(props: FormInputProps) {
-  const { label, type = 'text', ...rest } = props
-  if (label === undefined) { return <input type={type} {...rest} /> }
-  return <div className='formGroup'>
-    <label>{label}</label> <input type={type} {...rest} />
+  const { label, labelProps, type = 'text', ...rest } = props
+  let ret = null
+  switch (type) {
+    case 'select':
+      ret = <select {...rest} />; break;
+    case 'textarea':
+      ret = <textarea {...rest} />; break;
+    case 'phone':
+      ret = <input type='tel' {...rest} />; break;
+    default:
+      ret = <input type={type} {...rest} />
+  }
+  if (label) {
+    return <div className='form-group'>
+      <label {...labelProps || {}}>{label}</label> {ret}
+    </div>
+  }
+  return ret
+}
+
+interface InfoProps extends React.HTMLElement {
+  [key: string]: any
+}
+export function Info(props: InfoProps) {
+  return <div className='info' {...props}></div>
+}
+
+interface LinkButtonProps extends React.HTMLButtonElement {
+  to: string
+  [key: string]: any
+}
+export function LinkButton(props: LinkButtonProps) {
+  const { to, ...rest } = props
+  return <div className='btn-group'>
+    <Link to={to}><button {...rest} /></Link>
   </div>
 }
-
-interface FormSelectProps extends React.HTMLSelectElement {
-  label: string
-  name: string
-}
-export function FormSelect(props: FormSelectProps) {
-  const { label, ...rest } = props
-  return (
-    <div className='formGroup'>
-      <label>{label}</label>
-      <select {...rest} />
-    </div>
-  )
-}
-
-interface FormTextAreaProps extends React.HTMLTextAreaElement {
-  label: string
-  name: string
-}
-export function FormTextArea(props: FormTextAreaProps) {
-  const { label, ...rest } = props
-  return (
-    <div className='formGroup'>
-      <label>{label}</label>
-      <textarea {...props} />
-    </div>
-  )
-}
-
-
-
-
-
-// This is a version of FormInput that handles its own state
-// interface FormInputProps extends React.HTMLInputElement {
-//   name: string
-//   label?: string
-//   type?: string
-//   [key: string]: any
-// }
-// export function FormInput(props: FormInputProps) {
-//   const { label, onChange, value: valueStart, type = 'text', ...rest } = props
-//   const [value, setValue] = useState(valueStart || '')
-//   function handleChange(e: React.ChangeEvent) {
-//     setValue(e.target.value)
-//     if (onChange) { onChange(e) }
-//   }
-//   const inp = <input type={type} value={value} onChange={handleChange} {...rest} />
-//   if (label === undefined) { return inp }
-//   return <div className='formGroup'>
-//     <label>{label}</label> {inp}
-//   </div>
-// }
-
-// Different buttons
-            // {/* <button type="button" onClick={() => removeField(idx)} disabled={values.length === 1}>-</button> */}
-            // {/* {(idx === 0 || idx === values.length - 1) && (
-            //   <div>
-            //     <button type="button" onClick={addField}>+</button>
-            //     <button type="button" onClick={removeField} disabled={values.length === 1}>-</button>
-            //   </div>
-            // )} */}
