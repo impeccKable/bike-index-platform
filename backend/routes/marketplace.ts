@@ -1,9 +1,8 @@
 import express from 'express';
+import marketplaceController from '../controllers/marketplaceController';
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  res.send('Links page');
-});
+router.get('/', marketplaceController.getAll);
 
 export default router;
