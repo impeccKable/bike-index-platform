@@ -1,20 +1,25 @@
 /** @format */
 
-// const express = require('express');
-// const path = require('path');
 import express from 'express';
+// import http from 'http';
 
-import indexRoutes from './routes/index';
-// const indexRoutes = require('./routes/index');
-const usersRoutes = require('./routes/users');
-const nameRoutes = require('./routes/name');
+import { index } from './routes/index';
+import { name } from './routes/name';
+
+const port = process.env.PORT || 3000;
 
 const app = express();
 
+app.set('port', port);
+
+// const server = http.createServer(app);
+
 app.use(express.json());
 
-app.use('/', indexRoutes);
-app.use('/users', usersRoutes);
-app.use('/name', nameRoutes);
+app.use('/', index);
+app.use('/name', name);
 
-module.exports = app;
+app.listen(port, () => {
+  console.log(`listening on port http://localhost:${port}`);
+});
+export default app;

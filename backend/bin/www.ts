@@ -4,8 +4,10 @@
  * Module dependencies
  */
 
-const app = require('../dist/app');
-const http = require('http');
+// const app = require('../dist/app');
+import app from '../app';
+import http from 'http';
+// const http = require('http');
 
 const port = process.env.PORT || 3000;
 
