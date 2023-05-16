@@ -12,4 +12,5 @@ This script will run `npx tsc` to compile the program and then run `node ./dist/
 npm run build
 ```
 
+<br>
 more detail to be added
