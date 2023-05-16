@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "npm i --save-dev @types/mysql",
     "build": "npx tsc",
-    "start": "node ./dist/app.js",
+    "start": "npx tsc && node ./dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
