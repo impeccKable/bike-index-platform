@@ -1,7 +1,9 @@
 /** @format */
 
+import { Request, Response } from 'express';
+
 const indexController = {
-  home: (req: any, res: any) => {
+  home: (req: Request, res: Response) => {
     res.send('home page');
   },
 };
