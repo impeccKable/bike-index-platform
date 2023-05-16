@@ -22,6 +22,16 @@ const marketplaceController = {
       res.status(400).send('Invalid link parameter');
     }
   },
+
+  addOne: (req: Request, res: Response) => {
+    const { link } = req.body;
+    try {
+      marketplaceModel.addOne(link);
+      res.status(200).send('Successful adding link to db');
+    } catch (err) {
+      res.status(500).send('Error adding link to db');
+    }
+  },
 };
 
 export default marketplaceController;
