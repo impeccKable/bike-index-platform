@@ -1,7 +1,12 @@
-// import { faker } from '@faker-js/faker';
-const faker = require('@faker-js/faker');
+import { faker } from '@faker-js/faker';
+// const { faker } = require('@faker-js/faker');
 
-let fakeName = new Array();
+type Person {
+  id: number;
+  name: string;
+}
+
+const fakeName: any[] = [];
 for (let i = 0; i <= 20; i++) {
   const newPerson = {
     id: i + 1,
@@ -11,7 +16,8 @@ for (let i = 0; i <= 20; i++) {
 }
 
 const nameModel = {};
-nameModel.getAll = (callback) => {
+
+nameModel.getAll = () => {
   return fakeName;
 };
 
@@ -22,14 +28,14 @@ nameModel.addOne = (name, callback) => {
       name: name,
     };
     fakeName.push(newPerson);
-    return true;
+    return fakeName;
   } catch (err) {
     return err;
   }
 };
 
-nameModel.getByName = (name, callback) => {
-  let result = new Array();
+nameModel.getByName = (name) => {
+  let result = [];
   fakeName.forEach((person) => {
     if (person.name === name) {
       result.push(person);
@@ -67,4 +73,5 @@ nameModel.getByName = (name, callback) => {
 //   },
 // };
 
-module.export = nameModel;
+// module.exports = nameModel;
+export default nameModel;

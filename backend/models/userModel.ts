@@ -1,6 +1,7 @@
 /** @format */
 
-const db = require('./dbConfig');
+// const db = require('./dbConfig');
+import db from './dbConfig';
 
 const userModel = {};
 

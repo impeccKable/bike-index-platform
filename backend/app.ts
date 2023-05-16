@@ -1,9 +1,11 @@
 /** @format */
 
-const express = require('express');
-const path = require('path');
+// const express = require('express');
+// const path = require('path');
+import express from 'express';
 
-const indexRoutes = require('./routes/index');
+import indexRoutes from './routes/index';
+// const indexRoutes = require('./routes/index');
 const usersRoutes = require('./routes/users');
 const nameRoutes = require('./routes/name');
 
