@@ -6,5 +6,4 @@ const indexController = {
         res.send('home page');
     },
 };
-// module.exports = indexController;
 exports.default = indexController;

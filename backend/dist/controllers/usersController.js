@@ -1,10 +1,8 @@
 "use strict";
 // /** @format */
-// // const userModel = require('../models/userModel');
-// import { de } from '@faker-js/faker';
 // import userModel from '../models/userModel';
 // // fake users
-// let fakeUsers = [
+// const fakeUsers = [
 //   {
 //     id: 1,
 //     name: 'Fake User1',
@@ -51,5 +49,4 @@
 //     res.status(202);
 //   },
 // };
-// // module.exports = usersController;
 // export default usersController;
