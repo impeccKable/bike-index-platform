@@ -5,6 +5,9 @@ import { faker } from '@faker-js/faker';
 //   name: string;
 // };
 
+// we can als do this:
+//
+// const fakeName: Array<Person> = [];
 const fakeName: { id: number; name: string }[] = [];
 for (let i = 0; i <= 20; i++) {
   const newPerson = {
