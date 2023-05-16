@@ -1,6 +1,12 @@
 ### To run this program:
 
 ```
+cd backend
+```
+
+If you are in the root directory.
+
+```
 npm start
 ```
 
