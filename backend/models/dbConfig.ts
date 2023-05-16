@@ -1,10 +1,11 @@
 /** @format */
 
-import mysql from 'mysql';
+// import 'Connection' interface from @types/mysql
+import mysql, { Connection } from 'mysql';
 
 const useDb = false;
 
-let connection;
+let connection: Connection | any;
 
 if (useDb) {
   connection = mysql.createConnection({
