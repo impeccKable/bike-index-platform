@@ -1,6 +1,7 @@
 /** @format */
 
 import userModel from '../models/userModel';
+import { Request, Response } from 'express';
 
 // fake users
 const fakeUsers = [
@@ -16,13 +17,13 @@ const fakeUsers = [
 
 const usersController = {
   // handle get
-  getAllFake: (req: any, res: any) => {
+  getAllFake: (req: Request, res: Response) => {
     res.json(fakeUsers);
   },
 
   // handle get
   // get from db
-  getAll: (req: any, res: any) => {
+  getAll: (req: Request, res: Response) => {
     userModel.getAll((err, results, fields) => {
       if (err) {
         res.status(500).send('Error getting data from db');
@@ -34,7 +35,7 @@ const usersController = {
 
   // handle get
   // get from db
-  getById: (req: any, res: any) => {
+  getById: (req: Request, res: Response) => {
     userModel.getById(req.body.id, (err, results, fields) => {
       if (err) {
         res.status(500).send('Error getting data from db');
@@ -45,7 +46,7 @@ const usersController = {
   },
 
   // handle post
-  addFake: (req: any, res: any) => {
+  addFake: (req: Request, res: Response) => {
     const user = {
       id: fakeUsers.length + 1,
       name: req.body.name,
