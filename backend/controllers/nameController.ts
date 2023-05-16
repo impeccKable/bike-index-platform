@@ -1,53 +1,8 @@
+import { Request, Response } from 'express';
 import nameModel from '../models/nameModel';
-// const nameModel = require('../models/nameModel');
-
-// const nameController = {};
-
-// nameController.getAll = (req, res) => {
-//   // nameModel.getAll((err, results, fields) => {
-//   //   if (err) {
-//   //     res.status(500).send('Error getting all from db');
-//   //   } else {
-//   //     res.json(results);
-//   //   }
-//   // });
-//   try {
-//     res.json(nameModel.getAll());
-//   } catch (err) {
-//     res.status(500).send('Error getting names from db');
-//   }
-// };
-
-// nameController.addOne = (req, res) => {
-//   const { name } = req.body;
-//   nameModel.addOne(name, (err, results, fields) => {
-//     if (err) {
-//       res.status(500).send('Error adding name to db');
-//     } else {
-//       res.status(200).send('Successful adding data to db');
-//     }
-//   });
-// };
-
-// nameController.getByName = (req, res) => {
-//   const { name } = req.body;
-//   try {
-//     res.json(nameModel.getByName(name));
-//   } catch (err) {
-//     res.status(500).send('Error getting this name');
-//   }
-
-//   // nameModel.getByName(name, (err, results, fields) => {
-//   //   if (err) {
-//   //     res.status(500).send('Error getting data from db');
-//   //   } else {
-//   //     res.json(results);
-//   //   }
-//   // });
-// };
 
 const nameController = {
-  getAll: (req: any, res: any) => {
+  getAll: (req: Request, res: Response) => {
     try {
       res.json(nameModel.getAll());
     } catch (err) {
@@ -55,7 +10,7 @@ const nameController = {
     }
   },
 
-  addOne: (req: any, res: any) => {
+  addOne: (req: Request, res: Response) => {
     const { name } = req.body;
     try {
       nameModel.addOne(name);
@@ -72,7 +27,7 @@ const nameController = {
     // });
   },
 
-  getByName: (req: any, res: any) => {
+  getByName: (req: Request, res: Response) => {
     const { name } = req.body;
     try {
       res.send(nameModel.getByName(name));
