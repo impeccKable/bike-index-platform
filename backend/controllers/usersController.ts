@@ -36,13 +36,20 @@ const usersController = {
   // handle get
   // get from db
   getById: (req: Request, res: Response) => {
-    userModel.getById(req.body.id, (err, results, fields) => {
-      if (err) {
-        res.status(500).send('Error getting data from db');
-      } else {
-        res.json(results);
-      }
-    });
+    const { id } = req.query;
+
+    if (typeof id === 'string') {
+      const parsedId = parseInt(id, 10);
+      userModel.getById(parsedId, (err, results, fields) => {
+        if (err) {
+          res.status(500).send('Error getting data from db');
+        } else {
+          res.json(results);
+        }
+      });
+    } else {
+      res.status(400).send('Invalid id parameter');
+    }
   },
 
   // handle post
