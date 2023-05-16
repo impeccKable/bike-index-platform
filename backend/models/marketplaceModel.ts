@@ -13,6 +13,16 @@ const marketplaceModel = {
   getAll: () => {
     return fakeUrl;
   },
+
+  getByLink: (link: string) => {
+    const result: { id: number; url: string }[] = [];
+    fakeUrl.forEach((urlEntry) => {
+      if (urlEntry.url === link) {
+        result.push(urlEntry);
+      }
+    });
+    return result;
+  },
 };
 
 export default marketplaceModel;
