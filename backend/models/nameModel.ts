@@ -1,12 +1,11 @@
 import { faker } from '@faker-js/faker';
-// const { faker } = require('@faker-js/faker');
 
-type Person = {
-  id: number;
-  name: string;
-};
+// type Person = {
+//   id: number;
+//   name: string;
+// };
 
-const fakeName: Array<Person> = [];
+const fakeName: { id: number; name: string }[] = [];
 for (let i = 0; i <= 20; i++) {
   const newPerson = {
     id: i + 1,
@@ -14,34 +13,6 @@ for (let i = 0; i <= 20; i++) {
   };
   fakeName.push(newPerson);
 }
-
-// const nameModel = {};
-// nameModel.getAll = () => {
-//   return fakeName;
-// };
-
-// nameModel.addOne = (name, callback) => {
-//   try {
-//     const newPerson = {
-//       id: fakeName.length + 1,
-//       name: name,
-//     };
-//     fakeName.push(newPerson);
-//     return fakeName;
-//   } catch (err) {
-//     return err;
-//   }
-// };
-
-// nameModel.getByName = (name) => {
-//   let result = [];
-//   fakeName.forEach((person) => {
-//     if (person.name === name) {
-//       result.push(person);
-//     }
-//   });
-//   return result;
-// };
 
 const nameModel = {
   getAll: () => {
@@ -62,7 +33,7 @@ const nameModel = {
   },
 
   getByName: (name: string) => {
-    const result: Array<Person> = [];
+    const result: { id: number; name: string }[] = [];
     fakeName.forEach((person) => {
       if (person.name === name) {
         result.push(person);
@@ -72,5 +43,4 @@ const nameModel = {
   },
 };
 
-// module.exports = nameModel;
 export default nameModel;

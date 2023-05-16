@@ -1,7 +1,6 @@
 /** @format */
 
 import express from 'express';
-
 import index from './routes/index';
 import name from './routes/name';
 
