@@ -1,13 +1,13 @@
 /** @format */
 
 // import 'Connection' interface from @types/mysql
-import mysql, { Connection } from 'mysql';
+/* import mysql, { Connection } from 'mysql';
 
 const useDb = false;
+ */
+let connection: any;
 
-let connection: Connection | any;
-
-if (useDb) {
+/* if (useDb) {
   connection = mysql.createConnection({
     host: 'localhost',
     user: 'dbuser',
@@ -16,8 +16,9 @@ if (useDb) {
   });
 } else {
   connection = {
-    /* use test db */
+    /* use test db S
   };
-}
+} 
+*/
 
 export default connection;

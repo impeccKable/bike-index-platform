@@ -1,6 +1,6 @@
 /** @format */
 
-import db from './dbConfig';
+/* import db from './dbConfig';
 import { queryCallback } from 'mysql';
 
 const userModel = {
@@ -14,5 +14,6 @@ const userModel = {
     db.query(query, [id], callback);
   },
 };
-
+ */
+const userModel = {};
 export default userModel;
