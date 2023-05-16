@@ -6,11 +6,12 @@
 import * as express from 'express';
 import indexController from '../controllers/indexController';
 
-export const index = (app: express.Application) => {
-  app.get('/', indexController.home);
-};
+const router = express.Router();
+// export const index = (app: express.Application) => {
+//   app.get('/', indexController.home);
+// };
 
-// router.get('/', indexController.home);
+router.get('/', indexController.home);
 
 // module.exports = router;
-// export default router;
+export default router;

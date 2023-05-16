@@ -48,7 +48,7 @@ const nameModel_1 = __importDefault(require("../models/nameModel"));
 const nameController = {
     getAll: (req, res) => {
         try {
-            res.json(nameModel_1.default.getAll);
+            res.json(nameModel_1.default.getAll());
         }
         catch (err) {
             res.status(500).send('Error getting all from db');

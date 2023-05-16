@@ -49,7 +49,7 @@ import nameModel from '../models/nameModel';
 const nameController = {
   getAll: (req: any, res: any) => {
     try {
-      res.json(nameModel.getAll);
+      res.json(nameModel.getAll());
     } catch (err) {
       res.status(500).send('Error getting all from db');
     }

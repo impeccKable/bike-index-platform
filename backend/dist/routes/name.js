@@ -1,21 +1,46 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.name = void 0;
+// import express from 'express';
+// import { nameController } from '../controllers/nameController';
+const express = __importStar(require("express"));
 // import router from 'express.Router';
 const nameController_1 = __importDefault(require("../controllers/nameController"));
-const name = (app) => {
-    app.get('/', nameController_1.default.getAll);
-    app.get('/search/:name', nameController_1.default.getByName);
-};
-exports.name = name;
+const router = express.Router();
+// export const name = () => {
+//   router.get('/', nameController.getAll);
+//   router.get('/search/:name', nameController.getByName);
+// };
 // const router = express.Router();
 // // localhost:3000/name/
-// router.get('/', nameController.getAll);
+router.get('/', nameController_1.default.getAll);
 // // localhost:3000/name/search
 // router.get('/search/:name', nameController.getByName);
 // // localhost:3000/name/
 // // router.post('/', nameController.addOne);
-// export default router;
+exports.default = router;
