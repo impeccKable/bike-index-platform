@@ -31,11 +31,15 @@ const nameController = {
   },
 
   getByName: (req: Request, res: Response) => {
-    const { name } = req.body;
-    try {
-      res.send(nameModel.getByName(name));
-    } catch (err) {
-      res.status(500).send('Err getting data from db');
+    const { name } = req.query;
+    if (typeof name === 'string') {
+      try {
+        res.json(nameModel.getByName(name));
+      } catch (err) {
+        res.status(500).send('Err getting data from db');
+      }
+    } else {
+      res.status(400).send('Invalid name parameter');
     }
 
     // if mysql express plugin is used, we would use the function like this
