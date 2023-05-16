@@ -18,6 +18,9 @@ const nameController = {
     } catch (err) {
       res.status(500).send('Error adding name to db');
     }
+
+    // if mysql express plugin is used, we would use the function like this
+    //
     // nameModel.addOne(name, (err, results, fields) => {
     //   if (err) {
     // res.status(500).send('Error adding name to db');
@@ -34,6 +37,9 @@ const nameController = {
     } catch (err) {
       res.status(500).send('Err getting data from db');
     }
+
+    // if mysql express plugin is used, we would use the function like this
+    //
     // nameModel.getByName(name, (err, results, fields) => {
     //   if (err) {
     //     res.status(500).send('Error getting data from db');
@@ -44,5 +50,4 @@ const nameController = {
   },
 };
 
-// module.exports = nameController;
 export default nameController;
