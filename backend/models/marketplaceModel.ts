@@ -23,6 +23,18 @@ const marketplaceModel = {
     });
     return result;
   },
+
+  addOne: (link: string) => {
+    try {
+      const newUrl = {
+        id: fakeUrl.length + 1,
+        url: link,
+      };
+      fakeUrl.push(newUrl);
+    } catch (err) {
+      return err;
+    }
+  },
 };
 
 export default marketplaceModel;
