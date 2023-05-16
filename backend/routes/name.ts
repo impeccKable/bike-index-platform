@@ -5,8 +5,9 @@ const router = express.Router();
 
 // // localhost:3000/name/
 router.get('/', nameController.getAll);
-// localhost:3000/name/search
-router.get('/search/:name', nameController.getByName);
+// example:
+// localhost:3000/name/search?name=First%20Last
+router.get('/search', nameController.getByName);
 router.post('/', nameController.addOne);
 
 export default router;
