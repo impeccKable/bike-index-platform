@@ -1,6 +1,12 @@
-import { useState } from 'react'
-import Navbar from '../components/Navbar'
-import { Form, MultiField, FormInput, FormButton, LinkButton } from '../components/Form'
+import { useState } from 'react';
+import Navbar from '../components/Navbar';
+import {
+  Form,
+  MultiField,
+  FormInput,
+  FormButton,
+  LinkButton,
+} from '../components/Form';
 
 function Thief() {
   function handleFormSubmit(e: any) {
@@ -41,8 +47,8 @@ function Thief() {
   </div>
 }
 
-
-{/* <div className="container">
+{
+  /* <div className="container">
     <nav class="sidebar">
       <button>Button 1</button>
       <button>Button 2</button>
@@ -58,5 +64,6 @@ function Thief() {
         <button type="submit">Submit</button>
       </form>
     </main>
-  </div> */}
-export default Thief
+  </div> */
+}
+export default Thief;

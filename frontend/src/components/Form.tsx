@@ -1,73 +1,81 @@
-import { useState } from 'react'
-import React, { Children } from 'react'
-import { Link } from 'react-router-dom'
+import { useState } from 'react';
+import React, { Children } from 'react';
+import { Link } from 'react-router-dom';
 
 // A custom version of a form that compiles the form data into a dictionary
 //   and will later handle the submission and stuff
 interface FormProps {
-  children: any
-  onSubmit: (e: any) => void
+  children: any;
+  onSubmit: (e: any) => void;
 }
 export function Form(props: FormProps) {
-  const { children, onSubmit } = props
-  const [data, setData] = useState({})
+  const { children, onSubmit } = props;
+  const [data, setData] = useState({});
 
   function handleSubmit(e: any) {
-    e.preventDefault()
-    e.dataDict = data
-    onSubmit(e)
+    e.preventDefault();
+    e.dataDict = data;
+    onSubmit(e);
   }
   function handleChange(e: React.FormEvent) {
-    setData({ ...data, [e.target.name]: e.target.value, })
+    setData({ ...data, [e.target.name]: e.target.value });
   }
   function renderChildren() {
     return React.Children.map(children, (child: any) => {
-      if (!React.isValidElement(child)) { return null }
+      if (!React.isValidElement(child)) {
+        return null;
+      }
       return React.cloneElement(child, { onChange: handleChange });
     });
   }
-  return <form className="Form" onSubmit={handleSubmit}>{renderChildren()}</form>
+  return (
+    <form className="Form" onSubmit={handleSubmit}>
+      {renderChildren()}
+    </form>
+  );
 }
 
 // This provides functionality to have multiple values for a single 'field'
 //   returns the multiple values as a csv (as the event.target.value)
 interface MultiFieldProps extends React.HTMLElement {
-  label: string
-  name: string
-  component: typeof FormInput
-  onChange?: (e: any) => void
+  label: string;
+  name: string;
+  component: typeof FormInput;
+  onChange?: (e: any) => void;
 }
 export function MultiField(props: MultiFieldProps) {
-  const { label, name, component: Component, onChange, ...rest } = props
-  const [values, setValues] = useState([""])
+  const { label, name, component: Component, onChange, ...rest } = props;
+  const [values, setValues] = useState(['']);
   function handleInput(e: any, idx: number) {
-    let newValues = [...values]
-    newValues[idx] = e.target.value
-    updateValues(newValues)
+    let newValues = [...values];
+    newValues[idx] = e.target.value;
+    updateValues(newValues);
   }
   function addField(idx: number) {
-    let newValues = [...values]
-    newValues.splice(idx + 1, 0, "") // insert a new empty field
-    updateValues(newValues)
+    let newValues = [...values];
+    newValues.splice(idx + 1, 0, ''); // insert a new empty field
+    updateValues(newValues);
   }
   function removeField(idx: number) {
-    let newValues = [...values]
-    newValues.splice(idx, 1)
+    let newValues = [...values];
+    newValues.splice(idx, 1);
     if (values.length === 0) {
-      newValues = [""]
+      newValues = [''];
     }
-    updateValues(newValues)
+    updateValues(newValues);
   }
   function updateValues(newValues: string[]) {
-    setValues(newValues)
-    let newValuesCSV = newValues.map(field => {
-      if (field.includes(',')) {
-        return `"${field}"` // quote the field
-      }
-      return field
-    }).join(",")
+    setValues(newValues);
+    let newValuesCSV = newValues
+      .map((field) => {
+        if (field.includes(',')) {
+          return `"${field}"`; // quote the field
+        }
+        return field;
+      })
+      .join(',');
     if (onChange) {
-      onChange({ target: { name, value: newValuesCSV } })
+      onChange({ target: { name, value: newValuesCSV } });
     }
   }
   return <div className='form-group'>
@@ -90,56 +98,70 @@ export function MultiField(props: MultiFieldProps) {
 }
 
 interface FormButtonProps extends React.HTMLButtonElement {
-  [key: string]: any
+  [key: string]: any;
 }
 export function FormButton(props: FormButtonProps) {
-  return <div className='btn-div'>
-    <button className={props.type === 'submit' ? 'btn-submit' : ''} {...props} />
-  </div>
+  return (
+    <div className="btn-div">
+      <button
+        className={props.type === 'submit' ? 'btn-submit' : ''}
+        {...props}
+      />
+    </div>
+  );
 }
 
 interface FormInputProps extends React.HTMLInputElement {
-  name: string
-  label?: string
-  labelProps?: React.HTMLElement
-  type?: string
-  [key: string]: any
+  name: string;
+  label?: string;
+  labelProps?: React.HTMLElement;
+  type?: string;
+  [key: string]: any;
 }
 export function FormInput(props: FormInputProps) {
-  const { label, labelProps, type = 'text', ...rest } = props
-  let ret = null
+  const { label, labelProps, type = 'text', ...rest } = props;
+  let ret = null;
   switch (type) {
     case 'select':
-      ret = <select {...rest} />; break;
+      ret = <select {...rest} />;
+      break;
     case 'textarea':
-      ret = <textarea {...rest} />; break;
+      ret = <textarea {...rest} />;
+      break;
     case 'phone':
-      ret = <input type='tel' {...rest} />; break;
+      ret = <input type="tel" {...rest} />;
+      break;
     default:
-      ret = <input type={type} {...rest} />
+      ret = <input type={type} {...rest} />;
   }
   if (label) {
-    return <div className='form-group'>
-      <label {...labelProps || {}}>{label}</label> {ret}
-    </div>
+    return (
+      <div className="form-group">
+        <label {...(labelProps || {})}>{label}</label> {ret}
+      </div>
+    );
   }
-  return ret
+  return ret;
 }
 
 interface InfoProps extends React.HTMLElement {
-  [key: string]: any
+  [key: string]: any;
 }
 export function Info(props: InfoProps) {
-  return <div className='info' {...props}></div>
+  return <div className="info" {...props}></div>;
 }
 
 interface LinkButtonProps extends React.HTMLButtonElement {
-  to: string
-  [key: string]: any
+  to: string;
+  [key: string]: any;
 }
 export function LinkButton(props: LinkButtonProps) {
-  const { to, ...rest } = props
-  return <div className='btn-div'>
-    <Link to={to}><button {...rest} /></Link>
-  </div>
+  const { to, ...rest } = props;
+  return (
+    <div className="btn-div">
+      <Link to={to}>
+        <button {...rest} />
+      </Link>
+    </div>
+  );
 }
