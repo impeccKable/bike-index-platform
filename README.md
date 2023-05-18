@@ -13,18 +13,36 @@ Created by:
 ## Setup/Installation Requirements
 
 ## Setup/Installation
+https://nodejs.org/en/download
+https://pnpm.io/installation
 
 ### Frontend
-#### Install npm
+`cd frontend`
+`npm i`
+`pnpm run dev`
+
+### Backend
+For Windows (run in powershell):
+`Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted`
+`npm i`
+`npm start`
+
+## Known Bugs
+
+## Support and contact details
+
+## Technologies Used
+
+## License
+
+## Original Creation
+### Frontend
 https://expressjs.com/en/starter/installing.html
+
 (Yes to chocolatey (and run script))
-`cd frontend`?
 `npm init`
 `npm install express`
-#### Install pnpm
-https://pnpm.io/installation
 `npm install -g pnpm`
-#### Setup
 `pnpm create vite`
 `cd frontend`
 `pnpm install express`
@@ -34,7 +52,6 @@ https://pnpm.io/installation
 √ Select a variant: » TypeScript + SWC
 ```
 `pnpm install react-router-dom`
-
 ### Backend
 `npm init @eslint/config`
 ```
@@ -47,13 +64,3 @@ https://pnpm.io/installation
 √ Would you like to install them now? · Yes
 √ Which package manager do you want to use? · pnpm
 ```
-For Windows (run in powershell):
-`Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted`
-
-## Known Bugs
-
-## Support and contact details
-
-## Technologies Used
-
-## License

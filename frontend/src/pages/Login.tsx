@@ -6,6 +6,7 @@ function Login() {
   const navigate = useNavigate()
   function handleSubmit(e: any) {
     e.preventDefault()
+    console.log(e)
     console.log(e.dataDict)
     navigate('/thiefs')
   }
