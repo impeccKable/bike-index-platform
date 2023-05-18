@@ -10,7 +10,7 @@ Schedule
 					API calls
 				useState
 					ui variables
-			--Basic navigation
+			Basic navigation
 			Basic structure
 				use design notes
 
@@ -26,6 +26,7 @@ Schedule
 		API (gets/posts/puts) (Matt/Cheng)
 			Design
 			Mock up database
+			Users
 	Sprint 2 (6/6)
 		Search feature
 		Database (upload csv)
