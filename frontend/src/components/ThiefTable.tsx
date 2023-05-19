@@ -43,7 +43,7 @@ export default function ThiefTable(props: ThiefTableProps) {
                 <td>
                   <LinkButton
                     className="thief-edit"
-                    to={`/thiefs?name=${person.name}&email=${person.email}`}
+                    to={`/thief?name=${person.name}&email=${person.email}`}
                   >
                     Edit
                   </LinkButton>

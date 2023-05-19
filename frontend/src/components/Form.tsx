@@ -159,9 +159,7 @@ export function LinkButton(props: LinkButtonProps) {
   const { to, ...rest } = props;
   return (
     <div className="btn-div">
-      <Link to={to}>
-        <button {...rest} />
-      </Link>
+      <Link to={to}><button {...rest} /></Link>
     </div>
   );
 }
