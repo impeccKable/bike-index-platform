@@ -4,6 +4,7 @@ import Signup from './pages/Signup';
 import ForgotPass from './pages/ForgotPass';
 import Thief from './pages/Thief';
 import ThiefList from './pages/ThiefList';
+import DataImport from './pages/DataImport';
 import About from './pages/About';
 import Stats from './pages/Stats';
 
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="/forgot"    element={<ForgotPass />}></Route>
         <Route path="/thief"     element={<Thief      />}></Route>
         <Route path="/thieflist" element={<ThiefList  />}></Route>
+        <Route path="/import"    element={<DataImport />}></Route>
         <Route path="/about"     element={<About      />}></Route>
         <Route path="/stats"     element={<Stats      />}></Route>
       </Routes>
