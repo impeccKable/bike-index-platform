@@ -9,12 +9,14 @@ interface ThiefTableProps extends React.HTMLInputElement {
 
 let testPersons = [
   {
+    id: 1,
     name: 'Test Name 1',
     phone: '+1 123-456-7890',
     email: 'email1@gmail.com',
     approved: 'true',
   },
   {
+    id: 2,
     name: 'Test Name 2',
     phone: '+2 123-456-7890',
     email: 'email2@gmail.com',
@@ -39,7 +41,7 @@ export default function ThiefTable(props: ThiefTableProps) {
         <tbody>
           {testPersons.map((person) => {
             return (
-              <tr>
+              <tr key={person.id}>
                 <td>
                   <LinkButton
                     className="thief-edit"
