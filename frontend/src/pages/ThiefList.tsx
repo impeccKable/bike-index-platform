@@ -220,10 +220,10 @@ export default function ThiefList() {
   };
 
   return (
-    <div className="thief-page">
+    <div className="thieflist-page">
       <Navbar />
       <main>
-        <h1 className="title2">Adversary Listing</h1>
+        <h1 className="title2">Thief Listing</h1>
 
         <div className="container-fluid thief-searchbar">
           <div className="thief-dropdown">
@@ -241,16 +241,18 @@ export default function ThiefList() {
             </select>
           </div>
 
-          <label htmlFor="ThiefSearch">Search</label>
-          <input
-            id="ThiefSearch"
-            type={searchType.toString()}
-            required
-            disabled={searchEnabled}
-            placeholder={searchTip}
-            value={searchText}
-            onChange={SetUserInput}
-          ></input>
+          <div className="mobile">
+            <label htmlFor="ThiefSearch">Search</label>
+            <input
+              id="ThiefSearch"
+              type={searchType.toString()}
+              required
+              disabled={searchEnabled}
+              placeholder={searchTip}
+              value={searchText}
+              onChange={SetUserInput}
+            ></input>
+          </div>
           <button className="AddThiefButton">Add New</button>
         </div>
         <div className="add-new">
