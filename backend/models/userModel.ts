@@ -26,6 +26,25 @@ const userModel = {
 		return result;
 	},
 
+	deleteUser: (UserEmail: string) => {
+		let toBeDeleted:
+			| { id: number; User: string; Password: string }
+			| undefined = undefined;
+
+		fakeUser.forEach((UserEntry) => {
+			if (UserEntry.User === UserEmail) {
+				toBeDeleted = UserEntry;
+			}
+		});
+
+		if (toBeDeleted != undefined) {
+			const index = fakeUser.indexOf(toBeDeleted);
+			if (index > -1) {
+				fakeUser.splice(index, 1);
+			}
+		}
+	},
+
 	addOne: (UserEmail: string, UserPass: string) => {
 		try {
 			const newUser = {
@@ -37,6 +56,25 @@ const userModel = {
 		} catch (err) {
 			return err;
 		}
+	},
+
+	changeUserInfo: (email: string, field: string, value: string) => {
+		fakeUser.forEach((UserEntry) => {
+			if (UserEntry.User === email) {
+				try {
+					switch (field) {
+						case "email":
+							UserEntry.User = value;
+							break;
+						case "password":
+							UserEntry.Password = value;
+							break;
+					}
+				} catch (err) {
+					return err;
+				}
+			}
+		});
 	},
 };
 

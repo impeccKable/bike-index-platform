@@ -26,6 +26,15 @@ const usersController = {
 		}
 	},
 
+	deleteUser: (req: Request, res: Response) => {
+		let { email } = req.body;
+		try {
+			res.json(userModel.deleteUser(email));
+		} catch (err) {
+			res.status(500).send("Error deleting user from db");
+		}
+	},
+
 	// handle post
 	addFake: (req: Request, res: Response) => {
 		let { email, password } = req.body;
@@ -33,6 +42,16 @@ const usersController = {
 			res.json(userModel.addOne(email, password));
 		} catch (err) {
 			res.status(500).send("Error getting data from the db");
+		}
+	},
+
+	//handle change info
+	changeUserInfo: (req: Request, res: Response) => {
+		let { email, field, value } = req.body;
+		try {
+			res.json(userModel.changeUserInfo(email, field, value));
+		} catch (err) {
+			res.status(500).send("Error changing user data in the db");
 		}
 	},
 };
