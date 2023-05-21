@@ -5,9 +5,10 @@ import { useNavigate } from 'react-router-dom';
 function Login() {
   const navigate = useNavigate();
   function handleSubmit(e: any) {
-    e.preventDefault();
-    console.log(e.dataDict);
-    navigate('/thiefs');
+    e.preventDefault()
+    console.log(e)
+    console.log(e.dataDict)
+    navigate('/thiefs')
   }
   return (
     <div className="login-page">
