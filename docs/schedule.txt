@@ -2,12 +2,6 @@
 Schedule
 	Sprint 1 (5/23)
 		Mockup pages (Emerson/Cristian)
-			Todo
-				Fix up thief page
-				Clean up css
-					Research @media queries
-				Use react history to implement back buttons
-
 			Visual
 				Bootstrap
 					ChatGPT??
@@ -31,8 +25,23 @@ Schedule
 			Mock up database
 			Users
 	Sprint 2 (6/6)
-		Search feature
-		Database (upload csv)
+		Cristian Matt (frontend)
+			Fix up thief edit page - Emerson
+			Clean up css
+				Research @media queries
+			Use react history to implement back buttons
+			Search feature (sending requests and displaying results)
+			Csv upload page
+				Loading symbol/gif for results
+			Connect the Frontend to the Backend
+		Cheng Emerson (backend)
+			Search feature (verify api calls and connect to the database)
+			Database
+				Update schema
+				Create tables
+				Create roles
+			Stats
+			Connect the Backend to the Database
 	Sprint 3 (6/20)
 		Login (auth0?)
 			Redux
@@ -45,7 +54,6 @@ Schedule
 			Hooks
 				useEffect
 					API calls
-		Stats
 	Sprint 4 (7/4)
 		User management
 		Roles
