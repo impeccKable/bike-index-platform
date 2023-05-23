@@ -3,6 +3,9 @@ Todo
 	Questions
 		Does position matter for fields with multiple items?
 		Will the files be stored on the server that hosts the website?
+		Would you prefer having a dedicated home page?
+
+		Do we want to use OAuth (google/facebook), or a standalone authorization?
 	Pages
 		Forgot password
 		About
