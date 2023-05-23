@@ -1,6 +1,7 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { LinkButton } from './Form';
+import { Link } from 'react-router-dom';
 
 interface Person extends React.HTMLInputElement {
   id: number | string;
@@ -22,7 +23,6 @@ export default function ThiefTable(props: ThiefTableProps) {
       <table className="thief-table">
         <thead>
           <tr>
-            <th className="action-header">Actions</th>
             <th>Name</th>
             <th>Phone</th>
             <th>Email</th>
@@ -32,20 +32,18 @@ export default function ThiefTable(props: ThiefTableProps) {
         <tbody>
           {props.people.map((person) => {
             return (
-              <tr key={person.id}>
-                <td>
-                  <LinkButton
-                    className="thief-edit"
-                    to={`/thief?id=${person.id}`}
-                  >
-                    Edit
-                  </LinkButton>
-                </td>
-                <td>{person.name}</td>
-                <td>{person.phone}</td>
-                <td>{person.email}</td>
-                {adminStatus ? <td>{person.approved.toString()}</td> : ''}
-              </tr>
+              <Link
+                key={`Row${person.id}`}
+                className="row-link"
+                to={`/thief?id=${person.id}`}
+              >
+                <tr key={person.id}>
+                  <td>{person.name}</td>
+                  <td>{person.phone}</td>
+                  <td>{person.email}</td>
+                  {adminStatus ? <td>{person.approved.toString()}</td> : ''}
+                </tr>
+              </Link>
             );
           })}
         </tbody>

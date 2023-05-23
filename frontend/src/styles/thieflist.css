@@ -37,35 +37,25 @@
     width: 80%;
     justify-content: center;
   }
-
-  .action-header {
-    width: 20px;
-  }
-
-  .thief-edit {
-    margin: 0%;
-  }
 }
 
-@media (max-width: 650px) {
+@media (max-width: 650) {
   .thief-searchbar {
     display: grid;
     width: 100%;
     height: fit-content;
     margin-top: 30px;
+    margin-left: 20px;
     justify-content: flex-start;
   }
 
-  .thief-dropdown {
-    margin-left: 0px;
-  }
-
   .thief-searchbar input {
-    width: 250px;
+    width: 300px;
   }
 
   .thief-searchbar .thief-dropdown {
-    margin: 10px;
+    margin-left: 0px;
+    margin-bottom: 10px;
   }
 
   .thief-searchbar .NewThiefButton {
@@ -82,88 +72,73 @@
     justify-content: center;
   }
 
-  .action-header {
-    width: 20px;
+  .DropDown {
+    width: 280px;
   }
 
-  .thief-edit {
-    margin: 0%;
+  .AddThiefButton {
+    width: 370px;
   }
+}
+
+/*@media (max-width: 499) {
+  .thief-searchbar {
+    display: grid;
+    width: 100%;
+    height: fit-content;
+    margin-top: 30px;
+    margin-left: 20px;
+    justify-content: flex-start;
+  }
+
+  .thief-searchbar input {
+    width: 300px;
+  }
+
+  .thief-searchbar .thief-dropdown {
+    margin-left: 0px;
+    margin-bottom: 10px;
+  }
+
+  .thief-searchbar .NewThiefButton {
+    height: 42px;
+  }
+
+  /*ThiefTable Component
+  .thief-table-div {
+    display: flex;
+    margin-right: auto;
+    margin-left: auto;
+    background-color: #3f3f3f;
+    width: 80%;
+    justify-content: center;
+  }
+
+  .DropDown {
+    width: 280px;
+  }
+
+  .AddThiefButton {
+    width: 370px;
+  }
+}*/
+
+.row-link {
+  display: contents;
+  color: inherit;
 }
 
 .thief-table {
   width: 100%;
   text-align: center;
+  background-color: #383838;
 }
-/*
-@media (min-width: 500px) {
-  .mobile {
-    display: grid;
-  }
 
-  .mobile label {
-    width: fit-content;
-  }
-  .thief-searchbar {
-    flex-direction: column;
-    align-items: flex-start;
-    padding-left: 20px;
-    margin-bottom: 20px;
-    width: 390px;
-  }
-
-  #ThiefSearch {
-    height: 20px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    width: 235px;
-  }
-
-  .NewThiefButton,
-  .btn-div button {
-    margin-left: 0px;
-  }
-
-  .thief-dropdown {
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
-
-  #SearchType.DropDown {
-    height: 40px;
-    width: 250px;
-  }
-
-  .AddThiefButton {
-    width: 250px;
-    margin-left: 0px;
-  }
-
-  div.add-new {
-    margin-left: 0px;
-  }
-
-  .results-label {
-    margin-bottom: 5px;
-  }
-
-  .thief-table-div {
-    width: 900px;
-  }
-
-  .thief-table {
-    color: pink;
-  }
-
-  .thief-table td {
-    height: 20px;
-  }
-
-  .thief-edit {
-    margin: 1px;
-  }
+.thief-table tbody tr:hover {
+  color: #646cff;
+  border-color: #646cff;
 }
-*/
+
 .thieflist-page {
   display: flex;
   flex-direction: row;
@@ -187,14 +162,10 @@
   display: inline-flex;
 }
 
-.thief-edit:hover {
-  color: #646cff;
-  border-radius: 0px;
-}
-
 .thief-table,
 th,
 td {
   border: 1px solid;
   border-collapse: collapse;
+  height: 30px;
 }

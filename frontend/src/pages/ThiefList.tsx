@@ -13,7 +13,6 @@ interface Person extends React.HTMLInputElement {
   email: string;
   approved: boolean | string;
 }
-
 enum FilterType {
   All,
   Name,
