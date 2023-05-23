@@ -1,4 +1,23 @@
 
+Todo
+	Questions
+		Does position matter for fields with multiple items?
+		Will the files be stored on the server that hosts the website?
+		Would you prefer having a dedicated home page?
+
+		Do we want to use OAuth (google/facebook), or a standalone authorization?
+	Pages
+		Forgot password
+		About
+		Stats
+		Data import
+		Site management (?)
+		Config page (?)
+	Authentication
+		Session info
+			userId
+	Misc
+		Mobile layout
 Frontend
 	Pages
 		Home/Login
@@ -115,6 +134,61 @@ API
 Database
 	thief
 		thiefId      int
+		approved     bool
+	name
+		thiefId      int
+		name         text
+	email
+		thiefId      int
+		email        text
+	url
+		thiefId      int
+		url          text
+	addr
+		thiefId      int
+		line1        text
+		line2        text
+		city         text
+		state        text
+		zip          text
+	phone
+		thiefId      int
+		phone        text
+	bikeSerial
+		thiefId      int
+		bikeSerial   text
+	phrase
+		thiefId      int
+		phrase       text
+	note
+		thiefId      int
+		note         text
+	file
+		thiefId      int
+		file         text  -- (url to file server)
+	[table]_del tables
+		-- '[table]_del' for all of the above
+	user
+		userId       int
+		email        text
+		password     text  -- hash
+		firstName    text
+		lastName     text
+		title        text
+		phone        text  -- only digits
+		role         text  -- ["admin", "readWrite", "readOnly"]
+		approved     bool
+		banned       bool  -- acts as if user does not exist
+	history
+		-- Actions from post/get requests, store it as a json object
+		historyId    int
+		datetime     timestamp
+		userId       int
+		source       text
+		message      text
+Database (old)
+	thief
+		thiefId      int
 		name         text
 		email        text
 		url          text
@@ -176,6 +250,6 @@ Database
 			thiefId      int
 			url          text
 		notes
-			urlId        int
+			noteId       int
 			thiefId      int
-			url          text
+			note         text

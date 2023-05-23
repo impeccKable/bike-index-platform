@@ -2,14 +2,17 @@
 Schedule
 	Sprint 1 (5/23)
 		Mockup pages (Emerson/Cristian)
+			Todo
+				Fix up thief page
+				Clean up css
+					Research @media queries
+				Use react history to implement back buttons
+
 			Visual
 				Bootstrap
 					ChatGPT??
-			Hooks
-				useEffect
-					API calls
-				useState
-					ui variables
+			useState
+				ui variables
 			Basic navigation
 			Basic structure
 				use design notes
@@ -32,8 +35,16 @@ Schedule
 		Database (upload csv)
 	Sprint 3 (6/20)
 		Login (auth0?)
-		Authentication (session information)
+			Redux
+				research
+				install
+				...
+			Find an auth library
+				oauth?		Authentication (session information)
 		Flesh out pages
+			Hooks
+				useEffect
+					API calls
 		Stats
 	Sprint 4 (7/4)
 		User management

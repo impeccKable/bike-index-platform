@@ -1,35 +1,28 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { LinkButton } from './Form';
+import { Link } from 'react-router-dom';
 
-interface ThiefTableProps extends React.HTMLInputElement {
-  filter: string;
-  type: string;
+interface Person extends React.HTMLInputElement {
+  id: number | string;
+  name: string;
+  phone: string;
+  email: string;
+  approved: boolean | string;
 }
 
-let testPersons = [
-  {
-    name: 'Test Name 1',
-    phone: '+1 123-456-7890',
-    email: 'email1@gmail.com',
-    approved: 'true',
-  },
-  {
-    name: 'Test Name 2',
-    phone: '+2 123-456-7890',
-    email: 'email2@gmail.com',
-    approved: 'false',
-  },
-];
+interface ThiefTableProps extends React.HTMLInputElement {
+  people: Array<Person>;
+}
 
 export default function ThiefTable(props: ThiefTableProps) {
   const [adminStatus, setAdminStatus] = useState(true);
+
   return (
     <div className="container thief-table-div">
       <table className="thief-table">
         <thead>
           <tr>
-            <th className="action-header">Actions</th>
             <th>Name</th>
             <th>Phone</th>
             <th>Email</th>
@@ -37,22 +30,20 @@ export default function ThiefTable(props: ThiefTableProps) {
           </tr>
         </thead>
         <tbody>
-          {testPersons.map((person) => {
+          {props.people.map((person) => {
             return (
-              <tr>
-                <td>
-                  <LinkButton
-                    className="thief-edit"
-                    to={`/thiefs?name=${person.name}&email=${person.email}`}
-                  >
-                    Edit
-                  </LinkButton>
-                </td>
-                <td>{person.name}</td>
-                <td>{person.phone}</td>
-                <td>{person.email}</td>
-                {adminStatus ? <td>{person.approved}</td> : ''}
-              </tr>
+              <Link
+                key={`Row${person.id}`}
+                className="row-link"
+                to={`/thief?id=${person.id}`}
+              >
+                <tr key={person.id}>
+                  <td>{person.name}</td>
+                  <td>{person.phone}</td>
+                  <td>{person.email}</td>
+                  {adminStatus ? <td>{person.approved.toString()}</td> : ''}
+                </tr>
+              </Link>
             );
           })}
         </tbody>
