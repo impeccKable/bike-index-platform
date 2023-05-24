@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import ForgotPass from './pages/ForgotPass';
-import Thief from './pages/Thief';
+import ThiefEdit from './pages/ThiefEdit';
 import ThiefList from './pages/ThiefList';
 import DataImport from './pages/DataImport';
 import About from './pages/About';
@@ -15,7 +15,7 @@ export default function App() {
         <Route path="/"          element={<Login      />}></Route>
         <Route path="/signup"    element={<Signup     />}></Route>
         <Route path="/forgot"    element={<ForgotPass />}></Route>
-        <Route path="/thief"     element={<Thief      />}></Route>
+        <Route path="/thiefedit" element={<ThiefEdit  />}></Route>
         <Route path="/thieflist" element={<ThiefList  />}></Route>
         <Route path="/import"    element={<DataImport />}></Route>
         <Route path="/about"     element={<About      />}></Route>

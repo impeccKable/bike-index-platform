@@ -15,7 +15,9 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
-body {
+
+html, body {
+  height: 100%;
   margin: 0;
 }
 a {
@@ -47,7 +49,7 @@ button:hover {
   border-color: #646cff;
 }
 button:focus, button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 2px auto -webkit-focus-ring-color;
 }
 @media (prefers-color-scheme: light) {
   :root {
@@ -73,11 +75,6 @@ nav {
   /* padding-right: 1rem; */
   background-color: #181818;
 }
-nav .btn-group {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
 nav .btn-div {
   width: 100%;
 }
@@ -99,7 +96,7 @@ nav button:hover {
 }
 
 /* Pages */
-.login-page, .signup-page {
+.login-page, .signup-page, .forgot-pass-page {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -107,7 +104,7 @@ nav button:hover {
   height: 100vh;
   text-align: center;
 }
-.thief-page {
+.thiefedit-page, .stats-page, .about-page, .data-import-page {
   display: flex;
   flex-direction: row;
   height: 100vh;
@@ -115,7 +112,6 @@ nav button:hover {
 }
 main {
   flex-grow: 1;
-  /* width: 100%; */
 }
 
 /* Forms */
@@ -132,7 +128,7 @@ form {
 .signup-page form {
   width: 25rem;
 }
-.thief-page form {
+.thiefedit-page form {
   padding: 1.5rem 0.5rem;
   box-shadow: none;
   max-width: 40rem;
@@ -144,16 +140,29 @@ form {
   align-items: center;
   margin: 0.5rem 0;
 }
+.form-group button {
+  height: 2rem;
+  width: 2rem;
+  padding: 0;
+  margin: 0 0 0 0.5rem;
+  background-color: #303030;
+  color: #a0a0a0;
+}
+.thiefedit-page .form-group {
+  margin: 0.25rem;
+}
 .login-page .form-group {
   margin: 0.75rem 0;
 }
 
 ol {
+  flex: 1;
+  margin: 0;
   padding: 0;
-  margin-left: 0rem;
   list-style-type: none;
 }
 li {
+  margin: 0.5rem 0;
   display: flex;
   align-items: center;
 }
@@ -165,21 +174,31 @@ label {
   white-space: nowrap;
 }
 input {
+  flex: 1;
   padding: 0.5rem;
   border: none;
   border-radius: 0.25rem;
-  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
   font-size: 0.9rem;
-  width: 70%;
+}
+textarea {
+  flex: 1;
+  height: 4rem;
 }
 input:focus {
   outline: none;
   box-shadow: 0 0 0 0.1rem #0077cc;
 }
+.btn-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
 .btn-submit {
   background-color: #0077cc;
   color: #fff;
-  padding: 0.5rem 2rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
   border: none;
   border-radius: 0.25rem;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
@@ -187,7 +206,7 @@ input:focus {
   width: fit-content;
   justify-content: center;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+  transition: background-color 0.1s ease-in-out;
 }
 .btn-submit:hover {
   background-color: #0066b2;

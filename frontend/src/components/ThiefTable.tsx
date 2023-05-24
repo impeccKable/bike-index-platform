@@ -35,7 +35,7 @@ export default function ThiefTable(props: ThiefTableProps) {
               <Link
                 key={`Row${person.id}`}
                 className="row-link"
-                to={`/thief?id=${person.id}`}
+                to={`/thiefedit?id=${person.id}`}
               >
                 <tr key={person.id}>
                   <td>{person.name}</td>

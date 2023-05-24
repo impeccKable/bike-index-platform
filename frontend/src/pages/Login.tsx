@@ -19,7 +19,7 @@ export default function Login() {
         <FormButton className="btn-submit" type="submit">Sign In</FormButton>
         <div className="links">
           <a href="/signup">Sign Up</a>
-          <a href="/forgot">Forgot Password</a>
+          <a href="/forgot">Forgot Password?</a>
         </div>
       </Form>
     </div>
