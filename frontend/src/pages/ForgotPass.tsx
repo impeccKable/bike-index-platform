@@ -16,7 +16,7 @@ export default function ForgotPass() {
   );
   return (
     <div className="forgot-pass-page">
-      <h1 className="title">Forgot Password</h1>
+      <h1 className="title">Password Reset</h1>
       <Form onSubmit={handleFormSubmit}>
         <FormInput label="Email" name="email" required placeholder="email@example.com" type="email" />
         <div className="links">

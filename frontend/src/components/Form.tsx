@@ -42,6 +42,7 @@ interface MultiFieldProps extends React.HTMLElement {
   name: string;
   component: typeof FormInput;
   onChange?: (e: any) => void;
+  [key: string]: any;
 }
 export function MultiField(props: MultiFieldProps) {
   const { label, name, component: Component, onChange, ...rest } = props;
@@ -59,7 +60,7 @@ export function MultiField(props: MultiFieldProps) {
   function removeField(idx: number) {
     let newValues = [...values];
     newValues.splice(idx, 1);
-    if (values.length === 0) {
+    if (newValues.length === 0) {
       newValues = [''];
     }
     updateValues(newValues);
