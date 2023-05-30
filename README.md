@@ -64,3 +64,16 @@ https://expressjs.com/en/starter/installing.html
 √ Would you like to install them now? · Yes
 √ Which package manager do you want to use? · pnpm
 ```
+### EC2 setup
+sudo yum install git
+sudo yum install npm
+sudo yum install nmap
+git clone https://github.com/impeccKable/bike-index-platform
+npm i
+
+sudo dnf install postgresql15
+sudo dnf install postgresql15-server
+sudo postgresql-setup initdb
+sudo systemctl start postgresql
+sudo systemctl enable postgresql
+

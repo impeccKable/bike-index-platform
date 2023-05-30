@@ -1,22 +1,8 @@
 
 Todo
 	Questions
-		Does position matter for fields with multiple items?
-		Will the files be stored on the server that hosts the website?
-		Would you prefer having a dedicated home page?
-		Do we want to use OAuth (google/facebook), auth0, or another authorization library?
-	Pages
-		Forgot password
-		About
-		Stats
-		Data import
-		Site management (?)
-		Config page (?)
-	Authentication
-		Session info
-			userId
-	Misc
-		Mobile layout
+		Do we need to track who added what? Should this be by-thief or by-data-item?
+	Add approved user, etc to thief table
 Frontend
 	Pages
 		Home/Login
@@ -131,124 +117,206 @@ API
 		// dict contains most info about thief
 	LogEvent(source: string, message: string)
 Database
-	thief
-		thiefId      int
+	create table thief (
+		thiefId      int,
 		approved     bool
-	name
-		thiefId      int
+	);
+	create table name (
+		thiefId      int,
 		name         text
-	email
-		thiefId      int
+	);
+	create table email (
+		thiefId      int,
 		email        text
-	url
-		thiefId      int
+	);
+	create table url (
+		thiefId      int,
 		url          text
-	addr
-		thiefId      int
-		line1        text
-		line2        text
-		city         text
-		state        text
+	);
+	create table addr (
+		thiefId      int,
+		line1        text,
+		line2        text,
+		city         text,
+		state        text,
 		zip          text
-	phone
-		thiefId      int
+	);
+	create table phone (
+		thiefId      int,
 		phone        text
-	bikeSerial
-		thiefId      int
+	);
+	create table bikeSerial (
+		thiefId      int,
 		bikeSerial   text
-	phrase
-		thiefId      int
+	);
+	create table phrase (
+		thiefId      int,
 		phrase       text
-	note
-		thiefId      int
+	);
+	create table note (
+		thiefId      int,
 		note         text
-	file
-		thiefId      int
+	);
+	create table file (
+		thiefId      int,
 		file         text  -- (url to file server)
+	);
+	create table biuser (
+		biuserId       int,
+		email        text,
+		password     text,  -- hash
+		firstName    text,
+		lastName     text,
+		title        text,
+		phone        text,  -- only digits
+		role         text,  -- ["admin", "readWrite", "readOnly"]
+		approved     bool,
+		banned       bool  -- acts as if biuser does not exist
+	);
+	create table history (
+		-- Actions from post/get requests, store it as a json object
+		historyId    int,
+		datetime     timestamp,
+		biuserId     int,
+		source       text,
+		message      text
+	);
+	create sequence next_thief_id;
+
 	[table]_del tables
 		-- '[table]_del' for all of the above
-	user
-		userId       int
-		email        text
-		password     text  -- hash
-		firstName    text
-		lastName     text
-		title        text
-		phone        text  -- only digits
-		role         text  -- ["admin", "readWrite", "readOnly"]
-		approved     bool
-		banned       bool  -- acts as if user does not exist
-	history
-		-- Actions from post/get requests, store it as a json object
-		historyId    int
-		datetime     timestamp
-		userId       int
-		source       text
-		message      text
-Database (old)
-	thief
-		thiefId      int
-		name         text
-		email        text
-		url          text
-		-- What if there are multiple addresses?
-			-- Should each field have a list of the same length?
-			-- Should these 4 be separated into an addr table?
-		addr         text
-		city         text
-		state        text
-		zip          text
-		phone        text
-		bikeSerial   text
-		phrase       text
-		notes        text
-		-- files        text
+Test data
+	insert into name  values (1, 'Martin Escarcega');
+	insert into url   values (1, 'https://www.facebook.com/commerce/listing/883873439447420/?media_id=0&ref=share_attachment');
+	insert into url   values (1, 'https://www.facebook.com/photo/?fbid=8454358474638526&set=gm.1992600470910333&idorvanity=301221206714943');
+	insert into url   values (1, 'https://www.facebook.com/groups/301221206714943/search/?q=escarcega');
+	insert into name  values (2, 'Ventas Lopez');
+	insert into url   values (2, 'https://www.facebook.com/groups/JUAREZBICICLETAS/posts/2070072256496487/');
+	insert into url   values (2, 'https://www.facebook.com/groups/JUAREZBICICLETAS/posts/2073626302807749/');
+	insert into url   values (2, 'https://www.facebook.com/groups/JUAREZBICICLETAS/posts/2073628852807494/');
+	insert into phone values (2, '+52 656 441 818');
+	insert into name  values (3, 'Ricky Estrada Zamora');
+	insert into email values (3, 'ricarqui84@hotmail.com');
+	insert into name  values (4, 'Billy');
+	insert into url   values (4, 'https://offerup.com/p/89256643/');
+	insert into name  values (5, 'Tormentor');
+	insert into url   values (5, 'https://offerup.com/p/59257395/');
+	insert into name  values (6, 'Raymond');
+	insert into url   values (6, 'https://offerup.com/p/86715079/');
+	insert into name  values (7, 'Masii');
+	insert into url   values (7, 'https://offerup.com/item/detail/1583160894');
+	insert into url   values (7, 'https://offerup.com/item/detail/1583161312');
+	insert into url   values (7, 'https://offerup.com/item/detail/1583161761');
+	insert into addr  values (7, '728 South Tyler', null, 'Tacoma', 'WA', '98405');
+	insert into name  values (8, 'Servando Prieto');
+	insert into url   values (8, 'https://www.facebook.com/commerce/listing/191844393288121/?media_id=0&ref=share_attachment');
+	insert into url   values (8, 'https://www.facebook.com/commerce/listing/732060310781656/?media_id=0&ref=share_attachment');
+	insert into addr  values (8, '7535 Hermosillo Drive', null, 'El Paso', 'TX', '79915');
+Requests
+	We designed some requests/communications between the frontend and the backend and would like to get your thoughts
+	We can also explain these more on a call or on Tuesday
 
-		-- (metadata)
-		editTime     timestamp
-		editUserId   int
-		approved     bool
-		deleted      bool
-	user
-		userId       int
-		email        text
-		password     text  -- hash
-		firstName    text
-		lastName     text
-		title        text
-		phone        text  -- only digits
-			-- text not int because searches need text for substrings
-		role         text  -- ["admin", "readWrite", "readOnly"]
+	# Search (thief list page)
+	// GET
+	/search?search_type= ....
+	request:
+		{
+			'search_type': 'name',
+			'search': 'search content',
+		}
+	response:
+		[
+			{
+				'thief_id': 2
+				'name': ['name1', 'name2', 'name3'], // all names for the thief
+				'phone': ['phone1'],
+				'email': ['email1']
+			},
+			{
+				'thief_id': 3
+				'name': ['name_that_matched', 'namea', 'namec'],
+					// the name that matched the search is put first
+					// we were thinking we could have the names be separated by commas
+					//   and then truncated to only show a few (if there are many of them)
+					// ex:   name1, name2, ...
+					// if they want to see all, they can click the row and go to the thief edit page
+				'phone': ['phonea'],
+				'email': ['emaila']
+			},
+		]
 
-		-- (metadata)
-		editTime     timestamp
-		editUserId   int
-		approved     bool
-		banned       bool  -- acts as if user does not exist
-	event
-		-- all behaviors in the web system will be stored here
-		--   (errors, successes, failures, info, etc..)
-		eventId      int
-		datetime     timestamp
-		source       text
-		message      text
-	-- Separating these would make metadata/revision history complex
-		-- They could be separated out later on
-		-- But addr might need to be separate regardless
-		addr
-			addrId       int
-			thiefId      int
-			line1        text
-			line2        text
-			city         text
-			state        text
-			zip          text
-		url
-			-- there could be a lot of these for 1 thief
-			urlId        int
-			thiefId      int
-			url          text
-		notes
-			noteId       int
-			thiefId      int
-			note         text
+	# Load the thief page
+	// GET
+	/thiefedit?thief_id=3
+	request:
+		{
+			'thief_id': 3
+		}
+	response:
+		{
+			'name': ['name1', 'name2'], # all names for the thief
+			'email': ['email1']
+			// everything else about the thief
+		}
+
+	# Submit changes
+	(to keep track in the frontend):
+		// in order to send a cleaner response, we were thinking the frontend could figure out which
+		//   fields were edited and which were not. A temp id could be used to know which input field corresponds
+		//   to which, so that after they are changed, we know which were changed and which were deleted
+		old_state = {
+			'name': [
+				0: 'name1',
+				1: 'name2',
+				2: 'name3',
+			],
+		}
+		new_state = {
+			'name': [
+				0: 'name1',
+				1: null,
+				2: 'name3a',
+				3: 'name3b',
+			]
+		}
+	// Inserts (POST)
+	// /thiefedit
+		// the edit request would then contain only the edits that were made
+		{
+			'thief_id': 3
+			'name': [ 'name3b' ], // insert
+			'email': ['email1']
+		}
+	// Deletes (DELETE)
+	// /thiefedit
+		{
+			'thief_id': 3
+			'name': [ 'name2', ], // delete
+		}
+	// Updates (PUT)
+	// /thiefedit
+		{
+			'thief_id': 3
+			'name': [
+				// old val, new val
+				['name3', 'name3a'], // update
+			],
+		}
+
+	response:
+		'success/fail'
+
+	# Stats
+	// GET
+	// /stats
+	request:
+		'stats'
+	response:
+	{
+		'users': 30,
+		'urls': xxx,       // select count(*) from url;
+		'phones': xxx,     // select count(*) from phone;
+		'emails': xxx,     // select count(*) from email;
+		'addresses': xxx,
+		'names': xxx,
+	}

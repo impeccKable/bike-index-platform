@@ -26,22 +26,23 @@ Schedule
 			Users
 	Sprint 2 (6/6)
 		Cristian Matt (frontend)
-			Fix up thief edit page - Emerson
-			Clean up css
-				Research @media queries
 			Use react history to implement back buttons
 			Search feature (sending requests and displaying results)
 			Csv upload page
 				Loading symbol/gif for results
 			Connect the Frontend to the Backend
 		Cheng Emerson (backend)
-			Search feature (verify api calls and connect to the database)
 			Database
 				Update schema
 				Create tables
-				Create roles
-			Stats
+			Pull changes from main and push the new
+			Remote connection to psql
+			Set up requests
+				Do the stats first (it's easier)
+
 			Connect the Backend to the Database
+			Search feature (verify api calls and connect to the database)
+			Stats
 	Sprint 3 (6/20)
 		Login (auth0?)
 			Redux
@@ -57,10 +58,12 @@ Schedule
 	Sprint 4 (7/4)
 		User management
 		Roles
+		Multiple pages on search results?
 	Sprint 5 (7/18)
+		Testing
+	Sprint 6 (8/1)
 		Site management (files on server)
 		Note fields
-	Sprint 6 (8/1)
 	Sprint 7 (8/15)
 	Presentation (8/29)
 	Finals week (9/3)
