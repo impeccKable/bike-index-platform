@@ -26,23 +26,23 @@ Schedule
 			Users
 	Sprint 2 (6/6)
 		Cristian Matt (frontend)
-			Use react history to implement back buttons
+			-Use react history to implement back buttons
 			Search feature (sending requests and displaying results)
 			Csv upload page
 				Loading symbol/gif for results
-			Connect the Frontend to the Backend
+			-Connect the Frontend to the Backend
 		Cheng Emerson (backend)
-			Database
-				Update schema
-				Create tables
-			Pull changes from main and push the new
-			Remote connection to psql
+			-Database
+				-Update schema
+				-Create tables
+			-Pull changes from main and push the new
+			-Remote connection to psql
 			Set up requests
-				Do the stats first (it's easier)
+				-Do the stats first (it's easier)
 
-			Connect the Backend to the Database
+			-Connect the Backend to the Database
 			Search feature (verify api calls and connect to the database)
-			Stats
+			-Stats
 	Sprint 3 (6/20)
 		Login (auth0?)
 			Redux

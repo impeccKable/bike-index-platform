@@ -1,6 +1,7 @@
 /** @format */
 
 import express from "express";
+var cors = require("cors");
 import index from "./routes/index";
 import name from "./routes/name";
 import marketplace from "./routes/marketplace";
@@ -8,10 +9,14 @@ import phone from "./routes/phone";
 import email from "./routes/email";
 import address from "./routes/address";
 import user from "./routes/users";
+import stats from "./routes/stats";
+
 
 const port = process.env.PORT || 3000;
 
 const app = express();
+
+app.use(cors());
 
 app.set("port", port);
 
@@ -24,6 +29,7 @@ app.use("/phone", phone);
 app.use("/email", email);
 app.use("/address", address);
 app.use("/user", user);
+app.use("/stats", stats);
 
 app.listen(port, () => {
 	console.log(`listening on port http://localhost:${port}`);

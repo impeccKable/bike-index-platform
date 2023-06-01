@@ -173,7 +173,7 @@ export default function ThiefList() {
 	///   - "type": type of filter matching (name, email, phone, etc..)
 	/// Returns: Array of objects of all matches
 	const GetThiefs = (filter: string, type: FilterType) => {
-		let result;
+		let result: Person[] = [];
 
 		const config = {
 			headers: {

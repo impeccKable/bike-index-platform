@@ -77,3 +77,10 @@ sudo postgresql-setup initdb
 sudo systemctl start postgresql
 sudo systemctl enable postgresql
 
+sudo nano /var/lib/pgsql/data/pg_hba.conf
+local   all             all                                     trust
+host    all             all             127.0.0.1/32            md5
+sudo nano /var/lib/pgsql/data/postgresql.conf
+add line:
+listen_addresses = '*'
+

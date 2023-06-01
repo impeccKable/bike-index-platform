@@ -1,24 +1,17 @@
-/** @format */
 
-// import 'Connection' interface from @types/mysql
-/* import mysql, { Connection } from 'mysql';
+// Create an instance of pg-promise
+const pgp = require('pg-promise')();
 
-const useDb = false;
- */
-let connection: any;
+// Set up a connection configuration
+const connectionConfig = {
+  host: '54.172.42.84',
+  port: 5432,
+  database: 'bike_index',
+  user: 'ec2-user',
+  password: '3P7&!zrq5B',
+};
 
-/* if (useDb) {
-  connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'dbuser',
-    password: 'my_password',
-    database: 'my_db',
-  });
-} else {
-  connection = {
-    /* use test db S
-  };
-} 
-*/
+// Create a database object
+const connection = pgp(connectionConfig);
 
 export default connection;
