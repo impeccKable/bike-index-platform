@@ -5,23 +5,23 @@ Todo
 	Add approved user, etc to thief table
 Database
 	create table thief (
-		thiefId      int,
+		thief_id     int,
 		approved     bool
 	);
 	create table name (
-		thiefId      int,
+		thief_id     int,
 		name         text
 	);
 	create table email (
-		thiefId      int,
+		thief_id     int,
 		email        text
 	);
 	create table url (
-		thiefId      int,
+		thief_id     int,
 		url          text
 	);
 	create table addr (
-		thiefId      int,
+		thief_id     int,
 		line1        text,
 		line2        text,
 		city         text,
@@ -29,31 +29,31 @@ Database
 		zip          text
 	);
 	create table phone (
-		thiefId      int,
+		thief_id     int,
 		phone        text
 	);
-	create table bikeSerial (
-		thiefId      int,
-		bikeSerial   text
+	create table bike_serial (
+		thief_id     int,
+		bike_serial  text
 	);
 	create table phrase (
-		thiefId      int,
+		thief_id     int,
 		phrase       text
 	);
 	create table note (
-		thiefId      int,
+		thief_id     int,
 		note         text
 	);
 	create table file (
-		thiefId      int,
+		thief_id     int,
 		file         text  -- (url to file server)
 	);
-	create table biuser (
-		biuserId       int,
+	create table bi_user (
+		bi_user_id   int,
 		email        text,
 		password     text,  -- hash
-		firstName    text,
-		lastName     text,
+		first_name   text,
+		last_name    text,
 		title        text,
 		phone        text,  -- only digits
 		role         text,  -- ["admin", "readWrite", "readOnly"]
@@ -62,9 +62,9 @@ Database
 	);
 	create table history (
 		-- Actions from post/get requests, store it as a json object
-		historyId    int,
+		history_id   int,
 		datetime     timestamp,
-		biuserId     int,
+		bi_user_id    int,
 		source       text,
 		message      text
 	);
@@ -114,13 +114,13 @@ Requests
 	response:
 		[
 			{
-				'thief_id': 2
+				'thiefId': 2
 				'name': ['name1', 'name2', 'name3'], // all names for the thief
 				'phone': ['phone1'],
 				'email': ['email1']
 			},
 			{
-				'thief_id': 3
+				'thiefId': 3
 				'name': ['name_that_matched', 'namea', 'namec'],
 					// the name that matched the search is put first
 					// we were thinking we could have the names be separated by commas
@@ -128,7 +128,15 @@ Requests
 					// ex:   name1, name2, ...
 					// if they want to see all, they can click the row and go to the thief edit page
 				'phone': ['phonea'],
-				'email': ['emaila']
+				'email': ['emaila'],
+				'bikeSerial': ['....'],
+				'addr': [{
+					'line1': 'value',
+					'line2': 'value',
+					'city':  'value',
+					'state': 'value',
+					'zip':   'value'
+				}]
 			},
 		]
 

@@ -1,34 +1,19 @@
 /** @format */
 
 import express from "express";
+import search from "./src/search";
+import thiefedit from "./src/thiefedit";
+import stats from "./src/stats";
 var cors = require("cors");
-import index from "./routes/index";
-import name from "./routes/name";
-import marketplace from "./routes/marketplace";
-import phone from "./routes/phone";
-import email from "./routes/email";
-import address from "./routes/address";
-import user from "./routes/users";
-import stats from "./routes/stats";
-
 
 const port = process.env.PORT || 3000;
-
 const app = express();
-
 app.use(cors());
-
 app.set("port", port);
-
 app.use(express.json());
 
-app.use("/", index);
-app.use("/name", name);
-app.use("/marketplace", marketplace);
-app.use("/phone", phone);
-app.use("/email", email);
-app.use("/address", address);
-app.use("/user", user);
+app.use("/search", search);
+app.use("/thiefedit", thiefedit);
 app.use("/stats", stats);
 
 app.listen(port, () => {
