@@ -18,32 +18,33 @@ const get = async (query: any) => {
 	query = withLowercaseKeys(query);
 	let searchType: string = query.searchtype;
 	let search: string = query.search;
-	let thiefIds = [];
+	let thiefIds: Array<number> = [];
 	if (!searchType || !search) {
-		return []; // TODO: return most recent thieves
+		return thiefIds; // TODO: return most recent thieves
 	}
 	searchType = searchType.toLowerCase();
 	search = search.toLowerCase();
-	if (searchTypeToTable[searchType]) {
+	let table = withLowercaseKeys(searchTypeToTable)[searchType];
+	if (table) {
 		thiefIds = await db.any(`
 			SELECT thief_id
-			FROM ${searchTypeToTable[searchType]}
-			WHERE ${searchType} LIKE $1
+			FROM ${table}
+			WHERE lower(${table}) LIKE $1
 		`, [`%${search}%`]);
 
 	} else if (searchType === 'addr') {
 		thiefIds = await db.any(`
 			SELECT thief_id
 			FROM addr
-			WHERE line1 LIKE $1
-				OR line2 LIKE $1
-				OR city  LIKE $1
-				OR state LIKE $1
-				OR zip   LIKE $1
+			WHERE lower(line1) LIKE $1
+				OR lower(line2) LIKE $1
+				OR lower(city)  LIKE $1
+				OR lower(state) LIKE $1
+				OR lower(zip)   LIKE $1
 		`, [`%${search}%`]);
 
 	} else {
-		return []; // TODO: throw error, unknown search type
+		throw new Error(`Unknown search type: ${query.searchtype}`);
 	}
 	thiefIds = thiefIds.map((thiefId: any) => thiefId.thief_id);
 	return await thiefInfoByIds(thiefIds);

@@ -3,10 +3,10 @@ import db from "./dbConfig";
 import { withLowercaseKeys } from "./util";
 
 const tableNames = ["name", "email", "url", "addr", "phone", "bike_serial", "phrase", "note"];
-const dictNames  = ["name", "email", "url", "addr", "phone", "bikeserial", "phrase", "note"];
+const dictNames  = ["name", "email", "url", "addr", "phone", "bikeSerial", "phrase", "note"];
 
 export const thiefInfoByIds = async (thiefIds: Array<number>) => {
-	// Get thief info
+	// Get info from database
 	let values = await Promise.all([
 		db.any("SELECT thief_id, name        FROM name                    WHERE thief_id in ($1:csv)", [thiefIds]),
 		db.any("SELECT thief_id, email       FROM email                   WHERE thief_id in ($1:csv)", [thiefIds]),
@@ -17,12 +17,22 @@ export const thiefInfoByIds = async (thiefIds: Array<number>) => {
 		db.any("SELECT thief_id, phrase      FROM phrase                  WHERE thief_id in ($1:csv)", [thiefIds]),
 		db.any("SELECT thief_id, note        FROM note                    WHERE thief_id in ($1:csv)", [thiefIds]),
 	]);
+	// Combine results into dictionary of arrays:
+	// 	results = {
+	// 		name:  [{ thief_id: 1, name: "Alex" }, ...],
+	// 		email: [{ thief_id: 1, email: "..." }, ...],
+	// 	   ...
+	// 	}
 	let results: {[key: string]: Array<any>} = {};
 	for (let i = 0; i < dictNames.length; i++) {
 		results[dictNames[i]] = values[i];
 	}
 
-	// Format results
+	// Extract info into array of thieves:
+	// 	thieves = [
+	// 		{ thiefId: 1, name: ["William", "Will"], ... },
+	// 		...
+	// 	]
 	let thieves: any = [];
 	for (let i = 0; i < thiefIds.length; i++) {
 		let thiefId = thiefIds[i];
@@ -36,18 +46,21 @@ export const thiefInfoByIds = async (thiefIds: Array<number>) => {
 			);
 			if (dictNames[j] === "addr") {
 				// Take out null values and thief_id
+				// 	so it only contains the address fields
 				thief[dictNames[j]] = thief[dictNames[j]].map(
-					(currAddr: any) => {
-						for (let key in currAddr) {
-							if (currAddr[key] === null || key === "thief_id") {
-								delete currAddr[key];
+					(addrObj: any) => {
+						for (let key in addrObj) {
+							if (addrObj[key] === null || key === "thief_id") {
+								delete addrObj[key];
 							}
 						}
-						return currAddr;
+						return addrObj;
 					}
 				);
 			} else {
 				// Convert to array of strings (from array of objects)
+				//   as the format from the database is like this:
+				//   { thief_id: 1, name: "Alex" }
 				thief[dictNames[j]] = thief[dictNames[j]].map(
 					(result: any) => result[tableNames[j]]
 				);
@@ -87,13 +100,11 @@ const deleteField = async (table: string, thiefId: number, oldVal: any) => {
 const updateField = async (table: string, thiefId: number, oldVal: any, newVal: any) => {
 	if (table === "addr") {
 		await db.none(
-			`UPDATE ${table}
-			SET line1 = $1, line2 = $2, city = $3, state = $4, zip = $5
+			`UPDATE ${table} SET line1 = $1, line2 = $2, city = $3, state = $4, zip = $5
 			WHERE thief_id = $6 AND line1 = $7 AND line2 = $8 AND city = $9 AND state = $10 AND zip = $11`,
 			[
 				newVal.line1, newVal.line2, newVal.city, newVal.state, newVal.zip,
-				thiefId,
-				oldVal.line1, oldVal.line2, oldVal.city, oldVal.state, oldVal.zip
+				thiefId, oldVal.line1, oldVal.line2, oldVal.city, oldVal.state, oldVal.zip
 			]
 		);
 	} else {
@@ -106,26 +117,33 @@ const updateField = async (table: string, thiefId: number, oldVal: any, newVal: 
 
 const put = async (body: any) => {
 	body = withLowercaseKeys(body);
-	// Get next thief_id if necessary
 	let thiefId = body.thiefid;
 	if (thiefId == "new") {
+		// New thief: get next thief_id
 		thiefId = await db.one("SELECT nextval('next_thief_id')");
 	} else {
 		thiefId = parseInt(thiefId);
 	}
 	// Insert/update/delete fields
 	for (let i = 0; i < dictNames.length; i++) {
-		if (body[dictNames[i]]) {
-			for (let j = 0; j < body[dictNames[i]].length; j++) {
-				let oldVal = withLowercaseKeys(body[dictNames[i]][j][0]);
-				let newVal = withLowercaseKeys(body[dictNames[i]][j][1]);
-				if (oldVal === 0) {
-					insertField(tableNames[i], thiefId, newVal);
-				} else if (newVal === 0) {
-					deleteField(tableNames[i], thiefId, oldVal);
-				} else {
-					updateField(tableNames[i], thiefId, oldVal, newVal);
-				}
+		let key = dictNames[i].toLowerCase();
+		let table = tableNames[i];
+		if (!body[key]) {
+			continue;
+		}
+		for (let j = 0; j < body[key].length; j++) {
+			let oldVal = body[key][j][0];
+			let newVal = body[key][j][1];
+			if (table === "addr") {
+				if (oldVal) oldVal = withLowercaseKeys(oldVal);
+				if (newVal) newVal = withLowercaseKeys(newVal);
+			}
+			if (oldVal === 0) {
+				insertField(table, thiefId, newVal);
+			} else if (newVal === 0) {
+				deleteField(table, thiefId, oldVal);
+			} else {
+				updateField(table, thiefId, oldVal, newVal);
 			}
 		}
 	}
