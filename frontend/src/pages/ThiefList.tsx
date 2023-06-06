@@ -8,215 +8,60 @@ import axios from "axios";
 import "../styles/thieflist.css";
 
 // @ts-ignore
-interface Person extends React.HTMLInputElement {
-	id: number | string;
+export interface Person extends React.HTMLInputElement {
+	id: number;
 	name: string;
 	phone: string;
 	email: string;
-	approved: boolean | string;
+	address: string;
 }
+
 enum FilterType {
 	All,
-	Name,
-	Email,
-	Phone,
+	name,
+	email,
+	phone,
 }
 
-let testPersons = [
-	{
-		id: 263,
-		name: "Test Name 263",
-		phone: "+526 123-456-7890",
-		email: "email789@email.com",
-		approved: true,
-	},
-	{
-		id: 58,
-		name: "Test Name 58",
-		phone: "+116 123-456-7890",
-		email: "email174@email.com",
-		approved: false,
-	},
-	{
-		id: 203,
-		name: "Test Name 203",
-		phone: "+406 123-456-7890",
-		email: "email609@email.com",
-		approved: false,
-	},
-	{
-		id: 70,
-		name: "Test Name 70",
-		phone: "+140 123-456-7890",
-		email: "email210@email.com",
-		approved: false,
-	},
-	{
-		id: 59,
-		name: "Test Name 59",
-		phone: "+118 123-456-7890",
-		email: "email177@email.com",
-		approved: true,
-	},
-	{
-		id: 143,
-		name: "Test Name 143",
-		phone: "+286 123-456-7890",
-		email: "email429@email.com",
-		approved: true,
-	},
-	{
-		id: 220,
-		name: "Test Name 220",
-		phone: "+440 123-456-7890",
-		email: "email660@email.com",
-		approved: true,
-	},
-	{
-		id: 222,
-		name: "Test Name 222",
-		phone: "+444 123-456-7890",
-		email: "email666@email.com",
-		approved: true,
-	},
-	{
-		id: 146,
-		name: "Test Name 146",
-		phone: "+292 123-456-7890",
-		email: "email438@email.com",
-		approved: false,
-	},
-	{
-		id: 98,
-		name: "Test Name 98",
-		phone: "+196 123-456-7890",
-		email: "email294@email.com",
-		approved: false,
-	},
-	{
-		id: 53,
-		name: "Test Name 53",
-		phone: "+106 123-456-7890",
-		email: "email159@email.com",
-		approved: true,
-	},
-	{
-		id: 29,
-		name: "Test Name 29",
-		phone: "+58 123-456-7890",
-		email: "email87@email.com",
-		approved: false,
-	},
-	{
-		id: 80,
-		name: "Test Name 80",
-		phone: "+160 123-456-7890",
-		email: "email240@email.com",
-		approved: true,
-	},
-	{
-		id: 102,
-		name: "Test Name 102",
-		phone: "+204 123-456-7890",
-		email: "email306@email.com",
-		approved: true,
-	},
-	{
-		id: 81,
-		name: "Test Name 81",
-		phone: "+162 123-456-7890",
-		email: "email243@email.com",
-		approved: false,
-	},
-	{
-		id: 240,
-		name: "Test Name 240",
-		phone: "+480 123-456-7890",
-		email: "email720@email.com",
-		approved: false,
-	},
-	{
-		id: 25,
-		name: "Test Name 25",
-		phone: "+50 123-456-7890",
-		email: "email75@email.com",
-		approved: false,
-	},
-	{
-		id: 237,
-		name: "Test Name 237",
-		phone: "+474 123-456-7890",
-		email: "email711@email.com",
-		approved: true,
-	},
-	{
-		id: 193,
-		name: "Test Name 193",
-		phone: "+386 123-456-7890",
-		email: "email579@email.com",
-		approved: false,
-	},
-	{
-		id: 116,
-		name: "Test Name 116",
-		phone: "+232 123-456-7890",
-		email: "email348@email.com",
-		approved: true,
-	},
-];
-
 export default function ThiefList() {
-	/// Method: GetThiefs
-	/// Purpose: Gets all thiefs matching filter and filter type criteria
-	/// Params:
-	///   - "filter": string or value to search for in the filter type
-	///   - "type": type of filter matching (name, email, phone, etc..)
-	/// Returns: Array of objects of all matches
-	const GetThiefs = (filter: string, type: FilterType) => {
-		let result: Person[] = [];
-
-		const config = {
-			headers: {
-				"Content-type": "application/json",
-			},
-		};
-
-		axios
-			.get(
-				`localhost:3000/search?search_type=${type}&search=${filter}`,
-				config
-			)
-			.then((response) => {
-				console.log(response.status);
-				result = response.data.json();
-			});
-
-		/*
-    Older method of retreiving data from mocked up json array
-
-    const result: Person[] = [];
-    testPersons.map((person) => {
-      if (type === FilterType.All) {
-        //debugger;
-        result.push(person);
-      } else {
-        if (type === FilterType.Name && person.name.includes(filter))
-          result.push(person);
-        if (type === FilterType.Email && person.email.includes(filter))
-          result.push(person);
-        if (type === FilterType.Phone && person.phone.includes(filter))
-          result.push(person);
-      }
-    });
-    */
-		return result;
-	};
-
+	const empty: Person[] = [];
 	const [searchEnabled, setSearchEnabled] = useState(true);
 	const [searchType, setSearchType] = useState(FilterType.All);
 	const [searchText, setSearchText] = useState("");
 	const [searchTip, setTip] = useState("Select Search Type First");
-	const [persons, setPersons] = useState(GetThiefs("", searchType));
+	const [persons, setPersons] = useState(empty);
+
+	useEffect(() => {
+		const GetThiefs = async (filter: string, type: FilterType) => {
+			const config = {
+				headers: {
+					"Content-type": "application/json",
+				},
+			};
+			const url = `http://localhost:3000/search?searchType=${FilterType[type]}&search=${filter}`;
+			const response = await axios.get(url, config);
+
+			const result = await response.data;
+			const returnVal: Person[] = [];
+
+			result.forEach((person: Person) => {
+				let newPerson = {
+					id: person.id,
+					name: person.name,
+					phone: person.phone,
+					email: person.email,
+					address: person.address,
+				};
+				returnVal.push(newPerson);
+			});
+
+			console.log(returnVal);
+
+			setPersons(returnVal);
+		};
+
+		GetThiefs(searchText, searchType);
+	}, [searchText]);
 
 	const EnableSearch = (event: any) => {
 		let selectedVal = event.target[event.target.selectedIndex].value;
@@ -226,9 +71,9 @@ export default function ThiefList() {
 			setTip(`Enter Search Value...`);
 			setSearchEnabled(false);
 			if (selectedVal === "None") setSearchType(FilterType.All);
-			if (selectedVal === "text") setSearchType(FilterType.Name);
-			if (selectedVal === "tel") setSearchType(FilterType.Phone);
-			if (selectedVal === "email") setSearchType(FilterType.Email);
+			if (selectedVal === "text") setSearchType(FilterType.name);
+			if (selectedVal === "tel") setSearchType(FilterType.phone);
+			if (selectedVal === "email") setSearchType(FilterType.email);
 		} else {
 			setTip("Select Search Type First");
 			setSearchText("");
@@ -239,7 +84,6 @@ export default function ThiefList() {
 
 	const SetUserInput = (event: any) => {
 		setSearchText(event.target.value);
-		setPersons(GetThiefs(event.target.value, searchType));
 	};
 
 	return (
