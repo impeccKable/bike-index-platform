@@ -1,7 +1,7 @@
 import express from "express";
 import db from "./dbConfig";
-
 import { thiefInfoByIds } from "./thiefedit";
+import { withLowercaseKeys } from "./util";
 
 const searchTypeToTable: {[key: string]: string} = {
 	'name':       'name',
@@ -13,13 +13,18 @@ const searchTypeToTable: {[key: string]: string} = {
 	'note':       'note',
 };
 
-const get = async (searchType: string, search: string) => {
-	// Get matching thief_ids
+// Get matching thief_ids
+const get = async (query: any) => {
+	query = withLowercaseKeys(query);
+	let searchType: string = query.searchtype;
+	let search: string = query.search;
 	let thiefIds = [];
 	if (!searchType || !search) {
 		return []; // TODO: return most recent thieves
-
-	} else if (searchTypeToTable[searchType]) {
+	}
+	searchType = searchType.toLowerCase();
+	search = search.toLowerCase();
+	if (searchTypeToTable[searchType]) {
 		thiefIds = await db.any(`
 			SELECT thief_id
 			FROM ${searchTypeToTable[searchType]}
@@ -32,9 +37,9 @@ const get = async (searchType: string, search: string) => {
 			FROM addr
 			WHERE line1 LIKE $1
 				OR line2 LIKE $1
-				OR city LIKE $1
+				OR city  LIKE $1
 				OR state LIKE $1
-				OR zip LIKE $1
+				OR zip   LIKE $1
 		`, [`%${search}%`]);
 
 	} else {
@@ -47,13 +52,10 @@ const get = async (searchType: string, search: string) => {
 const router = express.Router();
 router.get("/", async (req: express.Request, res: express.Response) => {
 	try {
-		return res.json(await get(
-			req.query.searchType as string,
-			req.query.search     as string
-		));
+		return res.json(await get(req.query));
 	} catch (err) {
 		console.error(err);
-		res.status(500).send("Error getting stats from db");
+		res.status(500);
 	}
 });
 export default router;

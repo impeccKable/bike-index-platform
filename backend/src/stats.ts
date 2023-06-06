@@ -2,7 +2,6 @@ import express from "express";
 import db from "./dbConfig";
 
 const get = async () => {
-
 	let [
 		thieves, users, urls, phones, emails, addresses, names
 	] = await Promise.all([
@@ -32,7 +31,7 @@ router.get("/", async (req: express.Request, res: express.Response) => {
 		return res.json(await get());
 	} catch (err) {
 		console.error(err);
-		res.status(500).send("Error getting stats from db");
+		res.status(500);
 	}
 });
 export default router;

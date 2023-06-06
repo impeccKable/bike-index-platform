@@ -1,8 +1,9 @@
 import express from "express";
 import db from "./dbConfig";
+import { withLowercaseKeys } from "./util";
 
 const tableNames = ["name", "email", "url", "addr", "phone", "bike_serial", "phrase", "note"];
-const dictNames = ["name", "email", "url", "addr", "phone", "bikeSerial", "phrase", "note"];
+const dictNames  = ["name", "email", "url", "addr", "phone", "bikeserial", "phrase", "note"];
 
 export const thiefInfoByIds = async (thiefIds: Array<number>) => {
 	// Get thief info
@@ -104,17 +105,20 @@ const updateField = async (table: string, thiefId: number, oldVal: any, newVal: 
 }
 
 const put = async (body: any) => {
-	let thiefId = body.thiefId;
+	body = withLowercaseKeys(body);
+	// Get next thief_id if necessary
+	let thiefId = body.thiefid;
 	if (thiefId == "new") {
 		thiefId = await db.one("SELECT nextval('next_thief_id')");
 	} else {
 		thiefId = parseInt(thiefId);
 	}
+	// Insert/update/delete fields
 	for (let i = 0; i < dictNames.length; i++) {
 		if (body[dictNames[i]]) {
 			for (let j = 0; j < body[dictNames[i]].length; j++) {
-				let oldVal = body[dictNames[i]][j][0];
-				let newVal = body[dictNames[i]][j][1];
+				let oldVal = withLowercaseKeys(body[dictNames[i]][j][0]);
+				let newVal = withLowercaseKeys(body[dictNames[i]][j][1]);
 				if (oldVal === 0) {
 					insertField(tableNames[i], thiefId, newVal);
 				} else if (newVal === 0) {
