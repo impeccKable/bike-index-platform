@@ -37,11 +37,11 @@ Schedule
 				-Create tables
 			-Pull changes from main and push the new
 			-Remote connection to psql
-			Set up requests
+			-Set up requests
 				-Do the stats first (it's easier)
 
 			-Connect the Backend to the Database
-			Search feature (verify api calls and connect to the database)
+			-Search feature (verify api calls and connect to the database)
 			-Stats
 	Sprint 3 (6/20)
 		Login (auth0?)
@@ -61,6 +61,7 @@ Schedule
 		Multiple pages on search results?
 	Sprint 5 (7/18)
 		Testing
+		Make it robust to database errors
 	Sprint 6 (8/1)
 		Site management (files on server)
 		Note fields

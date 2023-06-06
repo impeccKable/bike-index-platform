@@ -2,6 +2,7 @@
 Todo
 	Questions
 		Do we need to track who added what? Should this be by-thief or by-data-item?
+		Should the default order of the thief table be by most recently edited/added?
 	Add approved user, etc to thief table
 Database
 	create table thief (
@@ -195,6 +196,8 @@ Requests
 			'name': [
 				// old val, new val
 				['name3', 'name3a'], // update
+				[      0, 'name3a'], // insert
+				['name3',       0 ], // delete
 			],
 		}
 
