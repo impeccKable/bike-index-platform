@@ -21,7 +21,7 @@ export default function ThiefEdit() {
         <MultiField label="Phrase"      name="phrase"     component={FormInput} type="textarea" />
         <MultiField label="Notes"       name="notes"      component={FormInput} type="textarea" />
         <div className="btn-group">
-          <LinkButton to="/thieflist">Back</LinkButton>
+          <LinkButton to="/thiefList">Back</LinkButton>
           <FormButton type="submit">Submit</FormButton>
         </div>
         {/* {submitted && submitMessage} */}

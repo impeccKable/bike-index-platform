@@ -2,10 +2,10 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { LinkButton } from "./Form";
 import { Link } from "react-router-dom";
-import { Person } from "../pages/ThiefList.tsx";
+import { Thief } from "../pages/ThiefList.tsx";
 
 interface ThiefTableProps extends React.HTMLInputElement {
-	people: Array<Person>;
+	thiefs: Array<Thief>;
 }
 
 export default function ThiefTable(props: ThiefTableProps) {
@@ -23,18 +23,18 @@ export default function ThiefTable(props: ThiefTableProps) {
 					</tr>
 				</thead>
 				<tbody>
-					{props.people.map((person) => {
+					{props.thiefs.map((thief) => {
 						return (
 							<Link
-								key={`Row${person.id}`}
+								key={`Row${thief.thiefId}`}
 								className="row-link"
-								to={`/thiefedit?id=${person.id}`}
+								to={`/thiefEdit?thiefId=${thief.thiefId}`}
 							>
-								<tr key={person.id}>
-									<td>{person.name}</td>
-									<td>{person.phone}</td>
-									<td>{person.email}</td>
-									<td>{person.address}</td>
+								<tr key={thief.thiefId}>
+									<td>{thief.name}</td>
+									<td>{thief.phone}</td>
+									<td>{thief.email}</td>
+									<td>{thief.address}</td>
 								</tr>
 							</Link>
 						);

@@ -143,7 +143,7 @@ Requests
 
 	# Load the thief page
 	// GET
-	/thiefedit?thief_id=3
+	/thiefEdit?thief_id=3
 	request:
 		{
 			'thief_id': 3
@@ -176,7 +176,7 @@ Requests
 			]
 		}
 	// Inserts (POST)
-	// /thiefedit
+	// /thiefEdit
 		// the edit request would then contain only the edits that were made
 		{
 			'thief_id': 3
@@ -184,13 +184,13 @@ Requests
 			'email': ['email1']
 		}
 	// Deletes (DELETE)
-	// /thiefedit
+	// /thiefEdit
 		{
 			'thief_id': 3
 			'name': [ 'name2', ], // delete
 		}
 	// Updates (PUT)
-	// /thiefedit
+	// /thiefEdit
 		{
 			'thief_id': 3
 			'name': [

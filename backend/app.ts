@@ -2,7 +2,7 @@
 
 import express from "express";
 import search from "./src/search";
-import thiefedit from "./src/thiefedit";
+import thiefEdit from "./src/thiefEdit";
 import stats from "./src/stats";
 var cors = require("cors");
 
@@ -13,7 +13,7 @@ app.set("port", port);
 app.use(express.json());
 
 app.use("/search", search);
-app.use("/thiefedit", thiefedit);
+app.use("/thiefEdit", thiefEdit);
 app.use("/stats", stats);
 
 app.listen(port, () => {

@@ -1,15 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import ThiefTable from "../components/ThiefTable";
 import Navbar from "../components/Navbar";
 import { LinkButton } from "../components/Form";
 import Modal from "../components/Modal";
 import axios from "axios";
 
-import "../styles/thieflist.css";
+import "../styles/thiefList.css";
 
 // @ts-ignore
-export interface Person extends React.HTMLInputElement {
-	id: number;
+export interface Thief extends React.HTMLInputElement {
+	thiefId: number;
 	name: string;
 	phone: string;
 	email: string;
@@ -24,43 +24,46 @@ enum FilterType {
 }
 
 export default function ThiefList() {
-	const empty: Person[] = [];
+	const empty: Thief[] = [];
 	const [searchEnabled, setSearchEnabled] = useState(true);
 	const [searchType, setSearchType] = useState(FilterType.All);
 	const [searchText, setSearchText] = useState("");
+	const latestSearchText = useRef(searchText);
 	const [searchTip, setTip] = useState("Select Search Type First");
-	const [persons, setPersons] = useState(empty);
+	const [thiefs, setThiefs] = useState(empty);
 
 	useEffect(() => {
-		const GetThiefs = async (filter: string, type: FilterType) => {
+		const GetThiefs = async () => {
+			latestSearchText.current = searchText;
 			const config = {
 				headers: {
 					"Content-type": "application/json",
 				},
 			};
-			const url = `http://localhost:3000/search?searchType=${FilterType[type]}&search=${filter}`;
+			const url = `http://localhost:3000/search?searchType=${FilterType[searchType]}&search=${searchText}`;
 			const response = await axios.get(url, config);
 
 			const result = await response.data;
-			const returnVal: Person[] = [];
+			const returnVal: Thief[] = [];
 
-			result.forEach((person: Person) => {
-				let newPerson = {
-					id: person.id,
-					name: person.name,
-					phone: person.phone,
-					email: person.email,
-					address: person.address,
+			result.forEach((thief: Thief) => {
+				let newThief = {
+					thiefId: thief.thiefId,
+					name:    thief.name,
+					phone:   thief.phone,
+					email:   thief.email,
+					address: thief.address,
 				};
-				returnVal.push(newPerson);
+				returnVal.push(newThief);
 			});
 
-			console.log(returnVal);
+			// Discard results if the search text has changed since the request was made
+			if (latestSearchText.current !== searchText) return;
 
-			setPersons(returnVal);
+			setThiefs(returnVal);
 		};
 
-		GetThiefs(searchText, searchType);
+		GetThiefs();
 	}, [searchText]);
 
 	const EnableSearch = (event: any) => {
@@ -125,7 +128,7 @@ export default function ThiefList() {
 				<div className="add-new">
 					<h2 className="results-label">Results: {}</h2>
 				</div>
-				<ThiefTable people={persons} />
+				<ThiefTable thiefs={thiefs} />
 			</main>
 		</div>
 	);

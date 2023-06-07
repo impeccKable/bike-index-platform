@@ -15,8 +15,8 @@ export default function App() {
         <Route path="/"          element={<Login      />}></Route>
         <Route path="/signup"    element={<Signup     />}></Route>
         <Route path="/forgot"    element={<ForgotPass />}></Route>
-        <Route path="/thiefedit" element={<ThiefEdit  />}></Route>
-        <Route path="/thieflist" element={<ThiefList  />}></Route>
+        <Route path="/thiefEdit" element={<ThiefEdit  />}></Route>
+        <Route path="/thiefList" element={<ThiefList  />}></Route>
         <Route path="/import"    element={<DataImport />}></Route>
         <Route path="/about"     element={<About      />}></Route>
         <Route path="/stats"     element={<Stats      />}></Route>

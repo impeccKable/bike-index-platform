@@ -8,7 +8,7 @@ export default function Login() {
     e.preventDefault()
     console.log(e)
     console.log(e.dataDict)
-    navigate('/thieflist')
+    navigate('/thiefList')
   }
   return (
     <div className="login-page">

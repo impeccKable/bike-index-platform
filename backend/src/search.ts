@@ -1,52 +1,38 @@
 import express from "express";
 import db from "./dbConfig";
-import { thiefInfoByIds } from "./thiefedit";
-import { withLowercaseKeys } from "./util";
-
-const searchTypeToTable: {[key: string]: string} = {
-	'name':       'name',
-	'email':      'email',
-	'url':        'url',
-	'phone':      'phone',
-	'bikeSerial': 'bike_serial',
-	'phrase':     'phrase',
-	'note':       'note',
-};
+import { fieldToTable, thiefInfoByIds } from "./thiefInfo";
 
 // Get matching thief_ids
 const get = async (query: any) => {
-	query = withLowercaseKeys(query);
-	let searchType: string = query.searchtype;
+	let searchType: string = query.searchType;
 	let search: string = query.search;
 	let thiefIds: Array<number> = [];
 	if (!searchType || !search) {
 		return thiefIds; // TODO: return most recent thieves
 	}
-	searchType = searchType.toLowerCase();
-	search = search.toLowerCase();
-	let table = withLowercaseKeys(searchTypeToTable)[searchType];
-	if (table) {
-		thiefIds = await db.any(`
-			SELECT thief_id
-			FROM ${table}
-			WHERE lower(${table}) LIKE $1
-		`, [`%${search}%`]);
-
-	} else if (searchType === 'addr') {
+	let table = fieldToTable[searchType];
+	if (table === "addr") {
 		thiefIds = await db.any(`
 			SELECT thief_id
 			FROM addr
-			WHERE lower(line1) LIKE $1
-				OR lower(line2) LIKE $1
-				OR lower(city)  LIKE $1
-				OR lower(state) LIKE $1
-				OR lower(zip)   LIKE $1
+			WHERE line1 ILIKE $1
+				OR line2 ILIKE $1
+				OR city  ILIKE $1
+				OR state ILIKE $1
+				OR zip   ILIKE $1
+		`, [`%${search}%`]);
+
+	} else if (table) {
+		thiefIds = await db.any(`
+			SELECT thief_id
+			FROM ${table}
+			WHERE ${table} ILIKE $1
 		`, [`%${search}%`]);
 
 	} else {
-		throw new Error(`Unknown search type: ${query.searchtype}`);
+		throw new Error(`Unknown search type: ${query.searchType}`);
 	}
-	thiefIds = thiefIds.map((thiefId: any) => thiefId.thief_id);
+	thiefIds = thiefIds.map((obj: any) => obj.thief_id);
 	return await thiefInfoByIds(thiefIds);
 }
 
