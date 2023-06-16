@@ -1,4 +1,23 @@
 
+Questions
+	Could we get more data?
+		Yes
+	Could we get some of the verbiage for the pages?
+		Yes
+	Do we need to track who added what? Should this be by-thief or by-data-item?
+		Yes, more granularity
+	What should show on the thief list page when no search has been entered yet?
+		Recently edited/entered
+	Should the default order of the thief table be by most recently edited/added?
+		Yes, that would make sense
+	What is the best format for the csv files? (easier for him but also for parsing and uploading)
+		We made a standard
+
+	Should users be able to edit their profile?
+Todo
+	Show thief ID
+		Editable by admin
+		intel.bikeindex.org
 Schedule
 	Sprint 1 (5/23)
 		Mockup pages (Emerson/Cristian)
@@ -41,24 +60,31 @@ Schedule
 			Connect the Backend to the Database
 			Search feature (verify api calls and connect to the database)
 			Stats
-
-	Tonight:
-		Run script
-		push changes
-
 	Sprint 3 (6/20)
-		Csv upload page
-			Loading symbol/gif for results
+		Figure out how to run it headless
 
-
-		Login (auth0?)
+		Authentication (Matt/Emerson)
+			Login
+			Logout
+			Firebase
 			Redux
 				research
 				install
 				...
-			Find an auth library
-				oauth?		Authentication (session information)
-		Flesh out pages
+		Flesh out pages (Cristian/Cheng)
+			Fix css issues
+			ENV files
+			Thief list
+				"Add new" button
+				Loading symbol/gif for results
+			Thief edit
+				Populate with data
+				Submit data
+			User list
+			Csv upload page
+				Example csv file
+			Stats/About
+				Formatting
 			Hooks
 				useEffect
 					API calls

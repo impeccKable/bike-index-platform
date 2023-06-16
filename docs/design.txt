@@ -1,8 +1,5 @@
 
 Todo
-	Questions
-		Do we need to track who added what? Should this be by-thief or by-data-item?
-		Should the default order of the thief table be by most recently edited/added?
 	Add approved user, etc to thief table
 Database
 	create table thief (
@@ -52,10 +49,11 @@ Database
 	create table bi_user (
 		bi_user_id   int,
 		email        text,
-		password     text,  -- hash
+		password     text,  -- hash                                    -- remove
 		first_name   text,
 		last_name    text,
 		title        text,
+		org          text,                                             -- add
 		phone        text,  -- only digits
 		role         text,  -- ["admin", "readWrite", "readOnly"]
 		approved     bool,
