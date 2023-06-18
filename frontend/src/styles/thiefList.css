@@ -142,7 +142,7 @@
 .thieflist-page {
   display: flex;
   flex-direction: row;
-  height: fit-content;
+  height: 100vh;
   background-color: #242424;
 }
 
