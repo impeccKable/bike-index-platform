@@ -144,6 +144,7 @@
   flex-direction: row;
   height: 100vh;
   background-color: #242424;
+  color: rgba(255, 255, 255, 0.87);
 }
 
 .thief-searchbar .DropDown {
