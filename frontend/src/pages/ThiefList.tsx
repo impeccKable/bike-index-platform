@@ -42,7 +42,7 @@ export default function ThiefList() {
         },
       };
       // debugger;
-      const url = `http://54.172.42.84:3000/search?searchType=${FilterType[searchType]}&search=${searchText}`;
+      const url = `http://localhost:3000/search?searchType=${FilterType[searchType]}&search=${searchText}`;
       const response = await axios.get(url, config);
 
       const result = await response.data;
@@ -125,12 +125,18 @@ export default function ThiefList() {
               onChange={SetUserInput}
             ></input>
           </div>
-          <button className="AddThiefButton">Add New</button>
+          <LinkButton className="AddThiefButton" to="/thiefEdit/">
+            Add New
+          </LinkButton>
         </div>
         <div className="add-new">
           <h2 className="results-label">Results: {}</h2>
         </div>
-        <ThiefTable thiefs={thiefs} />
+        {thiefs ? (
+          <ThiefTable thiefs={thiefs} />
+        ) : (
+          <i className="bi bi-arrow-clockwise"></i>
+        )}
       </main>
     </div>
   );
