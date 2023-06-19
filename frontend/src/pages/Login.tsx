@@ -1,29 +1,66 @@
-import { useState } from 'react';
-import { Form, FormInput, FormButton } from '../components/Form';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { useAuth } from "../services/AuthProvider";
+import { Form, FormInput, FormButton } from "../components/Form";
+import { useNavigate } from "react-router-dom";
+import { useCallback } from "react";
 
 export default function Login() {
-  const navigate = useNavigate();
-  function handleSubmit(e: any) {
-    e.preventDefault()
-    console.log(e)
-    console.log(e.dataDict)
-    navigate('/thiefList')
+	const auth = useAuth();
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const navigate = useNavigate();
+	/*
+  function handleSubmit = (e: any) => {
+    const 
+    const result = await auth?.handleLogin(email,password)
+    if(result===false){
+      //
+    }
   }
-  return (
-    <div className="login-page">
-      <h1 className="title">Bike Index Platform</h1>
-      <Form onSubmit={handleSubmit}>
-        <FormInput label="Email"    name="email"    type="text" />
-        <FormInput label="Password" name="password" type="password" />
-        <FormButton className="btn-submit" type="submit">Sign In</FormButton>
-        <div className="links">
-          <a href="/signup">Sign Up</a>
-          <a href="/forgot">Forgot Password?</a>
-        </div>
-      </Form>
-    </div>
-  );
+*/
+	const handleSubmit = (e: any) => {
+		const f = useCallback(async () => {
+			const success = await auth?.handleLogin(email, password);
+			if (success) {
+				navigate(-1);
+			} else {
+				//provide a message indicating authentication failure
+			}
+		}, []);
+	};
+
+	return (
+		<div className="login-page">
+			<h1 className="title">Bike Index Platform</h1>
+			<Form onSubmit={handleSubmit}>
+				<FormInput
+					label="Email"
+					name="email"
+					type="text"
+					value={email}
+					onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+						setEmail(e.target.value)
+					}
+				/>
+				<FormInput
+					label="Password"
+					name="password"
+					type="password"
+					value={password}
+					onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+						setPassword(e.target.value)
+					}
+				/>
+				<FormButton className="btn-submit" type="submit">
+					Sign In
+				</FormButton>
+				<div className="links">
+					<a href="/signup">Sign Up</a>
+					<a href="/forgot">Forgot Password?</a>
+				</div>
+			</Form>
+		</div>
+	);
 }
 
 // function isEmail(text: string) {

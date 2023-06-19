@@ -6,6 +6,7 @@ import Modal from "../components/Modal";
 import axios from "axios";
 
 import "../styles/thiefList.css";
+import { httpClient } from "../services/HttpClient";
 
 // @ts-ignore
 export interface Thief extends React.HTMLInputElement {
@@ -35,6 +36,9 @@ export default function ThiefList() {
 	useEffect(() => {
 		const GetThiefs = async () => {
 			latestSearchText.current = searchText;
+			httpClient.get(
+				`/search?searchType=${FilterType[searchType]}&search=${searchText}`
+			);
 			const config = {
 				headers: {
 					"Content-type": "application/json",
@@ -49,9 +53,9 @@ export default function ThiefList() {
 			result.forEach((thief: Thief) => {
 				let newThief = {
 					thiefId: thief.thiefId,
-					name:    thief.name,
-					phone:   thief.phone,
-					email:   thief.email,
+					name: thief.name,
+					phone: thief.phone,
+					email: thief.email,
 					address: thief.address,
 				};
 				returnVal.push(newThief);
