@@ -73,10 +73,14 @@ Schedule
 				...
 		Flesh out pages (Cristian/Cheng)
 			Fix css issues
+				- Complete
 			ENV files
+				- Complete
 			Thief list
 				"Add new" button
+					- Complete
 				Loading symbol/gif for results
+					- Complete
 			Thief edit
 				Populate with data
 				Submit data
