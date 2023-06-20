@@ -9,6 +9,9 @@ export default function Login() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const navigate = useNavigate();
+	//Login failure state, determines whether the login failure message is visible
+	const [loginFailure, setLoginFailure] = useState(false);
+
 	/*
   function handleSubmit = (e: any) => {
     const 
@@ -24,9 +27,11 @@ export default function Login() {
 			if (success) {
 				navigate(-1);
 			} else {
+				setLoginFailure(true);
 				//provide a message indicating authentication failure
 			}
-		}, []);
+		}, [e]); //I don't know if this will work
+		f();
 	};
 
 	return (
@@ -59,6 +64,11 @@ export default function Login() {
 					<a href="/forgot">Forgot Password?</a>
 				</div>
 			</Form>
+			{loginFailure && (
+				<div>
+					<p>Login failed</p>
+				</div>
+			)}
 		</div>
 	);
 }
