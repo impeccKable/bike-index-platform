@@ -4,7 +4,6 @@ import Navbar from '../components/Navbar';
 import { LinkButton } from '../components/Form';
 import Modal from '../components/Modal';
 import axios from 'axios';
-// import env from 'react-dotenv';
 
 import '../styles/thiefList.css';
 
@@ -42,7 +41,9 @@ export default function ThiefList() {
         },
       };
       // debugger;
-      const url = `http://localhost:3000/search?searchType=${FilterType[searchType]}&search=${searchText}`;
+      const url = `http://${
+        import.meta.env.VITE_BACKEND_HOST
+      }/search?searchType=${FilterType[searchType]}&search=${searchText}`;
       const response = await axios.get(url, config);
 
       const result = await response.data;
