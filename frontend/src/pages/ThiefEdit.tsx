@@ -54,7 +54,12 @@ export default function ThiefEdit() {
       <main>
         <h1 className="title2">Thief Edit</h1>
         <Form onSubmit={handleFormSubmit}>
-          <MultiField label="Name" name="name" component={FormInput} />
+          <MultiField
+            label="Name"
+            name="name"
+            data={['test1', 'test2']}
+            component={FormInput}
+          />
           <MultiField label="Email" name="email" component={FormInput} />
           <MultiField label="Url" name="url" component={FormInput} />
           <MultiField label="Address" name="addr" component={FormInput} />

@@ -43,7 +43,7 @@ export default function ThiefList() {
       // debugger;
       const url = `http://${
         import.meta.env.VITE_BACKEND_HOST
-      }/search?searchType=${FilterType[searchType]}&search=${searchText}`;
+      }:3000/search?searchType=${FilterType[searchType]}&search=${searchText}`;
       const response = await axios.get(url, config);
 
       const result = await response.data;
