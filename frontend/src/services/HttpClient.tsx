@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 
-const serverIP = import.meta.env.API_HOST;
-const serverPort = import.meta.env.PORT;
+const serverIP   = import.meta.env.VITE_APIHOST;
+const serverPort = import.meta.env.VITE_PORT;
 
 const serverUrl = `http://${serverIP}:${serverPort}`;
 

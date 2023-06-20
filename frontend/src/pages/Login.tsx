@@ -16,7 +16,7 @@ export default function Login() {
 		const f = async () => {
 			const success = await auth?.handleLogin(email, password);
 			if (success) {
-				navigate(-1);
+				navigate("/thieflist");
 			} else {
 				setLoginFailure(true);
 				//provide a message indicating authentication failure

@@ -10,30 +10,29 @@ import Stats from "./pages/Stats";
 import { AuthProvider } from "./services/AuthProvider";
 import { AuthProtected } from "./components/AuthProtected";
 import { Logout } from "./pages/Logout";
+import { RecoilRoot } from "recoil";
+import { Suspense } from "react";
 
 export default function App() {
 	return (
+		<RecoilRoot>
+		<Suspense>
 		<AuthProvider>
-			<div className="App">
-				<Routes>
-					<Route path="/" element={<Login />}></Route>
-					<Route path="/signup" element={<Signup />}></Route>
-					<Route path="/forgot" element={<ForgotPass />}></Route>
-					<Route path="/thiefEdit" element={<ThiefEdit />}></Route>
-					<Route path="/thiefList" element={<ThiefList />}></Route>
-					<Route path="/import" element={<DataImport />}></Route>
-					<Route
-						path="/about"
-						element={
-							<AuthProtected>
-								<About />
-							</AuthProtected>
-						}
-					></Route>
-					<Route path="/stats" element={<Stats />}></Route>
-					<Route path="/logout" element={<Logout />}></Route>
-				</Routes>
-			</div>
+		<div className="App">
+			<Routes>
+				<Route path="/" element={<Login />}></Route>
+				<Route path="/signup"    element={<Signup />}></Route>
+				<Route path="/forgot"    element={<ForgotPass />}></Route>
+				<Route path="/thiefEdit" element={<ThiefEdit />}></Route>
+				<Route path="/thiefList" element={<ThiefList />}></Route>
+				<Route path="/import"    element={<DataImport />}></Route>
+				<Route path="/about"     element={<AuthProtected><About /></AuthProtected>}></Route>
+				<Route path="/stats"     element={<Stats />}></Route>
+				<Route path="/logout"    element={<Logout />}></Route>
+			</Routes>
+		</div>
 		</AuthProvider>
+		</Suspense>
+		</RecoilRoot>
 	);
 }

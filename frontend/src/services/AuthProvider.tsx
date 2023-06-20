@@ -13,25 +13,13 @@ import React, { useState, useContext, useEffect } from "react";
 const AuthContext = React.createContext<AuthContextProps | null>(null);
 
 const app = initializeApp({
-	apiKey: "AIzaSyCozVVwQa4VTZO_z2pVptiJnj1lKRmzLVM",
-	authDomain: "zorp-c7155.firebaseapp.com",
-	projectId: "zorp-c7155",
-	storageBucket: "zorp-c7155.appspot.com",
-	messagingSenderId: "447122475646",
-	appId: "1:447122475646:web:554c21ec7bcd71dc53262f",
-	measurementId: "G-TJJ62R37J7",
+	apiKey:            import.meta.env.VITE_APIKEY,
+	authDomain:        import.meta.env.VITE_AUTHDOMAIN,
+	projectId:         import.meta.env.VITE_PROJECTID,
+	storageBucket:     import.meta.env.VITE_STORAGEBUCKET,
+	messagingSenderId: import.meta.env.VITE_MESSAGINGSENDERID,
+	appId:             import.meta.env.VITE_APPID,
 });
-
-/*
-const app = initializeApp({
-	apiKey: process.env.FIREBASE_API_KEY,
-	authDomain: process.env.FIREBASE_AUTHDOMAIN,
-	projectId: process.env.FIREBASE_PROJECT_ID,
-	storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-	messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-	appId: process.env.FIREBASE_APP_ID,
-});
-*/
 export const auth = getAuth(app);
 
 export type AuthContextProps = {

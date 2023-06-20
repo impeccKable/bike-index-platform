@@ -62,23 +62,29 @@ Schedule
 			Search feature (verify api calls and connect to the database)
 			Stats
 	Sprint 3 (6/20)
+		Get server running headless
+
 		Authentication (Matt/Emerson)
-			Login
-				Check if user account is approved
-			Logout
-			Protected routes
-			Edit user table
-				Add org, uid
-				Remove password
-			Recoil
-				research
-				install
-				...
-			Find an auth library
-				oauth?		Authentication (session information)
+			Done
+				Find an auth library
+					oauth?		Authentication (session information)
+				Logout
+				Protected routes
+			Todo
+				Console logs for reloads
+				Login
+					Check if user account is approved
+				Recoil
+					User state
+					Keep only used fields
+				Edit user table
+					Add org, uid
+					Remove password
+				Add token to requests
 		Flesh out pages (Cristian/Cheng)
 			Fix css issues
 			ENV files
+
 			Thief list
 				"Add new" button
 				Loading symbol/gif for results
