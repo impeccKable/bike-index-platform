@@ -9,6 +9,7 @@ import About from "./pages/About";
 import Stats from "./pages/Stats";
 import { AuthProvider } from "./services/AuthProvider";
 import { AuthProtected } from "./components/AuthProtected";
+import { Logout } from "./pages/Logout";
 
 export default function App() {
 	return (
@@ -21,10 +22,16 @@ export default function App() {
 					<Route path="/thiefEdit" element={<ThiefEdit />}></Route>
 					<Route path="/thiefList" element={<ThiefList />}></Route>
 					<Route path="/import" element={<DataImport />}></Route>
-					<AuthProtected>
-						<Route path="/about" element={<About />}></Route>
-					</AuthProtected>
+					<Route
+						path="/about"
+						element={
+							<AuthProtected>
+								<About />
+							</AuthProtected>
+						}
+					></Route>
 					<Route path="/stats" element={<Stats />}></Route>
+					<Route path="/logout" element={<Logout />}></Route>
 				</Routes>
 			</div>
 		</AuthProvider>

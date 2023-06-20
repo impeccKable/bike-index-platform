@@ -6,23 +6,14 @@ import { useCallback } from "react";
 
 export default function Login() {
 	const auth = useAuth();
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
 	const navigate = useNavigate();
-	//Login failure state, determines whether the login failure message is visible
 	const [loginFailure, setLoginFailure] = useState(false);
 
-	/*
-  function handleSubmit = (e: any) => {
-    const 
-    const result = await auth?.handleLogin(email,password)
-    if(result===false){
-      //
-    }
-  }
-*/
 	const handleSubmit = (e: any) => {
-		const f = useCallback(async () => {
+		console.log(e.dataDict);
+		const email = e.dataDict.email;
+		const password = e.dataDict.password;
+		const f = async () => {
 			const success = await auth?.handleLogin(email, password);
 			if (success) {
 				navigate(-1);
@@ -30,32 +21,16 @@ export default function Login() {
 				setLoginFailure(true);
 				//provide a message indicating authentication failure
 			}
-		}, [e]); //I don't know if this will work
+		}; //I don't know if this will work
 		f();
 	};
-
+	console.log("Component rendered");
 	return (
 		<div className="login-page">
 			<h1 className="title">Bike Index Platform</h1>
 			<Form onSubmit={handleSubmit}>
-				<FormInput
-					label="Email"
-					name="email"
-					type="text"
-					value={email}
-					onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-						setEmail(e.target.value)
-					}
-				/>
-				<FormInput
-					label="Password"
-					name="password"
-					type="password"
-					value={password}
-					onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-						setPassword(e.target.value)
-					}
-				/>
+				<FormInput placedholder="Email" name="email" type="text" />
+				<input placeholder="Password" name="password" type="password" />
 				<FormButton className="btn-submit" type="submit">
 					Sign In
 				</FormButton>
