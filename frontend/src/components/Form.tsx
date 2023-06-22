@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import React, { Children } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -48,12 +48,11 @@ export function MultiField(props: MultiFieldProps) {
   const { label, name, component: Component, onChange, ...rest } = props;
   const [values, setValues] = useState(['']);
 
-  let test = rest.data;
-  if (rest.data === undefined) {
-    test = [''];
+  if (rest.data) {
+    useEffect(() => {
+      setValues(rest.data);
+    }, []);
   }
-
-  //debugger;
 
   function handleInput(e: any, idx: number) {
     let newValues = [...values];
@@ -74,7 +73,6 @@ export function MultiField(props: MultiFieldProps) {
     updateValues(newValues);
   }
   function updateValues(newValues: string[]) {
-    test = newValues;
     setValues(newValues);
     let newValuesCSV = newValues
       .map((field) => {
@@ -92,7 +90,7 @@ export function MultiField(props: MultiFieldProps) {
     <div className="form-group">
       <label>{label}</label>
       <ol>
-        {test.map((value: string, idx: number) => (
+        {values.map((value: string, idx: number) => (
           <li key={idx == 0 ? name : name + idx}>
             <Component
               name={idx == 0 ? name : name + idx}
