@@ -4,9 +4,13 @@ import Navbar from "../components/Navbar";
 import { LinkButton } from "../components/Form";
 import Modal from "../components/Modal";
 import axios from "axios";
+import { useRecoilValue } from "recoil";
+import { debugState } from "../services/Recoil";
 
 import "../styles/thiefList.css";
 import { httpClient } from "../services/HttpClient";
+
+import { useAuth } from "../services/AuthProvider";
 
 // @ts-ignore
 export interface Thief extends React.HTMLInputElement {
@@ -25,6 +29,10 @@ enum FilterType {
 }
 
 export default function ThiefList() {
+	if (useRecoilValue(debugState) == true) {
+		console.log("ThiefList");
+		// console.log(useAuth().user);
+	}
 	const empty: Thief[] = [];
 	const [searchEnabled, setSearchEnabled] = useState(true);
 	const [searchType, setSearchType] = useState(FilterType.All);
@@ -34,6 +42,7 @@ export default function ThiefList() {
 	const [thiefs, setThiefs] = useState(empty);
 
 	useEffect(() => {
+		console.log(searchText);
 		const GetThiefs = async () => {
 			latestSearchText.current = searchText;
 			httpClient.get(

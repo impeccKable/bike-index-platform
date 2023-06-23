@@ -39,8 +39,7 @@ export const AuthProvider = ({ children }: any) => {
 				email,
 				password
 			);
-			const theUser = login.user;
-			setUser(theUser);
+			setUser(login.user);
 			return true;
 		} catch (err) {
 			console.error(err);
@@ -82,6 +81,6 @@ export const AuthProvider = ({ children }: any) => {
 	);
 };
 
-export const useAuth = () => {
+export const useAuth = (): any => {
 	return useContext(AuthContext);
 };

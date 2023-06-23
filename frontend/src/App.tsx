@@ -7,17 +7,20 @@ import ThiefList from "./pages/ThiefList";
 import DataImport from "./pages/DataImport";
 import About from "./pages/About";
 import Stats from "./pages/Stats";
-import { AuthProvider } from "./services/AuthProvider";
 import { AuthProtected } from "./components/AuthProtected";
 import { Logout } from "./pages/Logout";
-import { RecoilRoot } from "recoil";
-import { Suspense } from "react";
+import { debugState } from "./services/Recoil";
+import { useRecoilState } from "recoil";
+import { useEffect } from "react";
 
 export default function App() {
+	const [debug, setDebug] = useRecoilState(debugState);
+	useEffect(() => {
+		setDebug(true);
+		if (debug == true) { console.log("App"); }
+	})
+
 	return (
-		<RecoilRoot>
-		<Suspense>
-		<AuthProvider>
 		<div className="App">
 			<Routes>
 				<Route path="/" element={<Login />}></Route>
@@ -31,8 +34,5 @@ export default function App() {
 				<Route path="/logout"    element={<Logout />}></Route>
 			</Routes>
 		</div>
-		</AuthProvider>
-		</Suspense>
-		</RecoilRoot>
 	);
 }

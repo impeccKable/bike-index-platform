@@ -3,8 +3,11 @@ import { useAuth } from "../services/AuthProvider";
 import { Form, FormInput, FormButton } from "../components/Form";
 import { useNavigate } from "react-router-dom";
 import { useCallback } from "react";
+import { useRecoilValue } from "recoil";
+import { debugState } from "../services/Recoil";
 
 export default function Login() {
+	if (useRecoilValue(debugState) == true) { console.log("Login"); }
 	const auth = useAuth();
 	const navigate = useNavigate();
 	const [loginFailure, setLoginFailure] = useState(false);
@@ -24,7 +27,6 @@ export default function Login() {
 		}; //I don't know if this will work
 		f();
 	};
-	console.log("Component rendered");
 	return (
 		<div className="login-page">
 			<h1 className="title">Bike Index Platform</h1>

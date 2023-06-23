@@ -77,10 +77,15 @@ Schedule
 				Recoil
 					User state
 					Keep only used fields
-				Edit user table
-					Add org, uid
-					Remove password
-				Add token to requests
+
+				Frontend
+					login post
+					signup post
+					add tokens to headers
+				Backend
+					login post
+					signup post
+					verify request bearer tokens
 		Flesh out pages (Cristian/Cheng)
 			Fix css issues
 			ENV files
