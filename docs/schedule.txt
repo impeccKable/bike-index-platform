@@ -77,14 +77,16 @@ Schedule
 				Recoil
 					User state
 					Keep only used fields
+				Frontend
+					signup post
+				Backend
+					signup post
 
 				Frontend
 					login post
-					signup post
 					add tokens to headers
 				Backend
 					login post
-					signup post
 					verify request bearer tokens
 		Flesh out pages (Cristian/Cheng)
 			Fix css issues

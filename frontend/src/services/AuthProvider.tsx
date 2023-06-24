@@ -26,7 +26,7 @@ export type AuthContextProps = {
 	user: User | null;
 	handleLogin: (email: string, password: string) => Promise<Boolean>;
 	handleLogout: () => void;
-	handleSignUp: (email: string, password: string) => Promise<Boolean>;
+	handleSignUp: (email: string, password: string) => Promise<string>;
 };
 
 export const AuthProvider = ({ children }: any) => {
@@ -54,12 +54,12 @@ export const AuthProvider = ({ children }: any) => {
 
 	const handleSignUp = async (email: string, password: string) => {
 		try {
-			await createUserWithEmailAndPassword(auth, email, password);
-			return true;
+			let userData = await createUserWithEmailAndPassword(auth, email, password);
+			return userData.user.uid;
 		} catch (err) {
 			console.error(err);
 		}
-		return false;
+		return '';
 	};
 
 	useEffect(() => {

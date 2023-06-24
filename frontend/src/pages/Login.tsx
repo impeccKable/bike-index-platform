@@ -16,6 +16,7 @@ export default function Login() {
 		console.log(e.dataDict);
 		const email = e.dataDict.email;
 		const password = e.dataDict.password;
+
 		const f = async () => {
 			const success = await auth?.handleLogin(email, password);
 			if (success) {
