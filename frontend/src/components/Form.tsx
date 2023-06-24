@@ -64,6 +64,7 @@ export function MultiField(props: MultiFieldProps) {
     newValues.splice(idx + 1, 0, ''); // insert a new empty field
     updateValues(newValues);
   }
+
   function removeField(idx: number) {
     let newValues = [...values];
     newValues.splice(idx, 1);
