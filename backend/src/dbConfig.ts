@@ -1,3 +1,4 @@
+import { config } from './config';
 
 // Create an instance of pg-promise
 const pgp = require('pg-promise')();
@@ -7,8 +8,8 @@ const connectionConfig = {
   host: '54.172.42.84',
   port: 5432,
   database: 'bike_index',
-  user: 'ec2-user',
-  password: '3P7&!zrq5B',
+  user: config.dbUser,
+  password: config.dbPassword,
 };
 
 // Create a database object

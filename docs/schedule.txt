@@ -81,10 +81,14 @@ Schedule
 				verify request bearer tokens
 		Flesh out pages (Cristian/Cheng)
 			Fix css issues
+				- Complete
 			ENV files
+				- Complete
 			Thief list
 				"Add new" button
+					- Complete
 				Loading symbol/gif for results
+					- Complete
 			Thief edit
 				Populate with data
 				Submit data
@@ -92,6 +96,8 @@ Schedule
 				useEffect
 					API calls
 	Sprint 4 (7/4)
+		Convert all spaces to tabs for indenting
+
 		Theif list bug (multiple names)
 			(one table row for each theif alias)
 		Console logs for reloads (for debugging)

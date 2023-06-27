@@ -1,13 +1,13 @@
-import { useState, useEffect, useRef } from "react";
-import ThiefTable from "../components/ThiefTable";
-import Navbar from "../components/Navbar";
-import { LinkButton } from "../components/Form";
-import Modal from "../components/Modal";
-import axios from "axios";
+import { useState, useEffect, useRef } from 'react';
+import ThiefTable from '../components/ThiefTable';
+import Navbar from '../components/Navbar';
+import { LinkButton } from '../components/Form';
+import Modal from '../components/Modal';
+import axios from 'axios';
 import { useRecoilValue } from "recoil";
 import { debugState } from "../services/Recoil";
 
-import "../styles/thiefList.css";
+import '../styles/thiefList.css';
 import { httpClient } from "../services/HttpClient";
 
 import { useAuth } from "../services/AuthProvider";
@@ -37,9 +37,9 @@ export default function ThiefList() {
 	const empty: Thief[] = [];
 	const [searchEnabled, setSearchEnabled] = useState(true);
 	const [searchType, setSearchType] = useState(FilterType.All);
-	const [searchText, setSearchText] = useState("");
+	const [searchText, setSearchText] = useState('');
 	const latestSearchText = useRef(searchText);
-	const [searchTip, setTip] = useState("Select Search Type First");
+	const [searchTip, setTip] = useState('Select Search Type First');
 	const [thiefs, setThiefs] = useState(empty);
 
 	useEffect(() => {
@@ -78,17 +78,17 @@ export default function ThiefList() {
 	const EnableSearch = (event: any) => {
 		let selectedVal = event.target[event.target.selectedIndex].value;
 
-		if (selectedVal !== "None") {
-			setSearchText("");
+		if (selectedVal !== 'None') {
+			setSearchText('');
 			setTip(`Enter Search Value...`);
 			setSearchEnabled(false);
-			if (selectedVal === "None") setSearchType(FilterType.All);
-			if (selectedVal === "text") setSearchType(FilterType.name);
-			if (selectedVal === "tel") setSearchType(FilterType.phone);
-			if (selectedVal === "email") setSearchType(FilterType.email);
+			if (selectedVal === 'None') setSearchType(FilterType.All);
+			if (selectedVal === 'text') setSearchType(FilterType.name);
+			if (selectedVal === 'tel') setSearchType(FilterType.phone);
+			if (selectedVal === 'email') setSearchType(FilterType.email);
 		} else {
-			setTip("Select Search Type First");
-			setSearchText("");
+			setTip('Select Search Type First');
+			setSearchText('');
 			setSearchEnabled(true);
 			setSearchType(FilterType.All);
 		}
@@ -132,12 +132,18 @@ export default function ThiefList() {
 							onChange={SetUserInput}
 						></input>
 					</div>
-					<button className="AddThiefButton">Add New</button>
+					<LinkButton className="AddThiefButton" to="/thiefEdit?id=new">
+						Add New
+					</LinkButton>
 				</div>
 				<div className="add-new">
 					<h2 className="results-label">Results: {}</h2>
 				</div>
-				<ThiefTable thiefs={thiefs} />
+				{thiefs ? (
+					<ThiefTable thiefs={thiefs} />
+				) : (
+					<i className="bi bi-arrow-clockwise"></i>
+				)}
 			</main>
 		</div>
 	);

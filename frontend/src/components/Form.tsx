@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import React, { Children } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -46,7 +46,16 @@ interface MultiFieldProps extends React.HTMLElement {
 }
 export function MultiField(props: MultiFieldProps) {
   const { label, name, component: Component, onChange, ...rest } = props;
+
+  // array 1
   const [values, setValues] = useState(['']);
+
+  if (rest.data) {
+    useEffect(() => {
+      setValues(rest.data);
+    }, []);
+  }
+
   function handleInput(e: any, idx: number) {
     let newValues = [...values];
     newValues[idx] = e.target.value;
@@ -57,6 +66,7 @@ export function MultiField(props: MultiFieldProps) {
     newValues.splice(idx + 1, 0, ''); // insert a new empty field
     updateValues(newValues);
   }
+
   function removeField(idx: number) {
     let newValues = [...values];
     newValues.splice(idx, 1);
@@ -79,23 +89,29 @@ export function MultiField(props: MultiFieldProps) {
       onChange({ target: { name, value: newValuesCSV } });
     }
   }
-  return <div className='form-group'>
-    <label>{label}</label>
-    <ol>
-      {values.map((value, idx) => (
-        <li key={idx == 0 ? name : name + idx}>
-          <Component
-            name={idx == 0 ? name : name + idx}
-            value={value}
-            onChange={(e: any) => handleInput(e, idx)}
-            {...rest}
-          />
-          <button type="button" onClick={() => addField(idx)}>+</button>
-          <button type="button" onClick={() => removeField(idx)}>-</button>
-        </li>
-      ))}
-    </ol>
-  </div>
+  return (
+    <div className="form-group">
+      <label>{label}</label>
+      <ol>
+        {values.map((value: string, idx: number) => (
+          <li key={idx == 0 ? name : name + idx}>
+            <Component
+              name={idx == 0 ? name : name + idx}
+              value={value}
+              onChange={(e: any) => handleInput(e, idx)}
+              {...rest}
+            />
+            <button type="button" onClick={() => addField(idx)}>
+              +
+            </button>
+            <button type="button" onClick={() => removeField(idx)}>
+              -
+            </button>
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
 }
 
 interface FormButtonProps extends React.HTMLButtonElement {
@@ -160,7 +176,9 @@ export function LinkButton(props: LinkButtonProps) {
   const { to, ...rest } = props;
   return (
     <div className="btn-div">
-      <Link to={to}><button {...rest} /></Link>
+      <Link to={to}>
+        <button {...rest} />
+      </Link>
     </div>
   );
 }
