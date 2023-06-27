@@ -81,7 +81,7 @@ export default function ThiefEdit() {
 
             results[keyValue] !== undefined
               ? results[keyValue].push([oldVal, newVal])
-              : (results[keyValue] = [oldVal, newVal]);
+              : (results[keyValue] = [[oldVal, newVal]]);
           }
         }
       }
