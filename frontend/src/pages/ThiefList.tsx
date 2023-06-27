@@ -4,8 +4,13 @@ import Navbar from "../components/Navbar";
 import { LinkButton } from "../components/Form";
 import Modal from "../components/Modal";
 import axios from "axios";
+import { useRecoilValue } from "recoil";
+import { debugState } from "../services/Recoil";
 
 import "../styles/thiefList.css";
+import { httpClient } from "../services/HttpClient";
+
+import { useAuth } from "../services/AuthProvider";
 
 // @ts-ignore
 export interface Thief extends React.HTMLInputElement {
@@ -24,6 +29,11 @@ enum FilterType {
 }
 
 export default function ThiefList() {
+	if (useRecoilValue(debugState) == true) {
+		console.log("ThiefList");
+		// console.log(useAuth().user);
+	}
+	const auth = useAuth();
 	const empty: Thief[] = [];
 	const [searchEnabled, setSearchEnabled] = useState(true);
 	const [searchType, setSearchType] = useState(FilterType.All);
@@ -33,29 +43,28 @@ export default function ThiefList() {
 	const [thiefs, setThiefs] = useState(empty);
 
 	useEffect(() => {
+		console.log(searchText);
 		const GetThiefs = async () => {
 			latestSearchText.current = searchText;
-			const config = {
-				headers: {
-					"Content-type": "application/json",
-				},
-			};
-			const url = `http://localhost:3000/search?searchType=${FilterType[searchType]}&search=${searchText}`;
-			const response = await axios.get(url, config);
-
-			const result = await response.data;
+			let result: any = [];
+			const response = await httpClient.get(
+				`/search?searchType=${FilterType[searchType]}&search=${searchText}`
+			);
+			result = response.data;
 			const returnVal: Thief[] = [];
 
 			result.forEach((thief: Thief) => {
 				let newThief = {
 					thiefId: thief.thiefId,
-					name:    thief.name,
-					phone:   thief.phone,
-					email:   thief.email,
+					name: thief.name,
+					phone: thief.phone,
+					email: thief.email,
 					address: thief.address,
 				};
 				returnVal.push(newThief);
 			});
+
+			console.log(returnVal);
 
 			// Discard results if the search text has changed since the request was made
 			if (latestSearchText.current !== searchText) return;

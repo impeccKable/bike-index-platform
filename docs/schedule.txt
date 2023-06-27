@@ -14,6 +14,7 @@ Questions
 		We made a standard
 
 	Should users be able to edit their profile?
+	Does Bryan want verified emails?
 Todo
 	Show thief ID
 		Editable by admin
@@ -61,16 +62,23 @@ Schedule
 			Search feature (verify api calls and connect to the database)
 			Stats
 	Sprint 3 (6/20)
-		Figure out how to run it headless
+		Get server running headless
 
 		Authentication (Matt/Emerson)
-			Login
+			Find an auth library
+				oauth?		Authentication (session information)
 			Logout
-			Firebase
-			Redux
-				research
-				install
-				...
+			Login
+				Check if user account is approved
+			Protected routes
+			Frontend
+				signup post
+				login post
+				add tokens to headers
+			Backend
+				login post
+				signup post
+				verify request bearer tokens
 		Flesh out pages (Cristian/Cheng)
 			Fix css issues
 			ENV files
@@ -80,20 +88,28 @@ Schedule
 			Thief edit
 				Populate with data
 				Submit data
-			User list
-			Csv upload page
-				Example csv file
-			Stats/About
-				Formatting
 			Hooks
 				useEffect
 					API calls
 	Sprint 4 (7/4)
+		Theif list bug (multiple names)
+			(one table row for each theif alias)
+		Console logs for reloads (for debugging)
 		User management
 		Roles
 		Multiple pages on search results?
+
+		User list
+		Csv upload page
+			Example csv file
+		Stats/About
+			Formatting
 	Sprint 5 (7/18)
 		Testing
+		User old state bug
+			Recoil?
+			User state
+			Keep only used fields
 		Make it robust to database errors
 	Sprint 6 (8/1)
 		Site management (files on server)

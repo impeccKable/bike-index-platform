@@ -1,6 +1,7 @@
 import express from "express";
 import db from "./dbConfig";
 import { fieldToTable, thiefInfoByIds } from "./thiefInfo";
+import { auth } from "../app";
 
 // Get matching thief_ids
 const get = async (query: any) => {
@@ -39,7 +40,31 @@ const get = async (query: any) => {
 const router = express.Router();
 router.get("/", async (req: express.Request, res: express.Response) => {
 	try {
-		return res.json(await get(req.query));
+		let token = '';
+
+		if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+			token = req.headers.authorization.split(' ')[1];
+			if(token[0]===`"`){
+				token = token.slice(1,-1);
+			}
+		}	
+
+	    if(!token){
+	        res.status(401).send("No valid token provided");
+	        return;
+	    }
+
+		console.log(token);
+		
+		auth.verifyIdToken(token)
+            .then(async (decodedToken: any) => {
+                console.log(decodedToken);
+        });
+		
+		const result = await get(req.query);
+		console.log(result);
+
+		return res.json(result);
 	} catch (err) {
 		console.error(err);
 		res.status(500);
