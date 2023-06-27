@@ -33,6 +33,7 @@ export default function ThiefList() {
 		console.log("ThiefList");
 		// console.log(useAuth().user);
 	}
+	const auth = useAuth();
 	const empty: Thief[] = [];
 	const [searchEnabled, setSearchEnabled] = useState(true);
 	const [searchType, setSearchType] = useState(FilterType.All);
@@ -45,18 +46,11 @@ export default function ThiefList() {
 		console.log(searchText);
 		const GetThiefs = async () => {
 			latestSearchText.current = searchText;
-			httpClient.get(
+			let result: any = [];
+			const response = await httpClient.get(
 				`/search?searchType=${FilterType[searchType]}&search=${searchText}`
 			);
-			const config = {
-				headers: {
-					"Content-type": "application/json",
-				},
-			};
-			const url = `http://localhost:3000/search?searchType=${FilterType[searchType]}&search=${searchText}`;
-			const response = await axios.get(url, config);
-
-			const result = await response.data;
+			result = response.data;
 			const returnVal: Thief[] = [];
 
 			result.forEach((thief: Thief) => {
@@ -69,6 +63,8 @@ export default function ThiefList() {
 				};
 				returnVal.push(newThief);
 			});
+
+			console.log(returnVal);
 
 			// Discard results if the search text has changed since the request was made
 			if (latestSearchText.current !== searchText) return;

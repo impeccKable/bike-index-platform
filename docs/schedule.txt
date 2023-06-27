@@ -69,24 +69,23 @@ Schedule
 				Find an auth library
 					oauth?		Authentication (session information)
 				Logout
-				Protected routes
-			Todo
-				Console logs for reloads
 				Login
 					Check if user account is approved
+				Protected routes
+				Frontend
+					signup post
+					login post
+				Backend
+					login post
+					signup post
+			Todo
+				Console logs for reloads
 				Recoil
 					User state
 					Keep only used fields
-				Frontend
-					signup post
-				Backend
-					signup post
-
-				Frontend
-					login post
+				Frontend	
 					add tokens to headers
 				Backend
-					login post
 					verify request bearer tokens
 		Flesh out pages (Cristian/Cheng)
 			Fix css issues

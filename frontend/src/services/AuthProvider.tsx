@@ -9,6 +9,7 @@ import {
 	createUserWithEmailAndPassword,
 } from "firebase/auth";
 import React, { useState, useContext, useEffect } from "react";
+import { httpClient } from "./HttpClient";
 
 const AuthContext = React.createContext<AuthContextProps | null>(null);
 
@@ -20,26 +21,43 @@ const app = initializeApp({
 	messagingSenderId: import.meta.env.VITE_MESSAGINGSENDERID,
 	appId:             import.meta.env.VITE_APPID,
 });
+
 export const auth = getAuth(app);
 
+export type UserInfo = {
+	firebaseUser: User | null;
+	bikeUser: any | null; //create type for this later
+};
+
 export type AuthContextProps = {
-	user: User | null;
+	user: UserInfo | null;
 	handleLogin: (email: string, password: string) => Promise<Boolean>;
 	handleLogout: () => void;
 	handleSignUp: (email: string, password: string) => Promise<string>;
 };
 
 export const AuthProvider = ({ children }: any) => {
-	const [user, setUser] = useState<User | null>(null);
-
+	const [user, setUser] = useState<UserInfo | null>(null);
+	
 	const handleLogin = async (email: string, password: string) => {
 		try {
 			const login = await signInWithEmailAndPassword(
 				auth,
 				email,
 				password
-			);
-			setUser(login.user);
+				);
+			const user = {
+				firebaseUser: login.user,
+				bikeUser: (await httpClient.post("/login", { uid: login.user.uid })).data,
+			}
+			if(user.bikeUser.banned === true) {
+				throw new Error("User is banned");
+			}
+			else if(user.bikeUser.approved === false) {
+				throw new Error("User is not verified");
+			}
+			await updateAxios(await login.user.getIdToken());
+			setUser(user);
 			return true;
 		} catch (err) {
 			console.error(err);
@@ -62,10 +80,24 @@ export const AuthProvider = ({ children }: any) => {
 		return '';
 	};
 
-	useEffect(() => {
-		const unsubscribe = auth.onAuthStateChanged(setUser);
-		return unsubscribe;
-	}, []);
+	const updateAxios = async (token: string) => {
+		console.log(`In changing header auth with ${token}`);
+		httpClient.interceptors.request.use(
+			async (config) => {
+				// @ts-ignore
+				config.headers = {
+					Authorization: `Bearer ${token}`,
+					Accept: "application/json",
+				};
+				
+				return config;
+			},
+			(error) => {
+				console.error("REJECTED TOKEN PROMISE");
+				Promise.reject(error);
+			}
+		);
+	};
 
 	return (
 		<AuthContext.Provider
@@ -84,3 +116,4 @@ export const AuthProvider = ({ children }: any) => {
 export const useAuth = (): any => {
 	return useContext(AuthContext);
 };
+
