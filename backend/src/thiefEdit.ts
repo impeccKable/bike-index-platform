@@ -91,7 +91,7 @@ const put = async (body: any) => {
     }
     for (let [oldVal, newVal] of body[field]) {
       if (oldVal === '0') {
-        // await insertField(fieldToTable[field], thiefId, newVal);
+        await insertField(fieldToTable[field], thiefId, newVal);
       } else if (newVal === '0') {
         await deleteField(fieldToTable[field], thiefId, oldVal);
       } else {
