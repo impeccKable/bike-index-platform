@@ -46,6 +46,8 @@ interface MultiFieldProps extends React.HTMLElement {
 }
 export function MultiField(props: MultiFieldProps) {
   const { label, name, component: Component, onChange, ...rest } = props;
+
+  // array 1
   const [values, setValues] = useState(['']);
 
   if (rest.data) {

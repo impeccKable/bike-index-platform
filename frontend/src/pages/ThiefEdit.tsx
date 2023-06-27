@@ -12,12 +12,25 @@ import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 
 export default function ThiefEdit() {
-  function handleFormSubmit(e: any) {
-    e.preventDefault();
-    console.log(e);
-  }
-
   const [searchParams, setSearchParams] = useSearchParams();
+
+  // get id
+  let thiefID = searchParams.get('thiefId');
+
+  // theifInfo has latest data
+  //const [theifInfoCurrent, setCurrentTheifInfo] = useState({
+  //  thiefId: 0,
+  //  name: [''],
+  //  email: [''],
+  //  url: [''],
+  //  addr: [''],
+  //  phone: [''],
+  //  bikeSerial: [''],
+  //  phrase: [''],
+  //  note: [''],
+  //});
+
+  // theifInfo at beginning
   const [theifInfo, setTheifInfo] = useState({
     thiefId: 0,
     name: [''],
@@ -29,16 +42,58 @@ export default function ThiefEdit() {
     phrase: [''],
     note: [''],
   });
-  //const [nameData, setNameData] = useState<FormInputProps>({name:""});
-  //const [test, setTest] = useState<JSX.Element>();
 
-  // get id
-  let theifID = searchParams.get('thiefId');
+  function handleFormSubmit(e: any) {
+    e.preventDefault();
+    console.log(e);
+
+    let results = CompareResults(e.dataDict);
+
+    let status = axios.put(
+      `http://${import.meta.env.VITE_BACKEND_HOST}/thiefEdit`,
+      results
+    );
+
+    console.log(status);
+  }
+
+  const CompareResults = (submitData: any) => {
+    //Ex: newValues.name[0].push('Something'), 0 = old values
+    let results = {};
+    results.thiefId = thiefID;
+
+    // need to split this one
+    Object.entries(submitData).map((field) => {
+      // field[0] is key, field[1] is value
+
+      if (field[0] !== 'theifId') {
+        let newValues = field[1].split(',');
+        let oldValues = theifInfo[`${field[0]}`];
+
+        let test = Math.max(newValues.length, oldValues.length);
+
+        for (let i = 0; i < test; i++) {
+          let oldVal = oldValues[i] ? oldValues[i] : '0';
+          let newVal = newValues[i] ? newValues[i] : '0';
+
+          if (oldVal !== newVal) {
+            let keyValue = field[0];
+
+            results[keyValue] !== undefined
+              ? results[keyValue].push([oldVal, newVal])
+              : (results[keyValue] = [oldVal, newVal]);
+          }
+        }
+      }
+    });
+
+    return results;
+  };
 
   // get request for thief info
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/thiefEdit?thiefId=${theifID}`)
+      .get(`http://localhost:3000/thiefEdit?thiefId=${thiefID}`)
       .then((res: any) => {
         console.log('Theif search response', res.data);
 
@@ -53,9 +108,8 @@ export default function ThiefEdit() {
           phrase: [''],
           note: [''],
         };
+
         Object.entries(res.data[0]).map((atr) => {
-          // atr[0] = key;
-          // atr[1] = value;
           let t1 = atr;
           console.log(t1);
           if (atr[0].localeCompare('thiefId') && atr[1].length === 0) {
@@ -68,16 +122,6 @@ export default function ThiefEdit() {
         console.log('tempData = ', tempData);
 
         setTheifInfo(tempData);
-
-        //let newObject: FormInputProps = {
-        //  name: 'Thief Name',
-        //  label: 'Thief Name',
-        //  key: [tempData.name],
-        //};
-
-        //setNameData(newObject);
-        //let test = FormInput(newObject);
-        //setTest(test);
       });
   }, []);
 
