@@ -47,13 +47,12 @@ Database
 		file         text  -- (url to file server)
 	);
 	create table bi_user (
-		bi_user_id   int,
+		user_uid     text,
 		email        text,
-		password     text,  -- hash                                    -- remove
 		first_name   text,
 		last_name    text,
 		title        text,
-		org          text,                                             -- add
+		org          text,
 		phone        text,  -- only digits
 		role         text,  -- ["admin", "readWrite", "readOnly"]
 		approved     bool,
@@ -63,8 +62,8 @@ Database
 		-- Actions from post/get requests, store it as a json object
 		history_id   int,
 		datetime     timestamp,
-		bi_user_id    int,
-		source       text,
+		user_uid     int,
+		source       text,  -- ip?
 		message      text
 	);
 	create sequence next_thief_id;
