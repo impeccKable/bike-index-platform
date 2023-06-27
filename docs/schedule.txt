@@ -65,52 +65,51 @@ Schedule
 		Get server running headless
 
 		Authentication (Matt/Emerson)
-			Done
-				Find an auth library
-					oauth?		Authentication (session information)
-				Logout
-				Login
-					Check if user account is approved
-				Protected routes
-				Frontend
-					signup post
-					login post
-				Backend
-					login post
-					signup post
-			Todo
-				Console logs for reloads
-				Recoil
-					User state
-					Keep only used fields
-				Frontend	
-					add tokens to headers
-				Backend
-					verify request bearer tokens
+			Find an auth library
+				oauth?		Authentication (session information)
+			Logout
+			Login
+				Check if user account is approved
+			Protected routes
+			Frontend
+				signup post
+				login post
+				add tokens to headers
+			Backend
+				login post
+				signup post
+				verify request bearer tokens
 		Flesh out pages (Cristian/Cheng)
 			Fix css issues
 			ENV files
-
 			Thief list
 				"Add new" button
 				Loading symbol/gif for results
 			Thief edit
 				Populate with data
 				Submit data
-			User list
-			Csv upload page
-				Example csv file
-			Stats/About
-				Formatting
 			Hooks
 				useEffect
 					API calls
 	Sprint 4 (7/4)
+		Theif list bug (multiple names)
+			(one table row for each theif alias)
+		Console logs for reloads (for debugging)
 		User management
 		Roles
 		Multiple pages on search results?
+
+		User list
+		Csv upload page
+			Example csv file
+		Stats/About
+			Formatting
 	Sprint 5 (7/18)
 		Testing
+		User old state bug
+			Recoil?
+			User state
+			Keep only used fields
 		Make it robust to database errors
 	Sprint 6 (8/1)
 		Site management (files on server)
