@@ -90,9 +90,8 @@ const put = async (body: any) => {
       continue;
     }
     for (let [oldVal, newVal] of body[field]) {
-      console.log('insert values', oldVal, newVal);
       if (oldVal === '0') {
-        await insertField(fieldToTable[field], thiefId, newVal);
+        // await insertField(fieldToTable[field], thiefId, newVal);
       } else if (newVal === '0') {
         await deleteField(fieldToTable[field], thiefId, oldVal);
       } else {
@@ -112,7 +111,6 @@ router.get('/', async (req: express.Request, res: express.Response) => {
   }
 });
 router.put('/', async (req: express.Request, res: express.Response) => {
-  console.log('request body', req.body);
   try {
     await put(req.body);
     res.status(200);
