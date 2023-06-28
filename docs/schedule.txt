@@ -62,8 +62,6 @@ Schedule
 			Search feature (verify api calls and connect to the database)
 			Stats
 	Sprint 3 (6/20)
-		Get server running headless
-
 		Authentication (Matt/Emerson)
 			Find an auth library
 				oauth?		Authentication (session information)
@@ -96,7 +94,14 @@ Schedule
 				useEffect
 					API calls
 	Sprint 4 (7/4)
+		!!! Networking for server (frontend to backend)
+
+		Get server running headless
 		Convert all spaces to tabs for indenting
+		Combine host/port in frontend .env
+		Combine serviceProvider.json into .env
+		Figure out how to share/store/update .env files between people
+		Add a dev mode (dev/debug/prod)
 
 		Theif list bug (multiple names)
 			(one table row for each theif alias)
@@ -104,6 +109,9 @@ Schedule
 		User management
 		Roles
 		Multiple pages on search results?
+
+		Signup
+			Delete firebase user if post to backend fails
 
 		User list
 		Csv upload page

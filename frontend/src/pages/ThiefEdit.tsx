@@ -15,7 +15,7 @@ export default function ThiefEdit() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   // get id
-  let thiefID = searchParams.get('thiefId');
+  const thiefID = searchParams.get('thiefId');
 
   // theifInfo has latest data
   //const [theifInfoCurrent, setCurrentTheifInfo] = useState({
@@ -92,6 +92,9 @@ export default function ThiefEdit() {
 
   // get request for thief info
   useEffect(() => {
+    if (thiefID === 'new') {
+      return;
+    }
     axios
       .get(`http://localhost:3000/thiefEdit?thiefId=${thiefID}`)
       .then((res: any) => {
@@ -122,10 +125,11 @@ export default function ThiefEdit() {
         console.log('tempData = ', tempData);
 
         setTheifInfo(tempData);
+        console.log('theifInfo (2) = ', theifInfo);
       });
   }, []);
 
-  return theifInfo.thiefId !== 0 ? (
+  return theifInfo.thiefId !== 0 || thiefID === 'new' ? (
     <div className="thiefedit-page">
       <Navbar />
       <main>
@@ -191,6 +195,6 @@ export default function ThiefEdit() {
       </main>
     </div>
   ) : (
-    <h2>Loading</h2>
+    <h2>Loading...</h2>
   );
 }

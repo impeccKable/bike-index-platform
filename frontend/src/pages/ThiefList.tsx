@@ -132,7 +132,7 @@ export default function ThiefList() {
 							onChange={SetUserInput}
 						></input>
 					</div>
-					<LinkButton className="AddThiefButton" to="/thiefEdit?id=new">
+					<LinkButton className="AddThiefButton" to="/thiefEdit?thiefId=new">
 						Add New
 					</LinkButton>
 				</div>

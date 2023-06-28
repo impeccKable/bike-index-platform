@@ -21,6 +21,8 @@ https://pnpm.io/installation
 `npm i`
 `pnpm run dev`
 
+`pnpm run dev -- --host`
+
 ### Backend
 For Windows (run in powershell):
 `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted`
