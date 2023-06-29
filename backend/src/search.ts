@@ -6,9 +6,9 @@ import { auth } from "../app";
 // Get matching thief_ids
 const get = async (query: any) => {
 	let searchType: string = query.searchType;
-	let search: string = query.search;
+	let searchText: string = query.searchText;
 	let thiefIds: Array<number> = [];
-	if (!searchType || !search) {
+	if (!searchType || !searchText) {
 		return thiefIds; // TODO: return most recent thieves
 	}
 	let table = fieldToTable[searchType];
@@ -21,14 +21,14 @@ const get = async (query: any) => {
 				OR city  ILIKE $1
 				OR state ILIKE $1
 				OR zip   ILIKE $1
-		`, [`%${search}%`]);
+		`, [`%${searchText}%`]);
 
 	} else if (table) {
 		thiefIds = await db.any(`
 			SELECT thief_id
 			FROM ${table}
 			WHERE ${table} ILIKE $1
-		`, [`%${search}%`]);
+		`, [`%${searchText}%`]);
 
 	} else {
 		throw new Error(`Unknown search type: ${query.searchType}`);
@@ -53,18 +53,8 @@ router.get("/", async (req: express.Request, res: express.Response) => {
 			res.status(401).send("No valid token provided");
 			return;
 		}
-
-		console.log(token);
-
-		auth.verifyIdToken(token)
-			.then(async (decodedToken: any) => {
-				console.log(decodedToken);
-		});
-
-		const result = await get(req.query);
-		console.log(result);
-
-		return res.json(result);
+		auth.verifyIdToken(token);
+		return res.json(await get(req.query));
 	} catch (err) {
 		console.error(err);
 		res.status(500);

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import React, { Children } from 'react';
 import { Link } from 'react-router-dom';
+import { useRecoilValue } from "recoil";
+import { debugState } from "../services/Recoil";
 
 // A custom version of a form that compiles the form data into a dictionary
 //   and will later handle the submission and stuff
@@ -9,6 +11,9 @@ interface FormProps {
 	onSubmit: (e: any) => void;
 }
 export function Form(props: FormProps) {
+	if (useRecoilValue(debugState) == true) {
+		console.log("Form");
+	}
 	const { children, onSubmit } = props;
 	const [data, setData] = useState({});
 
@@ -45,16 +50,17 @@ interface MultiFieldProps extends React.HTMLElement {
 	[key: string]: any;
 }
 export function MultiField(props: MultiFieldProps) {
+	if (useRecoilValue(debugState) == true) {
+		console.log("MultiField");
+	}
 	const { label, name, component: Component, onChange, ...rest } = props;
-
-	// array 1
 	const [values, setValues] = useState(['']);
 
-	if (rest.data) {
-		useEffect(() => {
+	useEffect(() => {
+		if (rest.data) {
 			setValues(rest.data);
-		}, []);
-	}
+		}
+	}, [rest.data]);
 
 	function handleInput(e: any, idx: number) {
 		let newValues = [...values];
@@ -174,6 +180,17 @@ interface LinkButtonProps extends React.HTMLButtonElement {
 }
 export function LinkButton(props: LinkButtonProps) {
 	const { to, ...rest } = props;
+	if (to === 'back') {
+		return (
+			<div className="btn-div">
+				<button
+					className="btn"
+					onClick={() => window.history.back()}
+					{...rest}
+				/>
+			</div>
+		);
+	}
 	return (
 		<div className="btn-div">
 			<Link to={to}>

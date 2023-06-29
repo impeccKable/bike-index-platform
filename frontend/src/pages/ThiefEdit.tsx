@@ -1,66 +1,54 @@
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
-import {
-	Form,
-	MultiField,
-	FormInput,
-	FormButton,
-	LinkButton,
-	FormInputProps,
-} from '../components/Form';
+import { Form, MultiField, FormInput, FormButton, LinkButton } from '../components/Form';
 import { useSearchParams } from 'react-router-dom';
-import axios from 'axios';
+import { httpClient } from '../services/HttpClient';
+import { useRecoilValue } from "recoil";
+import { debugState } from "../services/Recoil";
+import loading from "../assets/loading.gif";
 
 export default function ThiefEdit() {
+	if (useRecoilValue(debugState) == true) {
+		console.log("ThiefEdit");
+	}
 	const [searchParams, setSearchParams] = useSearchParams();
+	const [isLoading, setIsLoading] = useState(true);
+	const [showLoadGif, setShowLoadGif] = useState(false);
+	const [wasSubmitted, setWasSubmitted] = useState(false);
+	const urlThiefId = searchParams.get('thiefId');
 
-	// get id
-	const thiefID = searchParams.get('thiefId');
-
-	// theifInfo has latest data
-	//const [theifInfoCurrent, setCurrentTheifInfo] = useState({
-	//	thiefId: 0,
-	//	name: [''],
-	//	email: [''],
-	//	url: [''],
-	//	addr: [''],
-	//	phone: [''],
-	//	bikeSerial: [''],
-	//	phrase: [''],
-	//	note: [''],
-	//});
+	setTimeout(() => {
+		setShowLoadGif(true);
+	}, 2000);
 
 	// theifInfo at beginning
 	const [theifInfo, setTheifInfo] = useState({
-		thiefId: 0,
-		name: [''],
-		email: [''],
-		url: [''],
-		addr: [''],
-		phone: [''],
+		thiefId:    0,
+		name:       [''],
+		email:      [''],
+		url:        [''],
+		addr:       [''],
+		phone:      [''],
 		bikeSerial: [''],
-		phrase: [''],
-		note: [''],
+		phrase:     [''],
+		note:       [''],
 	});
 
 	function handleFormSubmit(e: any) {
 		e.preventDefault();
-		console.log(e);
-
 		let results = CompareResults(e.dataDict);
-
-		let status = axios.put(
-			`http://${import.meta.env.VITE_BACKEND_HOST}/thiefEdit`,
-			results
-		);
-
-		console.log(status);
+		httpClient.put('/thiefEdit', results)
+		setWasSubmitted(true);
+		setTimeout(() => {
+			setWasSubmitted(false);
+		}, 3000);
 	}
 
 	const CompareResults = (submitData: any) => {
 		//Ex: newValues.name[0].push('Something'), 0 = old values
-		let results = {};
-		results.thiefId = thiefID;
+		let results = {
+			thiefId: urlThiefId,
+		};
 
 		// need to split this one
 		Object.entries(submitData).map((field) => {
@@ -90,31 +78,28 @@ export default function ThiefEdit() {
 		return results;
 	};
 
-	// get request for thief info
 	useEffect(() => {
-		if (thiefID === 'new') {
+		if (urlThiefId === 'new') {
+			setIsLoading(false);
 			return;
 		}
-		axios
-			.get(`http://localhost:3000/thiefEdit?thiefId=${thiefID}`)
+		httpClient.get(`/thiefEdit?thiefId=${urlThiefId}`)
 			.then((res: any) => {
-				console.log('Theif search response', res.data);
+				console.log('Theif search response:', res.data);
 
 				let tempData = {
 					thiefId: 0,
-					name: [''],
-					email: [''],
-					url: [''],
-					addr: [''],
-					phone: [''],
+					name:       [''],
+					email:      [''],
+					url:        [''],
+					addr:       [''],
+					phone:      [''],
 					bikeSerial: [''],
-					phrase: [''],
-					note: [''],
+					phrase:     [''],
+					note:       [''],
 				};
 
 				Object.entries(res.data[0]).map((atr) => {
-					let t1 = atr;
-					console.log(t1);
 					if (atr[0].localeCompare('thiefId') && atr[1].length === 0) {
 						atr[1] = [''];
 						tempData[`${atr[0]}`] = atr[1];
@@ -122,79 +107,34 @@ export default function ThiefEdit() {
 						tempData[`${atr[0]}`] = atr[1];
 					}
 				});
-				console.log('tempData = ', tempData);
-
+				setIsLoading(false);
 				setTheifInfo(tempData);
-				console.log('theifInfo (2) = ', theifInfo);
 			});
 	}, []);
 
-	return theifInfo.thiefId !== 0 || thiefID === 'new' ? (
+	return (
 		<div className="thiefedit-page">
 			<Navbar />
 			<main>
-				<h1 className="title2">Thief Edit</h1>
+				<h1 className="title2">Thief Edit {isLoading && showLoadGif && <img src={loading} alt="loading" width="30px" />}</h1>
 				<Form onSubmit={handleFormSubmit}>
-					<MultiField
-						label="Name"
-						name="name"
-						data={theifInfo.name}
-						component={FormInput}
-					/>
-					<MultiField
-						label="Email"
-						name="email"
-						data={theifInfo.email}
-						component={FormInput}
-					/>
-					<MultiField
-						label="Url"
-						name="url"
-						data={theifInfo.url}
-						component={FormInput}
-					/>
-					<MultiField
-						label="Address"
-						name="addr"
-						data={theifInfo.addr}
-						component={FormInput}
-					/>
-					<MultiField
-						label="Phone"
-						name="phone"
-						data={theifInfo.phone}
-						component={FormInput}
-						type="phone"
-					/>
-					<MultiField
-						label="Bike Serial"
-						name="bikeSerial"
-						data={theifInfo.bikeSerial}
-						component={FormInput}
-					/>
-					<MultiField
-						label="Phrase"
-						name="phrase"
-						data={theifInfo.phrase}
-						component={FormInput}
-						type="textarea"
-					/>
-					<MultiField
-						label="Notes"
-						name="notes"
-						data={theifInfo.note}
-						component={FormInput}
-						type="textarea"
-					/>
+					{console.log('theifInfo', theifInfo)}
+					<FormInput  label="Thief ID"    name="thiefId"    data={theifInfo.thiefId}                                          disabled={isLoading} />
+					<MultiField label="Name"        name="name"       data={theifInfo.name}       component={FormInput}                 disabled={isLoading} />
+					<MultiField label="Email"       name="email"      data={theifInfo.email}      component={FormInput}                 disabled={isLoading} />
+					<MultiField label="Url"         name="url"        data={theifInfo.url}        component={FormInput}                 disabled={isLoading} />
+					<MultiField label="Address"     name="addr"       data={theifInfo.addr}       component={FormInput}                 disabled={isLoading} />
+					<MultiField label="Phone"       name="phone"      data={theifInfo.phone}      component={FormInput} type="phone"    disabled={isLoading} />
+					<MultiField label="Bike Serial" name="bikeSerial" data={theifInfo.bikeSerial} component={FormInput}                 disabled={isLoading} />
+					<MultiField label="Phrase"      name="phrase"     data={theifInfo.phrase}     component={FormInput} type="textarea" disabled={isLoading} />
+					<MultiField label="Notes"       name="notes"      data={theifInfo.note}       component={FormInput} type="textarea" disabled={isLoading} />
 					<div className="btn-group">
-						<LinkButton to="/thiefList">Back</LinkButton>
+						<LinkButton type="button" to="back">Back</LinkButton>
 						<FormButton type="submit">Submit</FormButton>
 					</div>
-					{/* {submitted && submitMessage} */}
+					{wasSubmitted && <div>Changes have been submitted</div>}
 				</Form>
 			</main>
 		</div>
-	) : (
-		<h2>Loading...</h2>
 	);
 }

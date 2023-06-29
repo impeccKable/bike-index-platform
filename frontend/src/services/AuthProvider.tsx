@@ -38,7 +38,7 @@ export type AuthContextProps = {
 
 export const AuthProvider = ({ children }: any) => {
 	const [user, setUser] = useState<UserInfo | null>(null);
-	
+
 	const handleLogin = async (email: string, password: string) => {
 		try {
 			const login = await signInWithEmailAndPassword(
@@ -81,7 +81,6 @@ export const AuthProvider = ({ children }: any) => {
 	};
 
 	const updateAxios = async (token: string) => {
-		console.log(`In changing header auth with ${token}`);
 		httpClient.interceptors.request.use(
 			async (config) => {
 				// @ts-ignore
@@ -89,7 +88,7 @@ export const AuthProvider = ({ children }: any) => {
 					Authorization: `Bearer ${token}`,
 					Accept: "application/json",
 				};
-				
+
 				return config;
 			},
 			(error) => {

@@ -25,12 +25,12 @@ export default function Signup() {
 				delete e.dataDict.verify;
 				console.log(e.dataDict);
 				httpClient.post('/signup', e.dataDict)
-				.then((res: any) => {
-					console.log(res);
-				})
-				.catch((err: any) => {
-					console.log(err);
-				});
+					.then((res: any) => {
+						console.log(res);
+					})
+					.catch((err: any) => {
+						console.log(err);
+					});
 			}
 		};
 		f();

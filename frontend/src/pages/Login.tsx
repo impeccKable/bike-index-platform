@@ -13,7 +13,6 @@ export default function Login() {
 	const [loginFailure, setLoginFailure] = useState(false);
 
 	const handleSubmit = (e: any) => {
-		console.log(e.dataDict);
 		const email = e.dataDict.email;
 		const password = e.dataDict.password;
 
@@ -25,18 +24,16 @@ export default function Login() {
 				setLoginFailure(true);
 				//provide a message indicating authentication failure
 			}
-		}; //I don't know if this will work
+		};
 		f();
 	};
 	return (
 		<div className="login-page">
 			<h1 className="title">Bike Index Platform</h1>
 			<Form onSubmit={handleSubmit}>
-				<FormInput placedholder="Email" name="email" type="text" />
-				<input placeholder="Password" name="password" type="password" />
-				<FormButton className="btn-submit" type="submit">
-					Sign In
-				</FormButton>
+				<FormInput placeholder="Email"    name="email"    type="text" />
+				<FormInput placeholder="Password" name="password" type="password" />
+				<FormButton className="btn-submit" type="submit">Sign In</FormButton>
 				<div className="links">
 					<a href="/signup">Sign Up</a>
 					<a href="/forgot">Forgot Password?</a>

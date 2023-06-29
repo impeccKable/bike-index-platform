@@ -19,7 +19,7 @@ const app = express();
 var serviceAccount = require('../serviceProvider.json');
 
 const firebase = admin.initializeApp({
-	credential: admin.credential.cert(serviceAccount)
+  credential: admin.credential.cert(serviceAccount)
 });
 
 export const auth = admin.auth();

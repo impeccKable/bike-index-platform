@@ -122,10 +122,13 @@
 		width: 370px;
 	}
 }*/
+.tr-link {
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
 
-.row-link {
-	display: contents;
-	color: inherit;
+.tr-link:hover {
+	background-color: #585858;
 }
 
 .thief-table {
@@ -135,7 +138,7 @@
 }
 
 .thief-table tbody tr:hover {
-	color: #646cff;
+	/* color: #646cff; */
 	border-color: #646cff;
 }
 
@@ -148,9 +151,10 @@
 }
 
 .thief-searchbar .DropDown {
-	height: 42px;
+	/* height: 2rem; */
 	border-radius: 7px;
 	border-color: #383838;
+	padding: 0.4rem 0.3rem;
 }
 
 .thief-searchbar .DropDown:hover {
@@ -169,4 +173,5 @@ td {
 	border: 1px solid;
 	border-collapse: collapse;
 	height: 30px;
+	border-color: #808080;
 }
