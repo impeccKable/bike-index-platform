@@ -47,20 +47,20 @@ router.get("/", async (req: express.Request, res: express.Response) => {
 			if(token[0]===`"`){
 				token = token.slice(1,-1);
 			}
-		}	
+		}
 
-	    if(!token){
-	        res.status(401).send("No valid token provided");
-	        return;
-	    }
+		if(!token){
+			res.status(401).send("No valid token provided");
+			return;
+		}
 
 		console.log(token);
-		
+
 		auth.verifyIdToken(token)
-            .then(async (decodedToken: any) => {
-                console.log(decodedToken);
-        });
-		
+			.then(async (decodedToken: any) => {
+				console.log(decodedToken);
+		});
+
 		const result = await get(req.query);
 		console.log(result);
 

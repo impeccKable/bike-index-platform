@@ -52,22 +52,22 @@ export default function Login() {
 }
 
 // function isEmail(text: string) {
-//   return text.includes("@")
+// 	return text.includes("@")
 // }
 // function isPhone(text: string) {
-//   return text.match(/^[0-9 +\-\.\(\)]*[0-9]+[0-9 +\-\.\(\)]*$/)
+// 	return text.match(/^[0-9 +\-\.\(\)]*[0-9]+[0-9 +\-\.\(\)]*$/)
 // }
 
 // function handleSearchInput(e: any) {
-//   let newSearchText = e.target.value
-//   let newSearchTextType = ""
-//   if (newSearchText.includes("@")) {
-//     newSearchTextType = "email"
-//   } else if (newSearchText.match(/^[0-9 +\-\.\(\)]*[0-9]+[0-9 +\-\.\(\)]*$/)) {
-//     newSearchTextType = "phone"
-//   } else {
-//     newSearchTextType = ""
-//   }
-//   setSearchTextType(newSearchTextType)
-//   setSearchText(newSearchText)
+// 	let newSearchText = e.target.value
+// 	let newSearchTextType = ""
+// 	if (newSearchText.includes("@")) {
+// 		newSearchTextType = "email"
+// 	} else if (newSearchText.match(/^[0-9 +\-\.\(\)]*[0-9]+[0-9 +\-\.\(\)]*$/)) {
+// 		newSearchTextType = "phone"
+// 	} else {
+// 		newSearchTextType = ""
+// 	}
+// 	setSearchTextType(newSearchTextType)
+// 	setSearchText(newSearchText)
 // }

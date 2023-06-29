@@ -4,11 +4,11 @@ import { Home } from './pages/Login';
 import './App.css'
 
 function Routes() {
-  return (
-    <Switch>
-      <Route path="/home" component={Home} />
-    </Switch>
-  )
+	return (
+		<Switch>
+			<Route path="/home" component={Home} />
+		</Switch>
+	)
 }
 
 // export default App

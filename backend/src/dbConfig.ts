@@ -5,11 +5,11 @@ const pgp = require('pg-promise')();
 
 // Set up a connection configuration
 const connectionConfig = {
-  host: '54.172.42.84',
-  port: 5432,
-  database: 'bike_index',
-  user: config.dbUser,
-  password: config.dbPassword,
+	host: '54.172.42.84',
+	port: 5432,
+	database: 'bike_index',
+	user: config.dbUser,
+	password: config.dbPassword,
 };
 
 // Create a database object

@@ -9,13 +9,13 @@ import { AuthProvider } from "./services/AuthProvider";
 import { Suspense } from "react";
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <BrowserRouter>
-  <RecoilRoot>
-  <Suspense>
-  <AuthProvider>
-    <App />
-  </AuthProvider>
-  </Suspense>
-  </RecoilRoot>
-  </BrowserRouter>
+	<BrowserRouter>
+		<RecoilRoot>
+			<Suspense>
+				<AuthProvider>
+					<App />
+				</AuthProvider>
+			</Suspense>
+		</RecoilRoot>
+	</BrowserRouter>
 );

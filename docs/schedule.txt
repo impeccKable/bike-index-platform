@@ -1,24 +1,5 @@
 
 Questions
-	Could we get more data?
-		Yes
-	Could we get some of the verbiage for the pages?
-		Yes
-	Do we need to track who added what? Should this be by-thief or by-data-item?
-		Yes, more granularity
-	What should show on the thief list page when no search has been entered yet?
-		Recently edited/entered
-	Should the default order of the thief table be by most recently edited/added?
-		Yes, that would make sense
-	What is the best format for the csv files? (easier for him but also for parsing and uploading)
-		We made a standard
-
-	Should users be able to edit their profile?
-	Does Bryan want verified emails?
-Todo
-	Show thief ID
-		Editable by admin
-		intel.bikeindex.org
 Schedule
 	Sprint 1 (5/23)
 		Mockup pages (Emerson/Cristian)
@@ -109,6 +90,13 @@ Schedule
 		User management
 		Roles
 		Multiple pages on search results?
+
+		Show thief ID
+			Field is editable by admin
+		Do we need to track who added what? Should this be by-thief or by-data-item?
+			Yes, more granularity
+		Show recently edited on thief list
+		Sort search results by most recently edited too
 
 		Signup
 			Delete firebase user if post to backend fails
