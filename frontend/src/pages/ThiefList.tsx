@@ -2,15 +2,11 @@ import { useState, useEffect, useRef } from 'react';
 import ThiefTable from '../components/ThiefTable';
 import Navbar from '../components/Navbar';
 import { LinkButton } from '../components/Form';
-import Modal from '../components/Modal';
-import axios from 'axios';
 import { useRecoilValue } from "recoil";
 import { debugState } from "../services/Recoil";
-
-import '../styles/thiefList.css';
 import { httpClient } from "../services/HttpClient";
-
-import { useAuth } from "../services/AuthProvider";
+import '../styles/thiefList.css';
+import { useAuth } from '../services/AuthProvider';
 
 // @ts-ignore
 export interface Thief extends React.HTMLInputElement {
@@ -21,82 +17,43 @@ export interface Thief extends React.HTMLInputElement {
 	address: string;
 }
 
-enum FilterType {
-	All,
-	name,
-	email,
-	phone,
-}
-
 export default function ThiefList() {
 	if (useRecoilValue(debugState) == true) {
 		console.log("ThiefList");
-		// console.log(useAuth().user);
 	}
-	const auth = useAuth();
-	const empty: Thief[] = [];
-	const [searchEnabled, setSearchEnabled] = useState(true);
-	const [searchType, setSearchType] = useState(FilterType.All);
+	const [searchType, setSearchType] = useState('name');
 	const [searchText, setSearchText] = useState('');
 	const latestSearchText = useRef(searchText);
-	const [searchTip, setTip] = useState('Select Search Type First');
-	const [thiefs, setThiefs] = useState(empty);
+	const [thiefs, setThiefs] = useState<Thief[]>([]);
 
+	// Set the search text and search type from the url
 	useEffect(() => {
-		console.log(searchText);
+		const url = new URL(window.location.href);
+		const searchType = url.searchParams.get('searchType');
+		const searchText = url.searchParams.get('searchText');
+		if (searchType) setSearchType(searchType);
+		if (searchText) setSearchText(searchText);
+	}, []);
+
+	// Perform the search when the search text or search type changes
+	useEffect(() => {
+		// Set url to include search text (so back button will go back to the same search)
+		const url = new URL(window.location.href);
+		url.searchParams.set('searchType', searchType);
+		url.searchParams.set('searchText', searchText);
+		window.history.replaceState({ path: url.href }, '', url.href);
+
 		const GetThiefs = async () => {
 			latestSearchText.current = searchText;
-			let result: any = [];
 			const response = await httpClient.get(
-				`/search?searchType=${FilterType[searchType]}&search=${searchText}`
+				`/search?searchType=${searchType}&searchText=${searchText}`
 			);
-			result = response.data;
-			const returnVal: Thief[] = [];
-
-			result.forEach((thief: Thief) => {
-				let newThief = {
-					thiefId: thief.thiefId,
-					name: thief.name,
-					phone: thief.phone,
-					email: thief.email,
-					address: thief.address,
-				};
-				returnVal.push(newThief);
-			});
-
-			console.log(returnVal);
-
 			// Discard results if the search text has changed since the request was made
 			if (latestSearchText.current !== searchText) return;
-
-			setThiefs(returnVal);
+			setThiefs(response.data);
 		};
-
 		GetThiefs();
-	}, [searchText]);
-
-	const EnableSearch = (event: any) => {
-		let selectedVal = event.target[event.target.selectedIndex].value;
-
-		if (selectedVal !== 'None') {
-			setSearchText('');
-			setTip(`Enter Search Value...`);
-			setSearchEnabled(false);
-			if (selectedVal === 'None') setSearchType(FilterType.All);
-			if (selectedVal === 'text') setSearchType(FilterType.name);
-			if (selectedVal === 'tel') setSearchType(FilterType.phone);
-			if (selectedVal === 'email') setSearchType(FilterType.email);
-		} else {
-			setTip('Select Search Type First');
-			setSearchText('');
-			setSearchEnabled(true);
-			setSearchType(FilterType.All);
-		}
-	};
-
-	const SetUserInput = (event: any) => {
-		setSearchText(event.target.value);
-	};
+	}, [searchType, searchText]);
 
 	return (
 		<div className="thieflist-page">
@@ -111,11 +68,12 @@ export default function ThiefList() {
 							id="SearchType"
 							name="SearchType"
 							className="DropDown"
-							onChange={EnableSearch}
+							onChange={(event: any) => {
+								setSearchType(event.target[event.target.selectedIndex].value);
+							}}
 						>
-							<option value="None">Select Type</option>
-							<option value="text">Name</option>
-							<option value="tel">Phone Number</option>
+							<option value="name">Name</option>
+							<option value="phone">Phone Number</option>
 							<option value="email">Email</option>
 						</select>
 					</div>
@@ -124,21 +82,21 @@ export default function ThiefList() {
 						<label htmlFor="ThiefSearch">Search</label>
 						<input
 							id="ThiefSearch"
-							type={searchType.toString()}
+							type={searchType}
 							required
-							disabled={searchEnabled}
-							placeholder={searchTip}
 							value={searchText}
-							onChange={SetUserInput}
+							onChange={(event: any) => {
+								setSearchText(event.target.value);
+							}}
 						></input>
 					</div>
 					<LinkButton className="AddThiefButton" to="/thiefEdit?thiefId=new">
 						Add New
 					</LinkButton>
 				</div>
-				<div className="add-new">
+				{/* <div className="add-new">
 					<h2 className="results-label">Results: {}</h2>
-				</div>
+				</div> */}
 				{thiefs ? (
 					<ThiefTable thiefs={thiefs} />
 				) : (

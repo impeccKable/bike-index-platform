@@ -10,6 +10,8 @@ import {
 } from "firebase/auth";
 import React, { useState, useContext, useEffect } from "react";
 import { httpClient } from "./HttpClient";
+import { useRecoilValue } from "recoil";
+import { debugState } from "../services/Recoil";
 
 const AuthContext = React.createContext<AuthContextProps | null>(null);
 
@@ -25,8 +27,8 @@ const app = initializeApp({
 export const auth = getAuth(app);
 
 export type UserInfo = {
-	firebaseUser: User | null;
-	bikeUser: any | null; //create type for this later
+	firebase: User | null;
+	bikeIndex: any | null; //create type for this later
 };
 
 export type AuthContextProps = {
@@ -37,8 +39,15 @@ export type AuthContextProps = {
 };
 
 export const AuthProvider = ({ children }: any) => {
-	const [user, setUser] = useState<UserInfo | null>(null);
-	
+	if (useRecoilValue(debugState) == true) {
+		console.log("AuthProvider");
+	}
+
+	const retrieveUser = () => {
+		return JSON.parse(localStorage.getItem("user") ?? "null");
+	}
+	const [user, setUser] = useState<UserInfo | null>(retrieveUser());
+
 	const handleLogin = async (email: string, password: string) => {
 		try {
 			const login = await signInWithEmailAndPassword(
@@ -47,17 +56,17 @@ export const AuthProvider = ({ children }: any) => {
 				password
 				);
 			const user = {
-				firebaseUser: login.user,
-				bikeUser: (await httpClient.post("/login", { uid: login.user.uid })).data,
+				firebase: login.user,
+				bikeIndex: (await httpClient.post("/login", { uid: login.user.uid })).data,
 			}
-			if(user.bikeUser.banned === true) {
+			if(user.bikeIndex.banned === true) {
 				throw new Error("User is banned");
 			}
-			else if(user.bikeUser.approved === false) {
+			else if(user.bikeIndex.approved === false) {
 				throw new Error("User is not verified");
 			}
-			await updateAxios(await login.user.getIdToken());
-			setUser(user);
+			await updateAxios(await user.firebase.getIdToken());
+			updateUser(user);
 			return true;
 		} catch (err) {
 			console.error(err);
@@ -66,7 +75,7 @@ export const AuthProvider = ({ children }: any) => {
 	};
 
 	const handleLogout = () => {
-		setUser(null);
+		updateUser(null);
 		signOut(auth);
 	};
 
@@ -79,9 +88,8 @@ export const AuthProvider = ({ children }: any) => {
 		}
 		return '';
 	};
-
 	const updateAxios = async (token: string) => {
-		console.log(`In changing header auth with ${token}`);
+		console.log(`token: ...${token.slice(-10)}`);
 		httpClient.interceptors.request.use(
 			async (config) => {
 				// @ts-ignore
@@ -89,7 +97,7 @@ export const AuthProvider = ({ children }: any) => {
 					Authorization: `Bearer ${token}`,
 					Accept: "application/json",
 				};
-				
+
 				return config;
 			},
 			(error) => {
@@ -98,6 +106,19 @@ export const AuthProvider = ({ children }: any) => {
 			}
 		);
 	};
+
+	const updateUser = (newUser: UserInfo | null) => {
+		localStorage.setItem("user", JSON.stringify(newUser));
+		setUser(newUser);
+	}
+	useEffect(() => {
+		const prevUser = retrieveUser();
+		if (prevUser) {
+			updateAxios(prevUser.firebase.stsTokenManager.accessToken);
+		}
+		setUser(prevUser);
+	}, []);
+
 
 	return (
 		<AuthContext.Provider

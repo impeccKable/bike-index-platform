@@ -2,7 +2,6 @@ import express from "express";
 import db from "./dbConfig";
 
 const post = async (req: any) => {
-	// TODO: validate header token
 	req.body.role = "readWrite"; // TODO: change this to readOnly
 	req.body.approved = true; // TODO: change this to false
 	req.body.banned = false;

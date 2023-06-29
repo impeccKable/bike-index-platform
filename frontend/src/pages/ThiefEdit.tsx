@@ -1,200 +1,140 @@
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
-import {
-  Form,
-  MultiField,
-  FormInput,
-  FormButton,
-  LinkButton,
-  FormInputProps,
-} from '../components/Form';
+import { Form, MultiField, FormInput, FormButton, LinkButton } from '../components/Form';
 import { useSearchParams } from 'react-router-dom';
-import axios from 'axios';
+import { httpClient } from '../services/HttpClient';
+import { useRecoilValue } from "recoil";
+import { debugState } from "../services/Recoil";
+import loading from "../assets/loading.gif";
 
 export default function ThiefEdit() {
-  const [searchParams, setSearchParams] = useSearchParams();
+	if (useRecoilValue(debugState) == true) {
+		console.log("ThiefEdit");
+	}
+	const [searchParams, setSearchParams] = useSearchParams();
+	const [isLoading, setIsLoading] = useState(true);
+	const [showLoadGif, setShowLoadGif] = useState(false);
+	const [wasSubmitted, setWasSubmitted] = useState(false);
+	const urlThiefId = searchParams.get('thiefId');
 
-  // get id
-  const thiefID = searchParams.get('thiefId');
+	setTimeout(() => {
+		setShowLoadGif(true);
+	}, 1000);
 
-  // theifInfo has latest data
-  //const [theifInfoCurrent, setCurrentTheifInfo] = useState({
-  //  thiefId: 0,
-  //  name: [''],
-  //  email: [''],
-  //  url: [''],
-  //  addr: [''],
-  //  phone: [''],
-  //  bikeSerial: [''],
-  //  phrase: [''],
-  //  note: [''],
-  //});
+	// thiefInfo at beginning
+	const [thiefInfo, setThiefInfo] = useState({
+		thiefId:    0,
+		name:       [''],
+		email:      [''],
+		url:        [''],
+		addr:       [''],
+		phone:      [''],
+		bikeSerial: [''],
+		phrase:     [''],
+		note:       [''],
+	});
 
-  // theifInfo at beginning
-  const [theifInfo, setTheifInfo] = useState({
-    thiefId: 0,
-    name: [''],
-    email: [''],
-    url: [''],
-    addr: [''],
-    phone: [''],
-    bikeSerial: [''],
-    phrase: [''],
-    note: [''],
-  });
+	function handleFormSubmit(e: any) {
+		e.preventDefault();
+		let results = CompareResults(e.dataDict);
+		httpClient.put('/thiefEdit', results)
+		setWasSubmitted(true);
+		setTimeout(() => {
+			setWasSubmitted(false);
+		}, 3000);
+	}
 
-  function handleFormSubmit(e: any) {
-    e.preventDefault();
-    console.log(e);
+	const CompareResults = (submitData: any) => {
+		//Ex: newValues.name[0].push('Something'), 0 = old values
+		let results = {
+			thiefId: urlThiefId,
+		};
 
-    let results = CompareResults(e.dataDict);
+		// need to split this one
+		Object.entries(submitData).map((field) => {
+			// field[0] is key, field[1] is value
 
-    let status = axios.put(
-      `http://${import.meta.env.VITE_BACKEND_HOST}/thiefEdit`,
-      results
-    );
+			if (field[0] !== 'thiefId') {
+				let newValues = field[1].split(',');
+				let oldValues = thiefInfo[`${field[0]}`];
 
-    console.log(status);
-  }
+				let test = Math.max(newValues.length, oldValues.length);
 
-  const CompareResults = (submitData: any) => {
-    //Ex: newValues.name[0].push('Something'), 0 = old values
-    let results = {};
-    results.thiefId = thiefID;
+				for (let i = 0; i < test; i++) {
+					let oldVal = oldValues[i] ? oldValues[i] : '0';
+					let newVal = newValues[i] ? newValues[i] : '0';
 
-    // need to split this one
-    Object.entries(submitData).map((field) => {
-      // field[0] is key, field[1] is value
+					if (oldVal !== newVal) {
+						let keyValue = field[0];
 
-      if (field[0] !== 'theifId') {
-        let newValues = field[1].split(',');
-        let oldValues = theifInfo[`${field[0]}`];
+						results[keyValue] !== undefined
+							? results[keyValue].push([oldVal, newVal])
+							: (results[keyValue] = [[oldVal, newVal]]);
+					}
+				}
+			}
+		});
 
-        let test = Math.max(newValues.length, oldValues.length);
+		return results;
+	};
 
-        for (let i = 0; i < test; i++) {
-          let oldVal = oldValues[i] ? oldValues[i] : '0';
-          let newVal = newValues[i] ? newValues[i] : '0';
+	useEffect(() => {
+		if (urlThiefId === 'new') {
+			setIsLoading(false);
+			return;
+		}
+		httpClient.get(`/thiefEdit?thiefId=${urlThiefId}`)
+			.then((res: any) => {
+				console.log('Thief search response:', res.data);
 
-          if (oldVal !== newVal) {
-            let keyValue = field[0];
+				let tempData = {
+					thiefId: 0,
+					name:       [''],
+					email:      [''],
+					url:        [''],
+					addr:       [''],
+					phone:      [''],
+					bikeSerial: [''],
+					phrase:     [''],
+					note:       [''],
+				};
 
-            results[keyValue] !== undefined
-              ? results[keyValue].push([oldVal, newVal])
-              : (results[keyValue] = [[oldVal, newVal]]);
-          }
-        }
-      }
-    });
+				Object.entries(res.data[0]).map((atr) => {
+					if (atr[0].localeCompare('thiefId') && atr[1].length === 0) {
+						atr[1] = [''];
+						tempData[`${atr[0]}`] = atr[1];
+					} else {
+						tempData[`${atr[0]}`] = atr[1];
+					}
+				});
+				setIsLoading(false);
+				setThiefInfo(tempData);
+			});
+	}, []);
 
-    return results;
-  };
-
-  // get request for thief info
-  useEffect(() => {
-    if (thiefID === 'new') {
-      return;
-    }
-    axios
-      .get(`http://localhost:3000/thiefEdit?thiefId=${thiefID}`)
-      .then((res: any) => {
-        console.log('Theif search response', res.data);
-
-        let tempData = {
-          thiefId: 0,
-          name: [''],
-          email: [''],
-          url: [''],
-          addr: [''],
-          phone: [''],
-          bikeSerial: [''],
-          phrase: [''],
-          note: [''],
-        };
-
-        Object.entries(res.data[0]).map((atr) => {
-          let t1 = atr;
-          console.log(t1);
-          if (atr[0].localeCompare('thiefId') && atr[1].length === 0) {
-            atr[1] = [''];
-            tempData[`${atr[0]}`] = atr[1];
-          } else {
-            tempData[`${atr[0]}`] = atr[1];
-          }
-        });
-        console.log('tempData = ', tempData);
-
-        setTheifInfo(tempData);
-        console.log('theifInfo (2) = ', theifInfo);
-      });
-  }, []);
-
-  return theifInfo.thiefId !== 0 || thiefID === 'new' ? (
-    <div className="thiefedit-page">
-      <Navbar />
-      <main>
-        <h1 className="title2">Thief Edit</h1>
-        <Form onSubmit={handleFormSubmit}>
-          <MultiField
-            label="Name"
-            name="name"
-            data={theifInfo.name}
-            component={FormInput}
-          />
-          <MultiField
-            label="Email"
-            name="email"
-            data={theifInfo.email}
-            component={FormInput}
-          />
-          <MultiField
-            label="Url"
-            name="url"
-            data={theifInfo.url}
-            component={FormInput}
-          />
-          <MultiField
-            label="Address"
-            name="addr"
-            data={theifInfo.addr}
-            component={FormInput}
-          />
-          <MultiField
-            label="Phone"
-            name="phone"
-            data={theifInfo.phone}
-            component={FormInput}
-            type="phone"
-          />
-          <MultiField
-            label="Bike Serial"
-            name="bikeSerial"
-            data={theifInfo.bikeSerial}
-            component={FormInput}
-          />
-          <MultiField
-            label="Phrase"
-            name="phrase"
-            data={theifInfo.phrase}
-            component={FormInput}
-            type="textarea"
-          />
-          <MultiField
-            label="Notes"
-            name="notes"
-            data={theifInfo.note}
-            component={FormInput}
-            type="textarea"
-          />
-          <div className="btn-group">
-            <LinkButton to="/thiefList">Back</LinkButton>
-            <FormButton type="submit">Submit</FormButton>
-          </div>
-          {/* {submitted && submitMessage} */}
-        </Form>
-      </main>
-    </div>
-  ) : (
-    <h2>Loading...</h2>
-  );
+	return (
+		<div className="thiefedit-page">
+			<Navbar />
+			<main>
+				<h1 className="title2">Thief Edit {isLoading && showLoadGif && <img src={loading} alt="loading" width="30px" />}</h1>
+				<Form onSubmit={handleFormSubmit}>
+					{console.log('thiefInfo', thiefInfo)}
+					<FormInput  label="Thief ID"    name="thiefId"    data={thiefInfo.thiefId}                                          disabled={isLoading} />
+					<MultiField label="Name"        name="name"       data={thiefInfo.name}       component={FormInput}                 disabled={isLoading} />
+					<MultiField label="Email"       name="email"      data={thiefInfo.email}      component={FormInput}                 disabled={isLoading} />
+					<MultiField label="Url"         name="url"        data={thiefInfo.url}        component={FormInput}                 disabled={isLoading} />
+					<MultiField label="Address"     name="addr"       data={thiefInfo.addr}       component={FormInput}                 disabled={isLoading} />
+					<MultiField label="Phone"       name="phone"      data={thiefInfo.phone}      component={FormInput} type="phone"    disabled={isLoading} />
+					<MultiField label="Bike Serial" name="bikeSerial" data={thiefInfo.bikeSerial} component={FormInput}                 disabled={isLoading} />
+					<MultiField label="Phrase"      name="phrase"     data={thiefInfo.phrase}     component={FormInput} type="textarea" disabled={isLoading} />
+					<MultiField label="Notes"       name="notes"      data={thiefInfo.note}       component={FormInput} type="textarea" disabled={isLoading} />
+					<div className="btn-group">
+						<LinkButton type="button" to="back">Back</LinkButton>
+						<FormButton type="submit">Submit</FormButton>
+					</div>
+					{wasSubmitted && <div>Changes have been submitted</div>}
+				</Form>
+			</main>
+		</div>
+	);
 }

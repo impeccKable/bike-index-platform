@@ -1,12 +1,9 @@
-import axios, { AxiosInstance, AxiosResponse } from "axios";
+import axios from "axios";
 
-const serverIP   = import.meta.env.VITE_APIHOST;
-const serverPort = import.meta.env.VITE_PORT;
-
-const serverUrl = `http://${serverIP}:${serverPort}`;
+const env = import.meta.env;
 
 const httpClient = axios.create({
-	baseURL: serverUrl,
+	baseURL: `http://${env.VITE_APIHOST}:${env.VITE_APIPORT}`,
 	headers: {
 		"Content-type": "application/json",
 	},
