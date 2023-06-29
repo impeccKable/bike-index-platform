@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import React, { Children } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilValue } from "recoil";
 import { debugState } from "../services/Recoil";
 
@@ -180,12 +180,13 @@ interface LinkButtonProps extends React.HTMLButtonElement {
 }
 export function LinkButton(props: LinkButtonProps) {
 	const { to, ...rest } = props;
+	const navigate = useNavigate();
 	if (to === 'back') {
 		return (
 			<div className="btn-div">
 				<button
 					className="btn"
-					onClick={() => window.history.back()}
+					onClick={() => navigate(-1)}
 					{...rest}
 				/>
 			</div>

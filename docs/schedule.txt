@@ -75,37 +75,36 @@ Schedule
 				useEffect
 					API calls
 	Sprint 4 (7/4)
-		!!! Networking for server (frontend to backend)
+		em
+			done
+				Comma delimited spacing when mutliple feilds exist for name, etc
+				Convert all spaces to tabs for indenting
+				Combine host/port in frontend .env
+			todo
+				Fix back button from thiefEdit to thiefList
+				User token disappearing upon reload
 
-		Get server running headless
-		Convert all spaces to tabs for indenting
-		Combine host/port in frontend .env
-		Combine serviceProvider.json into .env
-		Figure out how to share/store/update .env files between people
-		Add a dev mode (dev/debug/prod)
+		pair-a (Emerson/Matt)
+			UserList page
+			UserEdit page
+			Roles
+			Show thief ID
+				Fix it so it shows the id
+				Editable by admin
+			Csv upload page
+				Example csv file
+			Verify user token upon reload
+		pair-b (Cheng/Cristian)
+			Signup
+				Delete firebase user if post to backend fails
+			Add a dev mode (dev/debug/prod)
+				Disable authorization in dev mode
+				Debug has console logs for reloads (for debugging)
+			EC2
+				Networking for server (frontend to backend)
+				Get server running headless
+			Multiple pages on search results
 
-		Theif list bug (multiple names)
-			(one table row for each theif alias)
-		Console logs for reloads (for debugging)
-		User management
-		Roles
-		Multiple pages on search results?
-
-		Show thief ID
-			Field is editable by admin
-		Do we need to track who added what? Should this be by-thief or by-data-item?
-			Yes, more granularity
-		Show recently edited on thief list
-		Sort search results by most recently edited too
-
-		Signup
-			Delete firebase user if post to backend fails
-
-		User list
-		Csv upload page
-			Example csv file
-		Stats/About
-			Formatting
 	Sprint 5 (7/18)
 		Testing
 		User old state bug
@@ -113,6 +112,8 @@ Schedule
 			User state
 			Keep only used fields
 		Make it robust to database errors
+		Combine serviceProvider.json into .env
+		Clean up css
 	Sprint 6 (8/1)
 		Site management (files on server)
 		Note fields

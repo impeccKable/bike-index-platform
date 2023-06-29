@@ -6,6 +6,7 @@ import { useRecoilValue } from "recoil";
 import { debugState } from "../services/Recoil";
 import { httpClient } from "../services/HttpClient";
 import '../styles/thiefList.css';
+import { useAuth } from '../services/AuthProvider';
 
 // @ts-ignore
 export interface Thief extends React.HTMLInputElement {

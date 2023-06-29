@@ -41,16 +41,14 @@ const router = express.Router();
 router.get("/", async (req: express.Request, res: express.Response) => {
 	try {
 		let token = '';
-
 		if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
 			token = req.headers.authorization.split(' ')[1];
 			if(token[0]===`"`){
 				token = token.slice(1,-1);
 			}
 		}
-
 		if(!token){
-			res.status(401).send("No valid token provided");
+			res.status(401).send("No token provided");
 			return;
 		}
 		auth.verifyIdToken(token);

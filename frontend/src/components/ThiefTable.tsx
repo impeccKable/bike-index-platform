@@ -1,11 +1,13 @@
 import React from "react";
 import { Thief } from "../pages/ThiefList.tsx";
+import { useNavigate } from "react-router-dom";
 
 interface ThiefTableProps extends React.HTMLInputElement {
 	thiefs: Array<Thief>;
 }
 
 export default function ThiefTable(props: ThiefTableProps) {
+	const navigate = useNavigate();
 	return (
 		<div className="container thief-table-div">
 			<table className="thief-table">
@@ -25,7 +27,7 @@ export default function ThiefTable(props: ThiefTableProps) {
 								key={thief.thiefId}
 								className="tr-link"
 								onClick={
-								() => window.location.href = `/thiefEdit?thiefId=${thief.thiefId}`
+								() => navigate(`/thiefEdit?thiefId=${thief.thiefId}`)
 							}>
 								<td>{thief.thiefId}</td>
 								<td>{thief.name.join(", ")}</td>

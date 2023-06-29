@@ -19,10 +19,10 @@ export default function ThiefEdit() {
 
 	setTimeout(() => {
 		setShowLoadGif(true);
-	}, 2000);
+	}, 1000);
 
-	// theifInfo at beginning
-	const [theifInfo, setTheifInfo] = useState({
+	// thiefInfo at beginning
+	const [thiefInfo, setThiefInfo] = useState({
 		thiefId:    0,
 		name:       [''],
 		email:      [''],
@@ -54,9 +54,9 @@ export default function ThiefEdit() {
 		Object.entries(submitData).map((field) => {
 			// field[0] is key, field[1] is value
 
-			if (field[0] !== 'theifId') {
+			if (field[0] !== 'thiefId') {
 				let newValues = field[1].split(',');
-				let oldValues = theifInfo[`${field[0]}`];
+				let oldValues = thiefInfo[`${field[0]}`];
 
 				let test = Math.max(newValues.length, oldValues.length);
 
@@ -85,7 +85,7 @@ export default function ThiefEdit() {
 		}
 		httpClient.get(`/thiefEdit?thiefId=${urlThiefId}`)
 			.then((res: any) => {
-				console.log('Theif search response:', res.data);
+				console.log('Thief search response:', res.data);
 
 				let tempData = {
 					thiefId: 0,
@@ -108,7 +108,7 @@ export default function ThiefEdit() {
 					}
 				});
 				setIsLoading(false);
-				setTheifInfo(tempData);
+				setThiefInfo(tempData);
 			});
 	}, []);
 
@@ -118,16 +118,16 @@ export default function ThiefEdit() {
 			<main>
 				<h1 className="title2">Thief Edit {isLoading && showLoadGif && <img src={loading} alt="loading" width="30px" />}</h1>
 				<Form onSubmit={handleFormSubmit}>
-					{console.log('theifInfo', theifInfo)}
-					<FormInput  label="Thief ID"    name="thiefId"    data={theifInfo.thiefId}                                          disabled={isLoading} />
-					<MultiField label="Name"        name="name"       data={theifInfo.name}       component={FormInput}                 disabled={isLoading} />
-					<MultiField label="Email"       name="email"      data={theifInfo.email}      component={FormInput}                 disabled={isLoading} />
-					<MultiField label="Url"         name="url"        data={theifInfo.url}        component={FormInput}                 disabled={isLoading} />
-					<MultiField label="Address"     name="addr"       data={theifInfo.addr}       component={FormInput}                 disabled={isLoading} />
-					<MultiField label="Phone"       name="phone"      data={theifInfo.phone}      component={FormInput} type="phone"    disabled={isLoading} />
-					<MultiField label="Bike Serial" name="bikeSerial" data={theifInfo.bikeSerial} component={FormInput}                 disabled={isLoading} />
-					<MultiField label="Phrase"      name="phrase"     data={theifInfo.phrase}     component={FormInput} type="textarea" disabled={isLoading} />
-					<MultiField label="Notes"       name="notes"      data={theifInfo.note}       component={FormInput} type="textarea" disabled={isLoading} />
+					{console.log('thiefInfo', thiefInfo)}
+					<FormInput  label="Thief ID"    name="thiefId"    data={thiefInfo.thiefId}                                          disabled={isLoading} />
+					<MultiField label="Name"        name="name"       data={thiefInfo.name}       component={FormInput}                 disabled={isLoading} />
+					<MultiField label="Email"       name="email"      data={thiefInfo.email}      component={FormInput}                 disabled={isLoading} />
+					<MultiField label="Url"         name="url"        data={thiefInfo.url}        component={FormInput}                 disabled={isLoading} />
+					<MultiField label="Address"     name="addr"       data={thiefInfo.addr}       component={FormInput}                 disabled={isLoading} />
+					<MultiField label="Phone"       name="phone"      data={thiefInfo.phone}      component={FormInput} type="phone"    disabled={isLoading} />
+					<MultiField label="Bike Serial" name="bikeSerial" data={thiefInfo.bikeSerial} component={FormInput}                 disabled={isLoading} />
+					<MultiField label="Phrase"      name="phrase"     data={thiefInfo.phrase}     component={FormInput} type="textarea" disabled={isLoading} />
+					<MultiField label="Notes"       name="notes"      data={thiefInfo.note}       component={FormInput} type="textarea" disabled={isLoading} />
 					<div className="btn-group">
 						<LinkButton type="button" to="back">Back</LinkButton>
 						<FormButton type="submit">Submit</FormButton>
