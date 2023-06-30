@@ -5,7 +5,6 @@ Schedule
 		Mockup pages (Emerson/Cristian)
 			Visual
 				Bootstrap
-					ChatGPT??
 			useState
 				ui variables
 			Basic navigation
@@ -60,14 +59,10 @@ Schedule
 				verify request bearer tokens
 		Flesh out pages (Cristian/Cheng)
 			Fix css issues
-				- Complete
 			ENV files
-				- Complete
 			Thief list
 				"Add new" button
-					- Complete
 				Loading symbol/gif for results
-					- Complete
 			Thief edit
 				Populate with data
 				Submit data
@@ -75,15 +70,12 @@ Schedule
 				useEffect
 					API calls
 	Sprint 4 (7/4)
-		em
-			done
-				Comma delimited spacing when mutliple feilds exist for name, etc
-				Convert all spaces to tabs for indenting
-				Combine host/port in frontend .env
-			todo
-				Fix back button from thiefEdit to thiefList
-				User token disappearing upon reload
-
+		em (done)
+			Comma delimited spacing when mutliple feilds exist for name, etc
+			Convert all spaces to tabs for indenting
+			Combine host/port in frontend .env
+			Fix back button from thiefEdit to thiefList
+			User token disappearing upon reload
 		pair-a (Emerson/Matt)
 			UserList page
 			UserEdit page
@@ -104,13 +96,8 @@ Schedule
 				Networking for server (frontend to backend)
 				Get server running headless
 			Multiple pages on search results
-
 	Sprint 5 (7/18)
 		Testing
-		User old state bug
-			Recoil?
-			User state
-			Keep only used fields
 		Make it robust to database errors
 		Combine serviceProvider.json into .env
 		Clean up css
