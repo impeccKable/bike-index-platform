@@ -6,6 +6,7 @@ import thiefEdit from "./src/thiefEdit";
 import stats from "./src/stats";
 import signup from "./src/signup";
 import login from "./src/login";
+import token from "./src/token";
 //@ts-ignore
 //import serviceAccount from 'serviceProvider.json';
 
@@ -35,6 +36,7 @@ app.use("/thiefEdit", thiefEdit);
 app.use("/stats", stats);
 app.use("/signup", signup);
 app.use("/login", login);
+app.use("/token", token);
 
 
 

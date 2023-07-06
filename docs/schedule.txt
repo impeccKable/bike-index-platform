@@ -99,7 +99,7 @@ Schedule
 	Negotiating alternative due date (8/1)
 	Sprint 5 (8/1)
 		Testing
-		Make it robust to database errors
+		Make it robust to exceptions/database errors
 		Combine serviceProvider.json into .env
 		Clean up css
 		Site management (files on server)

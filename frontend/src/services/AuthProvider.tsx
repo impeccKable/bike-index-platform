@@ -4,14 +4,15 @@ import {
 	signInWithEmailAndPassword,
 	signOut,
 	onAuthStateChanged,
-	UserCredential,
-	User,
 	createUserWithEmailAndPassword,
+	User,
+	UserCredential,
 } from "firebase/auth";
 import React, { useState, useContext, useEffect } from "react";
 import { httpClient } from "./HttpClient";
 import { useRecoilValue } from "recoil";
 import { debugState } from "../services/Recoil";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = React.createContext<AuthContextProps | null>(null);
 
@@ -39,14 +40,56 @@ export type AuthContextProps = {
 };
 
 export const AuthProvider = ({ children }: any) => {
+	const navigate = useNavigate();
+	const [user, setUser] = useState<UserInfo | null>(null);
+
 	if (useRecoilValue(debugState) == true) {
 		console.log("AuthProvider");
 	}
+	const updateAxios = async (token: string) => {
+		console.log(`token: ...${token.slice(-10)}`);
+		httpClient.interceptors.request.use(
+			async (config: any) => {
+				// @ts-ignore
+				config.headers = {
+					Authorization: `Bearer ${token}`,
+					Accept: "application/json",
+				};
 
-	const retrieveUser = () => {
-		return JSON.parse(localStorage.getItem("user") ?? "null");
+				return config;
+			},
+			(error: any) => {
+				console.error("REJECTED TOKEN PROMISE");
+				Promise.reject(error);
+			}
+		);
+	};
+	const updateUser = (newUser: UserInfo | null) => {
+		localStorage.setItem("user", JSON.stringify(newUser));
+		setUser(newUser);
 	}
-	const [user, setUser] = useState<UserInfo | null>(retrieveUser());
+	const handleLogout = () => {
+		updateUser(null);
+		signOut(auth);
+		navigate("/");
+	};
+	const verifyUserToken = async (user: UserInfo) => {
+		if (!user) {
+			handleLogout();
+			return;
+		}
+		await updateAxios(user.firebase.stsTokenManager.accessToken);
+		httpClient.post("/token", {}).then((res: any) => {
+			if (res.status !== 200) {
+				handleLogout();
+			}
+		});
+	}
+	const retrieveUser = () => {
+		let user = JSON.parse(localStorage.getItem("user") ?? "null");
+		verifyUserToken(user);
+		return user;
+	}
 
 	const handleLogin = async (email: string, password: string) => {
 		try {
@@ -74,11 +117,6 @@ export const AuthProvider = ({ children }: any) => {
 		return false;
 	};
 
-	const handleLogout = () => {
-		updateUser(null);
-		signOut(auth);
-	};
-
 	const handleSignUp = async (email: string, password: string) => {
 		try {
 			let userData = await createUserWithEmailAndPassword(auth, email, password);
@@ -88,37 +126,15 @@ export const AuthProvider = ({ children }: any) => {
 		}
 		return '';
 	};
-	const updateAxios = async (token: string) => {
-		console.log(`token: ...${token.slice(-10)}`);
-		httpClient.interceptors.request.use(
-			async (config) => {
-				// @ts-ignore
-				config.headers = {
-					Authorization: `Bearer ${token}`,
-					Accept: "application/json",
-				};
 
-				return config;
-			},
-			(error) => {
-				console.error("REJECTED TOKEN PROMISE");
-				Promise.reject(error);
-			}
-		);
-	};
-
-	const updateUser = (newUser: UserInfo | null) => {
-		localStorage.setItem("user", JSON.stringify(newUser));
-		setUser(newUser);
-	}
 	useEffect(() => {
 		const prevUser = retrieveUser();
 		if (prevUser) {
 			updateAxios(prevUser.firebase.stsTokenManager.accessToken);
 		}
 		setUser(prevUser);
+		console.log("AuthProvider useEffect");
 	}, []);
-
 
 	return (
 		<AuthContext.Provider
