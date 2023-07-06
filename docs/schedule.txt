@@ -69,7 +69,7 @@ Schedule
 			Hooks
 				useEffect
 					API calls
-	Sprint 4 (7/4)
+	Sprint 4 (7/18)
 		em (done)
 			Comma delimited spacing when mutliple feilds exist for name, etc
 			Convert all spaces to tabs for indenting
@@ -96,14 +96,17 @@ Schedule
 				Networking for server (frontend to backend)
 				Get server running headless
 			Multiple pages on search results
-	Sprint 5 (7/18)
+	Negotiating alternative due date (8/1)
+	Sprint 5 (8/1)
 		Testing
 		Make it robust to database errors
 		Combine serviceProvider.json into .env
 		Clean up css
-	Sprint 6 (8/1)
 		Site management (files on server)
 		Note fields
-	Sprint 7 (8/15)
-	Presentation (8/29)
-	Finals week (9/3)
+	Sprint 6 (8/15)
+		Polish
+		Polish
+		Polish
+	Sprint 7 (8/29)
+	Completion/Presentation (9/1)
