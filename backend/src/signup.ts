@@ -39,8 +39,9 @@ const post = async (req: any) => {
 const router = express.Router();
 router.post('/', async (req: express.Request, res: express.Response) => {
   try {
-    // return res.json(await post(req));
-    res.status(500);
+    console.log(req.body);
+    return res.json(await post(req));
+    // res.status(500);
   } catch (err) {
     console.error(err);
     res.status(500);
