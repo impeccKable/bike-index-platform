@@ -39,7 +39,7 @@ export default function DataImport() {
 		<div className="data-import-page">
 			<Navbar />
 			<main>
-				<h1 className="title2">Data Import</h1>
+				<h1>Data Import</h1>
 				<Form onSubmit={handleFormSubmit}>
 					<p>File select will go here</p>
 					<input
@@ -47,7 +47,7 @@ export default function DataImport() {
 						accept=".csv, .tsv"
 						onChange={onFileChange}
 					/>
-					<div className="btn-group">
+					<div className="form-btns">
 						<FormButton type="submit">Submit</FormButton>
 					</div>
 				</Form>

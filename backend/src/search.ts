@@ -40,9 +40,9 @@ const get = async (query: any) => {
 const router = express.Router();
 router.get("/", async (req: express.Request, res: express.Response) => {
 	try {
-		if (!validToken(req)) {
-			return res.status(401).send("Unauthorized");
-		}
+		// if (!validToken(req)) {
+		// return res.status(401).send("Unauthorized");
+		// }
 		return res.json(await get(req.query));
 	} catch (err) {
 		console.error(err);

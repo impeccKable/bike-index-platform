@@ -44,8 +44,8 @@ export default function Signup() {
 		</div>
 	);
 	return (
-		<div className="signup-page">
-			<h1 className="title">Sign Up</h1>
+		<div className="notecard signup-page">
+			<h1>Sign Up</h1>
 			<Form onSubmit={handleFormSubmit}>
 				<FormInput label="First name"    name="first"    placeholder="John" />
 				<FormInput label="Last name"     name="last"     placeholder="Doe" />
@@ -64,7 +64,7 @@ export default function Signup() {
 				<FormInput label="Password"   name="password"   required type="password" />
 				<FormInput label="(again)"    name="verify"     required type="password" labelProps={{ style: { color: '#666' }}} />
 				<FormInput label="Phone"      name="phone"      required placeholder="+1 222 333 4444" type="phone" /> */}
-				<div className="links">
+				<div className="form-btns">
 					<LinkButton to="..">Back</LinkButton>
 					<FormButton type="submit">Submit</FormButton>
 				</div>

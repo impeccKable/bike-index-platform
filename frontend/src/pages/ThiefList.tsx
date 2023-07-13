@@ -56,47 +56,38 @@ export default function ThiefList() {
 	}, [searchType, searchText]);
 
 	return (
-		<div className="thieflist-page">
+		<div className="formal thieflist-page">
 			<Navbar />
 			<main>
-				<h1 className="title2">Thief Listing</h1>
+				<h1>Thief Listing</h1>
 
-				<div className="container-fluid thief-searchbar">
-					<div className="thief-dropdown">
-						<label htmlFor="SearchType">Search Type</label>
-						<select
-							id="SearchType"
-							name="SearchType"
-							className="DropDown"
-							onChange={(event: any) => {
-								setSearchType(event.target[event.target.selectedIndex].value);
-							}}
-						>
-							<option value="name">Name</option>
-							<option value="phone">Phone Number</option>
-							<option value="email">Email</option>
-						</select>
-					</div>
-
-					<div className="mobile">
-						<label htmlFor="ThiefSearch">Search</label>
-						<input
-							id="ThiefSearch"
-							type={searchType}
-							required
-							value={searchText}
-							onChange={(event: any) => {
-								setSearchText(event.target.value);
-							}}
-						></input>
-					</div>
+				<div className="searchbar">
+					<label htmlFor="SearchType">Search Type</label>
+					<select
+						id="SearchType"
+						name="SearchType"
+						onChange={(event: any) => {
+							setSearchType(event.target[event.target.selectedIndex].value);
+						}}
+					>
+						<option value="name">Name</option>
+						<option value="phone">Phone Number</option>
+						<option value="email">Email</option>
+					</select>
+					<label htmlFor="ThiefSearch">Search</label>
+					<input
+						id="ThiefSearch"
+						type={searchType}
+						required
+						value={searchText}
+						onChange={(event: any) => {
+							setSearchText(event.target.value);
+						}}
+					></input>
 					<LinkButton className="AddThiefButton" to="/thiefEdit?thiefId=new">
 						Add New
 					</LinkButton>
 				</div>
-				{/* <div className="add-new">
-					<h2 className="results-label">Results: {}</h2>
-				</div> */}
 				{thiefs ? (
 					<ThiefTable thiefs={thiefs} />
 				) : (
