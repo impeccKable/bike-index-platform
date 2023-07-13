@@ -22,9 +22,9 @@ export default function Stats() {
 	return <div className="stats-page">
 		<Navbar />
 		<main>
-			<h1 className="title2">Stats</h1>
+			<h1>Stats</h1>
 			<>
-				<h2>Total number of rows for each table:</h2>
+				<h3>Total number of rows for each table:</h3>
 				<p>Users:     {stats.users}</p>
 				<p>Urls:      {stats.urls}</p>
 				<p>Phones:    {stats.phones}</p>

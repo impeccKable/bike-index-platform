@@ -113,10 +113,10 @@ export default function ThiefEdit() {
 	}, []);
 
 	return (
-		<div className="thiefedit-page">
-			<Navbar />
+		<div className="formal thiefedit-page">
+			<Navbar/>
 			<main>
-				<h1 className="title2">Thief Edit {isLoading && showLoadGif && <img src={loading} alt="loading" width="30px" />}</h1>
+				<h1>Thief Edit {isLoading && showLoadGif && <img src={loading} alt="loading" width="30px" />}</h1>
 				<Form onSubmit={handleFormSubmit}>
 					{console.log('thiefInfo', thiefInfo)}
 					<FormInput  label="Thief ID"    name="thiefId"    data={thiefInfo.thiefId}                                          disabled={isLoading} />
@@ -128,11 +128,11 @@ export default function ThiefEdit() {
 					<MultiField label="Bike Serial" name="bikeSerial" data={thiefInfo.bikeSerial} component={FormInput}                 disabled={isLoading} />
 					<MultiField label="Phrase"      name="phrase"     data={thiefInfo.phrase}     component={FormInput} type="textarea" disabled={isLoading} />
 					<MultiField label="Notes"       name="notes"      data={thiefInfo.note}       component={FormInput} type="textarea" disabled={isLoading} />
-					<div className="btn-group">
+					<div className="form-btns">
 						<LinkButton type="button" to="back">Back</LinkButton>
 						<FormButton type="submit">Submit</FormButton>
 					</div>
-					{wasSubmitted && <div>Changes have been submitted</div>}
+					{wasSubmitted && <div className='form-btns'>Submitted!</div>}
 				</Form>
 			</main>
 		</div>

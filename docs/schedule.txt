@@ -1,5 +1,8 @@
 
 Questions
+	How should we handle 20+ urls?
+	Do any other fields have 20+?
+
 Schedule
 	Sprint 1 (5/23)
 		Mockup pages (Emerson/Cristian)
@@ -77,34 +80,43 @@ Schedule
 			Fix back button from thiefEdit to thiefList
 			User token disappearing upon reload
 		pair-a (Emerson/Matt)
-			UserList page
-			UserEdit page
-			Roles
+			~ Clean up css
+				Ids?
+			Csv upload page
+				Example csv file
+			~ UserList page
 			Show thief ID
 				Fix it so it shows the id
 				Editable by admin
-			Csv upload page
-				Example csv file
-			Verify user token upon reload
+			~ Verify user token upon reload
+
+			Thief edit page -> table (to align labels)
+				Flexbox grid?
+				grid gaps?
+			Nav bar extend to right
+
 		pair-b (Cheng/Cristian)
-			Signup
+			x Signup
 				Delete firebase user if post to backend fails
 			Add a dev mode (dev/debug/prod)
 				Disable authorization in dev mode
 				Debug has console logs for reloads (for debugging)
-			EC2
+			~ EC2
 				Networking for server (frontend to backend)
-				Get server running headless
-			Multiple pages on search results
+				x Get server running headless
+				x Get Url working
+				Certificate for https
+			x Multiple pages on search results
 	Negotiating alternative due date (8/1)
 	Sprint 5 (8/1)
-		Testing
-		Make it robust to database errors
+		UserEdit page
+		Roles
+		Make it robust to exceptions/database errors
 		Combine serviceProvider.json into .env
-		Clean up css
 		Site management (files on server)
 		Note fields
 	Sprint 6 (8/15)
+		Testing
 		Polish
 		Polish
 		Polish
