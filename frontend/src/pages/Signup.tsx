@@ -23,7 +23,7 @@ export default function Signup() {
         e.dataDict.email,
         e.dataDict.password
       );
-      console.log(user.uid);
+      console.log(user);
       if (user.uid) {
         e.dataDict.uid = user.uid;
         delete e.dataDict.password;

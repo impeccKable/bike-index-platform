@@ -124,7 +124,7 @@ export const AuthProvider = ({ children }: any) => {
 				email,
 				password
 			);
-			return userData.user.uid;
+			return userData.user;
 		} catch (err) {
 			console.error(err);
 		}

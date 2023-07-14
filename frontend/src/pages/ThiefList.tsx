@@ -18,13 +18,14 @@ export interface Thief extends React.HTMLInputElement {
 }
 
 export default function ThiefList() {
-  if (useRecoilValue(debugState) == true) {
-    console.log('ThiefList');
-  }
   const [searchType, setSearchType] = useState('name');
   const [searchText, setSearchText] = useState('');
   const latestSearchText = useRef(searchText);
   const [thiefs, setThiefs] = useState<Thief[]>([]);
+
+  if (useRecoilValue(debugState) === true) {
+    console.log(thiefs);
+  }
 
   // Set the search text and search type from the url
   useEffect(() => {

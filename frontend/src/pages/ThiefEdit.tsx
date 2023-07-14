@@ -7,15 +7,15 @@ import { useRecoilValue } from "recoil";
 import { debugState } from "../services/Recoil";
 import loading from "../assets/loading.gif";
 
+
 export default function ThiefEdit() {
-	if (useRecoilValue(debugState) == true) {
-		console.log("ThiefEdit");
-	}
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [isLoading, setIsLoading] = useState(true);
 	const [showLoadGif, setShowLoadGif] = useState(false);
 	const [wasSubmitted, setWasSubmitted] = useState(false);
 	const urlThiefId = searchParams.get('thiefId');
+
+	const debug = useRecoilValue(debugState);
 
 	setTimeout(() => {
 		setShowLoadGif(true);
@@ -34,6 +34,7 @@ export default function ThiefEdit() {
 		note:       [''],
 	});
 
+
 	function handleFormSubmit(e: any) {
 		e.preventDefault();
 		let results = CompareResults(e.dataDict);
@@ -42,6 +43,12 @@ export default function ThiefEdit() {
 		setTimeout(() => {
 			setWasSubmitted(false);
 		}, 3000);
+
+		if (debug) {
+			console.log("Data edited")
+			console.log(results)
+		}
+
 	}
 
 	const CompareResults = (submitData: any) => {
@@ -118,7 +125,7 @@ export default function ThiefEdit() {
 			<main>
 				<h1>Thief Edit {isLoading && showLoadGif && <img src={loading} alt="loading" width="30px" />}</h1>
 				<Form onSubmit={handleFormSubmit}>
-					{console.log('thiefInfo', thiefInfo)}
+					{/* {console.log('thiefInfo', thiefInfo)} */}
 					<FormInput  label="Thief ID"    name="thiefId"    data={thiefInfo.thiefId}                                          disabled={isLoading} />
 					<MultiField label="Name"        name="name"       data={thiefInfo.name}       component={FormInput}                 disabled={isLoading} />
 					<MultiField label="Email"       name="email"      data={thiefInfo.email}      component={FormInput}                 disabled={isLoading} />
