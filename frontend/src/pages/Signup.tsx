@@ -4,43 +4,43 @@ import { useAuth } from '../services/AuthProvider';
 import { httpClient } from '../services/HttpClient';
 
 export default function Signup() {
-  const [submitted, setSubmitted] = useState(false);
-  const [passwordMismatch, setPasswordMismatch] = useState(false);
-  const auth = useAuth();
+	const [submitted, setSubmitted] = useState(false);
+	const [passwordMismatch, setPasswordMismatch] = useState(false);
+	const auth = useAuth();
 
-  function handleFormSubmit(e: any) {
-    e.preventDefault();
-    if (submitted) {
-      return;
-    }
-    if (e.dataDict.password !== e.dataDict.verify) {
-      setPasswordMismatch(true);
-      return;
-    }
+	function handleFormSubmit(e: any) {
+		e.preventDefault();
+		if (submitted) {
+			return;
+		}
+		if (e.dataDict.password !== e.dataDict.verify) {
+			setPasswordMismatch(true);
+			return;
+		}
 
-    const f = async () => {
-      const user = await auth?.handleSignUp(
-        e.dataDict.email,
-        e.dataDict.password
-      );
-      console.log(user.uid);
-      if (user.uid) {
-        e.dataDict.uid = user.uid;
-        delete e.dataDict.password;
-        delete e.dataDict.verify;
-        console.log(e.dataDict);
-        await httpClient
-          .post('/signup', e.dataDict)
-          .then((res: any) => {
-            console.log(res);
-          })
-          .catch((err: any) => {
-            console.log(err);
-            auth?.handleDelete(user);
-          });
-      }
-    };
-    f();
+		const f = async () => {
+			const user = await auth?.handleSignUp(
+				e.dataDict.email,
+				e.dataDict.password
+			);
+			console.log(user.uid);
+			if (user.uid) {
+				e.dataDict.uid = user.uid;
+				delete e.dataDict.password;
+				delete e.dataDict.verify;
+				console.log(e.dataDict);
+				await httpClient
+					.post('/signup', e.dataDict)
+					.then((res: any) => {
+						console.log(res);
+					})
+					.catch((err: any) => {
+						console.log(err);
+						auth?.handleDelete(user);
+					});
+			}
+		};
+		f();
 
 		setSubmitted(true);
 	}
@@ -53,35 +53,37 @@ export default function Signup() {
 	return (
 		<div className="notecard signup-page">
 			<h1>Sign Up</h1>
-			<Form onSubmit={handleFormSubmit}>
-				<FormInput label="First name"    name="first"    placeholder="John" />
-				<FormInput label="Last name"     name="last"     placeholder="Doe" />
-				<FormInput label="Title"         name="title"    placeholder="Mayor" />
-				<FormInput label="Organization"  name="org" />
-				<FormInput label="Email"         name="email"    placeholder="email@example.com" type="email" />
-				<FormInput label="Password"      name="password" type="password" />
-				<FormInput label="(again)"       name="verify"   type="password" labelProps={{ style: { color: '#666' }}} />
-				<FormInput label="Phone"         name="phone"    placeholder="+1 222 333 4444" type="phone" />
-				{/*
-				TODO: change this back to required
-				<FormInput label="First name" name="first-name" required placeholder="John" />
-				<FormInput label="Last name"  name="last-name"  required placeholder="Doe" />
-				<FormInput label="Title"      name="title"      required placeholder="Mayor" />
-				<FormInput label="Email"      name="email"      required placeholder="email@example.com" type="email" />
-				<FormInput label="Password"   name="password"   required type="password" />
-				<FormInput label="(again)"    name="verify"     required type="password" labelProps={{ style: { color: '#666' }}} />
-				<FormInput label="Phone"      name="phone"      required placeholder="+1 222 333 4444" type="phone" /> */}
-				<div className="form-btns">
-					<LinkButton to="..">Back</LinkButton>
-					<FormButton type="submit">Submit</FormButton>
-				</div>
+			<div className="card">
+				<Form onSubmit={handleFormSubmit}>
+					<FormInput label="First name"    name="first"    placeholder="John" />
+					<FormInput label="Last name"     name="last"     placeholder="Doe" />
+					<FormInput label="Title"         name="title"    placeholder="Mayor" />
+					<FormInput label="Organization"  name="org" />
+					<FormInput label="Email"         name="email"    placeholder="email@example.com" type="email" />
+					<FormInput label="Password"      name="password" type="password" />
+					<FormInput label="(again)"       name="verify"   type="password" labelProps={{ style: { color: '#666' }}} />
+					<FormInput label="Phone"         name="phone"    placeholder="+1 222 333 4444" type="phone" />
+					{/*
+					TODO: change this back to required
+					<FormInput label="First name" name="first-name" required placeholder="John" />
+					<FormInput label="Last name"  name="last-name"  required placeholder="Doe" />
+					<FormInput label="Title"      name="title"      required placeholder="Mayor" />
+					<FormInput label="Email"      name="email"      required placeholder="email@example.com" type="email" />
+					<FormInput label="Password"   name="password"   required type="password" />
+					<FormInput label="(again)"    name="verify"     required type="password" labelProps={{ style: { color: '#666' }}} />
+					<FormInput label="Phone"      name="phone"      required placeholder="+1 222 333 4444" type="phone" /> */}
+					<div className="form-btns">
+						<LinkButton to="..">Back</LinkButton>
+						<FormButton type="submit">Submit</FormButton>
+					</div>
+				</Form>
 				{submitted && submitMessage}
 				{passwordMismatch && (
 					<div>
 						<p>Passwords did not match, please try again</p>
 					</div>
 				)}
-			</Form>
+			</div>
 		</div>
 	);
 }

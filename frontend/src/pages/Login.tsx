@@ -30,20 +30,22 @@ export default function Login() {
 	return (
 		<div className="notecard login-page">
 			<h1>Bike Index Platform</h1>
-			<Form onSubmit={handleSubmit}>
-				<FormInput placeholder="Email"    name="email"    type="text" />
-				<FormInput placeholder="Password" name="password" type="password" />
-				<FormButton type="submit">Sign In</FormButton>
-				<div className="notecard-links">
-					<a href="/signup">Sign Up</a>
-					<a href="/forgot">Forgot Password?</a>
-				</div>
-			</Form>
-			{loginFailure && (
-				<div>
-					<p>Login failed</p>
-				</div>
-			)}
+			<div className="card">
+				<Form onSubmit={handleSubmit}>
+					<FormInput placeholder="Email" name="email" type="text" />
+					<FormInput placeholder="Password" name="password" type="password" />
+					<FormButton type="submit">Sign In</FormButton>
+					<div className="notecard-links">
+						<a href="/signup">Sign Up</a>
+						<a href="/forgot">Forgot Password?</a>
+					</div>
+				</Form>
+				{loginFailure && (
+					<div>
+						<p>Login failed</p>
+					</div>
+				)}
+			</div>
 		</div>
 	);
 }

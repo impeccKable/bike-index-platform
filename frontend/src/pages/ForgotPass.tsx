@@ -22,20 +22,22 @@ export default function ForgotPass() {
 	return (
 		<div className="notecard forgot-pass-page">
 			<h1>Password Reset</h1>
-			<Form onSubmit={handleFormSubmit}>
-				<FormInput
-					label="Email"
-					name="email"
-					required
-					placeholder="email@example.com"
-					type="email"
-				/>
-				<div className="form-btns">
-					<LinkButton to="..">Back</LinkButton>
-					<FormButton type="submit">Submit</FormButton>
-				</div>
-				{submitted && submitMessage}
-			</Form>
+			<div className="card">
+				<Form onSubmit={handleFormSubmit}>
+					<FormInput
+						label="Email"
+						name="email"
+						required
+						placeholder="email@example.com"
+						type="email"
+					/>
+					<div className="form-btns">
+						<LinkButton to="..">Back</LinkButton>
+						<FormButton type="submit">Submit</FormButton>
+					</div>
+					{submitted && submitMessage}
+				</Form>
+			</div>
 		</div>
 	);
 }

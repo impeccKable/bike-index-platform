@@ -146,13 +146,16 @@ nav button:hover {
 	text-align: center;
 	background-color: #1a1a1a;
 }
-.notecard form {
-	gap: 1rem;
+.notecard .card {
 	border-radius: 0.5rem;
 	padding: 2rem;
 	background-color: #242424;
 	box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
 	width: 30rem;
+}
+.notecard form {
+	gap: 1rem;
+	margin: 0;
 }
 .notecard-links {
 	display: flex;
@@ -229,21 +232,27 @@ nav button:hover {
 }
 
 
-.link-table {
-
+.link-table td {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	/* width: 20rem; */
 }
 
 
 /* ============= Specific Pages ============= */
-.login-page form {
+.login-page .card {
 	width: 20rem;
+}
+.login-page form {
 	grid-template-columns: auto;
 }
-.signup-page form {
+.signup-page .card {
 	width: 25rem;
 }
-.forgot-pass-page form {
+.forgot-pass-page .card {
 	width: 20rem;
 }
 
+/* .thief-page .link-table tr  */
 

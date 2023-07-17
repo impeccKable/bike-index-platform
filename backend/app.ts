@@ -7,6 +7,7 @@ import stats from "./src/stats";
 import signup from "./src/signup";
 import login from "./src/login";
 import token from "./src/token";
+import dataImport from "./src/dataImport";
 //@ts-ignore
 //import serviceAccount from 'serviceProvider.json';
 
@@ -37,6 +38,7 @@ app.use("/stats", stats);
 app.use("/signup", signup);
 app.use("/login", login);
 app.use("/token", token);
+app.use("/dataImport", dataImport);
 
 
 

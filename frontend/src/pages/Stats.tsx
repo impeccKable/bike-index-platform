@@ -1,6 +1,7 @@
 import Navbar from '../components/Navbar';
 import axios from "axios";
 import { useEffect, useState } from 'react';
+import { httpClient } from '../services/HttpClient';
 
 export default function Stats() {
 	const [stats, setStats] = useState({});
@@ -13,8 +14,8 @@ export default function Stats() {
 
 	useEffect(() => {
 		const getStats = async () => {
-			const statsFromServer = await axios.get("http://localhost:3000/stats", config);
-			return statsFromServer.data;
+			const response = await httpClient.get("/stats");
+			return response.data;
 		}
 		getStats().then(setStats);
 	}, []);

@@ -4,48 +4,55 @@ Todo
 Database
 	create table thief (
 		thief_id     int,
-		approved     bool
+		approved     bool,
+		primary key (thief_id, approved)
 	);
 	create table name (
 		thief_id     int,
-		name         text
+		name         text,
+		primary key (thief_id, name)
 	);
 	create table email (
 		thief_id     int,
-		email        text
+		email        text,
+		primary key (thief_id, email)
 	);
 	create table url (
 		thief_id     int,
-		url          text
+		url          text,
+		primary key (thief_id, url)
 	);
 	create table addr (
 		thief_id     int,
-		line1        text,
-		line2        text,
-		city         text,
-		state        text,
-		zip          text
+		addr         text,
+		primary key (thief_id, addr)
 	);
 	create table phone (
 		thief_id     int,
-		phone        text
+		phone        text,
+		primary key (thief_id, phone)
 	);
 	create table bike_serial (
 		thief_id     int,
-		bike_serial  text
+		bike_serial  text,
+		primary key (thief_id, bike_serial)
 	);
 	create table phrase (
 		thief_id     int,
-		phrase       text
+		phrase       text,
+		primary key (thief_id, phrase)
 	);
 	create table note (
 		thief_id     int,
-		note         text
+		note         text,
+		primary key (thief_id, note)
 	);
 	create table file (
 		thief_id     int,
-		file         text  -- (url to file server)
+		file         text,  -- (url to file server)
+		primary key (thief_id, file)
 	);
+
 	create table bi_user (
 		user_uid     text,
 		email        text,

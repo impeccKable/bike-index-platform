@@ -12,18 +12,7 @@ const get = async (query: any) => {
 		return thiefIds; // TODO: return most recent thieves
 	}
 	let table = fieldToTable[searchType];
-	if (table === "addr") {
-		thiefIds = await db.any(`
-			SELECT thief_id
-			FROM addr
-			WHERE line1 ILIKE $1
-				OR line2 ILIKE $1
-				OR city  ILIKE $1
-				OR state ILIKE $1
-				OR zip   ILIKE $1
-		`, [`%${searchText}%`]);
-
-	} else if (table) {
+	if (table) {
 		thiefIds = await db.any(`
 			SELECT thief_id
 			FROM ${table}
