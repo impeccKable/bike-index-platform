@@ -2,9 +2,14 @@ import Navbar from '../components/Navbar';
 import axios from "axios";
 import { useEffect, useState } from 'react';
 import { httpClient } from '../services/HttpClient';
+import { debugState } from '../services/Recoil';
+import { useRecoilValue } from 'recoil';
+import DebugLogs from '../services/DebugLogs';
 
 export default function Stats() {
 	const [stats, setStats] = useState({});
+	const debug = useRecoilValue(debugState)
+
 	const config = {
 		headers: {
 			"Content-type": "application/json",
@@ -13,12 +18,19 @@ export default function Stats() {
 	};
 
 	useEffect(() => {
+		DebugLogs('Stats Component', '', debug)
 		const getStats = async () => {
 			const response = await httpClient.get("/stats");
 			return response.data;
 		}
 		getStats().then(setStats);
 	}, []);
+
+	useEffect(() => {
+		if (Object.keys(stats).length > 0) {
+			DebugLogs('Stats', stats, debug)
+		}
+	}, [stats, debug])
 
 	return <div className="stats-page">
 		<Navbar />

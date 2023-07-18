@@ -1,6 +1,12 @@
 
 import { atom } from 'recoil';
 
+
+export const devState = atom({
+	key: 'dev',
+	default: false,
+})
+
 export const debugState = atom({
 	key: 'debug',
 	default: false,

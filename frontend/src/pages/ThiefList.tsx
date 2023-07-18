@@ -7,6 +7,7 @@ import { httpClient } from '../services/HttpClient';
 import '../styles/thiefList.css';
 import { useAuth } from '../services/AuthProvider';
 import LinkTable from '../components/LinkTable';
+import DebugLogs from '../services/DebugLogs';
 
 // @ts-ignore
 export interface Thief extends React.HTMLInputElement {
@@ -26,13 +27,11 @@ const header = {
 };
 
 export default function ThiefList() {
-	if (useRecoilValue(debugState) == true) {
-		console.log('ThiefList');
-	}
 	const [searchType, setSearchType] = useState('name');
 	const [searchText, setSearchText] = useState('');
 	const latestSearchText = useRef(searchText);
 	const [thiefs, setThiefs] = useState<Thief[]>([]);
+	const debug = useRecoilValue(debugState)
 
 	// Set the search text and search type from the url
 	useEffect(() => {
@@ -41,6 +40,7 @@ export default function ThiefList() {
 		const searchText = url.searchParams.get('searchText');
 		if (searchType) setSearchType(searchType);
 		if (searchText) setSearchText(searchText);
+		DebugLogs('ThiefList Component', '', debug)
 	}, []);
 
 	// Perform the search when the search text or search type changes
@@ -55,7 +55,9 @@ export default function ThiefList() {
 			latestSearchText.current = searchText;
 			const response = await httpClient.get(
 				`/search?searchType=${searchType}&searchText=${searchText}`
-			);
+			).catch((err: any) => {
+				DebugLogs('ThiefList get error', err, debug)
+			});
 			// Strip out the desired fields
 			const thiefs: Array<Thief> = response.data.map((thief: Thief) => {
 				return {
@@ -69,6 +71,7 @@ export default function ThiefList() {
 			// Discard results if the search text has changed since the request was made
 			if (latestSearchText.current !== searchText) return;
 			setThiefs(thiefs);
+			DebugLogs('Thief search get response', response.data, debug)
 		};
 		GetThiefs();
 	}, [searchType, searchText]);
@@ -107,7 +110,6 @@ export default function ThiefList() {
 				</div>
 				{thiefs ? (
 					<LinkTable header={header} data={thiefs} linkBase='/thiefEdit?thiefId=' />
-					// <ThiefTable thiefs={thiefs} />
 				) : (
 					<i className="bi bi-arrow-clockwise"></i>
 				)}

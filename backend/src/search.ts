@@ -14,10 +14,12 @@ const get = async (query: any) => {
 	let table = fieldToTable[searchType];
 	if (table) {
 		thiefIds = await db.any(`
-			SELECT thief_id
+			SELECT DISTINCT thief_id
 			FROM ${table}
 			WHERE ${table} ILIKE $1
+			ORDER BY thief_id DESC
 		`, [`%${searchText}%`]);
+		let resultCnt = thiefIds.length;
 
 	} else {
 		throw new Error(`Unknown search type: ${query.searchType}`);

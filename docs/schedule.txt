@@ -126,6 +126,8 @@ Schedule
 		Add a way to delete a thief
 		Show all thieves with no search
 		Show how many results
+		Remove FormButton
+		Move pages functionality to backend (page=2)
 
 	Sprint 6 (8/15)
 		Testing
