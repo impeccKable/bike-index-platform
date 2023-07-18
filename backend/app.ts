@@ -17,6 +17,7 @@ var cors = require("cors");
 
 const port = process.env.PORT || 3000;
 const app = express();
+const router = express.Router();
 
 var serviceAccount = require('../serviceProvider.json');
 
@@ -32,14 +33,15 @@ app.use(cors());
 app.set("port", port);
 app.use(express.json());
 
-app.use("/search", search);
-app.use("/thiefEdit", thiefEdit);
-app.use("/stats", stats);
-app.use("/signup", signup);
-app.use("/login", login);
-app.use("/token", token);
-app.use("/dataImport", dataImport);
+router.use("/search", search);
+router.use("/thiefEdit", thiefEdit);
+router.use("/stats", stats);
+router.use("/signup", signup);
+router.use("/login", login);
+router.use("/token", token);
+router.use("/dataImport", dataImport);
 
+app.use("/api", router);
 
 
 app.listen(port, () => {

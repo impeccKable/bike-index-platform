@@ -83,7 +83,7 @@ export default function ThiefEdit() {
           }
         }
 
-          
+
 
           Object.entries(results).map((thiefProperty) => {
             //[0, string] add
@@ -96,7 +96,7 @@ export default function ThiefEdit() {
 
                 if (propertyArray[0] === '0') {
                   consoleMessages.push(`Adding: ${propertyArray[1]}`);
-                } 
+                }
                 else if (propertyArray[1] === '0') {
                   consoleMessages.push(`Deleting: ${propertyArray[0]}`);
                 }
@@ -110,7 +110,7 @@ export default function ThiefEdit() {
             consoleMessages.push(`Thief ID: ${thiefProperty[1]}`);
           }
           });
-        }  
+        }
         DebugLogs('Submit Changes', consoleMessages, debug);
     });
 
@@ -119,12 +119,19 @@ export default function ThiefEdit() {
   };
 
   useEffect(() => {
+<<<<<<< Updated upstream
     DebugLogs('ThiefEdie Component', '', debug)
     if (urlThiefId === 'new') {
       setIsLoading(false);
       return;
     }
     httpClient.get(`/thiefEdit?thiefId=${urlThiefId}`).then((res: any) => {
+=======
+    axios
+      .get(`https://${import.meta.env.VITE_BACKEND_HOST}/thiefEdit?thiefId=${thiefID}`)
+      .then((res: any) => {
+        console.log('Theif search response', res.data);
+>>>>>>> Stashed changes
 
       let tempData = {
         thiefId: 0,
@@ -156,8 +163,13 @@ export default function ThiefEdit() {
     );
   }, []);
 
+<<<<<<< Updated upstream
   return (
     <div className="formal thiefedit-page">
+=======
+  return true ? (
+    <div className="thiefedit-page">
+>>>>>>> Stashed changes
       <Navbar />
       <main>
         <h1>
