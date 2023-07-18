@@ -1,10 +1,6 @@
 
 import { atom } from 'recoil';
 
-export const prodState = atom({
-	key: 'prod',
-	default: true,
-})
 
 export const devState = atom({
 	key: 'dev',
