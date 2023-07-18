@@ -88,41 +88,45 @@ Schedule
 			~ Clean up css
 				Ids?
 			~ UserList page
-			Show thief ID
+			Show thief ID on edit page
 				Fix it so it shows the id
 			~ Verify user token upon reload
 
 			CSS
 				x Thief edit page -> table (to align labels)
 				x Signup page glitches out upon submitting
-				Nav bar extend to right
-
-			psql user permissions
-			Think about what errors could happen
-			Add a way to delete a thief
+				Nav bar extend to right (and move with)
 
 		pair-b (Cheng/Cristian)
 			x Signup
-				Delete firebase user if post to backend fails
-			Add a dev mode (dev/debug/prod)
-				Disable authorization in dev mode
-				Debug has console logs for reloads (for debugging)
-			~ EC2
-				Networking for server (frontend to backend)
+				x Delete firebase user if post to backend fails
+			x Add a dev mode (dev/debug/prod)
+				x Disable authorization in dev mode
+				x Debug has console logs for reloads (for debugging)
+			x EC2
+				x Networking for server (frontend to backend)
 				x Get server running headless
 				x Get Url working
-				Certificate for https
+				n/a Certificate for https
 			x Multiple pages on search results
+
 	Negotiating alternative due date (8/1)
 	Sprint 5 (8/1)
 		Check for a valid token
 		UserEdit page
 		Roles
-			Editable by admin
+			Thief id editable by admin
 		Make it robust to exceptions/database errors
 		Combine serviceProvider.json into .env
 		Site management (files on server)
 		Note fields
+
+		psql user permissions
+		Think about what errors could happen in backend, handle them
+		Add a way to delete a thief
+		Show all thieves with no search
+		Show how many results
+
 	Sprint 6 (8/15)
 		Testing
 		Polish
