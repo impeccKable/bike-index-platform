@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import ThiefTable from '../components/ThiefTable';
 import Navbar from '../components/Navbar';
 import { LinkButton } from '../components/Form';
 import { useRecoilValue } from 'recoil';
@@ -7,6 +6,7 @@ import { debugState } from '../services/Recoil';
 import { httpClient } from '../services/HttpClient';
 import '../styles/thiefList.css';
 import { useAuth } from '../services/AuthProvider';
+import LinkTable from '../components/LinkTable';
 
 // @ts-ignore
 export interface Thief extends React.HTMLInputElement {
@@ -14,8 +14,16 @@ export interface Thief extends React.HTMLInputElement {
 	name: string;
 	phone: string;
 	email: string;
-	address: string;
+	addr: string;
 }
+
+const header = {
+	'ID': 30,
+	'Name': 200,
+	'Phone': 110,
+	'Email': 240,
+	'Address': 400,
+};
 
 export default function ThiefList() {
 	if (useRecoilValue(debugState) == true) {
@@ -48,9 +56,19 @@ export default function ThiefList() {
 			const response = await httpClient.get(
 				`/search?searchType=${searchType}&searchText=${searchText}`
 			);
+			// Strip out the desired fields
+			const thiefs: Array<Thief> = response.data.map((thief: Thief) => {
+				return {
+					thiefId: thief.thiefId,
+					name:    thief.name,
+					phone:   thief.phone,
+					email:   thief.email,
+					addr:    thief.addr,
+				};
+			});
 			// Discard results if the search text has changed since the request was made
 			if (latestSearchText.current !== searchText) return;
-			setThiefs(response.data);
+			setThiefs(thiefs);
 		};
 		GetThiefs();
 	}, [searchType, searchText]);
@@ -60,7 +78,6 @@ export default function ThiefList() {
 			<Navbar />
 			<main>
 				<h1>Thief Listing</h1>
-
 				<div className="searchbar">
 					<label htmlFor="SearchType">Search Type</label>
 					<select
@@ -89,7 +106,8 @@ export default function ThiefList() {
 					</LinkButton>
 				</div>
 				{thiefs ? (
-					<ThiefTable thiefs={thiefs} />
+					<LinkTable header={header} data={thiefs} linkBase='/thiefEdit?thiefId=' />
+					// <ThiefTable thiefs={thiefs} />
 				) : (
 					<i className="bi bi-arrow-clockwise"></i>
 				)}

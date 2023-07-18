@@ -26,12 +26,14 @@ export default function Stats() {
 			<h1>Stats</h1>
 			<>
 				<h3>Total number of rows for each table:</h3>
-				<p>Users:     {stats.users}</p>
-				<p>Urls:      {stats.urls}</p>
-				<p>Phones:    {stats.phones}</p>
-				<p>Emails:    {stats.emails}</p>
-				<p>Addresses: {stats.addresses}</p>
-				<p>Names:     {stats.names}</p>
+				<table>
+					<p>Users:     {stats.users}</p>
+					<p>Urls:      {stats.urls}</p>
+					<p>Phones:    {stats.phones}</p>
+					<p>Emails:    {stats.emails}</p>
+					<p>Addresses: {stats.addresses}</p>
+					<p>Names:     {stats.names}</p>
+				</table>
 			</>
 		</main>
 	</div>

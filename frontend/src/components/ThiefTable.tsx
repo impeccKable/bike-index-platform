@@ -18,8 +18,8 @@ export default function ThiefTable(props: ThiefTableProps) {
 				<table className="link-table">
 					<thead>
 						<tr>
-							<th style={{width: "20%"}}>ID</th>
-							<th style={{"maxWidth": "20px"}}>Name testing multimple worsds</th>
+							<th>ID</th>
+							<th>Name</th>
 							<th>Phone</th>
 							<th>Email</th>
 							<th>Address</th>

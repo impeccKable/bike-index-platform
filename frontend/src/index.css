@@ -232,6 +232,7 @@ nav button:hover {
 }
 
 
+.link-table th,
 .link-table td {
 	white-space: nowrap;
 	overflow: hidden;

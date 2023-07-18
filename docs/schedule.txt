@@ -81,27 +81,25 @@ Schedule
 			Fix back button from thiefEdit to thiefList
 			User token disappearing upon reload
 		pair-a (Emerson/Matt)
+			x Csv upload page
+				x Example csv file
+			x Disallow empty fields in the database
+
 			~ Clean up css
 				Ids?
-			~ Csv upload page
-				Example csv file
 			~ UserList page
 			Show thief ID
 				Fix it so it shows the id
-				Editable by admin
 			~ Verify user token upon reload
 
 			CSS
-				Thief edit page -> table (to align labels)
-					Flexbox grid?
-					grid gaps?
+				x Thief edit page -> table (to align labels)
+				x Signup page glitches out upon submitting
 				Nav bar extend to right
-				Signup page glitches out upon submitting
-
-			disallow empty fields
 
 			psql user permissions
 			Think about what errors could happen
+			Add a way to delete a thief
 
 		pair-b (Cheng/Cristian)
 			x Signup
@@ -120,6 +118,7 @@ Schedule
 		Check for a valid token
 		UserEdit page
 		Roles
+			Editable by admin
 		Make it robust to exceptions/database errors
 		Combine serviceProvider.json into .env
 		Site management (files on server)
