@@ -28,22 +28,24 @@ export default function Login() {
 		f();
 	};
 	return (
-		<div className="login-page">
-			<h1 className="title">Bike Index Platform</h1>
-			<Form onSubmit={handleSubmit}>
-				<FormInput placeholder="Email"    name="email"    type="text" />
-				<FormInput placeholder="Password" name="password" type="password" />
-				<FormButton className="btn-submit" type="submit">Sign In</FormButton>
-				<div className="links">
-					<a href="/signup">Sign Up</a>
-					<a href="/forgot">Forgot Password?</a>
-				</div>
-			</Form>
-			{loginFailure && (
-				<div>
-					<p>Login failed</p>
-				</div>
-			)}
+		<div className="notecard login-page">
+			<h1>Bike Index Platform</h1>
+			<div className="card">
+				<Form onSubmit={handleSubmit}>
+					<FormInput placeholder="Email" name="email" type="text" />
+					<FormInput placeholder="Password" name="password" type="password" />
+					<FormButton type="submit">Sign In</FormButton>
+					<div className="notecard-links">
+						<a href="/signup">Sign Up</a>
+						<a href="/forgot">Forgot Password?</a>
+					</div>
+				</Form>
+				{loginFailure && (
+					<div>
+						<p>Login failed</p>
+					</div>
+				)}
+			</div>
 		</div>
 	);
 }

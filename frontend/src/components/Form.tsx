@@ -34,7 +34,7 @@ export function Form(props: FormProps) {
 		});
 	}
 	return (
-		<form className="Form" onSubmit={handleSubmit}>
+		<form onSubmit={handleSubmit}>
 			{renderChildren()}
 		</form>
 	);
@@ -96,9 +96,9 @@ export function MultiField(props: MultiFieldProps) {
 		}
 	}
 	return (
-		<div className="form-group">
+		<>
 			<label>{label}</label>
-			<ol>
+			<ol className='multi-field'>
 				{values.map((value: string, idx: number) => (
 					<li key={idx == 0 ? name : name + idx}>
 						<Component
@@ -107,16 +107,12 @@ export function MultiField(props: MultiFieldProps) {
 							onChange={(e: any) => handleInput(e, idx)}
 							{...rest}
 						/>
-						<button type="button" onClick={() => addField(idx)}>
-							+
-						</button>
-						<button type="button" onClick={() => removeField(idx)}>
-							-
-						</button>
+						<button type="button" onClick={() => addField(idx)}>＋</button>
+						<button type="button" onClick={() => removeField(idx)}>－</button>
 					</li>
 				))}
 			</ol>
-		</div>
+		</>
 	);
 }
 
@@ -124,14 +120,7 @@ interface FormButtonProps extends React.HTMLButtonElement {
 	[key: string]: any;
 }
 export function FormButton(props: FormButtonProps) {
-	return (
-		<div className="btn-div">
-			<button
-				className={props.type === 'submit' ? 'btn-submit' : ''}
-				{...props}
-			/>
-		</div>
-	);
+	return <button {...props} />;
 }
 
 interface FormInputProps extends React.HTMLInputElement {
@@ -159,9 +148,9 @@ export function FormInput(props: FormInputProps) {
 	}
 	if (label) {
 		return (
-			<div className="form-group">
+			<>
 				<label {...(labelProps || {})}>{label}</label> {ret}
-			</div>
+			</>
 		);
 	}
 	return ret;
@@ -181,22 +170,7 @@ interface LinkButtonProps extends React.HTMLButtonElement {
 export function LinkButton(props: LinkButtonProps) {
 	const { to, ...rest } = props;
 	const navigate = useNavigate();
-	if (to === 'back') {
-		return (
-			<div className="btn-div">
-				<button
-					className="btn"
-					onClick={() => navigate(-1)}
-					{...rest}
-				/>
-			</div>
-		);
-	}
-	return (
-		<div className="btn-div">
-			<Link to={to}>
-				<button {...rest} />
-			</Link>
-		</div>
-	);
+	return <button {...rest} onClick={
+		() => navigate((to === 'back') ? -1 : to)
+	} />
 }

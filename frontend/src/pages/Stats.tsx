@@ -1,6 +1,7 @@
 import Navbar from '../components/Navbar';
 import axios from "axios";
 import { useEffect, useState } from 'react';
+import { httpClient } from '../services/HttpClient';
 
 export default function Stats() {
 	const [stats, setStats] = useState({});
@@ -13,8 +14,8 @@ export default function Stats() {
 
 	useEffect(() => {
 		const getStats = async () => {
-			const statsFromServer = await axios.get("http://localhost:3000/stats", config);
-			return statsFromServer.data;
+			const response = await httpClient.get("/stats");
+			return response.data;
 		}
 		getStats().then(setStats);
 	}, []);
@@ -22,15 +23,17 @@ export default function Stats() {
 	return <div className="stats-page">
 		<Navbar />
 		<main>
-			<h1 className="title2">Stats</h1>
+			<h1>Stats</h1>
 			<>
-				<h2>Total number of rows for each table:</h2>
-				<p>Users:     {stats.users}</p>
-				<p>Urls:      {stats.urls}</p>
-				<p>Phones:    {stats.phones}</p>
-				<p>Emails:    {stats.emails}</p>
-				<p>Addresses: {stats.addresses}</p>
-				<p>Names:     {stats.names}</p>
+				<h3>Total number of rows for each table:</h3>
+				<table>
+					<p>Users:     {stats.users}</p>
+					<p>Urls:      {stats.urls}</p>
+					<p>Phones:    {stats.phones}</p>
+					<p>Emails:    {stats.emails}</p>
+					<p>Addresses: {stats.addresses}</p>
+					<p>Names:     {stats.names}</p>
+				</table>
 			</>
 		</main>
 	</div>

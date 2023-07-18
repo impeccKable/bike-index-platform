@@ -1,7 +1,7 @@
 import express from "express";
 import db from "./dbConfig";
 import { fieldToTable, thiefInfoByIds } from "./thiefInfo";
-import { auth } from "../app";
+import { validToken } from "./token";
 
 // Get matching thief_ids
 const get = async (query: any) => {
@@ -12,18 +12,7 @@ const get = async (query: any) => {
 		return thiefIds; // TODO: return most recent thieves
 	}
 	let table = fieldToTable[searchType];
-	if (table === "addr") {
-		thiefIds = await db.any(`
-			SELECT thief_id
-			FROM addr
-			WHERE line1 ILIKE $1
-				OR line2 ILIKE $1
-				OR city  ILIKE $1
-				OR state ILIKE $1
-				OR zip   ILIKE $1
-		`, [`%${searchText}%`]);
-
-	} else if (table) {
+	if (table) {
 		thiefIds = await db.any(`
 			SELECT thief_id
 			FROM ${table}
@@ -40,18 +29,9 @@ const get = async (query: any) => {
 const router = express.Router();
 router.get("/", async (req: express.Request, res: express.Response) => {
 	try {
-		let token = '';
-		if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-			token = req.headers.authorization.split(' ')[1];
-			if(token[0]===`"`){
-				token = token.slice(1,-1);
-			}
-		}
-		if(!token){
-			res.status(401).send("No token provided");
-			return;
-		}
-		auth.verifyIdToken(token);
+		// if (!validToken(req)) {
+		// return res.status(401).send("Unauthorized");
+		// }
 		return res.json(await get(req.query));
 	} catch (err) {
 		console.error(err);
