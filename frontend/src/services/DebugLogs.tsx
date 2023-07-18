@@ -1,11 +1,5 @@
-
-import { useRecoilValue } from 'recoil';
-import { debugState } from '../services/Recoil';
-
-export default function DebugLogs(message: any, data: any) {
-    let debug = useRecoilValue(debugState);
-
-    if (debug) {
+export default function DebugLogs(message: string, data: any, isDebug: boolean) {
+    if (isDebug) {
         console.log(message, data);
     }
 }

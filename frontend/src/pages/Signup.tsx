@@ -2,11 +2,15 @@ import { useState } from 'react';
 import { Form, FormInput, FormButton, LinkButton } from '../components/Form';
 import { useAuth } from '../services/AuthProvider';
 import { httpClient } from '../services/HttpClient';
+import DebugLogs from '../services/DebugLogs';
+import { debugState } from '../services/Recoil';
+import { useRecoilValue } from 'recoil';
 
 export default function Signup() {
   const [submitted, setSubmitted] = useState(false);
   const [passwordMismatch, setPasswordMismatch] = useState(false);
   const auth = useAuth();
+	const debug = useRecoilValue(debugState)
 
   function handleFormSubmit(e: any) {
     e.preventDefault();
@@ -28,14 +32,14 @@ export default function Signup() {
         e.dataDict.uid = user.uid;
         delete e.dataDict.password;
         delete e.dataDict.verify;
-        console.log(e.dataDict);
+				DebugLogs('Form submitted', e.dataDict, debug)
         await httpClient
           .post('/signup', e.dataDict)
           .then((res: any) => {
-            console.log(res);
+						DebugLogs('Sign up post response', res, debug)
           })
           .catch((err: any) => {
-            console.log(err);
+						DebugLogs('Sign up post error', err, debug)
             auth?.handleDelete(user);
           });
       }

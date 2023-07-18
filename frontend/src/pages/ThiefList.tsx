@@ -7,6 +7,7 @@ import { debugState } from '../services/Recoil';
 import { httpClient } from '../services/HttpClient';
 import '../styles/thiefList.css';
 import { useAuth } from '../services/AuthProvider';
+import DebugLogs from '../services/DebugLogs';
 
 // @ts-ignore
 export interface Thief extends React.HTMLInputElement {
@@ -14,7 +15,7 @@ export interface Thief extends React.HTMLInputElement {
   name: string;
   phone: string;
   email: string;
-  address: string;
+  addr: string;
 }
 
 export default function ThiefList() {
@@ -22,10 +23,8 @@ export default function ThiefList() {
   const [searchText, setSearchText] = useState('');
   const latestSearchText = useRef(searchText);
   const [thiefs, setThiefs] = useState<Thief[]>([]);
+	const debug = useRecoilValue(debugState)
 
-  if (useRecoilValue(debugState) === true) {
-    console.log(thiefs);
-  }
 
   // Set the search text and search type from the url
   useEffect(() => {
@@ -34,6 +33,7 @@ export default function ThiefList() {
     const searchText = url.searchParams.get('searchText');
     if (searchType) setSearchType(searchType);
     if (searchText) setSearchText(searchText);
+		DebugLogs('ThiefList Component', '', debug)
   }, []);
 
   // Perform the search when the search text or search type changes
@@ -47,11 +47,14 @@ export default function ThiefList() {
     const GetThiefs = async () => {
       latestSearchText.current = searchText;
       const response = await httpClient.get(
-        `/search?searchType=${searchType}&searchText=${searchText}`
-      );
+        `/search?searchType=${searchType}&searchText=${searchText}`)
+				.catch(err => {
+					DebugLogs('ThieList get error', err, debug)
+				});
       // Discard results if the search text has changed since the request was made
       if (latestSearchText.current !== searchText) return;
       setThiefs(response.data);
+			DebugLogs('Thief search get response', response.data, debug)
     };
     GetThiefs();
   }, [searchType, searchText]);

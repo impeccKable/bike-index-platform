@@ -11,14 +11,16 @@ import About from "./pages/About";
 import Stats from "./pages/Stats";
 import { AuthProtected } from "./components/AuthProtected";
 import { Logout } from "./pages/Logout";
-import { debugState } from "./services/Recoil";
-import { useRecoilState } from "recoil";
+import { debugState, devState } from "./services/Recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { useEffect } from "react";
 
 export default function App() {
 	const [debug, setDebug] = useRecoilState(debugState);
+	const [dev, setDev] = useRecoilState(devState);
 	useEffect(() => {
 		setDebug(true);
+		setDev(true);
 		if (debug == true) { console.log("App"); }
 	})
 

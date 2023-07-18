@@ -15,23 +15,13 @@ import loading from '../assets/loading.gif';
 import DebugLogs from '../services/DebugLogs'
 
 
-
-function useDebug(message: any, data: any)
-{
-  DebugLogs(message, data);
-}
-
 export default function ThiefEdit() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
   const [showLoadGif, setShowLoadGif] = useState(false);
   const [wasSubmitted, setWasSubmitted] = useState(false);
-  const [consoleMessage, setConsoleMessage] = useState([]);
   const urlThiefId = searchParams.get('thiefId');
-  
-
-  DebugLogs("ThiefEdit Component", "")
-  DebugLogs("Submit Changes", consoleMessage);
+  const debug = useRecoilValue(debugState);
 
   setTimeout(() => {
     setShowLoadGif(true);
@@ -53,7 +43,10 @@ export default function ThiefEdit() {
   function handleFormSubmit(e: any) {
     e.preventDefault();
     let results = CompareResults(e.dataDict);
-    httpClient.put('/thiefEdit', results);
+    httpClient.put('/thiefEdit', results)
+      .catch(err => {
+        DebugLogs('ThiefEdit post error', err, debug);
+      })
     setWasSubmitted(true);
     setTimeout(() => {
       setWasSubmitted(false);
@@ -65,7 +58,7 @@ export default function ThiefEdit() {
     let results = {
       thiefId: urlThiefId,
     };
-    let consoleMessages: any = [];
+    const consoleMessages: any = [];
 
     // need to split this one
     Object.entries(submitData).map((field) => {
@@ -118,7 +111,7 @@ export default function ThiefEdit() {
           }
           });
         }  
-        setConsoleMessage(consoleMessages)
+        DebugLogs('Submit Changes', consoleMessages, debug);
     });
 
 
@@ -126,6 +119,7 @@ export default function ThiefEdit() {
   };
 
   useEffect(() => {
+    DebugLogs('ThiefEdie Component', '', debug)
     if (urlThiefId === 'new') {
       setIsLoading(false);
       return;
@@ -154,10 +148,13 @@ export default function ThiefEdit() {
       });
       setIsLoading(false);
       setThiefInfo(tempData);
-    });
+      DebugLogs('ThiefEdit get response', res.data, debug);
+    })
+      .catch(err => {
+        DebugLogs('ThiefEdit get error', err, debug);
+      }
+    );
   }, []);
-
-  DebugLogs("Thief Search Response", thiefInfo);
 
   return (
     <div className="formal thiefedit-page">

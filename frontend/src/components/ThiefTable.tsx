@@ -41,7 +41,7 @@ export default function ThiefTable(props: ThiefTableProps) {
                     <td>{thief.name.join(', ')}</td>
                     <td>{thief.phone.join(', ')}</td>
                     <td>{thief.email.join(', ')}</td>
-                    <td>{thief.address}</td>
+                    <td>{thief.addr}</td>
                   </tr>
                 );
               })}

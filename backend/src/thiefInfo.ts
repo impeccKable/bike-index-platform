@@ -21,7 +21,7 @@ export const thiefInfoByIds = async (thiefIds: Array<number>) => {
 		db.any("SELECT thief_id, name        FROM name                    WHERE thief_id in ($1:csv)", [thiefIds]),
 		db.any("SELECT thief_id, email       FROM email                   WHERE thief_id in ($1:csv)", [thiefIds]),
 		db.any("SELECT thief_id, url         FROM url                     WHERE thief_id in ($1:csv)", [thiefIds]),
-		db.any("SELECT thief_id, line1, line2, city, state, zip FROM addr WHERE thief_id in ($1:csv)", [thiefIds]),
+		db.any("SELECT thief_id, addr FROM addr WHERE thief_id in ($1:csv)", [thiefIds]),
 		db.any("SELECT thief_id, phone       FROM phone                   WHERE thief_id in ($1:csv)", [thiefIds]),
 		db.any("SELECT thief_id, bike_serial FROM bike_serial             WHERE thief_id in ($1:csv)", [thiefIds]),
 		db.any("SELECT thief_id, phrase      FROM phrase                  WHERE thief_id in ($1:csv)", [thiefIds]),
