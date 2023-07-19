@@ -119,19 +119,12 @@ export default function ThiefEdit() {
   };
 
   useEffect(() => {
-<<<<<<< Updated upstream
-    DebugLogs('ThiefEdie Component', '', debug)
+    DebugLogs('ThiefEdit Component', '', debug)
     if (urlThiefId === 'new') {
       setIsLoading(false);
       return;
     }
     httpClient.get(`/thiefEdit?thiefId=${urlThiefId}`).then((res: any) => {
-=======
-    axios
-      .get(`https://${import.meta.env.VITE_BACKEND_HOST}/thiefEdit?thiefId=${thiefID}`)
-      .then((res: any) => {
-        console.log('Theif search response', res.data);
->>>>>>> Stashed changes
 
       let tempData = {
         thiefId: 0,
@@ -163,13 +156,8 @@ export default function ThiefEdit() {
     );
   }, []);
 
-<<<<<<< Updated upstream
   return (
     <div className="formal thiefedit-page">
-=======
-  return true ? (
-    <div className="thiefedit-page">
->>>>>>> Stashed changes
       <Navbar />
       <main>
         <h1>
