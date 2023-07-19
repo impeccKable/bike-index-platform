@@ -3,7 +3,6 @@ Questions
 	How should we handle 20+ urls?
 	Do any other fields have 20+?
 	Should addresses be split into their separate fields?
-
 Schedule
 	Sprint 1 (5/23)
 		Mockup pages (Emerson/Cristian)
@@ -75,10 +74,10 @@ Schedule
 					API calls
 	Sprint 4 (7/18)
 		em (done)
-			Comma delimited spacing when mutliple feilds exist for name, etc
+			- Comma delimited spacing when mutliple feilds exist for name, etc
 			Convert all spaces to tabs for indenting
 			Combine host/port in frontend .env
-			Fix back button from thiefEdit to thiefList
+			- Fix back button from thiefEdit to thiefList
 			User token disappearing upon reload
 		pair-a (Emerson/Matt)
 			x Csv upload page
@@ -96,7 +95,6 @@ Schedule
 				x Thief edit page -> table (to align labels)
 				x Signup page glitches out upon submitting
 				Nav bar extend to right (and move with)
-
 		pair-b (Cheng/Cristian)
 			x Signup
 				x Delete firebase user if post to backend fails
@@ -109,9 +107,10 @@ Schedule
 				x Get Url working
 				n/a Certificate for https
 			x Multiple pages on search results
-
-	Negotiating alternative due date (8/1)
+		Negotiating alternative due date (8/1)
 	Sprint 5 (8/1)
+		Restart on save
+
 		Check for a valid token
 		UserEdit page
 		Roles
@@ -121,14 +120,30 @@ Schedule
 		Site management (files on server)
 		Note fields
 
-		psql user permissions
-		Think about what errors could happen in backend, handle them
-		Add a way to delete a thief
-		Show all thieves with no search
-		Show how many results
-		Remove FormButton
-		Move pages functionality to backend (page=2)
+		Misc
+			psql user permissions
+			Think about what errors could happen in backend, handle them
+			Add a way to delete a thief
+			Show all thieves with no search
+			Show how many results
+			Remove FormButton
+			Move pages functionality to backend (page=2)
+			Make run.sh and stop.sh scripts
+			Option to combine multiple thieves
 
+		Issues from call with Bryan
+			Issue: Sign-up redirects back to main page on Bryan's browswer
+			Issue 2: Submitting does not confirm after uploading a csv
+			"I ran into X amount of lines and submitted Y amount of rows" -Bryan
+			Bruce Truong — Today at 4:19 PM
+			Issue 3: Add user email verification through firebase
+			Issue 4: Need a file upload for the thief.  word file, txt files, pdf, screenshot (jpg, png, ie top 3/4 big file formats). Most are screenshots/files. 25mb would be a great cap. 10mb is fine.
+			Issue 5: Test Note submission is not working.
+			Bruce Truong — Today at 4:27 PM
+			Issue 4/5 is PRIORITY.
+			TESTING - try it on a new browser or reset cached
+			Bruce Truong — Today at 4:51 PM
+			Issue 6: Export file
 	Sprint 6 (8/15)
 		Testing
 		Polish
