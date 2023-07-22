@@ -101,11 +101,19 @@ li {
 	display: flex;
 	align-items: center;
 }
+table {
+	border-collapse: collapse;
+	background-color: #383838;
+}
 th, td {
 	border: 1px solid;
-	border-collapse: collapse;
-	height: 30px;
-	border-color: #808080;
+	padding: 0.25rem 0.65rem;
+	text-align: start;
+	border-color: #585858;
+}
+th {
+	background-color: #484848;
+	border-color: #686868;
 }
 
 
@@ -197,6 +205,7 @@ nav button:hover {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
+	align-items: center;
 	grid-column-start: 1;
 	grid-column-end: 3;
 }
@@ -232,12 +241,18 @@ nav button:hover {
 }
 
 
-.link-table th,
 .link-table td {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	/* width: 20rem; */
+}
+.tr-link > td {
+	cursor: pointer;
+	transition: background-color 0.05s ease;
+}
+.tr-link:hover > td {
+	background-color: #484848;
+	border-color: #686868;
 }
 
 
@@ -256,4 +271,15 @@ nav button:hover {
 }
 
 /* .thief-page .link-table tr  */
+
+.data-import-page form {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.5rem;
+}
+.data-import-page form button {
+	margin-left: 0;
+}
+
 
