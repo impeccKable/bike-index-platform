@@ -36,8 +36,8 @@ export default function ThiefList() {
 		const url = new URL(window.location.href);
 		const searchType = url.searchParams.get('searchType');
 		const searchText = url.searchParams.get('searchText');
-		if (searchType) setSearchType(searchType);
-		if (searchText) setSearchText(searchText);
+		setSearchType(searchType ? searchType : 'name');
+		setSearchText(searchText ? searchText : '');
 		DebugLogs('ThiefList Component', '', debug)
 	}, []);
 

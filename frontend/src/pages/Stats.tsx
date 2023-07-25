@@ -38,12 +38,14 @@ export default function Stats() {
 			<h1>Stats</h1>
 			<h3>Database totals:</h3>
 			<table>
-				<tr><td>Users    </td><td>{stats.users    }</td></tr>
-				<tr><td>Urls     </td><td>{stats.urls     }</td></tr>
-				<tr><td>Phones   </td><td>{stats.phones   }</td></tr>
-				<tr><td>Emails   </td><td>{stats.emails   }</td></tr>
-				<tr><td>Addresses</td><td>{stats.addresses}</td></tr>
-				<tr><td>Names    </td><td>{stats.names    }</td></tr>
+				<tbody>
+					<tr><td>Users    </td><td>{stats.users    }</td></tr>
+					<tr><td>Urls     </td><td>{stats.urls     }</td></tr>
+					<tr><td>Phones   </td><td>{stats.phones   }</td></tr>
+					<tr><td>Emails   </td><td>{stats.emails   }</td></tr>
+					<tr><td>Addresses</td><td>{stats.addresses}</td></tr>
+					<tr><td>Names    </td><td>{stats.names    }</td></tr>
+				</tbody>
 			</table>
 		</main>
 	</div>
