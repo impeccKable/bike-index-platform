@@ -1,5 +1,4 @@
 import Navbar from '../components/Navbar';
-import axios from "axios";
 import { useEffect, useState } from 'react';
 import { httpClient } from '../services/HttpClient';
 import { debugState } from '../services/Recoil';
@@ -7,15 +6,8 @@ import { useRecoilValue } from 'recoil';
 import DebugLogs from '../services/DebugLogs';
 
 export default function Stats() {
-	const [stats, setStats] = useState({});
+	const [stats, setStats]: any = useState({});
 	const debug = useRecoilValue(debugState)
-
-	const config = {
-		headers: {
-			"Content-type": "application/json",
-			// "Access-Control-Allow-Origin": "http://localhost:3000",
-		},
-	};
 
 	useEffect(() => {
 		DebugLogs('Stats Component', '', debug)
@@ -32,7 +24,7 @@ export default function Stats() {
 		}
 	}, [stats, debug])
 
-	return <div className="stats-page">
+	return <div className="formal stats-page">
 		<Navbar />
 		<main>
 			<h1>Stats</h1>
