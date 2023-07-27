@@ -12,9 +12,9 @@ import thiefDataExport from "./src/thiefDataExport";
 //@ts-ignore
 //import serviceAccount from 'serviceProvider.json';
 
-var admin = require("firebase-admin");
+var admin = require('firebase-admin');
 
-var cors = require("cors");
+var cors = require('cors');
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -23,15 +23,13 @@ const router = express.Router();
 var serviceAccount = require('../serviceProvider.json');
 
 const firebase = admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+	credential: admin.credential.cert(serviceAccount),
 });
 
 export const auth = admin.auth();
 
-
-
 app.use(cors());
-app.set("port", port);
+app.set('port', port);
 app.use(express.json());
 
 router.use("/search", search);
@@ -45,8 +43,8 @@ router.use("/thiefDataExport", thiefDataExport);
 
 app.use("/api", router);
 
+app.use('/api', router);
 
 app.listen(port, () => {
 	console.log(`listening on port http://localhost:${port}`);
 });
-

@@ -7,13 +7,13 @@ import {
 	FormButton,
 	LinkButton,
 } from '../components/Form';
+import { FileUpload } from '../components/FileUpload';
 import { useSearchParams } from 'react-router-dom';
 import { httpClient } from '../services/HttpClient';
 import { useRecoilValue } from 'recoil';
 import { debugState } from '../services/Recoil';
 import loading from '../assets/loading.gif';
-import DebugLogs from '../services/DebugLogs'
-
+import DebugLogs from '../services/DebugLogs';
 
 export default function ThiefEdit() {
 	const [searchParams, setSearchParams] = useSearchParams();
@@ -46,7 +46,7 @@ export default function ThiefEdit() {
 		httpClient.put('/thiefEdit', results)
 			.catch(err => {
 				DebugLogs('ThiefEdit post error', err, debug);
-			})
+			});
 		setWasSubmitted(true);
 		setTimeout(() => {
 			setWasSubmitted(false);
@@ -91,68 +91,65 @@ export default function ThiefEdit() {
 						// [string, string] update
 						//result = result.property.map
 
-						if (thiefProperty[0] !== 'thiefId') {
-							thiefProperty[1].map((propertyArray) => {
-
-								if (propertyArray[0] === '0') {
-									consoleMessages.push(`Adding: ${propertyArray[1]}`);
-								}
-								else if (propertyArray[1] === '0') {
-									consoleMessages.push(`Deleting: ${propertyArray[0]}`);
-								}
-								else {
-									consoleMessages.push(`Updating '${propertyArray[0]}' to '${propertyArray[1]}'`);
-								}
-
-							});
-					}
-					else {
+					if (thiefProperty[0] !== 'thiefId') {
+						thiefProperty[1].map((propertyArray) => {
+							if (propertyArray[0] === '0') {
+								consoleMessages.push(`Adding: ${propertyArray[1]}`);
+							} else if (propertyArray[1] === '0') {
+								consoleMessages.push(`Deleting: ${propertyArray[0]}`);
+							} else {
+								consoleMessages.push(
+									`Updating '${propertyArray[0]}' to '${propertyArray[1]}'`
+								);
+							}
+						});
+					} else {
 						consoleMessages.push(`Thief ID: ${thiefProperty[1]}`);
 					}
-					});
-				}
-				DebugLogs('Submit Changes', consoleMessages, debug);
+				});
+			}
+			DebugLogs('Submit Changes', consoleMessages, debug);
 		});
 
 		return results;
 	};
 
 	useEffect(() => {
-		DebugLogs('ThiefEdit Component', '', debug)
+		DebugLogs('ThiefEdit Component', '', debug);
 		if (urlThiefId === 'new') {
 			setIsLoading(false);
 			return;
 		}
-		httpClient.get(`/thiefEdit?thiefId=${urlThiefId}`).then((res: any) => {
+		httpClient
+			.get(`/thiefEdit?thiefId=${urlThiefId}`)
+			.then((res: any) => {
+				let tempData = {
+					thiefId: 0,
+					name: [''],
+					email: [''],
+					url: [''],
+					addr: [''],
+					phone: [''],
+					bikeSerial: [''],
+					phrase: [''],
+					note: [''],
+				};
 
-			let tempData = {
-				thiefId: 0,
-				name: [''],
-				email: [''],
-				url: [''],
-				addr: [''],
-				phone: [''],
-				bikeSerial: [''],
-				phrase: [''],
-				note: [''],
-			};
-
-			Object.entries(res.data[0]).map((atr) => {
-				if (atr[0].localeCompare('thiefId') && atr[1].length === 0) {
-					atr[1] = [''];
-					tempData[`${atr[0]}`] = atr[1];
-				} else {
-					tempData[`${atr[0]}`] = atr[1];
-				}
-			});
-			setIsLoading(false);
-			setThiefInfo(tempData);
-			DebugLogs('ThiefEdit get response', res.data, debug);
-		})
-			.catch(err => {
+				Object.entries(res.data[0]).map((atr) => {
+					if (atr[0].localeCompare('thiefId') && atr[1].length === 0) {
+						atr[1] = [''];
+						tempData[`${atr[0]}`] = atr[1];
+					} else {
+						tempData[`${atr[0]}`] = atr[1];
+					}
+				});
+				setIsLoading(false);
+				setThiefInfo(tempData);
+				DebugLogs('ThiefEdit get response', res.data, debug);
+			})
+			.catch((err) => {
 				DebugLogs('ThiefEdit get error', err, debug);
-			}
-		);
+			});
 	}, []);
 
 	return (
@@ -174,6 +171,7 @@ export default function ThiefEdit() {
 					<MultiField label="Bike Serial" name="bikeSerial" data={thiefInfo.bikeSerial} disabled={isLoading} component={FormInput}/>
 					<MultiField label="Phrase"      name="phrase"     data={thiefInfo.phrase}     disabled={isLoading} component={FormInput} type="textarea"/>
 					<MultiField label="Notes"       name="notes"      data={thiefInfo.note}       disabled={isLoading} component={FormInput} type="textarea"/>
+					<FileUpload label="File Upload" />
 					<div className="form-btns">
 						<LinkButton type="button" to="back">Back</LinkButton>
 						<FormButton type="submit">Submit</FormButton>
