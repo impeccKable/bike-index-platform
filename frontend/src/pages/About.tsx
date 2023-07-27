@@ -4,7 +4,7 @@ import { debugState } from "../services/Recoil";
 
 export default function About() {
 	if (useRecoilValue(debugState) == true) { console.log("About"); }
-	return <div className="about-page">
+	return <div className="formal about-page">
 		<Navbar />
 		<main>
 			<h1>About</h1>
