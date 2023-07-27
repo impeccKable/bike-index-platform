@@ -178,7 +178,7 @@ export default function ThiefEdit() {
 					<MultiField label="Phone"       name="phone"      data={thiefInfo.phone}      disabled={isLoading} component={FormInput} type="phone"/>
 					<MultiField label="Bike Serial" name="bikeSerial" data={thiefInfo.bikeSerial} disabled={isLoading} component={FormInput}/>
 					<MultiField label="Phrase"      name="phrase"     data={thiefInfo.phrase}     disabled={isLoading} component={FormInput} type="textarea"/>
-					<MultiField label="Notes"       name="notes"      data={thiefInfo.note}       disabled={isLoading} component={FormInput} type="textarea"/>
+					<MultiField label="Notes"       name="note"       data={thiefInfo.note}       disabled={isLoading} component={FormInput} type="textarea"/>
 					<FileUpload label="File Upload" />
 					<div className="form-btns">
 						<LinkButton type="button" to="back">Back</LinkButton>
