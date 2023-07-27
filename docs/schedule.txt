@@ -124,14 +124,14 @@ Schedule
 			1.5hr  Export file
 			x 1hr  Clean up thief list css
 				Change column widths to rem
-			1hr  Show thief ID on edit page (disabled)
+			x 1hr  Show thief ID on edit page (disabled)
 			1hr  Fix psql user permissions for 'ec2-user'
 			1hr  Add a way to delete a thief
-			1hr  Show all thieves with no search
+			x 1hr  Show all thieves with no search
 			1hr  Move pages functionality to backend (page=2)
 			1hr  Show how many results
 
-			1hr  Combine about + stats
+			1hr  Combine about and stats pages
 			1hr  Billy extra names bug
 		Matt
 			!! 1hr  Test Note submission is not working
