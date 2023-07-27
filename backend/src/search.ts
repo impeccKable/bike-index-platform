@@ -8,8 +8,8 @@ const get = async (query: any) => {
 	let searchType: string = query.searchType;
 	let searchText: string = query.searchText;
 	let thiefIds: Array<number> = [];
-	if (!searchType || !searchText) {
-		return thiefIds; // TODO: return most recent thieves
+	if (!searchType) {
+		return thiefIds;
 	}
 	let table = fieldToTable[searchType];
 	if (table) {

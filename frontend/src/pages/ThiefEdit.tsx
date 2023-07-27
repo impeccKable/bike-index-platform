@@ -43,9 +43,10 @@ export default function ThiefEdit() {
 	function handleFormSubmit(e: any) {
 		e.preventDefault();
 		let results = CompareResults(e.dataDict);
-		httpClient.put('/thiefEdit', results).catch((err) => {
-			DebugLogs('ThiefEdit post error', err, debug);
-		});
+		httpClient.put('/thiefEdit', results)
+			.catch(err => {
+				DebugLogs('ThiefEdit post error', err, debug);
+			});
 		setWasSubmitted(true);
 		setTimeout(() => {
 			setWasSubmitted(false);
@@ -82,11 +83,13 @@ export default function ThiefEdit() {
 					}
 				}
 
-				Object.entries(results).map((thiefProperty) => {
-					//[0, string] add
-					//[string, 0] delete
-					// [string, string] update
-					//result = result.property.map
+
+
+					Object.entries(results).map((thiefProperty) => {
+						//[0, string] add
+						//[string, 0] delete
+						// [string, string] update
+						//result = result.property.map
 
 					if (thiefProperty[0] !== 'thiefId') {
 						thiefProperty[1].map((propertyArray) => {
@@ -154,83 +157,23 @@ export default function ThiefEdit() {
 			<Navbar />
 			<main>
 				<h1>
-					Thief Edit{' '}
-					{isLoading && showLoadGif && (
-						<img src={loading} alt="loading" width="30px" />
+					Thief Edit {isLoading && showLoadGif && (
+						<img src={loading} alt="loading" width="30px" height="30px"/>
 					)}
 				</h1>
 				<Form onSubmit={handleFormSubmit}>
-					{/* {console.log('thiefInfo', thiefInfo)} */}
-					<FormInput
-						label="Thief ID"
-						name="thiefId"
-						data={thiefInfo.thiefId}
-						disabled={isLoading}
-					/>
-					<MultiField
-						label="Name"
-						name="name"
-						data={thiefInfo.name}
-						component={FormInput}
-						disabled={isLoading}
-					/>
-					<MultiField
-						label="Email"
-						name="email"
-						data={thiefInfo.email}
-						component={FormInput}
-						disabled={isLoading}
-					/>
-					<MultiField
-						label="Url"
-						name="url"
-						data={thiefInfo.url}
-						component={FormInput}
-						disabled={isLoading}
-					/>
-					<MultiField
-						label="Address"
-						name="addr"
-						data={thiefInfo.addr}
-						component={FormInput}
-						disabled={isLoading}
-					/>
-					<MultiField
-						label="Phone"
-						name="phone"
-						data={thiefInfo.phone}
-						component={FormInput}
-						type="phone"
-						disabled={isLoading}
-					/>
-					<MultiField
-						label="Bike Serial"
-						name="bikeSerial"
-						data={thiefInfo.bikeSerial}
-						component={FormInput}
-						disabled={isLoading}
-					/>
-					<MultiField
-						label="Phrase"
-						name="phrase"
-						data={thiefInfo.phrase}
-						component={FormInput}
-						type="textarea"
-						disabled={isLoading}
-					/>
-					<MultiField
-						label="Notes"
-						name="notes"
-						data={thiefInfo.note}
-						component={FormInput}
-						type="textarea"
-						disabled={isLoading}
-					/>
+					<FormInput  label="Thief ID"    name="thiefId"    value={thiefInfo.thiefId}   disabled={true}/>
+					<MultiField label="Name"        name="name"       data={thiefInfo.name}       disabled={isLoading} component={FormInput}/>
+					<MultiField label="Email"       name="email"      data={thiefInfo.email}      disabled={isLoading} component={FormInput}/>
+					<MultiField label="Url"         name="url"        data={thiefInfo.url}        disabled={isLoading} component={FormInput}/>
+					<MultiField label="Address"     name="addr"       data={thiefInfo.addr}       disabled={isLoading} component={FormInput}/>
+					<MultiField label="Phone"       name="phone"      data={thiefInfo.phone}      disabled={isLoading} component={FormInput} type="phone"/>
+					<MultiField label="Bike Serial" name="bikeSerial" data={thiefInfo.bikeSerial} disabled={isLoading} component={FormInput}/>
+					<MultiField label="Phrase"      name="phrase"     data={thiefInfo.phrase}     disabled={isLoading} component={FormInput} type="textarea"/>
+					<MultiField label="Notes"       name="notes"      data={thiefInfo.note}       disabled={isLoading} component={FormInput} type="textarea"/>
 					<FileUpload label="File Upload" />
 					<div className="form-btns">
-						<LinkButton type="button" to="back">
-							Back
-						</LinkButton>
+						<LinkButton type="button" to="back">Back</LinkButton>
 						<FormButton type="submit">Submit</FormButton>
 					</div>
 					{wasSubmitted && <div className="form-btns">Submitted!</div>}

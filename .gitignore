@@ -1,4 +1,5 @@
 # Custom
+/backend/userFiles
 /backend/uploads
 /backend/nohup.out
 /frontend/nohup.out

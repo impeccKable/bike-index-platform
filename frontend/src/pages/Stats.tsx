@@ -32,21 +32,21 @@ export default function Stats() {
 		}
 	}, [stats, debug])
 
-	return <div className="stats-page">
+	return <div className="formal stats-page">
 		<Navbar />
 		<main>
 			<h1>Stats</h1>
-			<>
-				<h3>Total number of rows for each table:</h3>
-				<table>
-					<p>Users:     {stats.users}</p>
-					<p>Urls:      {stats.urls}</p>
-					<p>Phones:    {stats.phones}</p>
-					<p>Emails:    {stats.emails}</p>
-					<p>Addresses: {stats.addresses}</p>
-					<p>Names:     {stats.names}</p>
-				</table>
-			</>
+			<h3>Database totals:</h3>
+			<table>
+				<tbody>
+					<tr><td>Users    </td><td>{stats.users    }</td></tr>
+					<tr><td>Urls     </td><td>{stats.urls     }</td></tr>
+					<tr><td>Phones   </td><td>{stats.phones   }</td></tr>
+					<tr><td>Emails   </td><td>{stats.emails   }</td></tr>
+					<tr><td>Addresses</td><td>{stats.addresses}</td></tr>
+					<tr><td>Names    </td><td>{stats.names    }</td></tr>
+				</tbody>
+			</table>
 		</main>
 	</div>
 }

@@ -8,12 +8,12 @@ interface LinkTableProps extends React.HTMLInputElement {
 	[key: string]: any;
 }
 
-const maxRow = 2;
+const maxRow = 10;
 
 export default function LinkTable(props: LinkTableProps) {
 	const navigate = useNavigate();
 	const { header, data, linkBase, ...rest } = props;
-	const widths = Object.values(header).map((val: any) => `${val}px`);
+	const styles: any = Object.values(header);
 	const idName = data.length > 0 ? Object.keys(data[0])[0] : ''; // e.g. 'thiefId'
 	const [lowerIndex, setLowerIndex] = useState(0);
 
@@ -25,10 +25,7 @@ export default function LinkTable(props: LinkTableProps) {
 						{Object.keys(header).map((colName: any, idx) => {
 							return <th
 								key={colName}
-								style={{
-									minWidth: widths[idx],
-									maxWidth: widths[idx]
-								}}
+								style={styles[idx]}
 							>{colName}</th>;
 						})}
 					</tr>
@@ -39,7 +36,7 @@ export default function LinkTable(props: LinkTableProps) {
 						return (
 							<tr
 								key={row[idName]}
-								className="tr-link"
+								className="tr-link" // (so header row is not included)
 								onClick={() =>
 									navigate(`${linkBase}${row[idName]}`)
 								}
@@ -50,10 +47,7 @@ export default function LinkTable(props: LinkTableProps) {
 									}
 									return <td
 										key={Object.keys(row)[idx]}
-										style={{
-											minWidth: widths[idx],
-											maxWidth: widths[idx]
-										}}
+										style={styles[idx]}
 									>{cell}</td>;
 								})}
 							</tr>
