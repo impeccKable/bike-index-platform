@@ -1,6 +1,9 @@
 # Custom
 /backend/userFiles
+<<<<<<< HEAD
 /backend/uploads
+=======
+>>>>>>> 6278b58d4a74945a5ef94818d57d8bdd27697349
 /backend/nohup.out
 /frontend/nohup.out
 

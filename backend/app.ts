@@ -1,11 +1,14 @@
-import express from 'express';
-import search from './src/search';
-import thiefEdit from './src/thiefEdit';
-import stats from './src/stats';
-import signup from './src/signup';
-import login from './src/login';
-import token from './src/token';
-import dataImport from './src/dataImport';
+/** @format */
+
+import express from "express";
+import search from "./src/search";
+import thiefEdit from "./src/thiefEdit";
+import stats from "./src/stats";
+import signup from "./src/signup";
+import login from "./src/login";
+import token from "./src/token";
+import thiefDataImport from "./src/thiefDataImport";
+import thiefDataExport from "./src/thiefDataExport";
 //@ts-ignore
 //import serviceAccount from 'serviceProvider.json';
 
@@ -29,13 +32,16 @@ app.use(cors());
 app.set('port', port);
 app.use(express.json());
 
-router.use('/search', search);
-router.use('/thiefEdit', thiefEdit);
-router.use('/stats', stats);
-router.use('/signup', signup);
-router.use('/login', login);
-router.use('/token', token);
-router.use('/dataImport', dataImport);
+router.use("/search", search);
+router.use("/thiefEdit", thiefEdit);
+router.use("/stats", stats);
+router.use("/signup", signup);
+router.use("/login", login);
+router.use("/token", token);
+router.use("/thiefDataImport", thiefDataImport);
+router.use("/thiefDataExport", thiefDataExport);
+
+app.use("/api", router);
 
 app.use('/api', router);
 
