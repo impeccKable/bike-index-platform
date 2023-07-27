@@ -186,8 +186,7 @@ nav button:hover {
 	user-select: none;
 	outline: none;
 }
-.multi-field button:hover,
-.file-upload-btn:hover {
+.multi-field button:hover {
 	background-color: #404040;
 }
 .form-btns {
@@ -268,20 +267,41 @@ nav button:hover {
 	border: 1px;
 	border-style: solid;
 	border-radius: 8px;
-	width: 50%;
+	width: 80%;
 	max-width: 400px;
+	
 }
 
-.close {
+.modal-content .file-name {
+	width: 100%;
+}
+
+.modal-content .close {
 	font-size: 28px;
 	font-weight: bold;
-	float: right;
 	color: #aaaaaa;
+	float: right;
 }
 
-.close:hover, .close:focus {
+.modal-content .close:hover, .modal-content .close:focus { 
 	cursor: pointer;
-	color: gray;
+	color: white;
 }
+
+.modal-content .confirm {
+	display: flex;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.modal-content .confirm:disabled {
+	background-color: grey;
+	cursor: not-allowed;
+}
+
+.modal-content .error-message {
+	color: red;
+}
+
 
 /* .thief-page .link-table tr  */
