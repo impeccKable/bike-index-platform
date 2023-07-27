@@ -7,7 +7,8 @@ import stats from "./src/stats";
 import signup from "./src/signup";
 import login from "./src/login";
 import token from "./src/token";
-import dataImport from "./src/dataImport";
+import thiefDataImport from "./src/thiefDataImport";
+import thiefDataExport from "./src/thiefDataExport";
 //@ts-ignore
 //import serviceAccount from 'serviceProvider.json';
 
@@ -39,7 +40,8 @@ router.use("/stats", stats);
 router.use("/signup", signup);
 router.use("/login", login);
 router.use("/token", token);
-router.use("/dataImport", dataImport);
+router.use("/thiefDataImport", thiefDataImport);
+router.use("/thiefDataExport", thiefDataExport);
 
 app.use("/api", router);
 

@@ -12,7 +12,7 @@ export const fieldToTable: {[key: string]: string} = {
 };
 export const fields = Object.keys(fieldToTable);
 
-export const thiefInfoByIds = async (thiefIds: Array<number>) => {
+export const thiefInfoByIds = async (thiefIds: number[]) => {
 	if (thiefIds.length === 0) {
 		return [];
 	}
@@ -33,7 +33,7 @@ export const thiefInfoByIds = async (thiefIds: Array<number>) => {
 	// 		email: [{ thief_id: 1, email: "..." }, ...],
 	// 	   ...
 	// 	}
-	let results: {[key: string]: Array<any>} = {};
+	let results: {[key: string]: any[]} = {};
 	for (let i = 0; i < fields.length; i++) {
 		results[fields[i]] = values[i];
 	}

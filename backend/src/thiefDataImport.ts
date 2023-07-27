@@ -1,9 +1,18 @@
 import express from "express";
-import csv from "csv-parse/sync";
+import { parse } from "csv/sync";
 import fs from "fs";
 
+export const csvStandardHeader =
+	[ 'Thief Id', 'Name', 'Email', 'Url', 'Address', 'Phone', 'Bike Serial', 'Phrase', 'Notes' ]
+
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+const upload = multer({
+	dest: "userFiles/uploads/",
+	filename: (req: any, file: any, cb: any) => {
+		console.log(req);
+		cb(null, `import_${Date.now()}.csv`);
+	}
+});
 import db from './dbConfig';
 
 let columnToTable = [ 'thief_id', 'name', 'email', 'url', 'addr', 'phone', 'bike_serial', 'phrase', 'note', ];
@@ -17,18 +26,16 @@ const processFile = (req: any) => {
 			newDataCnts[table]++;
 		} catch (err: any) {
 			// duplicate primary key constraint
-			if (err.code === '23505') {
-				return;
-			}
+			if (err.code === '23505') { return; }
 			else { throw err; }
 		}
 	};
 
 	return new Promise(async (resolve, reject) => {
 		const fileContents = fs.readFileSync(req.file.path, 'utf8');
-		const rows = csv.parse(fileContents, { skipEmptyLines: true, fromLine: 2, });
+		const rows = parse(fileContents, { skipEmptyLines: true, fromLine: 2, });
 		let inserts: any = [];
-		rows.forEach((row: any) => {
+		for (let row of rows) {
 			let thiefId = row[0];
 			for (let i = 1; i < columnToTable.length; i++) {
 				let val = row[i];
@@ -36,7 +43,7 @@ const processFile = (req: any) => {
 				let col = columnToTable[i];
 				inserts.push(tryInsertRow(col, thiefId, val));
 			}
-		})
+		}
 		console.log(`Recieved ${inserts.length} data items`)
 		await Promise.all(inserts);
 		console.log(`Returning ${JSON.stringify(newDataCnts)}`);
@@ -47,7 +54,8 @@ const processFile = (req: any) => {
 const router = express.Router();
 router.post("/", upload.single('file'), async (req: express.Request, res: express.Response) => {
 	try {
-		return res.json(await processFile(req));
+		processFile(req);
+		return res.json();
 	} catch (err) {
 		console.error(err);
 		res.status(500);

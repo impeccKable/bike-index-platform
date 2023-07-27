@@ -6,7 +6,7 @@ import ThiefList from "./pages/ThiefList";
 import ThiefEdit from "./pages/ThiefEdit";
 // import UserList from "./pages/UserList";
 // import UserEdit from "./pages/UserEdit";
-import DataImport from "./pages/DataImport";
+import DataImport from "./pages/Data";
 import About from "./pages/About";
 import Stats from "./pages/Stats";
 import { AuthProtected } from "./components/AuthProtected";
