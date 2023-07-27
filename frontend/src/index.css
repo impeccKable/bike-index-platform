@@ -269,7 +269,6 @@ nav button:hover {
 	border-radius: 8px;
 	width: 80%;
 	max-width: 400px;
-	
 }
 
 .modal-content .file-name {
@@ -283,7 +282,8 @@ nav button:hover {
 	float: right;
 }
 
-.modal-content .close:hover, .modal-content .close:focus { 
+.modal-content .close:hover,
+.modal-content .close:focus {
 	cursor: pointer;
 	color: white;
 }
@@ -305,6 +305,7 @@ nav button:hover {
 
 .upload-file-field {
 	display: flex;
+	align-items: center;
 }
 
 .gallery img {
@@ -312,6 +313,5 @@ nav button:hover {
 	height: 100px;
 	object-fit: cover;
 }
-
 
 /* .thief-page .link-table tr  */
