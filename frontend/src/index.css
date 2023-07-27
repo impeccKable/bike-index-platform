@@ -303,5 +303,9 @@ nav button:hover {
 	color: red;
 }
 
+.upload-file-field {
+	display: flex;
+}
+
 
 /* .thief-page .link-table tr  */

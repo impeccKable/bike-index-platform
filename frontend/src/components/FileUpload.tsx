@@ -44,10 +44,12 @@ export function FileUpload(props: FileUploadProps) {
 	return (
 		<>
 			<label>{props.label}</label>
-			<Gallery files={uploadedFiles} />
-			<button className="file-upload-btn" type="button" onClick={handleAddButton}>
-				＋
-			</button>
+			<div className="upload-file-field">
+				<Gallery files={uploadedFiles} />
+				<button className="file-upload-btn" type="button" onClick={handleAddButton}>
+					＋
+				</button>
+			</div>
 
 			{isModalOpen && (
 				<div className="modal">
