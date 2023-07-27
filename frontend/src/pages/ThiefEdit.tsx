@@ -68,11 +68,8 @@ export default function ThiefEdit() {
 			if (keyValue !== 'thiefId') {
 				let newValues = field[1].split(',');
 				let oldValues = thiefInfo[`${field[0]}`];
-				console.log(newValues);
-				console.log(oldValues);
 				results[keyValue] = [];
 				oldValues.forEach(oldVal => {
-					console.log(oldVal)
 					if (!newValues.includes(oldVal)) {
 						results[keyValue].push([oldVal, '']);
 					}
@@ -122,7 +119,6 @@ export default function ThiefEdit() {
 			}
 			DebugLogs('Submit Changes', consoleMessages, debug);
 		});
-		console.log(results);
 		return results;
 	};
 
