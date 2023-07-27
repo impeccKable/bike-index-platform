@@ -103,25 +103,25 @@ Schedule
 		Bruce
 			Email Bryan about using the site
 		Cheng
-			!! 8hr  File upload
+			~ !! 8hr  File upload
 				Research
-					Where do we store it?
+					Where do we store it? (different server)
 					What kind of files? Mobile phone photo formats?
 					Show picture thumbnails?
 				25mb cap
-			2hr  Make run.sh and stop.sh scripts
+			x 2hr  Make run.sh and stop.sh scripts
 		Cristian
-			1hr  Restart backend on save (nodemon)
-			1hr  Create UserList page
+			x 1hr  Restart backend on save (nodemon)
+			~ 1hr  Create UserList page
 			1hr  Create UserEdit page
-			2hr  CSS: Nav bar move with page
+			x 2hr  CSS: Nav bar move with page
 			2hr  Site management
 				Editing interface for verbiage on every page
 				Store as rows in the database (new table)
 		Emerson
 			x 1hr  Submitting does not confirm after uploading a csv
 				"I ran into X amount of lines and submitted Y amount of rows" -Bryan
-			1.5hr  Export file
+			x 1.5hr  Export file
 			x 1hr  Clean up thief list css
 				Change column widths to rem
 			x 1hr  Show thief ID on edit page (disabled)
@@ -132,15 +132,15 @@ Schedule
 			1hr  Show how many results
 
 			1hr  Combine about and stats pages
-			1hr  Billy extra names bug
+			x 1hr  Billy extra names bug
+			1hr  Re-show fields on thief edit upon submit (to show actual changes)
 		Matt
-			!! 1hr  Test Note submission is not working
-			12hr  Sign-up redirects back to main page on fresh browser (cache issue)
+			~ 1hr  Test Note submission is not working
+			~ 12hr Sign-up redirects back to main page on fresh browser (cache issue)
 				Verify user token upon reload
 				Check for a valid token
 			1hr  Add user email verification through firebase
 	Sprint 6 (8/15)
-		Make the order of thief edit fields be consistent (alphabeticalize?)
 		Roles
 			Thief id editable by admin
 			Option to combine multiple thieves (verify this works on thief id change)

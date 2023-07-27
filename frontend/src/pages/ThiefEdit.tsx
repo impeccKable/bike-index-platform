@@ -63,54 +63,66 @@ export default function ThiefEdit() {
 		// need to split this one
 		Object.entries(submitData).map((field) => {
 			// field[0] is key, field[1] is value
+			let keyValue = field[0];
 
-			if (field[0] !== 'thiefId') {
+			if (keyValue !== 'thiefId') {
 				let newValues = field[1].split(',');
 				let oldValues = thiefInfo[`${field[0]}`];
-
-				let test = Math.max(newValues.length, oldValues.length);
-
-				for (let i = 0; i < test; i++) {
-					let oldVal = oldValues[i] ? oldValues[i] : '0';
-					let newVal = newValues[i] ? newValues[i] : '0';
-
-					if (oldVal !== newVal) {
-						let keyValue = field[0];
-
-						results[keyValue] !== undefined
-							? results[keyValue].push([oldVal, newVal])
-							: (results[keyValue] = [[oldVal, newVal]]);
-					}
-				}
-
-
-
-					Object.entries(results).map((thiefProperty) => {
-						//[0, string] add
-						//[string, 0] delete
-						// [string, string] update
-						//result = result.property.map
-
-					if (thiefProperty[0] !== 'thiefId') {
-						thiefProperty[1].map((propertyArray) => {
-							if (propertyArray[0] === '0') {
-								consoleMessages.push(`Adding: ${propertyArray[1]}`);
-							} else if (propertyArray[1] === '0') {
-								consoleMessages.push(`Deleting: ${propertyArray[0]}`);
-							} else {
-								consoleMessages.push(
-									`Updating '${propertyArray[0]}' to '${propertyArray[1]}'`
-								);
-							}
-						});
-					} else {
-						consoleMessages.push(`Thief ID: ${thiefProperty[1]}`);
+				console.log(newValues);
+				console.log(oldValues);
+				results[keyValue] = [];
+				oldValues.forEach(oldVal => {
+					console.log(oldVal)
+					if (!newValues.includes(oldVal)) {
+						results[keyValue].push([oldVal, '']);
 					}
 				});
+				newValues.forEach(newVal => {
+					if (!oldValues.includes(newVal)) {
+						results[keyValue].push(['', newVal]);
+					}
+				});
+
+
+				// let test = Math.max(newValues.length, oldValues.length);
+				// for (let i = 0; i < test; i++) {
+				// 	let oldVal = oldValues[i] ? oldValues[i] : '0';
+				// 	let newVal = newValues[i] ? newValues[i] : '0';
+
+				// 	if (oldVal !== newVal) {
+
+				// 		if (results[keyValue] === undefined) {
+				// 			results[keyValue] = [];
+				// 		}
+				// 		results[keyValue].push([oldVal, newVal])
+				// 	}
+				// }
+				// Object.entries(results).map((thiefProperty) => {
+				// 	//[0, string] add
+				// 	//[string, 0] delete
+				// 	// [string, string] update
+				// 	//result = result.property.map
+
+				// 	if (thiefProperty[0] !== 'thiefId') {
+				// 		thiefProperty[1].map((propertyArray) => {
+				// 			if (propertyArray[0] === '0') {
+				// 				consoleMessages.push(`Adding: ${propertyArray[1]}`);
+				// 			} else if (propertyArray[1] === '0') {
+				// 				consoleMessages.push(`Deleting: ${propertyArray[0]}`);
+				// 			} else {
+				// 				consoleMessages.push(
+				// 					`Updating '${propertyArray[0]}' to '${propertyArray[1]}'`
+				// 				);
+				// 			}
+				// 		});
+				// 	} else {
+				// 		consoleMessages.push(`Thief ID: ${thiefProperty[1]}`);
+				// 	}
+				// });
 			}
 			DebugLogs('Submit Changes', consoleMessages, debug);
 		});
-
+		console.log(results);
 		return results;
 	};
 

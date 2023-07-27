@@ -19,15 +19,15 @@ const put = async (body: any) => {
 		}
 		for (let [oldVal, newVal] of body[field]) {
 			let table = fieldToTable[field];
-			if (oldVal === '0') {
-				await db.none(
-					`INSERT INTO ${table} (thief_id, ${table}) VALUES ($1, $2)`,
-					[thiefId, newVal]
-				);
-			} else if (newVal === '0') {
+			if (newVal === '') {
 				await db.none(
 					`DELETE FROM ${table} WHERE thief_id = $1 AND ${table} = $2`,
 					[thiefId, oldVal]
+				);
+			} else if (oldVal === '') {
+				await db.none(
+					`INSERT INTO ${table} (thief_id, ${table}) VALUES ($1, $2)`,
+					[thiefId, newVal]
 				);
 			} else {
 				await db.none(
