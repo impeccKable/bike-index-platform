@@ -307,5 +307,11 @@ nav button:hover {
 	display: flex;
 }
 
+.gallery img {
+	width: 100px;
+	height: 100px;
+	object-fit: cover;
+}
+
 
 /* .thief-page .link-table tr  */
