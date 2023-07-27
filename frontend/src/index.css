@@ -186,7 +186,8 @@ nav button:hover {
 	user-select: none;
 	outline: none;
 }
-.multi-field button:hover {
+.multi-field button:hover,
+.file-upload-btn:hover {
 	background-color: #404040;
 }
 .form-btns {
@@ -246,6 +247,41 @@ nav button:hover {
 }
 .forgot-pass-page .card {
 	width: 20rem;
+}
+
+.modal {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	background-color: #00000066;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+
+.modal-content {
+	background-color: black;
+	padding: 20px;
+	border: 1px;
+	border-style: solid;
+	border-radius: 8px;
+	width: 50%;
+	max-width: 400px;
+}
+
+.close {
+	font-size: 28px;
+	font-weight: bold;
+	float: right;
+	color: #aaaaaa;
+}
+
+.close:hover, .close:focus {
+	cursor: pointer;
+	color: gray;
 }
 
 /* .thief-page .link-table tr  */
