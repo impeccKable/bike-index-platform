@@ -119,17 +119,20 @@ Schedule
 				Editing interface for verbiage on every page
 				Store as rows in the database (new table)
 		Emerson
-			1hr  Submitting does not confirm after uploading a csv
+			x 1hr  Submitting does not confirm after uploading a csv
 				"I ran into X amount of lines and submitted Y amount of rows" -Bryan
 			1.5hr  Export file
-			1hr  Clean up thief list css
+			x 1hr  Clean up thief list css
 				Change column widths to rem
-			1hr  Show thief ID on edit page (disabled)
+			x 1hr  Show thief ID on edit page (disabled)
 			1hr  Fix psql user permissions for 'ec2-user'
 			1hr  Add a way to delete a thief
-			1hr  Show all thieves with no search
+			x 1hr  Show all thieves with no search
 			1hr  Move pages functionality to backend (page=2)
 			1hr  Show how many results
+
+			1hr  Combine about and stats pages
+			1hr  Billy extra names bug
 		Matt
 			!! 1hr  Test Note submission is not working
 			12hr  Sign-up redirects back to main page on fresh browser (cache issue)
