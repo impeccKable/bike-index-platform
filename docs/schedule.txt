@@ -140,6 +140,7 @@ Schedule
 				Check for a valid token
 			1hr  Add user email verification through firebase
 	Sprint 6 (8/15)
+		Make the order of thief edit fields be consistent (alphabeticalize?)
 		Roles
 			Thief id editable by admin
 			Option to combine multiple thieves (verify this works on thief id change)

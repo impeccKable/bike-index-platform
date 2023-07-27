@@ -163,7 +163,7 @@ export default function ThiefEdit() {
         <h1>
           Thief Edit{' '}
           {isLoading && showLoadGif && (
-            <img src={loading} alt="loading" width="30px" />
+            <img src={loading} alt="loading" width="30px" height="30px"/>
           )}
         </h1>
         <Form onSubmit={handleFormSubmit}>

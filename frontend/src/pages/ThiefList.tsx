@@ -4,8 +4,6 @@ import { LinkButton } from '../components/Form';
 import { useRecoilValue } from 'recoil';
 import { debugState } from '../services/Recoil';
 import { httpClient } from '../services/HttpClient';
-import '../styles/thiefList.css';
-import { useAuth } from '../services/AuthProvider';
 import LinkTable from '../components/LinkTable';
 import DebugLogs from '../services/DebugLogs';
 
@@ -19,11 +17,11 @@ export interface Thief extends React.HTMLInputElement {
 }
 
 const header = {
-	'ID': 30,
-	'Name': 200,
-	'Phone': 110,
-	'Email': 240,
-	'Address': 400,
+	'ID':      { maxWidth: "2rem",  minWidth: "2rem" },
+	'Name':    { maxWidth: "12rem", minWidth: "12rem"},
+	'Phone':   { maxWidth: "6rem",  minWidth: "6rem" },
+	'Email':   { maxWidth: "14rem", minWidth: "14rem"},
+	'Address': { maxWidth: "22rem", minWidth: "22rem"},
 };
 
 export default function ThiefList() {
@@ -108,11 +106,7 @@ export default function ThiefList() {
 						Add New
 					</LinkButton>
 				</div>
-				{thiefs ? (
-					<LinkTable header={header} data={thiefs} linkBase='/thiefEdit?thiefId=' />
-				) : (
-					<i className="bi bi-arrow-clockwise"></i>
-				)}
+				<LinkTable header={header} data={thiefs} linkBase='/thiefEdit?thiefId=' />
 			</main>
 		</div>
 	);
