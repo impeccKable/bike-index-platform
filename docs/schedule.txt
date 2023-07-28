@@ -110,6 +110,8 @@ Schedule
 					Show picture thumbnails?
 				25mb cap
 			x 2hr  Make run.sh and stop.sh scripts
+
+			1hr  Add npm i to the script
 		Cristian
 			x 1hr  Restart backend on save (nodemon)
 			~ 1hr  Create UserList page
@@ -135,7 +137,7 @@ Schedule
 			x 1hr  Billy extra names bug
 			1hr  Re-show fields on thief edit upon submit (to show actual changes)
 		Matt
-			~ 1hr  Test Note submission is not working
+			x 1hr  Test Note submission is not working
 			~ 12hr Sign-up redirects back to main page on fresh browser (cache issue)
 				Verify user token upon reload
 				Check for a valid token
