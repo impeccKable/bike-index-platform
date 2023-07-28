@@ -7,7 +7,7 @@ import {
 	FormButton,
 	LinkButton,
 } from '../components/Form';
-import { FileUpload } from '../components/FileUpload';
+import { FileUpload } from '../components/FileUpload/FileUpload';
 import { useSearchParams } from 'react-router-dom';
 import { httpClient } from '../services/HttpClient';
 import { useRecoilValue } from 'recoil';
