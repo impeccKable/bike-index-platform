@@ -19,7 +19,6 @@ export default function DataImport() {
 			formData.append("file", document.getElementsByName("csvfile")[0].files[0]);
 			const config = { headers: { "content-type": "multipart/form-data" } };
 			const response = await httpClient.post("/thiefDataImport", formData, config);
-			console.log(response.data);
 			setNewDataCnts(response.data);
 			setIsLoadingImport(false);
 		} catch (error) {
