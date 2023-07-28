@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Gallery } from '../Gallery';
+import { Thumbnail } from './Thumbnail';
 
 interface FileUploadProps {
 	label: string;
@@ -45,7 +45,7 @@ export function FileUpload(props: FileUploadProps) {
 		<>
 			<label>{props.label}</label>
 			<div className="upload-file-field">
-				<Gallery files={uploadedFiles} />
+				{uploadedFiles.map((item, index) => ( <Thumbnail key={index} file={item} index={index} /> ))}
 				<button className="file-upload-btn" type="button" onClick={handleAddButton}>
 					＋
 				</button>
