@@ -44,9 +44,8 @@ const processFile = (req: any) => {
 				inserts.push(tryInsertRow(col, thiefId, val));
 			}
 		}
-		console.log(`Recieved ${inserts.length} data items`)
+		console.log(`Recieved ${inserts.length} thief data items`)
 		await Promise.all(inserts);
-		console.log(`Returning ${JSON.stringify(newDataCnts)}`);
 		resolve(newDataCnts);
 	});
 }
@@ -54,8 +53,7 @@ const processFile = (req: any) => {
 const router = express.Router();
 router.post("/", upload.single('file'), async (req: express.Request, res: express.Response) => {
 	try {
-		processFile(req);
-		return res.json();
+		return res.json(await processFile(req));
 	} catch (err) {
 		console.error(err);
 		res.status(500);

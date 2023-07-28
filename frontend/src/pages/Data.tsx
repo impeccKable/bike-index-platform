@@ -12,12 +12,14 @@ export default function DataImport() {
 	async function handleImport(e: any) {
 		try {
 			setIsLoadingImport(true);
+			setNewDataCnts(null);
 			e.preventDefault();
 			const formData = new FormData();
 			// @ts-ignore
 			formData.append("file", document.getElementsByName("csvfile")[0].files[0]);
 			const config = { headers: { "content-type": "multipart/form-data" } };
 			const response = await httpClient.post("/thiefDataImport", formData, config);
+			console.log(response.data);
 			setNewDataCnts(response.data);
 			setIsLoadingImport(false);
 		} catch (error) {
