@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Gallery } from './Gallery';
+import { Gallery } from '../Gallery';
 
 interface FileUploadProps {
 	label: string;
