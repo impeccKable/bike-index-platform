@@ -137,6 +137,8 @@ Schedule
 			x 1hr  Billy extra names bug
 			1hr  Re-show fields on thief edit upon submit (to show actual changes)
 			1hr  Add date to downloaded thief data csv
+			1hr  Rename (again) to Verify Password on signup page
+				Remove password error upon a re-submit
 		Matt
 			x 1hr  Test Note submission is not working
 			~ 12hr Sign-up redirects back to main page on fresh browser (cache issue)
