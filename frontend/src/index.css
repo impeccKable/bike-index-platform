@@ -193,7 +193,8 @@ nav button:hover {
 	user-select: none;
 	outline: none;
 }
-.multi-field button:hover {
+.multi-field button:hover,
+.file-upload-btn:hover {
 	background-color: #404040;
 }
 .form-btns {
@@ -303,7 +304,6 @@ nav button:hover {
 	font-size: 28px;
 	font-weight: bold;
 	color: #aaaaaa;
-	/* float: right; */
 	position: absolute;
 	top: 5px;
 	right: 15px;
