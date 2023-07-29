@@ -17,6 +17,7 @@ To specify light theme colors:
 }
 main {
 	flex-grow: 1;
+	overflow-x: auto;
 }
 body {
 	margin: 0;
