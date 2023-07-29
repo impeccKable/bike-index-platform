@@ -1,22 +1,28 @@
 import { useState } from "react";
 import { Form, FormInput, FormButton, LinkButton } from "../components/Form";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../services/AuthProvider";
 
-export default function ForgotPass() {
+export default function RequestVerification() {
 	const [submitted, setSubmitted] = useState(false);
+	const auth = useAuth();
 	const navigate = useNavigate();
 
 	function handleFormSubmit(e: any) {
-		if (submitted) {
-			return;
-		}
+		const email = e.dataDict.email;
+		const password = e.dataDict.password;
+
+		const f = async () => {
+			await auth.handleVerificationRequest(email, password);
+		};
+		
 		e.preventDefault();
-		console.log(e.dataDict);
+		f();
 		setSubmitted(true);
 	}
 	let submitMessage = (
 		<div className="submit-message">
-			<p>Check your email for a password reset</p>
+			<p>Check your email for a verification email</p>
 		</div>
 	);
 	return (
@@ -30,6 +36,13 @@ export default function ForgotPass() {
 						required
 						placeholder="email@example.com"
 						type="email"
+					/>
+					<FormInput
+						label="Password"
+						name="password"
+						required
+						placeholder="password"
+						type="password"
 					/>
 					<div className="form-btns">
 						<LinkButton to="..">Back</LinkButton>
