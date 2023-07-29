@@ -22,7 +22,7 @@ export default function App() {
 	
 	useEffect(() => {
 		setDebug(true);
-		setDev(false);
+		setDev(true);
 		if (debug == true) { console.log("App"); }
 	})
 
