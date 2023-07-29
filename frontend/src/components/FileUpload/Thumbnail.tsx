@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { ImageModal } from './ImageModal';
 
 interface ThumbnailProps {
   file: string | File;
@@ -6,7 +7,8 @@ interface ThumbnailProps {
 }
 
 export function Thumbnail(props: ThumbnailProps) {
-  const [imageUrl, setImageUrl] = useState<string | undefined>();
+  const [imageUrl, setImageUrl] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (typeof props.file === 'string') {
@@ -21,5 +23,18 @@ export function Thumbnail(props: ThumbnailProps) {
     }
   }, [props.file]);
 
-  return <img key={props.index} src={imageUrl} alt={`Image ${props.index}`} />
+  function handleImageClick() {
+    setIsModalOpen(true);
+  }
+
+  function handleCloseModal() {
+    setIsModalOpen(false);
+  }
+
+  return (
+    <div className="thumbnail">
+      <img key={props.index} src={imageUrl} alt={`Thumbnail ${props.index}`} onClick={handleImageClick} />
+      {isModalOpen && <ImageModal imageUrl={imageUrl} handleClose={handleCloseModal} />}
+    </div>
+  )
 }
