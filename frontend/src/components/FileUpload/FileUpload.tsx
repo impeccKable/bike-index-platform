@@ -46,7 +46,7 @@ export function FileUpload(props: FileUploadProps) {
 			<label>{props.label}</label>
 			<div className="upload-file-field">
 				{uploadedFiles.map((item, index) => ( <Thumbnail key={index} file={item} index={index} /> ))}
-				<button className="file-upload-btn" type="button" onClick={handleAddButton}>
+				<button className={`file-upload-btn ${uploadedFiles.length > 0 ? 'expanded' : ''}`} type="button" onClick={handleAddButton}>
 					＋
 				</button>
 			</div>

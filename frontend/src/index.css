@@ -284,6 +284,7 @@ nav button:hover {
 	border-radius: 8px;
 	width: 80%;
 	max-width: 400px;
+	position: relative;
 }
 
 .modal-content .file-name {
@@ -294,7 +295,10 @@ nav button:hover {
 	font-size: 28px;
 	font-weight: bold;
 	color: #aaaaaa;
-	float: right;
+	/* float: right; */
+	position: absolute;
+	top: 10px;
+	right: 20px;
 }
 
 .modal-content .close:hover,
@@ -319,14 +323,22 @@ nav button:hover {
 }
 
 .upload-file-field {
+	max-width: 30rem;
 	display: flex;
 	align-items: center;
+	flex-wrap: wrap;
 }
 
-.gallery img {
-	width: 100px;
-	height: 100px;
+.thumbnail img, .file-upload-btn.expanded {
+	width: 5rem;
+	height: 5rem;
 	object-fit: cover;
+	cursor: pointer;
+	margin-left: 0;
+	margin-right: 1rem;
+	margin-bottom: 0.2rem;
+	margin-top: 0.2rem;
+	border-radius: 5px;
 }
 
 /* .thief-page .link-table tr  */
