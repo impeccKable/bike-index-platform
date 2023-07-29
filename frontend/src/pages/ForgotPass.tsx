@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Form, FormInput, FormButton, LinkButton } from "../components/Form";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../services/AuthProvider";
 
 export default function ForgotPass() {
 	const [submitted, setSubmitted] = useState(false);
 	const navigate = useNavigate();
+	const auth = useAuth();
 
 	function handleFormSubmit(e: any) {
 		if (submitted) {
@@ -12,6 +14,7 @@ export default function ForgotPass() {
 		}
 		e.preventDefault();
 		console.log(e.dataDict);
+		auth.handlePasswordReset(e.dataDict.email);
 		setSubmitted(true);
 	}
 	let submitMessage = (
@@ -34,9 +37,9 @@ export default function ForgotPass() {
 					<div className="form-btns">
 						<LinkButton to="..">Back</LinkButton>
 						<FormButton type="submit">Submit</FormButton>
-					</div>
-					{submitted && submitMessage}
+					</div>	
 				</Form>
+				{submitted && submitMessage}
 			</div>
 		</div>
 	);
