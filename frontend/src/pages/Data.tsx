@@ -12,6 +12,7 @@ export default function DataImport() {
 	async function handleImport(e: any) {
 		try {
 			setIsLoadingImport(true);
+			setNewDataCnts(null);
 			e.preventDefault();
 			const formData = new FormData();
 			// @ts-ignore
