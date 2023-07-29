@@ -286,13 +286,13 @@ nav button:hover {
 	width: 80%;
 	max-width: 400px;
 	position: relative;
-	max-height: 85vh;;
-	overflow-y: auto;
 }
 
 .image-modal .modal-content {
-	width: 100%;
+	/* width: 100%; */
 	max-width: 80%;
+	max-height: 85vh;;
+	overflow-y: auto;
 }
 
 .modal-content .file-name {
@@ -347,6 +347,11 @@ nav button:hover {
 	margin-bottom: 0.2rem;
 	margin-top: 0.2rem;
 	border-radius: 5px;
+}
+
+.image-modal .image-modal-btns {
+	display: flex;
+	justify-content: center;
 }
 
 .image-modal img {

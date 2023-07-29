@@ -4,11 +4,15 @@ import { ImageModal } from './ImageModal';
 interface ThumbnailProps {
   file: string | File;
   index: number;
+  handleNext: (index: number) => void;
+  handlePrev: (index: number) => void;
+  currentViewing: string | File | null;
+  setCurrentViewing: (file: string | File | null) => void;
 }
 
 export function Thumbnail(props: ThumbnailProps) {
   const [imageUrl, setImageUrl] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (typeof props.file === 'string') {
@@ -24,17 +28,20 @@ export function Thumbnail(props: ThumbnailProps) {
   }, [props.file]);
 
   function handleImageClick() {
-    setIsModalOpen(true);
+    // setIsModalOpen(true);
+    props.setCurrentViewing(props.file);
   }
 
   function handleCloseModal() {
-    setIsModalOpen(false);
+    // setIsModalOpen(false);
+    props.setCurrentViewing(null);
   }
 
   return (
     <div className="thumbnail">
       <img key={props.index} src={imageUrl} alt={`Thumbnail ${props.index}`} onClick={handleImageClick} />
-      {isModalOpen && <ImageModal imageUrl={imageUrl} handleClose={handleCloseModal} />}
+      {props.currentViewing === props.file && <ImageModal imageUrl={imageUrl} index={props.index} handleClose={handleCloseModal} handleNext={() => props.handleNext(props.index)} 
+        handlePrev={() => props.handlePrev(props.index)} />}
     </div>
   )
 }

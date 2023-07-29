@@ -10,6 +10,7 @@ export function FileUpload(props: FileUploadProps) {
 	const [uploadedFiles, setUploadedFiles] = useState<(File | string)[]>([]);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
+	const [currentViewing, setCurrentViewing] = useState<File | string | null>(null); 
 	const maxSize = 1024 * 1024 * 25;
 	const fileTypes = ['image/jpeg', 'image/jpg', 'image/png']
 
@@ -34,6 +35,17 @@ export function FileUpload(props: FileUploadProps) {
 		}
 	}
 
+	function handlkeNext(index: number) {
+		const next = (index + 1) % uploadedFiles.length;
+		setCurrentViewing(uploadedFiles[next]);
+	}
+
+	function handlePrev(index: number) {
+		console.log(index)
+		const prev = (index - 1 + uploadedFiles.length) % uploadedFiles.length;
+		setCurrentViewing(uploadedFiles[prev]);
+	}
+
 	function handleUpload() {
 		if (selectedFile) {
 			setUploadedFiles(prevFiles => [...prevFiles, selectedFile]);
@@ -45,7 +57,8 @@ export function FileUpload(props: FileUploadProps) {
 		<>
 			<label>{props.label}</label>
 			<div className="upload-file-field">
-				{uploadedFiles.map((item, index) => ( <Thumbnail key={index} file={item} index={index} /> ))}
+				{uploadedFiles.map((item, index) => ( <Thumbnail key={index} file={item} index={index} handleNext={() => handlkeNext(index)}
+					handlePrev={() => handlePrev(index)} currentViewing={currentViewing} setCurrentViewing={setCurrentViewing} /> ))}
 				<button className={`file-upload-btn ${uploadedFiles.length > 0 ? 'expanded' : ''}`} type="button" onClick={handleAddButton}>
 					＋
 				</button>
@@ -57,7 +70,7 @@ export function FileUpload(props: FileUploadProps) {
 						<span className="modal-btn close" onClick={() => setIsModalOpen(false)}>&#215;</span>
 						<input type="file" className="file-name" onChange={handleFileChange} />
 						<span className="error-message">{errorMessage}</span>
-						<button className="confirm" disabled={!!errorMessage || !selectedFile} onClick={handleUpload}>Upload</button>
+						<button type="button" className="confirm" disabled={!!errorMessage || !selectedFile} onClick={handleUpload}>Upload</button>
 					</div>
 				</div>
 			)}
