@@ -6,6 +6,7 @@ import ThiefList from "./pages/ThiefList";
 import ThiefEdit from "./pages/ThiefEdit";
 // import UserList from "./pages/UserList";
 // import UserEdit from "./pages/UserEdit";
+import RequestVerification from "./pages/RequestVerification";
 import DataImport from "./pages/Data";
 import About from "./pages/About";
 import Stats from "./pages/Stats";
@@ -18,9 +19,10 @@ import { useEffect } from "react";
 export default function App() {
 	const [debug, setDebug] = useRecoilState(debugState);
 	const [dev, setDev] = useRecoilState(devState);
+	
 	useEffect(() => {
 		setDebug(true);
-		setDev(true);
+		setDev(false);
 		if (debug == true) { console.log("App"); }
 	})
 
@@ -38,6 +40,7 @@ export default function App() {
 				<Route path="/about"     element={<AuthProtected><About /></AuthProtected>}></Route>
 				<Route path="/stats"     element={<Stats />}></Route>
 				<Route path="/logout"    element={<Logout />}></Route>
+				<Route path="/requestverification" element={<RequestVerification />}></Route>
 			</Routes>
 		</div>
 	);

@@ -87,6 +87,9 @@ export default function Signup() {
 						<p>Passwords did not match, please try again</p>
 					</div>
 				)}
+				<div className="notecard-links">
+					<a href="/requestverification">Request Verification Email</a>
+				</div>
 			</div>
 		</div>
 	);

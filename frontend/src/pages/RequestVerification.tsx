@@ -26,8 +26,8 @@ export default function RequestVerification() {
 		</div>
 	);
 	return (
-		<div className="notecard forgot-pass-page">
-			<h1>Password Reset</h1>
+		<div className="notecard">
+			<h1>Request Verification Email</h1>
 			<div className="card">
 				<Form onSubmit={handleFormSubmit}>
 					<FormInput
@@ -48,8 +48,9 @@ export default function RequestVerification() {
 						<LinkButton to="..">Back</LinkButton>
 						<FormButton type="submit">Submit</FormButton>
 					</div>
-					{submitted && submitMessage}
+					
 				</Form>
+				{submitted && submitMessage}
 			</div>
 		</div>
 	);

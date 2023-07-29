@@ -43,6 +43,7 @@ export type AuthContextProps = {
 	handleLogout: () => void;
 	handleSignUp: (email: string, password: string) => Promise<string>;
 	handleDelete: (user: User) => void;
+	handleVerificationRequest: (email: string, password: string) => void;
 };
 
 export const AuthProvider = ({ children }: any) => {
@@ -164,6 +165,7 @@ export const AuthProvider = ({ children }: any) => {
 		try{
 			let login = await signInWithEmailAndPassword(auth, email, password);
 			await sendEmailVerification(login.user);
+			signOut(auth);
 		} catch (err) {
 			console.error(err);
 		}
@@ -186,6 +188,7 @@ export const AuthProvider = ({ children }: any) => {
 				handleLogout,
 				handleSignUp,
 				handleDelete,
+				handleVerificationRequest,
 			}}
 		>
 			{children}
