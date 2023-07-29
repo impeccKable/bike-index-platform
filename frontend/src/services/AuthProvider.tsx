@@ -10,6 +10,7 @@ import {
 	User,
 	UserCredential,
 	deleteUser,
+	sendEmailVerification,
 } from 'firebase/auth';
 import React, { useState, useContext, useEffect } from 'react';
 import { httpClient } from './HttpClient';
@@ -52,6 +53,7 @@ export const AuthProvider = ({ children }: any) => {
 	if (useRecoilValue(debugState) == true) {
 		console.log('AuthProvider');
 	}
+
 	const updateAxios = async (token: string) => {
 		console.log(`token: ...${token.slice(-10)}`);
 		httpClient.interceptors.request.use(
@@ -70,27 +72,34 @@ export const AuthProvider = ({ children }: any) => {
 			}
 		);
 	};
+
 	const updateUser = (newUser: UserInfo | null) => {
 		localStorage.setItem('user', JSON.stringify(newUser));
 		setUser(newUser);
 	};
+
 	const handleLogout = () => {
 		updateUser(null);
 		signOut(auth);
 		navigate('/');
 	};
+
 	const verifyUserToken = async (user: UserInfo) => {
+		
 		if (!user) {
 			handleLogout();
 			return;
 		}
+
 		await updateAxios(user.firebase.stsTokenManager.accessToken);
 		httpClient.post('/token', {}).then((res: any) => {
 			if (res.status !== 200) {
 				handleLogout();
 			}
 		});
+
 	};
+
 	const retrieveUser = () => {
 		let user = JSON.parse(localStorage.getItem('user') ?? 'null');
 		verifyUserToken(user);
@@ -114,6 +123,8 @@ export const AuthProvider = ({ children }: any) => {
 				throw new Error('User is banned');
 			} else if (user.bikeIndex.approved === false) {
 				throw new Error('User is not verified');
+			} else if(user.firebase.emailVerified === false) {
+				throw new Error('User email is not verified');
 			}
 			await updateAxios(await user.firebase.getIdToken());
 			updateUser(user);
@@ -131,6 +142,7 @@ export const AuthProvider = ({ children }: any) => {
 				email,
 				password
 			);
+			await sendEmailVerification(userData.user);
 			return userData.user;
 		} catch (err) {
 			console.error(err);
@@ -145,6 +157,15 @@ export const AuthProvider = ({ children }: any) => {
 			console.log(`User ${uid} deleted`);
 		} catch (err) {
 			console.log(err);
+		}
+	};
+
+	const handleVerificationRequest = async (email: string, password:string ) => {
+		try{
+			let login = await signInWithEmailAndPassword(auth, email, password);
+			await sendEmailVerification(login.user);
+		} catch (err) {
+			console.error(err);
 		}
 	};
 
