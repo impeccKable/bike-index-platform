@@ -10,6 +10,7 @@ import {
 	User,
 	UserCredential,
 	deleteUser,
+	sendPasswordResetEmail
 } from 'firebase/auth';
 import React, { useState, useContext, useEffect } from 'react';
 import { httpClient } from './HttpClient';
@@ -42,6 +43,7 @@ export type AuthContextProps = {
 	handleLogout: () => void;
 	handleSignUp: (email: string, password: string) => Promise<string>;
 	handleDelete: (user: User) => void;
+	handlePasswordReset: (email: string) => void;
 };
 
 export const AuthProvider = ({ children }: any) => {
@@ -148,6 +150,14 @@ export const AuthProvider = ({ children }: any) => {
 		}
 	};
 
+	const handlePasswordReset = async (email: string) => {
+		try{
+			await sendPasswordResetEmail(auth, email);
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
 	useEffect(() => {
 		const prevUser = retrieveUser();
 		if (prevUser) {
@@ -165,6 +175,7 @@ export const AuthProvider = ({ children }: any) => {
 				handleLogout,
 				handleSignUp,
 				handleDelete,
+				handlePasswordReset
 			}}
 		>
 			{children}
