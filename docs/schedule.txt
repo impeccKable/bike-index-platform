@@ -136,6 +136,7 @@ Schedule
 			1hr  Combine about and stats pages
 			x 1hr  Billy extra names bug
 			1hr  Re-show fields on thief edit upon submit (to show actual changes)
+			1hr  Add date to downloaded thief data csv
 		Matt
 			x 1hr  Test Note submission is not working
 			~ 12hr Sign-up redirects back to main page on fresh browser (cache issue)
@@ -147,6 +148,7 @@ Schedule
 			Thief id editable by admin
 			Option to combine multiple thieves (verify this works on thief id change)
 		Make it robust to exceptions/database errors
+		Add loading gif to stats table?
 		Remove FormButton (redundant with <button>)
 		Testing
 		Polish
