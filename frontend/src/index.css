@@ -289,7 +289,7 @@ nav button:hover {
 }
 
 .image-modal .modal-content {
-	/* width: 100%; */
+	width: fit-content;
 	max-width: 80%;
 	max-height: 85vh;;
 	overflow-y: auto;
@@ -350,8 +350,16 @@ nav button:hover {
 }
 
 .image-modal .image-modal-btns {
+	position: fixed;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	font-size: 5rem;
 	display: flex;
-	justify-content: center;
+	justify-content: space-between;
+	width: 200px;
+	padding: 10px;
+	cursor: pointer;
 }
 
 .image-modal img {
