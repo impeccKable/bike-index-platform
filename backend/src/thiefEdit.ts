@@ -1,6 +1,9 @@
 import express from 'express';
 import db from './dbConfig';
 import { fieldToTable, fields, thiefInfoByIds } from './thiefInfo';
+import multer from 'multer';
+
+const upload = multer();
 
 const get = async (query: any) => {
 	return thiefInfoByIds([parseInt(query.thiefId)]);
@@ -37,6 +40,8 @@ const put = async (body: any) => {
 			}
 		}
 	}
+
+	return thiefId;
 };
 
 const router = express.Router();
@@ -48,9 +53,12 @@ router.get('/', async (req: express.Request, res: express.Response) => {
 		res.status(500);
 	}
 });
-router.put('/', async (req: express.Request, res: express.Response) => {
+router.put('/', upload.array('newImages'), async (req: express.Request, res: express.Response) => {
 	try {
-		await put(req.body);
+		const thiefId = await put(JSON.parse(req.body.body));
+		console.log("Returned thiefId", thiefId);
+		console.log("Delete image", JSON.parse(req.body.deletedImages))
+		console.log(req.files);
 		res.status(200);
 	} catch (err) {
 		console.error(err);
