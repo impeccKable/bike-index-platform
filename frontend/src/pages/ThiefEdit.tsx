@@ -20,7 +20,9 @@ export default function ThiefEdit() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [showLoadGif, setShowLoadGif] = useState(false);
 	const [wasSubmitted, setWasSubmitted] = useState(false);
-	const [imageFiles, setImageFiles] = useState<(File | string)[]>([]);
+	const [initialImageFiles, setInitialImageFiles] = useState<(File | string)[]>([]);
+	const [newImages, setNewImages] = useState<(File | string)[]>([]);
+	const [deletedImages, setDeletedImages] = useState<(File | string)[]>([]);
 	const urlThiefId = searchParams.get('thiefId');
 	const debug = useRecoilValue(debugState);
 
@@ -123,9 +125,9 @@ export default function ThiefEdit() {
 		return results;
 	};
 
-	function handleImageFilesChanged(newFileList: (File | string)[]) {
-		setImageFiles(newFileList);
-		console.log(newFileList)
+	function handleImageFilesChange(newImageFileList: (File | string)[], deletedImageFileList: (File | string)[]) {
+		setNewImages(newImageFileList);
+		setDeletedImages(deletedImageFileList);
 	}
 
 	useEffect(() => {
@@ -185,7 +187,15 @@ export default function ThiefEdit() {
 					<MultiField label="Bike Serial" name="bikeSerial" data={thiefInfo.bikeSerial} disabled={isLoading} component={FormInput}/>
 					<MultiField label="Phrase"      name="phrase"     data={thiefInfo.phrase}     disabled={isLoading} component={FormInput} type="textarea"/>
 					<MultiField label="Notes"       name="note"       data={thiefInfo.note}       disabled={isLoading} component={FormInput} type="textarea"/>
-					<FileUpload label="Images" handleImageFilesChanged={handleImageFilesChanged} />
+					<FileUpload
+						label="Images"
+						handleImageFilesChange={handleImageFilesChange} 
+						imageFiles={[...initialImageFiles, ...newImages]}
+						newImages={newImages}
+						setNewImages={setNewImages}
+						deletedImages={deletedImages}
+						setDeletedImages={setDeletedImages}
+					/>
 					<div className="form-btns">
 						<LinkButton type="button" to="back">Back</LinkButton>
 						<FormButton type="submit">Submit</FormButton>

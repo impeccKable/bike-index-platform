@@ -3,12 +3,17 @@ import { Thumbnail } from './Thumbnail';
 
 interface FileUploadProps {
 	label: string;
-	handleImageFilesChanged: (file: (File | string)[])	 => void;
+	imageFiles: (File | string)[];
+	newImages: (File | string)[];
+	setNewImages: (newImages: (File | string)[]) => void;
+	deletedImages: (File | string)[];
+	setDeletedImages: (deletedImages: (File | string)[]) => void;
+	handleImageFilesChange: (newImageList: (File | string)[], deletedImageList: (File | string)[])	 => void;
 }
 
 export function FileUpload(props: FileUploadProps) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [uploadedFiles, setUploadedFiles] = useState<(File | string)[]>([]);
+	const [uploadedFiles, setUploadedFiles] = useState<(File | string)[]>(props.imageFiles);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	const [currentViewing, setCurrentViewing] = useState<File | string | null>(null); 
@@ -21,7 +26,7 @@ export function FileUpload(props: FileUploadProps) {
 		setSelectedFile(null);
 	}
 
-	function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+	function handleSelectFileChange(event: React.ChangeEvent<HTMLInputElement>) {
 		setErrorMessage(null);
 		if (event.target.files) {
 			const file = event.target.files[0];
@@ -48,20 +53,26 @@ export function FileUpload(props: FileUploadProps) {
 
 	function handleUpload() {
 		if (selectedFile) {
-			setUploadedFiles(prevFiles => {
-				const newFileList = [...prevFiles, selectedFile];
-				props.handleImageFilesChanged(newFileList);
-				return newFileList;
-			});
+			setUploadedFiles(prevFiles => [...prevFiles, selectedFile]);
+			props.setNewImages([...props.newImages, selectedFile]);
+			props.handleImageFilesChange(props.newImages, props.deletedImages);
 			setIsModalOpen(false);
 		}
 	}
 
 	function handleDelete(index: number) {
 		setUploadedFiles(prevFiles => {
+			const deletedFile = prevFiles[index];
 			const newFileList = [...prevFiles];
 			newFileList.splice(index, 1);
-			props.handleImageFilesChanged(newFileList);
+
+			if (props.newImages.includes(deletedFile)) {
+				props.setNewImages(props.newImages.filter(file => file !== deletedFile));
+			} else {
+				props.setDeletedImages([...props.deletedImages, deletedFile]);
+			}
+
+			props.handleImageFilesChange(props.newImages, props.deletedImages);
 			return newFileList;
 		});
 		setCurrentViewing(null);
@@ -82,7 +93,7 @@ export function FileUpload(props: FileUploadProps) {
 				<div className="modal">
 					<div className="modal-content">
 						<span className="modal-btn close" onClick={() => setIsModalOpen(false)}>&#215;</span>
-						<input type="file" className="file-name" onChange={handleFileChange} />
+						<input type="file" className="file-name" onChange={handleSelectFileChange} />
 						<span className="error-message">{errorMessage}</span>
 						<button type="button" className="confirm" disabled={!!errorMessage || !selectedFile} onClick={handleUpload}>Upload</button>
 					</div>
