@@ -28,8 +28,6 @@ const get = async (query: any) => {
 	return await thiefInfoByIds(thiefIds);
 }
 
-const GetUsers
-
 const router = express.Router();
 router.get("/", async (req: express.Request, res: express.Response) => {
 	try {

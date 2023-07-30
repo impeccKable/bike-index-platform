@@ -17,9 +17,23 @@ const tableHeaders = {
 	'role':    { maxWidth: "15rem", minWidth: "15rem"},
 };
 
+export interface User extends React.HTMLInputElement {
+	userid: number;
+	email: string;
+	first: string;
+	last: string;
+	title: string;
+	org: string;
+	phone: string;
+	role: string;
+	approved: string;
+	banned: string;
+}
+
 export default function UserList() {
     const [searchType, setSearchType] = useState('name');
     const [searchText, setSearchText] = useState("");
+    const [userData, setUserData] = useState<User[]>([]);
     const preSearchText = useRef(searchText);
 
     useEffect(() => {
@@ -28,12 +42,22 @@ export default function UserList() {
         const GetUsers = async () => {
             preSearchText.current = searchText;
 
-            const response = await httpClient.get("")
-            .catch((err: any) => {
-                // DebugLogs
-            });
+            const response = await httpClient.get("/userList");
 
+            if (response.status === 200) {
+                //success
+            }
+            else {
+                // failure
+            }
+
+            debugger;
+
+            console.log(response);
+            
         }
+
+        GetUsers();
 
 
     }, []);
@@ -69,7 +93,7 @@ export default function UserList() {
                 </input>
                 <LinkButton className="AddThiefButton" to="">Add New</LinkButton>
             </div>
-            <LinkTable header={tableHeaders} linkBase=""></LinkTable>
+            <LinkTable header={tableHeaders} data={userData} linkBase=""></LinkTable>
             </main>
         </div>
     );
