@@ -146,10 +146,8 @@ export default function ThiefEdit() {
 				Object.entries(res.data[0]).map((atr) => {
 					if (atr[0].localeCompare('thiefId') && atr[1].length === 0) {
 						atr[1] = [''];
-						tempData[`${atr[0]}`] = atr[1];
-					} else {
-						tempData[`${atr[0]}`] = atr[1];
 					}
+					tempData[atr[0]] = atr[1];
 				});
 				setIsLoading(false);
 				setThiefInfo(tempData);
