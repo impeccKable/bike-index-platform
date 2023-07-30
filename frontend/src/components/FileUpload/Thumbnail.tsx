@@ -6,7 +6,7 @@ interface ThumbnailProps {
 	index: number;
 	handleNext: () => void;
 	handlePrev: () => void;
-	handleDelete: (index: number) => void;
+	handleDelete: () => void;
 	currentViewing: string | File | null;
 	setCurrentViewing: (file: string | File | null) => void;
 }
@@ -53,7 +53,7 @@ export function Thumbnail(props: ThumbnailProps) {
 					handleClose={handleCloseModal}
 					handleNext={props.handleNext}
 					handlePrev={props.handlePrev}
-					handleDelete={() => props.handleDelete(props.index)}
+					handleDelete={props.handleDelete}
 				/>
 			)}
 		</div>

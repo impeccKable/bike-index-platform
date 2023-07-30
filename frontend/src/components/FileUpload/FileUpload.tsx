@@ -53,8 +53,11 @@ export function FileUpload(props: FileUploadProps) {
 	}
 
 	function handleDelete(index: number) {
-		console.log(index)
-		setUploadedFiles(prevFiles => prevFiles.splice(index, 1));
+		setUploadedFiles(prevFiles => {
+			const newFileList = [...prevFiles];
+			newFileList.splice(index, 1);
+			return newFileList;
+		});
 		setCurrentViewing(null);
 	}
 
