@@ -20,6 +20,7 @@ export default function ThiefEdit() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [showLoadGif, setShowLoadGif] = useState(false);
 	const [wasSubmitted, setWasSubmitted] = useState(false);
+	const [imageFiles, setImageFiles] = useState<(File | string)[]>([]);
 	const urlThiefId = searchParams.get('thiefId');
 	const debug = useRecoilValue(debugState);
 
@@ -122,6 +123,11 @@ export default function ThiefEdit() {
 		return results;
 	};
 
+	function handleImageFilesChanged(newFileList: (File | string)[]) {
+		setImageFiles(newFileList);
+		console.log(newFileList)
+	}
+
 	useEffect(() => {
 		DebugLogs('ThiefEdit Component', '', debug);
 		if (urlThiefId === 'new') {
@@ -179,7 +185,7 @@ export default function ThiefEdit() {
 					<MultiField label="Bike Serial" name="bikeSerial" data={thiefInfo.bikeSerial} disabled={isLoading} component={FormInput}/>
 					<MultiField label="Phrase"      name="phrase"     data={thiefInfo.phrase}     disabled={isLoading} component={FormInput} type="textarea"/>
 					<MultiField label="Notes"       name="note"       data={thiefInfo.note}       disabled={isLoading} component={FormInput} type="textarea"/>
-					<FileUpload label="Images" />
+					<FileUpload label="Images" handleImageFilesChanged={handleImageFilesChanged} />
 					<div className="form-btns">
 						<LinkButton type="button" to="back">Back</LinkButton>
 						<FormButton type="submit">Submit</FormButton>
