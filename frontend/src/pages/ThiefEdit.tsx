@@ -29,7 +29,7 @@ export default function ThiefEdit() {
 
 	// thiefInfo at beginning
 	const [thiefInfo, setThiefInfo] = useState({
-		thiefId: 0,
+		thiefId: '',
 		name: [''],
 		email: [''],
 		url: [''],
