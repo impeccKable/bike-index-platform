@@ -35,7 +35,7 @@ app.use(express.json());
 
 router.use("/search", search);
 router.use("/thiefEdit", thiefEdit);
-router.use("/userList", userList);
+router.use(["/userList", "/userEdit"], userList);
 router.use("/stats", stats);
 router.use("/signup", signup);
 router.use("/login", login);

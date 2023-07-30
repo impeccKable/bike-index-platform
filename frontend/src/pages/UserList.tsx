@@ -8,14 +8,19 @@ import { httpClient } from "../services/HttpClient";
 // react
 import {useState, useEffect, useRef} from 'react';
 
-// headers: ID, Name (First / Last), email, phone, role
+
 const tableHeaders = {
-	'ID':      { maxWidth: "2rem",  minWidth: "2rem" },
-	'Name':    { maxWidth: "13rem", minWidth: "13rem"},
-	'Phone':   { maxWidth: "6rem",  minWidth: "6rem" },
-	'Email':   { maxWidth: "14rem", minWidth: "14rem"},
-	'role':    { maxWidth: "15rem", minWidth: "15rem"},
-};
+    'ID': { maxWidth: "20rem",  minWidth: "20rem" },
+    'email':   { maxWidth: "14rem", minWidth: "14rem"},
+    'first':  { maxWidth: "8rem", minWidth: "8rem"},
+    'last':   { maxWidth: "8rem", minWidth: "8rem"},
+    'title':  { maxWidth: "7rem", minWidth: "7rem"},
+    'org':  { maxWidth: "13rem", minWidth: "13rem"},
+    'phone':  { maxWidth: "6rem", minWidth: "6rem"},
+    'role':  { maxWidth: "5rem", minWidth: "5rem"},
+    'approved':  { maxWidth: "5rem", minWidth: "5rem"},
+    'banned':  { maxWidth: "5rem", minWidth: "5rem"}
+}
 
 export interface User extends React.HTMLInputElement {
 	userid: number;
@@ -51,9 +56,7 @@ export default function UserList() {
                 // failure
             }
 
-            debugger;
-
-            console.log(response);
+            setUserData(response.data);
             
         }
 
@@ -93,7 +96,7 @@ export default function UserList() {
                 </input>
                 <LinkButton className="AddThiefButton" to="">Add New</LinkButton>
             </div>
-            <LinkTable header={tableHeaders} data={userData} linkBase=""></LinkTable>
+            {<LinkTable header={tableHeaders} data={userData} linkBase="/userEdit/"></LinkTable>}
             </main>
         </div>
     );
