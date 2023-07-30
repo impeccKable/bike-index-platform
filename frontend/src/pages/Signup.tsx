@@ -17,6 +17,8 @@ export default function Signup() {
 		if (submitted) {
 			return;
 		}
+		setSubmitted(false);
+		setPasswordMismatch(false);
 		if (e.dataDict.password !== e.dataDict.verify) {
 			setPasswordMismatch(true);
 			return;
