@@ -48,12 +48,6 @@ export default function Signup() {
 
 		setSubmitted(true);
 	}
-	let submitMessage = (
-		<div className="submit-message">
-			<p>Your request to sign up has been submitted!</p>
-			<p>We will review your application and get back to you.</p>
-		</div>
-	);
 	return (
 		<div className="notecard signup-page">
 			<h1>Sign Up</h1>
@@ -81,11 +75,14 @@ export default function Signup() {
 						<FormButton type="submit">Submit</FormButton>
 					</div>
 				</Form>
-				{submitted && submitMessage}
-				{passwordMismatch && (
+				{submitted && (
 					<div>
-						<p>Passwords did not match, please try again</p>
+						<p>Your request to sign up has been submitted!</p>
+						<p>We will review your application and get back to you.</p>
 					</div>
+				)}
+				{passwordMismatch && (
+					<div><p>Passwords did not match, please try again</p></div>
 				)}
 			</div>
 		</div>

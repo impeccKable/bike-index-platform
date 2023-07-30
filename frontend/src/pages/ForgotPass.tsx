@@ -14,11 +14,6 @@ export default function ForgotPass() {
 		console.log(e.dataDict);
 		setSubmitted(true);
 	}
-	let submitMessage = (
-		<div className="submit-message">
-			<p>Check your email for a password reset</p>
-		</div>
-	);
 	return (
 		<div className="notecard forgot-pass-page">
 			<h1>Password Reset</h1>
@@ -35,7 +30,9 @@ export default function ForgotPass() {
 						<LinkButton to="..">Back</LinkButton>
 						<FormButton type="submit">Submit</FormButton>
 					</div>
-					{submitted && submitMessage}
+					{submitted && (
+						<div><p>Check your email for a password reset</p></div>
+					)}
 				</Form>
 			</div>
 		</div>
