@@ -11,6 +11,7 @@ import {
 	UserCredential,
 	deleteUser,
 	sendEmailVerification,
+	sendPasswordResetEmail
 } from 'firebase/auth';
 import React, { useState, useContext, useEffect } from 'react';
 import { httpClient } from './HttpClient';
@@ -44,6 +45,7 @@ export type AuthContextProps = {
 	handleSignUp: (email: string, password: string) => Promise<string>;
 	handleDelete: (user: User) => void;
 	handleVerificationRequest: (email: string, password: string) => void;
+	handlePasswordReset: (email: string) => void;
 };
 
 export const AuthProvider = ({ children }: any) => {
@@ -171,6 +173,14 @@ export const AuthProvider = ({ children }: any) => {
 		}
 	};
 
+	const handlePasswordReset = async (email: string) => {
+		try{
+			await sendPasswordResetEmail(auth, email);
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
 	useEffect(() => {
 		const prevUser = retrieveUser();
 		if (prevUser) {
@@ -189,6 +199,7 @@ export const AuthProvider = ({ children }: any) => {
 				handleSignUp,
 				handleDelete,
 				handleVerificationRequest,
+				handlePasswordReset
 			}}
 		>
 			{children}
