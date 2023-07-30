@@ -20,7 +20,7 @@ export default function ThiefEdit() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [showLoadGif, setShowLoadGif] = useState(false);
 	const [wasSubmitted, setWasSubmitted] = useState(false);
-	const [initialImageFiles, setInitialImageFiles] = useState<(File | string)[]>([]);
+	const [initialImageFiles, setInitialImageFiles] = useState<(File | string)[]>(["https://t0.gstatic.com/licensed-image?q=tbn:ANd9GcQkrjYxSfSHeCEA7hkPy8e2JphDsfFHZVKqx-3t37E4XKr-AT7DML8IwtwY0TnZsUcQ"]);
 	const [newImages, setNewImages] = useState<(File | string)[]>([]);
 	const [deletedImages, setDeletedImages] = useState<(File | string)[]>([]);
 	const urlThiefId = searchParams.get('thiefId');
@@ -46,10 +46,23 @@ export default function ThiefEdit() {
 	function handleFormSubmit(e: any) {
 		e.preventDefault();
 		let results = CompareResults(e.dataDict);
-		httpClient.put('/thiefEdit', results)
-			.catch(err => {
-				DebugLogs('ThiefEdit post error', err, debug);
-			});
+
+		const formData = new FormData();
+		formData.append('body', JSON.stringify(results));
+		newImages.forEach((image, index) => {
+			if (image instanceof File) {
+				console.log(`Image ${index}: ${image.name}, ${image.type}, ${image.size}`);
+				formData.append(`newImages[${index}]`, image);
+			}
+		})
+		formData.append('deletedImages', JSON.stringify(deletedImages));
+
+		console.log(deletedImages)
+
+		// httpClient.put('/thiefEdit', formData)
+		// 	.catch(err => {
+		// 		DebugLogs('ThiefEdit post error', err, debug);
+		// 	});
 		setWasSubmitted(true);
 		setTimeout(() => {
 			setWasSubmitted(false);
@@ -125,10 +138,6 @@ export default function ThiefEdit() {
 		return results;
 	};
 
-	function handleImageFilesChange(newImageFileList: (File | string)[], deletedImageFileList: (File | string)[]) {
-		setNewImages(newImageFileList);
-		setDeletedImages(deletedImageFileList);
-	}
 
 	useEffect(() => {
 		DebugLogs('ThiefEdit Component', '', debug);
@@ -189,7 +198,6 @@ export default function ThiefEdit() {
 					<MultiField label="Notes"       name="note"       data={thiefInfo.note}       disabled={isLoading} component={FormInput} type="textarea"/>
 					<FileUpload
 						label="Images"
-						handleImageFilesChange={handleImageFilesChange} 
 						imageFiles={[...initialImageFiles, ...newImages]}
 						newImages={newImages}
 						setNewImages={setNewImages}

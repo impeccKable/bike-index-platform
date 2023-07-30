@@ -8,7 +8,6 @@ interface FileUploadProps {
 	setNewImages: (newImages: (File | string)[]) => void;
 	deletedImages: (File | string)[];
 	setDeletedImages: (deletedImages: (File | string)[]) => void;
-	handleImageFilesChange: (newImageList: (File | string)[], deletedImageList: (File | string)[])	 => void;
 }
 
 export function FileUpload(props: FileUploadProps) {
@@ -18,7 +17,7 @@ export function FileUpload(props: FileUploadProps) {
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	const [currentViewing, setCurrentViewing] = useState<File | string | null>(null); 
 	const maxSize = 1024 * 1024 * 25;
-	const fileTypes = ['image/jpeg', 'image/jpg', 'image/png']
+	const fileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
 
 	function handleAddButton() {
 		setIsModalOpen(true);
@@ -55,7 +54,6 @@ export function FileUpload(props: FileUploadProps) {
 		if (selectedFile) {
 			setUploadedFiles(prevFiles => [...prevFiles, selectedFile]);
 			props.setNewImages([...props.newImages, selectedFile]);
-			props.handleImageFilesChange(props.newImages, props.deletedImages);
 			setIsModalOpen(false);
 		}
 	}
@@ -72,7 +70,6 @@ export function FileUpload(props: FileUploadProps) {
 				props.setDeletedImages([...props.deletedImages, deletedFile]);
 			}
 
-			props.handleImageFilesChange(props.newImages, props.deletedImages);
 			return newFileList;
 		});
 		setCurrentViewing(null);
