@@ -10,7 +10,7 @@ interface FileUploadProps {
 	setDeletedImages: (deletedImages: (File | string)[]) => void;
 }
 
-export function FileUpload(props: FileUploadProps) {
+export function ImageUpload(props: FileUploadProps) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [uploadedFiles, setUploadedFiles] = useState<(File | string)[]>(props.imageFiles);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);

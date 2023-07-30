@@ -7,7 +7,7 @@ import {
 	FormButton,
 	LinkButton,
 } from '../components/Form';
-import { FileUpload } from '../components/FileUpload/FileUpload';
+import { ImageUpload } from '../components/ImageUplaod/ImageUpload';
 import { useSearchParams } from 'react-router-dom';
 import { httpClient } from '../services/HttpClient';
 import { useRecoilValue } from 'recoil';
@@ -193,7 +193,7 @@ export default function ThiefEdit() {
 					<MultiField label="Bike Serial" name="bikeSerial" data={thiefInfo.bikeSerial} disabled={isLoading} component={FormInput}/>
 					<MultiField label="Phrase"      name="phrase"     data={thiefInfo.phrase}     disabled={isLoading} component={FormInput} type="textarea"/>
 					<MultiField label="Notes"       name="note"       data={thiefInfo.note}       disabled={isLoading} component={FormInput} type="textarea"/>
-					<FileUpload
+					<ImageUpload
 						label="Images"
 						imageFiles={[...initialImageFiles, ...newImages]}
 						newImages={newImages}
