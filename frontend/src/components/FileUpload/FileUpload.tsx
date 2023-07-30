@@ -41,7 +41,6 @@ export function FileUpload(props: FileUploadProps) {
 	}
 
 	function handlePrev(index: number) {
-		console.log(index)
 		const prev = (index - 1 + uploadedFiles.length) % uploadedFiles.length;
 		setCurrentViewing(uploadedFiles[prev]);
 	}
@@ -53,12 +52,18 @@ export function FileUpload(props: FileUploadProps) {
 		}
 	}
 
+	function handleDelete(index: number) {
+		console.log(index)
+		setUploadedFiles(prevFiles => prevFiles.splice(index, 1));
+		setCurrentViewing(null);
+	}
+
 	return (
 		<>
 			<label>{props.label}</label>
 			<div className="upload-file-field">
 				{uploadedFiles.map((item, index) => ( <Thumbnail key={index} file={item} index={index} handleNext={() => handlkeNext(index)}
-					handlePrev={() => handlePrev(index)} currentViewing={currentViewing} setCurrentViewing={setCurrentViewing} /> ))}
+					handlePrev={() => handlePrev(index)} handleDelete={() => handleDelete(index)} currentViewing={currentViewing} setCurrentViewing={setCurrentViewing} /> ))}
 				<button className={`file-upload-btn ${uploadedFiles.length > 0 ? 'expanded' : ''}`} type="button" onClick={handleAddButton}>
 					＋
 				</button>

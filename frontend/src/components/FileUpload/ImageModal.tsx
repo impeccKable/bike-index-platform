@@ -2,26 +2,27 @@ interface ImageModalProps {
   imageUrl: string;
   index: number;
   handleClose: () => void;
-  handleNext: (index: number) => void;
-  handlePrev: (index: number) => void;
-  // handleDelete: () => void;
+  handleNext: () => void;
+  handlePrev: () => void;
+  handleDelete: () => void;
 }
 
 export function ImageModal(props: ImageModalProps) {
 
-  function handleClickImage() {
+  function handleClickImage(event: React.MouseEvent) {
+    event.stopPropagation(); // to avoid 
     window.open(props.imageUrl, "_blank");
   }
 
-  function handleOnClickNext(event: React.MouseEvent) {
-    // event.stopPropagation();
-    props.handleNext(props.index);
-  }
+  // function handleOnClickNext(event: React.MouseEvent) {
+  //   // event.stopPropagation();
+  //   props.handleNext();
+  // }
   
-  function handleOnClickPrev(event: React.MouseEvent) {
-    // event.stopPropagation();
-    props.handlePrev(props.index);
-  }
+  // function handleOnClickPrev(event: React.MouseEvent) {
+  //   // event.stopPropagation();
+  //   props.handlePrev(props.index);
+  // }
 
   return (
     <div className="image-modal">
@@ -32,8 +33,9 @@ export function ImageModal(props: ImageModalProps) {
         </div>
       </div>
         <div className="image-modal-btns">
-          <span className="modal-btn prev" onClick={handleOnClickPrev}>&lt;</span>
-          <span className="modal-btn next" onClick={handleOnClickNext}>&gt;</span>
+          <span className="modal-btn prev" onClick={props.handlePrev}>&lt;</span>
+          <span className="modal-btn delete" onClick={props.handleDelete}>&#x1F5D1;</span>
+          <span className="modal-btn next" onClick={props.handleNext}>&gt;</span>
         </div>
     </div>
   )

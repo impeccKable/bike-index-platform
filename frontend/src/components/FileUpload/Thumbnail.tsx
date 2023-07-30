@@ -4,8 +4,9 @@ import { ImageModal } from './ImageModal';
 interface ThumbnailProps {
 	file: string | File;
 	index: number;
-	handleNext: (index: number) => void;
-	handlePrev: (index: number) => void;
+	handleNext: () => void;
+	handlePrev: () => void;
+	handleDelete: (index: number) => void;
 	currentViewing: string | File | null;
 	setCurrentViewing: (file: string | File | null) => void;
 }
@@ -50,8 +51,9 @@ export function Thumbnail(props: ThumbnailProps) {
 					imageUrl={imageUrl}
 					index={props.index}
 					handleClose={handleCloseModal}
-					handleNext={() => props.handleNext(props.index)}
-					handlePrev={() => props.handlePrev(props.index)}
+					handleNext={props.handleNext}
+					handlePrev={props.handlePrev}
+					handleDelete={() => props.handleDelete(props.index)}
 				/>
 			)}
 		</div>
