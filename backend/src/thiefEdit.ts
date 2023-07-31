@@ -53,7 +53,6 @@ router.get('/', async (req: express.Request, res: express.Response) => {
 		const imageUrls = await getImage(thiefId)
 
 		return res.json({ thiefInfo: await get(req.query), imageUrls });
-		// console.log(res.json({ thiefInfo: await get(req.query), imageUrls }));
 	} catch (err) {
 		if (err instanceof ImageFileError) {
 			console.error(err);

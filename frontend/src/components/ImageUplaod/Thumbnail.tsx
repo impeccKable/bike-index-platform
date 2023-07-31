@@ -43,7 +43,7 @@ export function Thumbnail(props: ThumbnailProps) {
 			<img
 				key={props.index}
 				src={imageUrl}
-				alt={`Thumbnail ${props.index}`}
+				alt={`Image ${props.index}`}
 				onClick={handleImageClick}
 			/>
 			{props.currentViewing === props.file && (

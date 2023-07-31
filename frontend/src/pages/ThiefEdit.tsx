@@ -21,7 +21,7 @@ export default function ThiefEdit() {
 	const [showLoadGif, setShowLoadGif] = useState(false);
 	const [wasSubmitted, setWasSubmitted] = useState(false);
 	const fakeIamges = ["https://t0.gstatic.com/licensed-image?q=tbn:ANd9GcQkrjYxSfSHeCEA7hkPy8e2JphDsfFHZVKqx-3t37E4XKr-AT7DML8IwtwY0TnZsUcQ", "https://hips.hearstapps.com/hmg-prod/images/beautiful-smooth-haired-red-cat-lies-on-the-sofa-royalty-free-image-1678488026.jpg?crop=0.88847xw:1xh;center,top&resize=1200:*", "https://programmerhumor.io/wp-content/uploads/2021/06/programmerhumor-io-python-memes-backend-memes-41e437ca7369eb4.jpg"]
-	const [initialImageFiles, setInitialImageFiles] = useState<string[]>(fakeIamges);
+	const [initialImageFiles, setInitialImageFiles] = useState<string[]>([]);
 	const [newImages, setNewImages] = useState<(File | string)[]>([]);
 	const [deletedImages, setDeletedImages] = useState<(File | string)[]>([]);
 	const urlThiefId = searchParams.get('thiefId');
@@ -135,7 +135,9 @@ export default function ThiefEdit() {
 				});
 				setIsLoading(false);
 				setThiefInfo(tempData);
-				setInitialImageFiles([...initialImageFiles, ...res.data.imageUrls]);
+				if (res.data.imageUrls.length !== 0) {
+					setInitialImageFiles(res.data.imageUrls)
+				}
 
 
 				DebugLogs('ThiefEdit get response', res.data, debug);
