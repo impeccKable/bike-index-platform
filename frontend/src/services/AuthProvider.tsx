@@ -114,7 +114,7 @@ export const AuthProvider = ({ children }: any) => {
 	const handleLogin = async (email: string, password: string) => {
 		let login;
 		if (devMode) {
-			login = await signInWithEmailAndPassword(auth, 'email@email.com', 'pasword');
+			login = await signInWithEmailAndPassword(auth, 'email@email.com', 'password');
 		} else {
 			login = await signInWithEmailAndPassword(auth, email, password);
 		}
