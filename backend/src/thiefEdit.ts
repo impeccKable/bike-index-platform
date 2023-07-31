@@ -1,6 +1,7 @@
 import express from 'express';
 import db from './dbConfig';
 import { fieldToTable, fields, thiefInfoByIds } from './thiefInfo';
+import { imageUpload, imageDelete } from './imageOperation';
 import multer from 'multer';
 
 const upload = multer();
@@ -57,8 +58,14 @@ router.put('/', upload.array('newImages'), async (req: express.Request, res: exp
 	try {
 		const thiefId = await put(JSON.parse(req.body.body));
 		console.log("Returned thiefId", thiefId);
-		console.log("Delete image", JSON.parse(req.body.deletedImages))
-		console.log(req.files);
+		
+		if (req.files && req.files.length !== 0) {
+			imageUpload(req.files);
+		}
+		if (req.body.deletedImages) {
+			imageDelete(JSON.parse(req.body.deletedImages));
+		}
+
 		res.status(200);
 	} catch (err) {
 		console.error(err);

@@ -50,15 +50,18 @@ export default function ThiefEdit() {
 
 		const formData = new FormData();
 		formData.append('body', JSON.stringify(results));
-		newImages.forEach((image) => {
-			formData.append(`newImages`, image);
-		})
-		formData.append('deletedImages', JSON.stringify(deletedImages));
-
+		if (newImages.length !== 0) {
+			newImages.forEach((image) => {
+				formData.append(`newImages`, image);
+			})
+		}
+		if (deletedImages.length !== 0) {
+			formData.append('deletedImages', JSON.stringify(deletedImages));
+		}
 
 		httpClient.put('/thiefEdit', formData)
 			.catch(err => {
-				DebugLogs('ThiefEdit post error', err, debug);
+				DebugLogs('ThiefEdit post error', err.message, debug);
 			});
 		setWasSubmitted(true);
 		setTimeout(() => {
