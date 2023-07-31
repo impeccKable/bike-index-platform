@@ -27,6 +27,7 @@ export default function Login() {
 				} else if(error.message.includes('wrong-password')){
 					loginFailureAlert("wrong-password");
 				} else {
+					loginFailureAlert("unknown-error");
 					console.log(error);
 				};
 			};
@@ -50,7 +51,7 @@ export default function Login() {
 				alert!.innerHTML += "<a href='/forgot'>here</a>.";
 				break;
 			default:
-				alert!.innerHTML = "Unknown error. Please try again.";
+				alert!.innerHTML = "Login error. Please try again.";
 				break;	
 			};
 	};
