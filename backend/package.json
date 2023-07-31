@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/impeccKable/bike-index-platform#readme",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.379.1",
     "@types/dotenv": "^8.2.0",
     "@types/multer": "^1.4.7",
     "cors": "^2.8.5",
