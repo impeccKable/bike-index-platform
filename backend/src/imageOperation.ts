@@ -1,14 +1,39 @@
 import multer from 'multer';
 import path from 'path';
 import crypto from 'crypto';
+import { PutObjectCommand } from '@aws-sdk/client-s3';
+import { s3Client } from './s3Client';
+import { config } from './config';
 
-export const imageUpload = (uploadedFiles: Express.Multer.File[]) => {
-	let filename: string;
+export const imageUpload = async (uploadedFiles: Express.Multer.File[], thiefId: number) => {
+	let baseName: string | null;
 	for (const file of uploadedFiles) {
-		filename = generateUniqueFilename(file.originalname);
-		console.log(filename);
-		// console.log("mimetype", file.mimetype);
-		// console.log("buffer", file.buffer);
+		baseName = generateUniqueFilename(file.originalname);
+
+		if (baseName === null) {
+			return;
+		}
+
+		const key = `${thiefId}/images/${baseName}`;
+
+		const params = {
+			Bucket: config.bucketName,
+			Key: key,
+			Body: file.buffer,
+			ContentType: file.mimetype
+		};
+
+		try {
+			await s3Client.send(new PutObjectCommand(params));
+			console.log("Successfully uploaded " +
+				params.Key +
+				" to " +
+				params.Bucket +
+				"/" +
+				params.Key);
+		} catch (err) {
+			console.log("Image upload failed", err);
+		}
 	}
 }
 
@@ -18,11 +43,15 @@ export const imageDelete = (deletedFile: string[]) => {
 	}
 }
 
-const generateUniqueFilename = (filename: string): string => {
-	const extension = path.extname(filename);
-	const basename = path.basename(filename, extension).replace(/\s/g, '-');
+const generateUniqueFilename = (filename: string): string | null => {
+	try {
+		const extension = path.extname(filename);
+		const basename = path.basename(filename, extension).replace(/\s/g, '-');
+		const randomString = crypto.randomBytes(5).toString('hex');
 
-	const randomString = crypto.randomBytes(5).toString('hex');
-
-	return `${basename}-${randomString}${extension}`;
+		return `${basename}-${randomString}${extension}`;
+	} catch (err) {
+		console.log("Failed to generate unique filename", err);
+		return null;
+	}
 }
