@@ -3,7 +3,8 @@ import { Thumbnail } from './Thumbnail';
 
 interface FileUploadProps {
 	label: string;
-	imageFiles: (File | string)[];
+	renderImageFiles: (File | string)[];
+	setRenderImageFiles: (iamges: (File | string)[]) => void;
 	newImages: (File | string)[];
 	setNewImages: (newImages: (File | string)[]) => void;
 	deletedImages: (File | string)[];
@@ -12,7 +13,7 @@ interface FileUploadProps {
 
 export function ImageUpload(props: FileUploadProps) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [uploadedFiles, setUploadedFiles] = useState<(File | string)[]>([]);
+	// const [uploadedFiles, setUploadedFiles] = useState<(File | string)[]>([]);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	const [currentViewing, setCurrentViewing] = useState<File | string | null>(null); 
@@ -41,51 +42,46 @@ export function ImageUpload(props: FileUploadProps) {
 	}
 
 	function handleNext(index: number) {
-		const next = (index + 1) % uploadedFiles.length;
-		setCurrentViewing(uploadedFiles[next]);
+		const next = (index + 1) % props.renderImageFiles.length;
+		setCurrentViewing(props.renderImageFiles[next]);
 	}
 
 	function handlePrev(index: number) {
-		const prev = (index - 1 + uploadedFiles.length) % uploadedFiles.length;
-		setCurrentViewing(uploadedFiles[prev]);
+		const prev = (index - 1 + props.renderImageFiles.length) % props.renderImageFiles.length;
+		setCurrentViewing(props.renderImageFiles[prev]);
 	}
 
 	function handleUpload() {
 		if (selectedFile) {
-			setUploadedFiles(prevFiles => [...prevFiles, selectedFile]);
+			props.setRenderImageFiles([...props.renderImageFiles, selectedFile]);
 			props.setNewImages([...props.newImages, selectedFile]);
 			setIsModalOpen(false);
 		}
 	}
 
 	function handleDelete(index: number) {
-		setUploadedFiles(prevFiles => {
-			const deletedFile = prevFiles[index];
-			const newFileList = [...prevFiles];
-			newFileList.splice(index, 1);
+		const deletedFile = props.renderImageFiles[index];
+		const newFileList = [...props.renderImageFiles];
+		newFileList.splice(index, 1);
 
-			if (props.newImages.includes(deletedFile)) {
-				props.setNewImages(props.newImages.filter(file => file !== deletedFile));
-			} else {
-				props.setDeletedImages([...props.deletedImages, deletedFile]);
-			}
+		if (props.newImages.includes(deletedFile)) {
+			props.setNewImages(props.newImages.filter(file => file !== deletedFile));
+		} else {
+			props.setDeletedImages([...props.deletedImages, deletedFile]);
+		}
 
-			return newFileList;
-		});
+		props.setRenderImageFiles(newFileList);
+
 		setCurrentViewing(null);
 	}
-
-	useEffect(() => {
-		setUploadedFiles(props.imageFiles);
-	}, [props.imageFiles]);
 
 	return (
 		<>
 			<label>{props.label}</label>
 			<div className="upload-file-field">
-				{uploadedFiles.map((item, index) => ( <Thumbnail key={index} file={item} index={index} handleNext={() => handleNext(index)}
+				{props.renderImageFiles.map((item, index) => ( <Thumbnail key={index} file={item} index={index} handleNext={() => handleNext(index)}
 					handlePrev={() => handlePrev(index)} handleDelete={() => handleDelete(index)} currentViewing={currentViewing} setCurrentViewing={setCurrentViewing} /> ))}
-				<button className={`file-upload-btn ${uploadedFiles.length > 0 ? 'expanded' : ''}`} type="button" onClick={handleAddButton}>
+				<button className={`file-upload-btn ${props.renderImageFiles.length > 0 ? 'expanded' : ''}`} type="button" onClick={handleAddButton}>
 					＋
 				</button>
 			</div>
