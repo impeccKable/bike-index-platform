@@ -1,7 +1,7 @@
 import express from 'express';
 import db from './dbConfig';
 import { fieldToTable, fields, thiefInfoByIds } from './thiefInfo';
-import { imageUpload, imageDelete } from './imageOperation';
+import { imageUpload, imageDelete, ImageFileError } from './imageOperation';
 import multer from 'multer';
 
 const upload = multer();
@@ -57,10 +57,9 @@ router.get('/', async (req: express.Request, res: express.Response) => {
 router.put('/', upload.array('newImages'), async (req: express.Request, res: express.Response) => {
 	try {
 		const thiefId = await put(JSON.parse(req.body.body));
-		console.log("Returned thiefId", thiefId);
 		
 		if (req.files && req.files.length !== 0) {
-			imageUpload(req.files as Express.Multer.File[]);
+			imageUpload(req.files as Express.Multer.File[], thiefId);
 		}
 		if (req.body.deletedImages) {
 			imageDelete(JSON.parse(req.body.deletedImages));
@@ -68,8 +67,12 @@ router.put('/', upload.array('newImages'), async (req: express.Request, res: exp
 
 		res.status(200);
 	} catch (err) {
-		console.error(err);
-		res.status(500);
+		if (err instanceof ImageFileError) {
+			res.status(500).send("Error uploading file");
+		} else {
+			console.error(err);
+			res.status(500);
+		}
 	}
 });
 export default router;

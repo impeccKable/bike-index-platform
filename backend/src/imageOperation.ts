@@ -5,16 +5,26 @@ import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { s3Client } from './s3Client';
 import { config } from './config';
 
+export class ImageFileError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = "ImageFileError";
+	}
+}
+
 export const imageUpload = async (uploadedFiles: Express.Multer.File[], thiefId: number) => {
 	let baseName: string | null;
 	for (const file of uploadedFiles) {
 		baseName = generateUniqueFilename(file.originalname);
 
+		// if generate name fails return
 		if (baseName === null) {
-			return;
+			throw new ImageFileError("Fail to generate unique file name");
 		}
 
-		baseName = sanitize(baseName); // remove all unwanted characters for s3 bucket
+		// sanitize the name for s3 bucket
+		baseName = sanitize(baseName);
+
 		const key = `${thiefId}/images/${baseName}`;
 
 		const params = {
@@ -29,9 +39,7 @@ export const imageUpload = async (uploadedFiles: Express.Multer.File[], thiefId:
 			console.log("Successfully uploaded " +
 				params.Key +
 				" to " +
-				params.Bucket +
-				"/" +
-				params.Key);
+				params.Bucket);
 		} catch (err) {
 			console.log("Image upload failed", err);
 		}
@@ -52,7 +60,6 @@ const generateUniqueFilename = (filename: string): string | null => {
 
 		return `${basename}-${randomString}${extension}`;
 	} catch (err) {
-		console.log("Failed to generate unique filename", err);
 		return null;
 	}
 }
