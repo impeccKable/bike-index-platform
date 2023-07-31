@@ -60,7 +60,7 @@ router.put('/', upload.array('newImages'), async (req: express.Request, res: exp
 		console.log("Returned thiefId", thiefId);
 		
 		if (req.files && req.files.length !== 0) {
-			imageUpload(req.files);
+			imageUpload(req.files as Express.Multer.File[]);
 		}
 		if (req.body.deletedImages) {
 			imageDelete(JSON.parse(req.body.deletedImages));
