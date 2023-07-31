@@ -14,6 +14,7 @@ export const imageUpload = async (uploadedFiles: Express.Multer.File[], thiefId:
 			return;
 		}
 
+		baseName = sanitize(baseName); // remove all unwanted characters for s3 bucket
 		const key = `${thiefId}/images/${baseName}`;
 
 		const params = {
@@ -46,7 +47,7 @@ export const imageDelete = (deletedFile: string[]) => {
 const generateUniqueFilename = (filename: string): string | null => {
 	try {
 		const extension = path.extname(filename);
-		const basename = path.basename(filename, extension).replace(/\s/g, '-');
+		const basename = path.basename(filename, extension);
 		const randomString = crypto.randomBytes(5).toString('hex');
 
 		return `${basename}-${randomString}${extension}`;
@@ -54,4 +55,8 @@ const generateUniqueFilename = (filename: string): string | null => {
 		console.log("Failed to generate unique filename", err);
 		return null;
 	}
+}
+
+const sanitize = (filename: string): string => {
+	return filename.replace(/[^a-zA-Z0-9!_.*()'-]/g, '-');
 }
