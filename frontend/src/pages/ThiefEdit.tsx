@@ -21,7 +21,7 @@ export default function ThiefEdit() {
 	const [showLoadGif, setShowLoadGif] = useState(false);
 	const [wasSubmitted, setWasSubmitted] = useState(false);
 	const fakeIamges = ["https://t0.gstatic.com/licensed-image?q=tbn:ANd9GcQkrjYxSfSHeCEA7hkPy8e2JphDsfFHZVKqx-3t37E4XKr-AT7DML8IwtwY0TnZsUcQ", "https://hips.hearstapps.com/hmg-prod/images/beautiful-smooth-haired-red-cat-lies-on-the-sofa-royalty-free-image-1678488026.jpg?crop=0.88847xw:1xh;center,top&resize=1200:*", "https://programmerhumor.io/wp-content/uploads/2021/06/programmerhumor-io-python-memes-backend-memes-41e437ca7369eb4.jpg"]
-	const [initialImageFiles, setInitialImageFiles] = useState<(File | string)[]>(fakeIamges);
+	const [initialImageFiles, setInitialImageFiles] = useState<string[]>(fakeIamges);
 	const [newImages, setNewImages] = useState<(File | string)[]>([]);
 	const [deletedImages, setDeletedImages] = useState<(File | string)[]>([]);
 	const urlThiefId = searchParams.get('thiefId');
@@ -97,41 +97,6 @@ export default function ThiefEdit() {
 				});
 
 
-				// let test = Math.max(newValues.length, oldValues.length);
-				// for (let i = 0; i < test; i++) {
-				// 	let oldVal = oldValues[i] ? oldValues[i] : '0';
-				// 	let newVal = newValues[i] ? newValues[i] : '0';
-
-				// 	if (oldVal !== newVal) {
-
-				// 		if (results[keyValue] === undefined) {
-				// 			results[keyValue] = [];
-				// 		}
-				// 		results[keyValue].push([oldVal, newVal])
-				// 	}
-				// }
-				// Object.entries(results).map((thiefProperty) => {
-				// 	//[0, string] add
-				// 	//[string, 0] delete
-				// 	// [string, string] update
-				// 	//result = result.property.map
-
-				// 	if (thiefProperty[0] !== 'thiefId') {
-				// 		thiefProperty[1].map((propertyArray) => {
-				// 			if (propertyArray[0] === '0') {
-				// 				consoleMessages.push(`Adding: ${propertyArray[1]}`);
-				// 			} else if (propertyArray[1] === '0') {
-				// 				consoleMessages.push(`Deleting: ${propertyArray[0]}`);
-				// 			} else {
-				// 				consoleMessages.push(
-				// 					`Updating '${propertyArray[0]}' to '${propertyArray[1]}'`
-				// 				);
-				// 			}
-				// 		});
-				// 	} else {
-				// 		consoleMessages.push(`Thief ID: ${thiefProperty[1]}`);
-				// 	}
-				// });
 			}
 			DebugLogs('Submit Changes', consoleMessages, debug);
 		});
@@ -160,7 +125,7 @@ export default function ThiefEdit() {
 					note: [''],
 				};
 
-				Object.entries(res.data[0]).map((atr) => {
+				Object.entries(res.data.thiefInfo[0]).map((atr) => {
 					if (atr[0].localeCompare('thiefId') && atr[1].length === 0) {
 						atr[1] = [''];
 						tempData[`${atr[0]}`] = atr[1];
@@ -170,6 +135,9 @@ export default function ThiefEdit() {
 				});
 				setIsLoading(false);
 				setThiefInfo(tempData);
+				setInitialImageFiles([...initialImageFiles, ...res.data.imageUrls]);
+
+
 				DebugLogs('ThiefEdit get response', res.data, debug);
 			})
 			.catch((err) => {

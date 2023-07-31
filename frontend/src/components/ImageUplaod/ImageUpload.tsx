@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Thumbnail } from './Thumbnail';
 
 interface FileUploadProps {
@@ -12,7 +12,7 @@ interface FileUploadProps {
 
 export function ImageUpload(props: FileUploadProps) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [uploadedFiles, setUploadedFiles] = useState<(File | string)[]>(props.imageFiles);
+	const [uploadedFiles, setUploadedFiles] = useState<(File | string)[]>([]);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	const [currentViewing, setCurrentViewing] = useState<File | string | null>(null); 
@@ -74,6 +74,10 @@ export function ImageUpload(props: FileUploadProps) {
 		});
 		setCurrentViewing(null);
 	}
+
+	useEffect(() => {
+		setUploadedFiles(props.imageFiles);
+	}, [props.imageFiles]);
 
 	return (
 		<>

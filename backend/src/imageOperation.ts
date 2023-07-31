@@ -1,7 +1,8 @@
 import multer from 'multer';
 import path from 'path';
 import crypto from 'crypto';
-import { PutObjectCommand } from '@aws-sdk/client-s3';
+import { PutObjectCommand, GetObjectCommand, ListObjectsCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { s3Client } from './s3Client';
 import { config } from './config';
 
@@ -12,7 +13,7 @@ export class ImageFileError extends Error {
 	}
 }
 
-export const imageUpload = async (uploadedFiles: Express.Multer.File[], thiefId: number) => {
+export const uploadImage = async (uploadedFiles: Express.Multer.File[], thiefId: number) => {
 	let baseName: string | null;
 	for (const file of uploadedFiles) {
 		baseName = generateUniqueFilename(file.originalname);
@@ -25,7 +26,7 @@ export const imageUpload = async (uploadedFiles: Express.Multer.File[], thiefId:
 		// sanitize the name for s3 bucket
 		baseName = sanitize(baseName);
 
-		const key = `${thiefId}/images/${baseName}`;
+		const key = `thiefs/${thiefId}/images/${baseName}`;
 
 		const params = {
 			Bucket: config.bucketName,
@@ -46,11 +47,55 @@ export const imageUpload = async (uploadedFiles: Express.Multer.File[], thiefId:
 	}
 }
 
-export const imageDelete = (deletedFile: string[]) => {
+export const deleteImage = (deletedFile: string[]) => {
 	for (const file of deletedFile) {
 		console.log("Deleted file", file);
 	}
 }
+
+export const getImage = async (thiefId: string): Promise<string[]> => {
+	const prefix = `thiefs/${thiefId}/images/`;
+
+	const params = {
+		Bucket: config.bucketName,
+		Prefix: prefix
+	};
+
+	let response;
+	try {
+		response = await s3Client.send(new ListObjectsCommand(params));
+	} catch (err) {
+		throw new ImageFileError(`Error getting object list from s3: ${err}`);
+	}
+
+	const keys: (string | undefined)[] = response.Contents?.map (content => content.Key) || [];
+
+	let urls: string[] = [];
+	try {
+		urls = await getImageUrl(keys);
+	} catch (err) {
+		throw new ImageFileError(`Error getting signed URLs: ${err}`);
+	}
+
+	return urls;
+} 
+
+const getImageUrl = async (keys: (string | undefined)[]): Promise<string[]> => {
+	const urls: string[] = [];
+
+	for (const key of keys) {
+		const params = {
+			Bucket: config.bucketName,
+			Key: key
+		};
+
+		const url = await getSignedUrl(s3Client, new GetObjectCommand(params), { expiresIn: 3600 });
+		urls.push(url);
+	}
+
+	return urls;
+}
+
 
 const generateUniqueFilename = (filename: string): string | null => {
 	try {
