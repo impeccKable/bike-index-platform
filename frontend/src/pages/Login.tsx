@@ -17,16 +17,44 @@ export default function Login() {
 		const password = e.dataDict.password;
 
 		const f = async () => {
-			const success = await auth?.handleLogin(email, password);
-			if (success) {
-				navigate("/thieflist");
-			} else {
-				setLoginFailure(true);
-				//provide a message indicating authentication failure
-			}
+			try{
+				await auth?.handleLogin(email, password);
+			} catch (error) {
+				if(error.message === 'User email is not verified'){
+					loginFailureAlert("email-not-verified");
+				} else if(error.message === 'User is not verified'){
+					loginFailureAlert("user-not-verified");
+				} else if(error.message.includes('wrong-password')){
+					loginFailureAlert("wrong-password");
+				} else {
+					console.log(error);
+				};
+			};
 		};
 		f();
 	};
+
+	const loginFailureAlert = (alertType:string) => {
+		const alert = document.getElementById("login-alert");
+		switch(alertType){
+			case "email-not-verified":
+				alert!.innerHTML = "Email not verified. Please check your email for a verification link. ";
+				alert!.innerHTML += "To request another verification email visit ";
+				alert!.innerHTML += "<a href='/requestverification'>here</a>.";
+				break;
+			case "user-not-verified":
+				alert!.innerHTML = "User not verified. Please contact an administrator.";
+				break;
+			case "wrong-password":
+				alert!.innerHTML = "Wrong password. Please try again or reset your password ";
+				alert!.innerHTML += "<a href='/forgot'>here</a>.";
+				break;
+			default:
+				alert!.innerHTML = "Unknown error. Please try again.";
+				break;	
+			};
+	};
+
 	return (
 		<div className="notecard login-page">
 			<h1>Bike Index Platform</h1>
@@ -40,11 +68,7 @@ export default function Login() {
 						<a href="/forgot">Forgot Password?</a>
 					</div>
 				</Form>
-				{loginFailure && (
-					<div>
-						<p>Login failed</p>
-					</div>
-				)}
+				<div id="login-alert"/>
 			</div>
 		</div>
 	);
