@@ -17,6 +17,8 @@ export default function Signup() {
 		if (submitted) {
 			return;
 		}
+		setSubmitted(false);
+		setPasswordMismatch(false);
 		if (e.dataDict.password !== e.dataDict.verify) {
 			setPasswordMismatch(true);
 			return;
@@ -59,14 +61,14 @@ export default function Signup() {
 			<h1>Sign Up</h1>
 			<div className="card">
 				<Form onSubmit={handleFormSubmit}>
-					<FormInput label="First name"    name="first"    placeholder="John" />
-					<FormInput label="Last name"     name="last"     placeholder="Doe" />
-					<FormInput label="Title"         name="title"    placeholder="Mayor" />
-					<FormInput label="Organization"  name="org" />
-					<FormInput label="Email"         name="email"    placeholder="email@example.com" type="email" />
-					<FormInput label="Password"      name="password" type="password" />
-					<FormInput label="(again)"       name="verify"   type="password" labelProps={{ style: { color: '#666' }}} />
-					<FormInput label="Phone"         name="phone"    placeholder="+1 222 333 4444" type="phone" />
+					<FormInput label="First name"      name="first"    placeholder="John" />
+					<FormInput label="Last name"       name="last"     placeholder="Doe" />
+					<FormInput label="Title"           name="title"    placeholder="Mayor" />
+					<FormInput label="Organization"    name="org" />
+					<FormInput label="Phone"           name="phone"    placeholder="+1 222 333 4444"   type="phone" />
+					<FormInput label="Email"           name="email"    placeholder="email@example.com" type="email" />
+					<FormInput label="Password"        name="password" type="password" />
+					<FormInput label="Verify password" name="verify"   type="password" />
 					{/*
 					TODO: change this back to required
 					<FormInput label="First name" name="first-name" required placeholder="John" />
@@ -87,6 +89,9 @@ export default function Signup() {
 						<p>Passwords did not match, please try again</p>
 					</div>
 				)}
+				<div className="notecard-links">
+					<a href="/requestverification">Request Verification Email</a>
+				</div>
 			</div>
 		</div>
 	);

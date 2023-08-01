@@ -127,26 +127,36 @@ Schedule
 			x 1hr  Clean up thief list css
 				Change column widths to rem
 			x 1hr  Show thief ID on edit page (disabled)
-			1hr  Fix psql user permissions for 'ec2-user'
-			1hr  Add a way to delete a thief
+			x 1hr  Fix psql user permissions for 'ec2-user'
+			x 1hr  Add a way to delete a thief
 			x 1hr  Show all thieves with no search
 			1hr  Move pages functionality to backend (page=2)
 			1hr  Show how many results
 
-			1hr  Combine about and stats pages
-			x 1hr  Billy extra names bug
-			1hr  Re-show fields on thief edit upon submit (to show actual changes)
+			x 1hr  Combine about and stats pages
+			x 1hr  Billy extra names bug (thief edit submission was not working)
+			1hr  Re-show fields on thief edit upon submit
+				(to show what's actually in the database)
+			1hr  Add date to downloaded thief data csv
+			x 1hr  Rename (again) to Verify Password on signup page
+				Remove password error upon a re-submit
+			x 1hr  Show Thief ID as new for new thief
+			x 1hr  Update next_thief_id upon data import
+			x 1hr  Fix add new thief
 		Matt
 			x 1hr  Test Note submission is not working
 			~ 12hr Sign-up redirects back to main page on fresh browser (cache issue)
 				Verify user token upon reload
 				Check for a valid token
 			1hr  Add user email verification through firebase
+
+			x 1hr  Give more specific error messages for login failures
 	Sprint 6 (8/15)
 		Roles
 			Thief id editable by admin
 			Option to combine multiple thieves (verify this works on thief id change)
 		Make it robust to exceptions/database errors
+		Add loading gif to stats table?
 		Remove FormButton (redundant with <button>)
 		Testing
 		Polish
