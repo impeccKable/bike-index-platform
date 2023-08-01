@@ -80,7 +80,7 @@ export default function ThiefList() {
 			<Navbar />
 			<main>
 				<h1>Thief Listing</h1>
-				<TextWindow />
+				<TextWindow pageName="Thief List" />
 				<div className="searchbar">
 					<label htmlFor="SearchType">Search Type</label>
 					<select

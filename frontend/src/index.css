@@ -186,6 +186,7 @@ nav button:hover {
 	justify-content: center;
 	margin: auto;
 	width: 60%;
+	margin-bottom: 3%;
 }
 
 .text-window > div {
@@ -195,6 +196,7 @@ nav button:hover {
 .text-area {
 	width: 100%;
 	border-radius: 5px;
+	resize: none;
 }
 
 
