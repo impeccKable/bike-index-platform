@@ -2,9 +2,16 @@ import express from 'express';
 import db from './dbConfig';
 import { fieldToTable, fields, thiefInfoByIds } from './thiefInfo';
 import { uploadImage, deleteImage, getImage, ImageUploadError, ImageDeletionError, ImageGetError} from './imageOperation';
-import multer from 'multer';
+import multer, { MulterError } from 'multer';
 
-const upload = multer();
+const upload = multer({
+	limits: { fileSize: 1024 * 1024 * 25 },
+	fileFilter: function (req, file, cb) {
+		if (file.mimetype !== "image/jpeg" && file.mimetype !== "image/jpg" && file.mimetype !== "image/png") {
+      cb(new Error("invalid file type"));
+    }
+	}
+});
 
 const get = async (query: any) => {
 	return thiefInfoByIds([parseInt(query.thiefId)]);
