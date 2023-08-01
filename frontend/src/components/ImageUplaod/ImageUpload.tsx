@@ -11,6 +11,12 @@ interface FileUploadProps {
 	setDeletedImages: (deletedImages: (File | string)[]) => void;
 }
 
+function extractObjectKeyForS3Deletion(url: string): string {
+	const urlObj = new URL(url);
+	return urlObj.pathname.substring(1);
+
+}
+
 export function ImageUpload(props: FileUploadProps) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	// const [uploadedFiles, setUploadedFiles] = useState<(File | string)[]>([]);
@@ -67,7 +73,7 @@ export function ImageUpload(props: FileUploadProps) {
 		if (props.newImages.includes(deletedFile)) {
 			props.setNewImages(props.newImages.filter(file => file !== deletedFile));
 		} else {
-			props.setDeletedImages([...props.deletedImages, deletedFile]);
+			props.setDeletedImages([...props.deletedImages, extractObjectKeyForS3Deletion(deletedFile as string)]);
 		}
 
 		props.setRenderImageFiles(newFileList);

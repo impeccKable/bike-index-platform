@@ -15,6 +15,7 @@ import { debugState } from '../services/Recoil';
 import loading from '../assets/loading.gif';
 import DebugLogs from '../services/DebugLogs';
 
+
 export default function ThiefEdit() {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [isLoading, setIsLoading] = useState(true);

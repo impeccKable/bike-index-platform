@@ -1,7 +1,7 @@
 import express from 'express';
 import db from './dbConfig';
 import { fieldToTable, fields, thiefInfoByIds } from './thiefInfo';
-import { uploadImage, deleteImage, getImage, ImageFileError} from './imageOperation';
+import { uploadImage, deleteImage, getImage, ImageUploadError, ImageDeletionError, ImageGetError} from './imageOperation';
 import multer from 'multer';
 
 const upload = multer();
@@ -54,7 +54,7 @@ router.get('/', async (req: express.Request, res: express.Response) => {
 
 		return res.json({ thiefInfo: await get(req.query), imageUrls });
 	} catch (err) {
-		if (err instanceof ImageFileError) {
+		if (err instanceof ImageGetError) {
 			console.error(err);
 			res.status(400).send("Error getting image");
 		}
@@ -75,9 +75,12 @@ router.put('/', upload.array('newImages'), async (req: express.Request, res: exp
 
 		res.status(200);
 	} catch (err) {
-		if (err instanceof ImageFileError) {
+		if (err instanceof ImageUploadError) {
 			console.error(err);
 			res.status(422).send("Error uploading file");
+		} else if (err instanceof ImageDeletionError) {
+			console.error(err);
+			res.status(422).send("Error deleting file");
 		} else {
 			console.error(err);
 			res.status(500);

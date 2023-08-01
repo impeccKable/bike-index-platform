@@ -1,15 +1,29 @@
 import multer from 'multer';
 import path from 'path';
 import crypto from 'crypto';
-import { PutObjectCommand, GetObjectCommand, ListObjectsCommand } from '@aws-sdk/client-s3';
+import { PutObjectCommand, GetObjectCommand, DeleteObjectCommand, ListObjectsCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { s3Client } from './s3Client';
 import { config } from './config';
 
-export class ImageFileError extends Error {
+export class ImageUploadError extends Error {
 	constructor(message: string) {
 		super(message);
-		this.name = "ImageFileError";
+		this.name = "ImageUploadError";
+	}
+}
+
+export class ImageDeletionError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = "ImageDeletionError";
+	}
+}
+
+export class ImageGetError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = "ImageGetError";
 	}
 }
 
@@ -20,7 +34,7 @@ export const uploadImage = async (uploadedFiles: Express.Multer.File[], thiefId:
 
 		// if generate name fails return
 		if (baseName === null) {
-			throw new ImageFileError("Fail to generate unique file name");
+			throw new ImageUploadError("Fail to generate unique file name");
 		}
 
 		// sanitize the name for s3 bucket
@@ -42,14 +56,24 @@ export const uploadImage = async (uploadedFiles: Express.Multer.File[], thiefId:
 				" to " +
 				params.Bucket);
 		} catch (err) {
-			console.log("Image upload failed", err);
+			throw new ImageUploadError(`Error uploaidng image to s3: ${err}`);
 		}
 	}
 }
 
-export const deleteImage = (deletedFile: string[]) => {
-	for (const file of deletedFile) {
-		console.log("Deleted file", file);
+export const deleteImage = async (deletedFile: string[]) => {
+	for (const key of deletedFile) {
+		const params = {
+			Bucket: config.bucketName,
+			Key: key
+		};
+
+		try {
+			await s3Client.send(new DeleteObjectCommand(params));
+			console.log(`Object ${key} deleted from bucket ${config.bucketName}`);	
+		} catch (err) {
+			throw new ImageDeletionError(`Error deleting object from s3: ${err}`);
+		}
 	}
 }
 
@@ -65,22 +89,22 @@ export const getImage = async (thiefId: string): Promise<string[]> => {
 	try {
 		response = await s3Client.send(new ListObjectsCommand(params));
 	} catch (err) {
-		throw new ImageFileError(`Error getting object list from s3: ${err}`);
+		throw new ImageGetError(`Error getting object list from s3: ${err}`);
 	}
 
 	const keys: (string | undefined)[] = response.Contents?.map (content => content.Key) || [];
 
 	let urls: string[] = [];
 	try {
-		urls = await getImageUrl(keys);
+		urls = await getTempImageUrl(keys);
 	} catch (err) {
-		throw new ImageFileError(`Error getting signed URLs: ${err}`);
+		throw new ImageGetError(`Error getting signed URLs: ${err}`);
 	}
 
 	return urls;
 } 
 
-const getImageUrl = async (keys: (string | undefined)[]): Promise<string[]> => {
+const getTempImageUrl = async (keys: (string | undefined)[]): Promise<string[]> => {
 	const urls: string[] = [];
 
 	for (const key of keys) {
