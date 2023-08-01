@@ -1,6 +1,6 @@
 import express from "express";
 import db from "./dbConfig"
-import { GetAllUsers, GetUserByID } from "./userData";
+import { GetAllUsers, GetUserByID, GetUserBySearchType } from "./userData";
 
 const router = express.Router();
 
@@ -22,10 +22,25 @@ const GetByID = async (userID: string) => {
     return {};
 }
 
+const GetBySearchType = async (searchkey: string, searchType: string) => {
+    return await GetUserBySearchType(searchkey, searchType);
+}
+
 router.get("/", async (req: express.Request, res: express.Response) => {
     try 
     {
-        return res.json(await Get());
+        let key = req.query.searchKey;
+        let type = req.query.searchType;
+
+        if (key !== undefined && type !== undefined && key !== "All" && !IsNullOrEmpty(key)) {
+            let test = res.json(await GetBySearchType(key.toString(), type.toString()));
+
+            return test;
+        }
+        else {
+            return res.json(await Get());
+        }
+
     }
     catch (exc)
     {

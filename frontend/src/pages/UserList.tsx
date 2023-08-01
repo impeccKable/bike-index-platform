@@ -11,15 +11,14 @@ import {useState, useEffect, useRef} from 'react';
 
 const tableHeaders = {
     'ID': { maxWidth: "20rem",  minWidth: "20rem" },
-    'email':   { maxWidth: "14rem", minWidth: "14rem"},
-    'first':  { maxWidth: "8rem", minWidth: "8rem"},
-    'last':   { maxWidth: "8rem", minWidth: "8rem"},
-    'title':  { maxWidth: "7rem", minWidth: "7rem"},
-    'org':  { maxWidth: "13rem", minWidth: "13rem"},
-    'phone':  { maxWidth: "6rem", minWidth: "6rem"},
-    'role':  { maxWidth: "5rem", minWidth: "5rem"},
-    'approved':  { maxWidth: "5rem", minWidth: "5rem"},
-    'banned':  { maxWidth: "5rem", minWidth: "5rem"}
+    'Email':   { maxWidth: "14rem", minWidth: "14rem"},
+    'Name':   { maxWidth: "12rem", minWidth: "12rem"},
+    'Title':  { maxWidth: "7rem", minWidth: "7rem"},
+    'Org':  { maxWidth: "13rem", minWidth: "13rem"},
+    'Phone':  { maxWidth: "6rem", minWidth: "6rem"},
+    'Role':  { maxWidth: "5rem", minWidth: "5rem"},
+    'Approved':  { maxWidth: "5rem", minWidth: "5rem"},
+    'Banned':  { maxWidth: "5rem", minWidth: "5rem"}
 }
 
 export interface User extends React.HTMLInputElement {
@@ -42,28 +41,22 @@ export default function UserList() {
     const preSearchText = useRef(searchText);
 
     useEffect(() => {
-
-
         const GetUsers = async () => {
             preSearchText.current = searchText;
+            let key = searchText === "" ? "All" : searchText;
 
-            const response = await httpClient.get("/userList");
-
+            const response = await httpClient.get(`/userList?searchKey=${key}&searchType=${searchType}`);
             if (response.status === 200) {
-                //success
+                console.log("Success 200 ");
             }
             else {
-                // failure
+                console.log(`Failure Status ${response.status}`);
             }
 
             setUserData(response.data);
-            
         }
-
         GetUsers();
-
-
-    }, []);
+    }, [searchText]);
 
     return (
         <div className="formal">
@@ -82,6 +75,8 @@ export default function UserList() {
                     <option value="name">Name</option>
                     <option value="phone">Phone Number</option>
                     <option value="email">Email</option>
+                    <option value="title">Title</option>
+                    <option value="org">Organization</option>
                 </select>
                 <label htmlFor="UserSearch">Search</label>
                 <input
