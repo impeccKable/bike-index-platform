@@ -19,6 +19,7 @@ let columnToTable = [ 'thief_id', 'name', 'email', 'url', 'addr', 'phone', 'bike
 
 const processFile = (req: any) => {
 	let newDataCnts: any = { 'thief': 0, 'name': 0, 'email': 0, 'url': 0, 'addr': 0, 'phone': 0, 'bike_serial': 0, 'phrase': 0, 'note': 0, };
+	let maxThiefId = -1;
 
 	const tryInsertRow = async (table: string, thief_id: string, val: string) => {
 		try {
@@ -37,6 +38,11 @@ const processFile = (req: any) => {
 		let inserts: any = [];
 		for (let row of rows) {
 			let thiefId = row[0];
+			if (thiefId === '') { continue; }
+			if (parseInt(thiefId) > maxThiefId) {
+				console.log(`New max thief id: ${thiefId}`);
+				maxThiefId = parseInt(thiefId);
+			}
 			for (let i = 1; i < columnToTable.length; i++) {
 				let val = row[i];
 				if (val === '') { continue; }
@@ -45,6 +51,14 @@ const processFile = (req: any) => {
 			}
 		}
 		console.log(`Recieved ${inserts.length} thief data items`)
+
+		// Update next_thief_id
+		let lastThiefId = (await db.one(`SELECT last_value FROM next_thief_id;`)).last_value;
+		if (maxThiefId > lastThiefId) {
+			console.log(`Updating next_thief_id to ${maxThiefId}`);
+			await db.one(`SELECT setval('next_thief_id', ${maxThiefId});`);
+		}
+
 		await Promise.all(inserts);
 		resolve(newDataCnts);
 	});

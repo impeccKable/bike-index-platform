@@ -34,7 +34,7 @@ export default function ThiefEdit() {
 
 	// thiefInfo at beginning
 	const [thiefInfo, setThiefInfo] = useState({
-		thiefId: 0,
+		thiefId: '',
 		name: [''],
 		email: [''],
 		url: [''],
@@ -109,33 +109,22 @@ export default function ThiefEdit() {
 		DebugLogs('ThiefEdit Component', '', debug);
 		if (urlThiefId === 'new') {
 			setIsLoading(false);
+			thiefInfo.thiefId = 'new';
+			setThiefInfo(thiefInfo);
 			return;
 		}
 		httpClient
 			.get(`/thiefEdit?thiefId=${urlThiefId}`)
 			.then((res: any) => {
-				let tempData = {
-					thiefId: 0,
-					name: [''],
-					email: [''],
-					url: [''],
-					addr: [''],
-					phone: [''],
-					bikeSerial: [''],
-					phrase: [''],
-					note: [''],
-				};
-
 				Object.entries(res.data.thiefInfo[0]).map((atr) => {
 					if (atr[0].localeCompare('thiefId') && atr[1].length === 0) {
 						atr[1] = [''];
-						tempData[`${atr[0]}`] = atr[1];
+						thiefInfo[`${atr[0]}`] = atr[1];
 					} else {
-						tempData[`${atr[0]}`] = atr[1];
+						thiefInfo[`${atr[0]}`] = atr[1];
 					}
 				});
 				setIsLoading(false);
-				setThiefInfo(tempData);
 				if (res.data.imageUrls.length !== 0) {
 					setRenderImageFiles(res.data.imageUrls)
 				}
