@@ -15,8 +15,8 @@ import {
 } from 'firebase/auth';
 import React, { useState, useContext, useEffect } from 'react';
 import { httpClient } from './HttpClient';
-import { useRecoilValue } from 'recoil';
-import { debugState } from '../services/Recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
+import { debugState, isAdmin } from '../services/Recoil';
 import { useNavigate } from 'react-router-dom';
 import { devState } from '../services/Recoil';
 
@@ -52,6 +52,7 @@ export const AuthProvider = ({ children }: any) => {
 	const navigate = useNavigate();
 	const [user, setUser] = useState<UserInfo | null>(null);
 	const devMode = useRecoilValue(devState);
+	const [isAd, setIsAdmin] = useRecoilState(isAdmin);
 
 	if (useRecoilValue(debugState) == true) {
 		console.log('AuthProvider');
@@ -122,6 +123,8 @@ export const AuthProvider = ({ children }: any) => {
 				bikeIndex: (await httpClient.post('/login', { uid: login.user.uid }))
 					.data,
 			};
+		
+			setIsAdmin(user.bikeIndex.role.toLowerCase() === 'admin');
 			if (user.bikeIndex.banned === true) {
 				throw new Error('User is banned');
 			} else if (user.bikeIndex.approved === false) {
