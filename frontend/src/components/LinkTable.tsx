@@ -48,7 +48,7 @@ export default function LinkTable(props: LinkTableProps) {
 									return <td
 										key={Object.keys(row)[idx]}
 										style={styles[idx]}
-									>{cell}</td>;
+									>{cell?.toString() ?? ''}</td>;
 								})}
 							</tr>
 						);
