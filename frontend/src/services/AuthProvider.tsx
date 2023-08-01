@@ -40,7 +40,7 @@ export type UserInfo = {
 
 export type AuthContextProps = {
 	user: UserInfo | null;
-	handleLogin: (email: string, password: string) => Promise<Boolean>;
+	handleLogin: (email: string, password: string) => Promise<void>;
 	handleLogout: () => void;
 	handleSignUp: (email: string, password: string) => Promise<string>;
 	handleDelete: (user: User) => void;
@@ -109,33 +109,29 @@ export const AuthProvider = ({ children }: any) => {
 		return user;
 	};
 
+
+	//Login handler function, can throw an error if user is banned, not verified, or if the password is incorrect
 	const handleLogin = async (email: string, password: string) => {
 		let login;
-		try {
-			if (devMode) {
-				login = await signInWithEmailAndPassword(auth, 'email@email.com', 'password');
-			} else {
-				login = await signInWithEmailAndPassword(auth, email, password);
-			}
-			const user = {
-				firebase: login.user,
-				bikeIndex: (await httpClient.post('/login', { uid: login.user.uid }))
-					.data,
-			};
-			if (user.bikeIndex.banned === true) {
-				throw new Error('User is banned');
-			} else if (user.bikeIndex.approved === false) {
-				throw new Error('User is not verified');
-			} else if(user.firebase.emailVerified === false) {
-				throw new Error('User email is not verified');
-			}
-			await updateAxios(await user.firebase.getIdToken());
-			updateUser(user);
-			return true;
-		} catch (err) {
-			console.error(err);
+		if (devMode) {
+			login = await signInWithEmailAndPassword(auth, 'email@email.com', 'password');
+		} else {
+			login = await signInWithEmailAndPassword(auth, email, password);
 		}
-		return false;
+		const user = {
+			firebase: login.user,
+			bikeIndex: (await httpClient.post('/login', { uid: login.user.uid }))
+				.data,
+		};
+		if (user.bikeIndex.banned === true) {
+			throw new Error('User is banned');
+		} else if (user.bikeIndex.approved === false) {
+			throw new Error('User is not verified');
+		} else if(user.firebase.emailVerified === false) {
+			throw new Error('User email is not verified');
+		}
+		await updateAxios(await user.firebase.getIdToken());
+		updateUser(user);
 	};
 
 	const handleSignUp = async (email: string, password: string) => {
