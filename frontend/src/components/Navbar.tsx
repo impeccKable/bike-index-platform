@@ -7,7 +7,6 @@ function Navbar() {
 			<LinkButton to="/thiefList">Thiefs</LinkButton>
 			<LinkButton to=".">Users</LinkButton>
 			<LinkButton to="/import">Data</LinkButton>
-			<LinkButton to="/stats">Stats</LinkButton>
 			<LinkButton to="/about">About</LinkButton>
 			<LinkButton to="/logout">Logout</LinkButton>
 		</nav>

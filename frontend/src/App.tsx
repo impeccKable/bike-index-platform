@@ -9,7 +9,6 @@ import ThiefEdit from "./pages/ThiefEdit";
 import RequestVerification from "./pages/RequestVerification";
 import DataImport from "./pages/Data";
 import About from "./pages/About";
-import Stats from "./pages/Stats";
 import { AuthProtected } from "./components/AuthProtected";
 import { Logout } from "./pages/Logout";
 import { debugState, devState } from "./services/Recoil";
@@ -38,7 +37,6 @@ export default function App() {
 				{/* <Route path="/userEdit"  element={<UserEdit />}></Route> */}
 				<Route path="/import"    element={<DataImport />}></Route>
 				<Route path="/about"     element={<AuthProtected><About /></AuthProtected>}></Route>
-				<Route path="/stats"     element={<Stats />}></Route>
 				<Route path="/logout"    element={<Logout />}></Route>
 				<Route path="/requestverification" element={<RequestVerification />}></Route>
 			</Routes>
