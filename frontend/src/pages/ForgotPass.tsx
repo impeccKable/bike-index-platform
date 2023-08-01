@@ -5,7 +5,6 @@ import { useAuth } from "../services/AuthProvider";
 
 export default function ForgotPass() {
 	const [submitted, setSubmitted] = useState(false);
-	const navigate = useNavigate();
 	const auth = useAuth();
 
 	function handleFormSubmit(e: any) {
@@ -17,11 +16,6 @@ export default function ForgotPass() {
 		auth.handlePasswordReset(e.dataDict.email);
 		setSubmitted(true);
 	}
-	let submitMessage = (
-		<div className="submit-message">
-			<p>Check your email for a password reset</p>
-		</div>
-	);
 	return (
 		<div className="notecard forgot-pass-page">
 			<h1>Password Reset</h1>
@@ -37,9 +31,11 @@ export default function ForgotPass() {
 					<div className="form-btns">
 						<LinkButton to="..">Back</LinkButton>
 						<FormButton type="submit">Submit</FormButton>
-					</div>	
+					</div>
 				</Form>
-				{submitted && submitMessage}
+				{submitted && (
+					<div><p>Check your email for a password reset</p></div>
+				)}
 			</div>
 		</div>
 	);

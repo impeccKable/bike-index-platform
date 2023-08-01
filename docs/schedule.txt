@@ -147,6 +147,13 @@ Schedule
 			x 1hr  Give more specific error messages for login failures
 
 		New
+			Remove request verification page
+			Remove forgot password page
+			Add message that a verification email was sent to sign up page
+			Add an error diologue when login with unverified email (with a link to resend email)
+			Add an error diologue when password is incorrect (with a link to reset password)
+			Change firebase project name
+
 			Move pages functionality to backend (page=2)
 			Show how many results
 			Re-show fields on thief edit upon submit
