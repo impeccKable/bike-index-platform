@@ -1,5 +1,7 @@
 # Custom
 /backend/userFiles
+**/package-lock.json
+
 
 
 
