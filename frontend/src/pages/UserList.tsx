@@ -65,7 +65,7 @@ export default function UserList() {
             <h1>User Listing</h1>
             <div className="searchbar">
                 <label htmlFor="SearchType">Search Type</label>
-                <select 
+                <select
                 id="SearchType"
                 name="SearchType"
                 onChange={(event: any) => {

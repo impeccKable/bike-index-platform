@@ -120,14 +120,12 @@ export default function ThiefEdit() {
 					if (atr[0].localeCompare('thiefId') && atr[1].length === 0) {
 						atr[1] = [''];
 					}
-					tempData[atr[0]] = atr[1];
+					thiefInfo[atr[0]] = atr[1];
 				});
 				setIsLoading(false);
 				if (res.data.imageUrls.length !== 0) {
 					setRenderImageFiles(res.data.imageUrls)
 				}
-
-
 				DebugLogs('ThiefEdit get response', res.data, debug);
 			})
 			.catch((err) => {

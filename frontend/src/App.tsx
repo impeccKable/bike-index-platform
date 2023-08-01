@@ -18,17 +18,17 @@ import { useEffect } from "react";
 export default function App() {
 	const [debug, setDebug] = useRecoilState(debugState);
 	const [dev, setDev] = useRecoilState(devState);
-	
+
 	useEffect(() => {
 		setDebug(true);
-		setDev(true);
+		// setDev(true);
 		if (debug == true) { console.log("App"); }
 	})
 
 	return (
 		<div className="App">
 			<Routes>
-				<Route path="/" element={<Login />}></Route>
+				<Route path="/"          element={<Login />}></Route>
 				<Route path="/signup"    element={<Signup />}></Route>
 				<Route path="/forgot"    element={<ForgotPass />}></Route>
 				<Route path="/thiefList" element={<ThiefList />}></Route>

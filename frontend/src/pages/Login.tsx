@@ -1,8 +1,6 @@
-import { useState } from "react";
 import { useAuth } from "../services/AuthProvider";
 import { Form, FormInput, FormButton } from "../components/Form";
 import { useNavigate } from "react-router-dom";
-import { useCallback } from "react";
 import { useRecoilValue } from "recoil";
 import { debugState } from "../services/Recoil";
 
@@ -10,7 +8,6 @@ export default function Login() {
 	if (useRecoilValue(debugState) == true) { console.log("Login"); }
 	const auth = useAuth();
 	const navigate = useNavigate();
-	const [loginFailure, setLoginFailure] = useState(false);
 
 	const handleSubmit = (e: any) => {
 		const email = e.dataDict.email;
@@ -19,6 +16,7 @@ export default function Login() {
 		const f = async () => {
 			try{
 				await auth?.handleLogin(email, password);
+				navigate("/thiefList");
 			} catch (error) {
 				if(error.message === 'User email is not verified'){
 					loginFailureAlert("email-not-verified");
@@ -52,7 +50,7 @@ export default function Login() {
 				break;
 			default:
 				alert!.innerHTML = "Login error. Please try again.";
-				break;	
+				break;
 			};
 	};
 

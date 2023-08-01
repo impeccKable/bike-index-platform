@@ -3,6 +3,8 @@ Questions
 	How should we handle 20+ urls?
 	Do any other fields have 20+?
 	Should addresses be split into their separate fields?
+
+	What should be shown when a search type is selected?
 Schedule
 	Sprint 1 (5/23)
 		Mockup pages (Emerson/Cristian)
@@ -145,14 +147,30 @@ Schedule
 			x 1hr  Password resets
 			x 1hr  Add user email verification through firebase
 			x 1hr  Give more specific error messages for login failures
-
+	Sprint 6 (8/15)
+		Bruce
+		Cheng
+		Cristian
+		Emerson
+		Matt
+		By meeting
+			Change order of userList columns
+			(Data import) Don't do anything when no file is selected
 		New
+			Simplify login logic
+			Search fails on ^&*&(*$#@!@#$%^&*()
+
+			Upload env files to capstone folder
 			Remove request verification page
 			Remove forgot password page
 			Add message that a verification email was sent to sign up page
 			Add an error diologue when login with unverified email (with a link to resend email)
 			Add an error diologue when password is incorrect (with a link to reset password)
 			Change firebase project name
+			Fix url path names (uncapitalize, shorten)
+
+			User listing search put parameters into url
+			Ability to change email
 
 			Move pages functionality to backend (page=2)
 			Show how many results
@@ -172,8 +190,6 @@ Schedule
 
 			Allow other files
 			Move scripts to bike-index-.. repo
-
-	Sprint 6 (8/15)
 		Roles
 			Thief id editable by admin
 			Option to combine multiple thieves (verify this works on thief id change)

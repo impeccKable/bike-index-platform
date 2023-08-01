@@ -84,11 +84,10 @@ export const AuthProvider = ({ children }: any) => {
 	const handleLogout = () => {
 		updateUser(null);
 		signOut(auth);
-		navigate('/');
 	};
 
 	const verifyUserToken = async (user: UserInfo) => {
-		
+
 		if (!user) {
 			handleLogout();
 			return;
