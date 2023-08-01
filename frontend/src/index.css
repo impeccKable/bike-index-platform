@@ -181,6 +181,23 @@ nav button:hover {
 }
 
 /* ============= Custom ============= */
+.text-window {
+	display: flex;
+	justify-content: center;
+	margin: auto;
+	width: 60%;
+}
+
+.text-window > div {
+	width: 100%;
+}
+
+.text-area {
+	width: 100%;
+	border-radius: 5px;
+}
+
+
 .multi-field button,
 .file-upload-btn {
 	height: 1.5rem;

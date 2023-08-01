@@ -6,6 +6,7 @@ import { debugState } from '../services/Recoil';
 import { httpClient } from '../services/HttpClient';
 import LinkTable from '../components/LinkTable';
 import DebugLogs from '../services/DebugLogs';
+import TextWindow from '../components/TextWindow';
 
 // @ts-ignore
 export interface Thief extends React.HTMLInputElement {
@@ -79,6 +80,7 @@ export default function ThiefList() {
 			<Navbar />
 			<main>
 				<h1>Thief Listing</h1>
+				<TextWindow />
 				<div className="searchbar">
 					<label htmlFor="SearchType">Search Type</label>
 					<select
