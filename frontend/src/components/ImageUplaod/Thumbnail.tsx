@@ -11,9 +11,10 @@ interface ThumbnailProps {
 	setCurrentViewing: (file: string | File | null) => void;
 }
 
+// this component is responsible for displaying a single thumbnail image
+// and also takes care of displaying the ImageModal when a thumbnail is clicked
 export function Thumbnail(props: ThumbnailProps) {
 	const [imageUrl, setImageUrl] = useState('');
-	// const [isModalOpen, setIsModalOpen] = useState(false);
 
 	useEffect(() => {
 		if (typeof props.file === 'string') {
@@ -28,16 +29,17 @@ export function Thumbnail(props: ThumbnailProps) {
 		}
 	}, [props.file]);
 
+	// handler for clicking the thumbnail image
 	function handleImageClick() {
-		// setIsModalOpen(true);
 		props.setCurrentViewing(props.file);
 	}
 
+	// handler for closing the ImageModal
 	function handleCloseModal() {
-		// setIsModalOpen(false);
 		props.setCurrentViewing(null);
 	}
 
+ // returns a thumbnail image and an ImageModal if the current file is being viewed
 	return (
 		<div className="thumbnail">
 			<img
@@ -48,7 +50,6 @@ export function Thumbnail(props: ThumbnailProps) {
 			{props.currentViewing === props.file && (
 				<ImageModal
 					imageUrl={imageUrl}
-					index={props.index}
 					handleClose={handleCloseModal}
 					handleNext={props.handleNext}
 					handlePrev={props.handlePrev}

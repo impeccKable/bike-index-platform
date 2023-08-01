@@ -1,28 +1,21 @@
 interface ImageModalProps {
   imageUrl: string;
-  index: number;
   handleClose: () => void;
   handleNext: () => void;
   handlePrev: () => void;
   handleDelete: () => void;
 }
 
+// component for display image in a single image in a modal
+// receives the imageUrl, event handler functions as props from its parent component
 export function ImageModal(props: ImageModalProps) {
 
+  // handler for clicking the image within the modal
+  // stops the event propagation to prevent the modal from closing and opens the image in a new tab.
   function handleClickImage(event: React.MouseEvent) {
-    event.stopPropagation(); // to avoid 
+    event.stopPropagation();
     window.open(props.imageUrl, "_blank");
   }
-
-  // function handleOnClickNext(event: React.MouseEvent) {
-  //   // event.stopPropagation();
-  //   props.handleNext();
-  // }
-  
-  // function handleOnClickPrev(event: React.MouseEvent) {
-  //   // event.stopPropagation();
-  //   props.handlePrev(props.index);
-  // }
 
   return (
     <div className="image-modal">

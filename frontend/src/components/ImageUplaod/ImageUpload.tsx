@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Thumbnail } from './Thumbnail';
 
 interface FileUploadProps {
@@ -17,21 +17,27 @@ function extractObjectKeyForS3Deletion(url: string): string {
 
 }
 
+// responsible for the image uploading functionality
+// displays a file input for selecting files, an upload button, and a list of thumbnail images
+// also takes care of displaying the ImageModal when a thumbnail is clicked
 export function ImageUpload(props: FileUploadProps) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	// const [uploadedFiles, setUploadedFiles] = useState<(File | string)[]>([]);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	const [currentViewing, setCurrentViewing] = useState<File | string | null>(null); 
 	const maxSize = 1024 * 1024 * 25;
 	const fileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
 
+	// handler for the Add button
+  // opens the modal and resets the errorMessage and selectedFile state variables
 	function handleAddButton() {
 		setIsModalOpen(true);
 		setErrorMessage(null);
 		setSelectedFile(null);
 	}
 
+	// handler for the file input change event
+  // checks the file type and size and updates the errorMessage and selectedFile state variables accordingly
 	function handleSelectFileChange(event: React.ChangeEvent<HTMLInputElement>) {
 		setErrorMessage(null);
 		if (event.target.files) {
@@ -47,16 +53,18 @@ export function ImageUpload(props: FileUploadProps) {
 		}
 	}
 
+	// handlers for the Next and Previous buttons in the ImageModal
+  // call setCurrentViewing with the next or previous file
 	function handleNext(index: number) {
 		const next = (index + 1) % props.renderImageFiles.length;
 		setCurrentViewing(props.renderImageFiles[next]);
 	}
-
 	function handlePrev(index: number) {
 		const prev = (index - 1 + props.renderImageFiles.length) % props.renderImageFiles.length;
 		setCurrentViewing(props.renderImageFiles[prev]);
 	}
 
+	// adds the selectedFile to the newImages and renderImageFiles arrays in the parent component
 	function handleUpload() {
 		if (selectedFile) {
 			props.setRenderImageFiles([...props.renderImageFiles, selectedFile]);
@@ -65,6 +73,8 @@ export function ImageUpload(props: FileUploadProps) {
 		}
 	}
 
+	// removes the file from the renderImageFiles and newImages arrays in the parent component
+  // if the deleted file was not newly added, adds it to the deletedImages array
 	function handleDelete(index: number) {
 		const deletedFile = props.renderImageFiles[index];
 		const newFileList = [...props.renderImageFiles];
