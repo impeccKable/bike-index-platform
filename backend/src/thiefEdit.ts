@@ -9,10 +9,9 @@ const put = async (body: any) => {
 	let thiefId = body.thiefId;
 	if (thiefId == 'new') {
 		// (new thief, get next thief_id)
-		thiefId = await db.one("SELECT nextval('next_thief_id')");
-	} else {
-		thiefId = parseInt(thiefId);
+		thiefId = (await db.one("SELECT nextval('next_thief_id')"))['nextval'];
 	}
+	thiefId = parseInt(thiefId);
 	for (let field of fields) {
 		if (!body[field]) {
 			continue;

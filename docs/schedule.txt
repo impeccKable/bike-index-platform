@@ -103,21 +103,20 @@ Schedule
 		Bruce
 			Email Bryan about using the site
 		Cheng
-			~ !! 8hr  File upload
-				Research
-					Where do we store it? (different server)
-					What kind of files? Mobile phone photo formats?
-					Show picture thumbnails?
-				25mb cap
+			x !! 30hr  File upload
+				x Research
+					x Where do we store it? (different server)
+					x What kind of files? Mobile phone photo formats?
+					x Show picture thumbnails?
+				x 25mb cap
 			x 2hr  Make run.sh and stop.sh scripts
-
-			1hr  Add npm i to the script
+			x 1hr  Add npm i to the script
 		Cristian
 			x 1hr  Restart backend on save (nodemon)
-			~ 1hr  Create UserList page
-			1hr  Create UserEdit page
+			x 1hr  Create UserList page
+			~ 1hr  Create UserEdit page
 			x 2hr  CSS: Nav bar move with page
-			2hr  Site management
+			~ 2hr  Site management
 				Editing interface for verbiage on every page
 				Store as rows in the database (new table)
 		Emerson
@@ -127,24 +126,46 @@ Schedule
 			x 1hr  Clean up thief list css
 				Change column widths to rem
 			x 1hr  Show thief ID on edit page (disabled)
-			1hr  Fix psql user permissions for 'ec2-user'
-			1hr  Add a way to delete a thief
+			x 1hr  Fix psql user permissions for 'ec2-user'
+			x 1hr  Add a way to delete a thief
 			x 1hr  Show all thieves with no search
-			1hr  Move pages functionality to backend (page=2)
-			1hr  Show how many results
 
-			1hr  Combine about and stats pages
-			x 1hr  Billy extra names bug
-			1hr  Re-show fields on thief edit upon submit (to show actual changes)
-			1hr  Add date to downloaded thief data csv
-			1hr  Rename (again) to Verify Password on signup page
+			x 1hr  Combine about and stats pages
+			x 1hr  Billy extra names bug (thief edit submission was not working)
+			x 1hr  Rename (again) to Verify Password on signup page
 				Remove password error upon a re-submit
+			x 1hr  Show Thief ID as new for new thief
+			x 1hr  Update next_thief_id upon data import
+			x 1hr  Fix add new thief
 		Matt
 			x 1hr  Test Note submission is not working
-			~ 12hr Sign-up redirects back to main page on fresh browser (cache issue)
-				Verify user token upon reload
-				Check for a valid token
-			1hr  Add user email verification through firebase
+			x 12hr Sign-up redirects back to main page on fresh browser (cache issue)
+				x Verify user token upon reload
+				x Check for a valid token
+			x 1hr  Password resets
+			x 1hr  Add user email verification through firebase
+			x 1hr  Give more specific error messages for login failures
+
+		New
+			Move pages functionality to backend (page=2)
+			Show how many results
+			Re-show fields on thief edit upon submit
+				(to show what's actually in the database)
+			Add date to downloaded thief data csv
+
+			Show number of lines submitted and number of data items
+			Error when submitting with no file chosen (data import)
+			209 data items on import, 23something when uploading Data_2.csv
+			Clear all button for fields
+			Way to combine thief
+
+			Error in console log when reloading pages (react loading things in a weird order)
+			Testing auth protected routes
+				(reloading page booted even with fresh token)
+
+			Allow other files
+			Move scripts to bike-index-.. repo
+
 	Sprint 6 (8/15)
 		Roles
 			Thief id editable by admin
