@@ -79,8 +79,8 @@ export default function DataImport() {
 						</table>
 					</div>
 				)}
-				<br></br>
-				<br></br>
+				<br />
+				<br />
 				<h3>Export all thief data to .csv</h3>
 				<Form onSubmit={handleExport}>
 					<div className="form-btns">
