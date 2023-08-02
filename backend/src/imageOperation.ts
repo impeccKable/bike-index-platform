@@ -26,8 +26,9 @@ export class ImageGetError extends Error {
 }
 
 // upload images to S3 bucket
-export const uploadImage = async (uploadedFiles: Express.Multer.File[], thiefId: number) => {
+export async function uploadImage(uploadedFiles: Express.Multer.File[], thiefId: number) {
 	let baseName: string | null;
+	let promises = [];
 	for (const file of uploadedFiles) {
 		// generate unique file name
 		baseName = generateUniqueFilename(file.originalname);
@@ -52,19 +53,18 @@ export const uploadImage = async (uploadedFiles: Express.Multer.File[], thiefId:
 
 		// try to put object in the S3 bucket
 		try {
-			s3Client.send(new PutObjectCommand(params));
-			console.log("Successfully uploaded " +
-				params.Key +
-				" to " +
-				params.Bucket);
+			promises.push(s3Client.send(new PutObjectCommand(params)));
+			console.log(`Uploading ${params.Key} to ${params.Bucket}`);
 		} catch (err) {
 			throw new ImageUploadError(`Error uploaidng image to s3: ${err}`);
 		}
 	}
+	return Promise.all(promises);
 }
 
 // delete images from S3 bucket
-export const deleteImage = async (deletedFile: string[]) => {
+export async function deleteImage(deletedFile: string[]) {
+	let promises = [];
 	for (const key of deletedFile) {
 		const params = {
 			Bucket: config.bucketName,
@@ -72,16 +72,17 @@ export const deleteImage = async (deletedFile: string[]) => {
 		};
 
 		try {
-			await s3Client.send(new DeleteObjectCommand(params));
-			console.log(`Object ${key} deleted from bucket ${config.bucketName}`);
+			promises.push(s3Client.send(new DeleteObjectCommand(params)));
+			console.log(`Deleting object ${key} from bucket ${config.bucketName}`);
 		} catch (err) {
 			throw new ImageDeletionError(`Error deleting object from s3: ${err}`);
 		}
 	}
+	return Promise.all(promises);
 }
 
 // get images from S3 bucket
-export const getImage = async (thiefId: string): Promise<string[]> => {
+export async function getImage(thiefId: string): Promise<string[]> {
 	const prefix = `thiefs/${thiefId}/images/`;
 
 	const params = {
@@ -112,7 +113,7 @@ export const getImage = async (thiefId: string): Promise<string[]> => {
 }
 
 // generate temporary URLs for S3 objects
-const getTempImageUrl = async (keys: (string | undefined)[]): Promise<string[]> => {
+async function getTempImageUrl(keys: (string | undefined)[]): Promise<string[]> {
 	const urls: string[] = [];
 
 	for (const key of keys) {
@@ -129,7 +130,7 @@ const getTempImageUrl = async (keys: (string | undefined)[]): Promise<string[]> 
 }
 
 
-const generateUniqueFilename = (filename: string): string | null => {
+function generateUniqueFilename(filename: string): string | null {
 	try {
 		const extension = path.extname(filename);
 		const basename = path.basename(filename, extension);
@@ -142,6 +143,6 @@ const generateUniqueFilename = (filename: string): string | null => {
 }
 
 // replacing non-alphanumeric and characters not safe for s3 bucket with a hyphen
-const sanitize = (filename: string): string => {
+function sanitize(filename: string): string {
 	return filename.replace(/[^a-zA-Z0-9!_.*()'-]/g, '-');
 }

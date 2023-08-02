@@ -40,18 +40,16 @@ const put = async (body: any) => {
 			}
 		}
 	}
-
 	return thiefId;
 };
 
 const router = express.Router();
 router.get('/', async (req: express.Request, res: express.Response) => {
 	try {
-		const thiefId = req.query.thiefId as string;
-
-		const imageUrls = await getImage(thiefId)
-
-		return res.json({ thiefInfo: await get(req.query), imageUrls });
+		return res.json({
+			thiefInfo: await get(req.query),
+			imageUrls: await getImage(req.query.thiefId as string),
+		});
 	} catch (err) {
 		if (err instanceof ImageGetError) {
 			console.error(err);
@@ -65,12 +63,14 @@ router.put('/', upload.array('newImages'), async (req: express.Request, res: exp
 	try {
 		const thiefId = await put(JSON.parse(req.body.body));
 
+		let promises = [];
 		if (req.files && req.files.length !== 0) {
-			uploadImage(req.files as Express.Multer.File[], thiefId);
+			promises.push(uploadImage(req.files as Express.Multer.File[], thiefId));
 		}
 		if (req.body.deletedImages) {
-			deleteImage(JSON.parse(req.body.deletedImages));
+			promises.push(deleteImage(JSON.parse(req.body.deletedImages)));
 		}
+		await Promise.all(promises);
 
 		res.status(200).json({ thiefId });
 	} catch (err) {
