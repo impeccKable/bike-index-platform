@@ -71,7 +71,7 @@ router.put('', upload.array('newImages'), async (req: express.Request, res: expr
 	try {
 		const thiefId = await put(JSON.parse(req.body.body));
 
-		let promises = [];
+		const promises = [];
 		if (req.files && req.files.length !== 0) {
 			promises.push(uploadImage(req.files as Express.Multer.File[], thiefId));
 		}

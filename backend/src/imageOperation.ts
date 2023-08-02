@@ -25,7 +25,7 @@ export class ImageGetError extends Error {
 
 // upload images to S3 bucket
 export async function uploadImage(uploadedFiles: Express.Multer.File[], thiefId: number) {
-	let promises = [];
+	const promises = [];
 	for (const file of uploadedFiles) {
 		// define the key for S3 bucket object
 		const key = `thiefs/${thiefId}/images/${file.originalname}`;
@@ -51,7 +51,7 @@ export async function uploadImage(uploadedFiles: Express.Multer.File[], thiefId:
 
 // delete images from S3 bucket
 export async function deleteImage(deletedFile: string[], thiefId: string) {
-	let promises = [];
+	const promises = [];
 	for (const filename of deletedFile) {
 		const key = `thiefs/${thiefId}/images/${filename}`;
 		const params = {
