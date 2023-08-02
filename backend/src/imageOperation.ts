@@ -52,7 +52,7 @@ export const uploadImage = async (uploadedFiles: Express.Multer.File[], thiefId:
 
 		// try to put object in the S3 bucket
 		try {
-			await s3Client.send(new PutObjectCommand(params));
+			s3Client.send(new PutObjectCommand(params));
 			console.log("Successfully uploaded " +
 				params.Key +
 				" to " +
@@ -73,7 +73,7 @@ export const deleteImage = async (deletedFile: string[]) => {
 
 		try {
 			await s3Client.send(new DeleteObjectCommand(params));
-			console.log(`Object ${key} deleted from bucket ${config.bucketName}`);	
+			console.log(`Object ${key} deleted from bucket ${config.bucketName}`);
 		} catch (err) {
 			throw new ImageDeletionError(`Error deleting object from s3: ${err}`);
 		}
@@ -109,7 +109,7 @@ export const getImage = async (thiefId: string): Promise<string[]> => {
 	}
 
 	return urls;
-} 
+}
 
 // generate temporary URLs for S3 objects
 const getTempImageUrl = async (keys: (string | undefined)[]): Promise<string[]> => {

@@ -64,7 +64,7 @@ router.get('/', async (req: express.Request, res: express.Response) => {
 router.put('/', upload.array('newImages'), async (req: express.Request, res: express.Response) => {
 	try {
 		const thiefId = await put(JSON.parse(req.body.body));
-		
+
 		if (req.files && req.files.length !== 0) {
 			uploadImage(req.files as Express.Multer.File[], thiefId);
 		}
@@ -72,7 +72,7 @@ router.put('/', upload.array('newImages'), async (req: express.Request, res: exp
 			deleteImage(JSON.parse(req.body.deletedImages));
 		}
 
-		res.status(200);
+		res.status(200).json({ thiefId });
 	} catch (err) {
 		if (err instanceof ImageUploadError) {
 			console.error(err);

@@ -30,10 +30,10 @@ export default function ThiefList() {
 	const latestSearchText = useRef(searchText);
 	const [thiefs, setThiefs] = useState<Thief[]>([]);
 	const debug = useRecoilValue(debugState)
+	const url = new URL(window.location.href);
 
 	// Set the search text and search type from the url
 	useEffect(() => {
-		const url = new URL(window.location.href);
 		const searchType = url.searchParams.get('searchType');
 		const searchText = url.searchParams.get('searchText');
 		setSearchType(searchType ? searchType : 'name');
@@ -44,7 +44,6 @@ export default function ThiefList() {
 	// Perform the search when the search text or search type changes
 	useEffect(() => {
 		// Set url to include search text (so back button will go back to the same search)
-		const url = new URL(window.location.href);
 		url.searchParams.set('searchType', searchType);
 		url.searchParams.set('searchText', searchText);
 		window.history.replaceState({ path: url.href }, '', url.href);

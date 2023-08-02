@@ -25,8 +25,8 @@ export default function ThiefEdit() {
 	const [renderImageFiles, setRenderImageFiles] = useState<(File | string)[]>([]);
 	const [newImages, setNewImages] = useState<(File | string)[]>([]);
 	const [deletedImages, setDeletedImages] = useState<(File | string)[]>([]);
-	const urlThiefId = searchParams.get('thiefId');
 	const debug = useRecoilValue(debugState);
+	const url = new URL(window.location.href);
 
 	setTimeout(() => {
 		setShowLoadGif(true);
@@ -45,7 +45,8 @@ export default function ThiefEdit() {
 		note: [''],
 	});
 
-	function handleFormSubmit(e: any) {
+	async function handleFormSubmit(e: any) {
+		setIsLoading(true);
 		e.preventDefault();
 		let results = CompareResults(e.dataDict);
 
@@ -60,10 +61,15 @@ export default function ThiefEdit() {
 			formData.append('deletedImages', JSON.stringify(deletedImages));
 		}
 
-		httpClient.put('/thiefEdit', formData)
+		let res = await httpClient.put('/thiefEdit', formData)
 			.catch(err => {
 				DebugLogs('ThiefEdit post error', err.message, debug);
 			});
+		url.searchParams.set('thiefId', res.data.thiefId);
+		window.history.replaceState({ path: url.href }, '', url.href);
+		await displayThiefInfo();
+		setIsLoading(false);
+
 		setWasSubmitted(true);
 		setTimeout(() => {
 			setWasSubmitted(false);
@@ -73,7 +79,7 @@ export default function ThiefEdit() {
 	const CompareResults = (submitData: any) => {
 		//Ex: newValues.name[0].push('Something'), 0 = old values
 		let results = {
-			thiefId: urlThiefId,
+			thiefId: url.searchParams.get('thiefId'),
 		};
 		const consoleMessages: any = [];
 
@@ -96,25 +102,15 @@ export default function ThiefEdit() {
 						results[keyValue].push(['', newVal]);
 					}
 				});
-
-
 			}
 			DebugLogs('Submit Changes', consoleMessages, debug);
 		});
 		return results;
 	};
 
-
-	useEffect(() => {
-		DebugLogs('ThiefEdit Component', '', debug);
-		if (urlThiefId === 'new') {
-			setIsLoading(false);
-			thiefInfo.thiefId = 'new';
-			setThiefInfo(thiefInfo);
-			return;
-		}
-		httpClient
-			.get(`/thiefEdit?thiefId=${urlThiefId}`)
+	async function displayThiefInfo() {
+		await httpClient
+			.get(`/thiefEdit?thiefId=${url.searchParams.get('thiefId')}`)
 			.then((res: any) => {
 				Object.entries(res.data.thiefInfo[0]).map((atr) => {
 					if (atr[0].localeCompare('thiefId') && atr[1].length === 0) {
@@ -131,6 +127,17 @@ export default function ThiefEdit() {
 			.catch((err) => {
 				DebugLogs('ThiefEdit get error', err, debug);
 			});
+	}
+
+	useEffect(() => {
+		DebugLogs('ThiefEdit Component', '', debug);
+		if (url.searchParams.get('thiefId') === 'new') {
+			setIsLoading(false);
+			thiefInfo.thiefId = 'new';
+			setThiefInfo(thiefInfo);
+			return;
+		}
+		displayThiefInfo();
 	}, []);
 
 	return (
@@ -163,7 +170,7 @@ export default function ThiefEdit() {
 					/>
 					<div className="form-btns">
 						<LinkButton type="button" to="back">Back</LinkButton>
-						<FormButton type="submit">Submit</FormButton>
+						{!isLoading && <FormButton type="submit">Submit</FormButton>}
 					</div>
 					{wasSubmitted && <div className="form-btns">Submitted!</div>}
 				</Form>
