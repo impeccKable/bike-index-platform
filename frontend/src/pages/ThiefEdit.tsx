@@ -119,16 +119,13 @@ export default function ThiefEdit() {
 			.catch((err) => {
 				DebugLogs('ThiefEdit get error', err, debug);
 			});
-		Object.entries(res.data.thiefInfo[0]).map((atr) => {
+		Object.entries(res.data[0]).map((atr) => {
 			if (atr[0].localeCompare('thiefId') && atr[1].length === 0) {
 				atr[1] = [''];
 			}
 			thiefInfo[atr[0]] = atr[1];
 		});
 		setIsLoading(false);
-		if (res.data.imageUrls.length !== 0) {
-			setRenderImageFiles(res.data.imageUrls)
-		}
 		DebugLogs('ThiefEdit get response', res.data, debug);
 	}
 
@@ -140,6 +137,15 @@ export default function ThiefEdit() {
 			setThiefInfo(thiefInfo);
 			return;
 		}
+		httpClient.get(`/thiefEdit/images?thiefId=${url.searchParams.get('thiefId')}`)
+			.then(res => {
+				if (res.data.length !== 0 && renderImageFiles.length === 0) {
+					setRenderImageFiles(res.data)
+				}
+			})
+			.catch((err) => {
+				DebugLogs('ThiefEdit get error', err.message, debug);
+			});
 		displayThiefInfo();
 	}, []);
 

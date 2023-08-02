@@ -46,10 +46,16 @@ const put = async (body: any) => {
 const router = express.Router();
 router.get('/', async (req: express.Request, res: express.Response) => {
 	try {
-		return res.json({
-			thiefInfo: await get(req.query),
-			imageUrls: await getImage(req.query.thiefId as string),
-		});
+		res.json(await get(req.query));
+	} catch (err) {
+		console.error(err);
+		res.status(500);
+	}
+});
+
+router.get('/images', async (req: express.Request, res: express.Response) => {
+	try {
+		res.json(await getImage(req.query.thiefId as string));
 	} catch (err) {
 		if (err instanceof ImageGetError) {
 			console.error(err);
@@ -58,8 +64,10 @@ router.get('/', async (req: express.Request, res: express.Response) => {
 		console.error(err);
 		res.status(500);
 	}
-});
-router.put('/', upload.array('newImages'), async (req: express.Request, res: express.Response) => {
+
+})
+
+router.put('', upload.array('newImages'), async (req: express.Request, res: express.Response) => {
 	try {
 		const thiefId = await put(JSON.parse(req.body.body));
 
@@ -68,7 +76,7 @@ router.put('/', upload.array('newImages'), async (req: express.Request, res: exp
 			promises.push(uploadImage(req.files as Express.Multer.File[], thiefId));
 		}
 		if (req.body.deletedImages) {
-			promises.push(deleteImage(JSON.parse(req.body.deletedImages)));
+			promises.push(deleteImage(JSON.parse(req.body.deletedImages), thiefId));
 		}
 		await Promise.all(promises);
 
