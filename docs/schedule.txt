@@ -156,7 +156,7 @@ Schedule
 		By meeting
 			Change order of userList columns
 			(Data import) Don't do anything when no file is selected
-			Add image, submit, add another image, submit (uploads twice)
+			Image upload is buggy (not rendering correctly)
 		New
 			Mess around with uploading/deleting images until it gives an error
 			Create delete all images, submit
