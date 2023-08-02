@@ -17,7 +17,6 @@ interface FileUploadProps {
 function extractObjectKeyForS3Deletion(url: string): string {
 	const urlObj = new URL(url);
 	return urlObj.pathname.substring(1);
-
 }
 
 // responsible for the image uploading functionality
@@ -32,9 +31,8 @@ export function ImageUpload(props: FileUploadProps) {
 	DebugLogs('ImageUpload', '', debug);
 	const maxSize = 1024 * 1024 * 25;
 	const fileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-
 	// handler for the Add button
-  // opens the modal and resets the errorMessage and selectedFile state variables
+	// opens the modal and resets the errorMessage and selectedFile state variables
 	function handleAddButton() {
 		setIsModalOpen(true);
 		setErrorMessage(null);
