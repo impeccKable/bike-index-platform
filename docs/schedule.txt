@@ -2,8 +2,6 @@
 Questions
 	How should we handle 20+ urls?
 	Do any other fields have 20+?
-	Should addresses be split into their separate fields?
-
 	What should be shown when a search type is selected?
 Schedule
 	Sprint 1 (5/23)
@@ -148,20 +146,27 @@ Schedule
 			x 1hr  Add user email verification through firebase
 			x 1hr  Give more specific error messages for login failures
 	Sprint 6 (8/15)
+		By meeting
+			Change order of userList columns
+			(Data import) Don't do anything when no file is selected
+
 		Bruce
 		Cheng
 		Cristian
 		Emerson
 		Matt
-		By meeting
-			Change order of userList columns
-			(Data import) Don't do anything when no file is selected
-			Image upload is buggy (not rendering correctly)
-		New
+
+		Tasks
+			Add ability to collapse the many rows of urls
 			Mess around with uploading/deleting images until it gives an error
 			Create delete all images, submit
 			Simplify login logic
 			Search fails on ^&*&(*$#@!@#$%^&*()
+
+			Roles
+				Thief id editable by admin
+				Option to combine multiple thieves (verify this works on thief id change)
+			Make it robust to exceptions/database errors
 
 			Upload env files to capstone folder
 			Remove request verification page
@@ -193,15 +198,6 @@ Schedule
 
 			Allow other files
 			Move scripts to bike-index-.. repo
-		Roles
-			Thief id editable by admin
-			Option to combine multiple thieves (verify this works on thief id change)
-		Make it robust to exceptions/database errors
-		Add loading gif to stats table?
-		Remove FormButton (redundant with <button>)
-		Testing
-		Polish
-		Polish
-		Polish
+			Add loading gif to stats table?
 	Sprint 7 (8/29)
 	Completion/Presentation (9/1)
