@@ -1,3 +1,6 @@
+import { useRecoilValue } from 'recoil';
+import DebugLogs from '../../services/DebugLogs';
+import { debugState } from '../../services/Recoil';
 import { useState } from 'react';
 import { Thumbnail } from './Thumbnail';
 
@@ -24,7 +27,9 @@ export function ImageUpload(props: FileUploadProps) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
-	const [currentViewing, setCurrentViewing] = useState<File | string | null>(null); 
+	const [currentViewing, setCurrentViewing] = useState<File | string | null>(null);
+	const debug = useRecoilValue(debugState);
+	DebugLogs('ImageUpload', '', debug);
 	const maxSize = 1024 * 1024 * 25;
 	const fileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
 
@@ -37,7 +42,7 @@ export function ImageUpload(props: FileUploadProps) {
 	}
 
 	// handler for the file input change event
-  // checks the file type and size and updates the errorMessage and selectedFile state variables accordingly
+	// checks the file type and size and updates the errorMessage and selectedFile state variables accordingly
 	function handleSelectFileChange(event: React.ChangeEvent<HTMLInputElement>) {
 		setErrorMessage(null);
 		if (event.target.files) {
@@ -54,7 +59,7 @@ export function ImageUpload(props: FileUploadProps) {
 	}
 
 	// handlers for the Next and Previous buttons in the ImageModal
-  // call setCurrentViewing with the next or previous file
+	// call setCurrentViewing with the next or previous file
 	function handleNext(index: number) {
 		const next = (index + 1) % props.renderImageFiles.length;
 		setCurrentViewing(props.renderImageFiles[next]);
@@ -74,7 +79,7 @@ export function ImageUpload(props: FileUploadProps) {
 	}
 
 	// removes the file from the renderImageFiles and newImages arrays in the parent component
-  // if the deleted file was not newly added, adds it to the deletedImages array
+	// if the deleted file was not newly added, adds it to the deletedImages array
 	function handleDelete(index: number) {
 		const deletedFile = props.renderImageFiles[index];
 		const newFileList = [...props.renderImageFiles];

@@ -65,11 +65,17 @@ export default function ThiefEdit() {
 			.catch(err => {
 				DebugLogs('ThiefEdit post error', err.message, debug);
 			});
+		setRenderImageFiles([]);
+		setNewImages([]);
+		setDeletedImages([]);
+
 		url.searchParams.set('thiefId', res.data.thiefId);
 		window.history.replaceState({ path: url.href }, '', url.href);
-		await displayThiefInfo();
-		setIsLoading(false);
 
+		// console.log(renderImageFiles);
+		await displayThiefInfo();
+		console.log(renderImageFiles);
+		setIsLoading(false);
 		setWasSubmitted(true);
 		setTimeout(() => {
 			setWasSubmitted(false);
