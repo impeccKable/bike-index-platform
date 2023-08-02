@@ -6,6 +6,7 @@ import loading from '../assets/loading.gif';
 
 export default function DataImport() {
 	const [newDataCnts, setNewDataCnts]: any = useState(null);
+	const [isFileSelected, setIsFileSelected] = useState(false);
 	const [isLoadingImport, setIsLoadingImport] = useState(false);
 	const [isLoadingExport, setIsLoadingExport] = useState(false);
 
@@ -48,6 +49,11 @@ export default function DataImport() {
 		a.click();
 	}
 
+	function handleSelectFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+		setNewDataCnts(null);
+		setIsFileSelected(!event.target || !event.target.files || event.target.files.length === 0 ? false : true);
+	}
+
 	return (
 		<div className="formal data-page">
 			<Navbar />
@@ -55,9 +61,9 @@ export default function DataImport() {
 				<h1>Data Management</h1>
 				<h3>Import data from .csv</h3>
 				<Form onSubmit={handleImport}>
-					<input name="csvfile" type="file" accept=".csv"/>
+					<input name="csvfile" type="file" accept=".csv" onChange={handleSelectFileChange} />
 					<div className="form-btns">
-						<FormButton type="submit">Upload</FormButton>
+						<FormButton type="submit" disabled={!isFileSelected}>Upload</FormButton>
 						{isLoadingImport && (<img src={loading} alt="loading" width="30px" height="30px" />)}
 					</div>
 				</Form>
