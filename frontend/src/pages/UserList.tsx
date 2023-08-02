@@ -10,15 +10,15 @@ import {useState, useEffect, useRef} from 'react';
 
 
 const tableHeaders = {
-    'ID': { maxWidth: "20rem",  minWidth: "20rem" },
-    'Email':   { maxWidth: "14rem", minWidth: "14rem"},
     'Name':   { maxWidth: "12rem", minWidth: "12rem"},
-    'Title':  { maxWidth: "7rem", minWidth: "7rem"},
-    'Org':  { maxWidth: "13rem", minWidth: "13rem"},
+    'Email':   { maxWidth: "14rem", minWidth: "14rem"},
     'Phone':  { maxWidth: "6rem", minWidth: "6rem"},
+    'Title':  { maxWidth: "7rem", minWidth: "7rem"},
     'Role':  { maxWidth: "5rem", minWidth: "5rem"},
+    'Organization':  { maxWidth: "13rem", minWidth: "13rem"},
     'Approved':  { maxWidth: "5rem", minWidth: "5rem"},
-    'Banned':  { maxWidth: "5rem", minWidth: "5rem"}
+    'Banned':  { maxWidth: "5rem", minWidth: "5rem"},
+    'ID': { maxWidth: "20rem",  minWidth: "20rem" }
 }
 
 export interface User extends React.HTMLInputElement {
