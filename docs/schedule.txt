@@ -153,11 +153,15 @@ Schedule
 		Matt
 
 		Tasks
+			Add column order functionality to link table (that doesn't throw errors)
+
 			Add ability to collapse the many rows of urls
 			Mess around with uploading/deleting images until it gives an error
 			Create delete all images, submit
 			Simplify login logic
 			Search fails on ^&*&(*$#@!@#$%^&*()
+
+			Forward user to https if they use http
 
 			Roles
 				Thief id editable by admin
