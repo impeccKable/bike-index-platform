@@ -72,7 +72,7 @@ export default function ThiefEdit() {
 		window.history.replaceState({ path: url.href }, '', url.href);
 
 		// console.log(renderImageFiles);
-		await displayThiefInfo();
+		// await displayThiefInfo();
 		console.log(renderImageFiles);
 		setIsLoading(false);
 		setWasSubmitted(true);
@@ -87,6 +87,7 @@ export default function ThiefEdit() {
 			thiefId: url.searchParams.get('thiefId'),
 		};
 		const consoleMessages: any = [];
+		const newThiefInfo = {...thiefInfo};
 
 		// need to split this one
 		Object.entries(submitData).map((field) => {
@@ -96,20 +97,27 @@ export default function ThiefEdit() {
 			if (keyValue !== 'thiefId') {
 				let newValues = field[1].split(',');
 				let oldValues = thiefInfo[`${field[0]}`];
+				newThiefInfo[keyValue] = oldValues.slice();
+
 				results[keyValue] = [];
 				oldValues.forEach(oldVal => {
 					if (!newValues.includes(oldVal)) {
 						results[keyValue].push([oldVal, '']);
+						newThiefInfo[keyValue] = newThiefInfo[keyValue].filter(value => value !== oldVal);
 					}
 				});
 				newValues.forEach(newVal => {
 					if (!oldValues.includes(newVal)) {
 						results[keyValue].push(['', newVal]);
+						if (!newThiefInfo[keyValue].includes(newVal)) {
+							newThiefInfo[keyValue].push(newVal);
+						}
 					}
 				});
 			}
 			DebugLogs('Submit Changes', consoleMessages, debug);
 		});
+		setThiefInfo(newThiefInfo);
 		return results;
 	};
 
