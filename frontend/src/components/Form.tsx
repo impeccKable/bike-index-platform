@@ -30,7 +30,14 @@ export function Form(props: FormProps) {
 			if (!React.isValidElement(child)) {
 				return null;
 			}
-			return React.cloneElement(child, { onChange: handleChange });
+			return React.cloneElement(child, {
+				onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+					handleChange(event);
+					if (child.props.onChange) {
+						child.props.onChange(event);
+					}
+				}
+			});
 		});
 	}
 	return (
