@@ -31,6 +31,7 @@ export default function ThiefList() {
 	const latestSearchText = useRef(searchText);
 	const [thiefs, setThiefs] = useState<Thief[]>([]);
 	const debug = useRecoilValue(debugState)
+	const pageName = "Thief Listing";
 
 	// Set the search text and search type from the url
 	useEffect(() => {
@@ -79,8 +80,8 @@ export default function ThiefList() {
 		<div className="formal thieflist-page">
 			<Navbar />
 			<main>
-				<h1>Thief Listing</h1>
-				<TextWindow pageName="Thief List" />
+				<h1>{pageName}</h1>
+				<TextWindow pageName={pageName} />
 				<div className="searchbar">
 					<label htmlFor="SearchType">Search Type</label>
 					<select
