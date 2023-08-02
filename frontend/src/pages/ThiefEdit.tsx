@@ -65,11 +65,16 @@ export default function ThiefEdit() {
 			.catch(err => {
 				DebugLogs('ThiefEdit post error', err.message, debug);
 			});
+		setDeletedImages([]);
+		setNewImages([]);
+
 		url.searchParams.set('thiefId', res.data.thiefId);
 		window.history.replaceState({ path: url.href }, '', url.href);
-		await displayThiefInfo();
-		setIsLoading(false);
 
+		// console.log(renderImageFiles);
+		await displayThiefInfo();
+		console.log(renderImageFiles);
+		setIsLoading(false);
 		setWasSubmitted(true);
 		setTimeout(() => {
 			setWasSubmitted(false);
@@ -109,24 +114,22 @@ export default function ThiefEdit() {
 	};
 
 	async function displayThiefInfo() {
-		await httpClient
+		let res = await httpClient
 			.get(`/thiefEdit?thiefId=${url.searchParams.get('thiefId')}`)
-			.then((res: any) => {
-				Object.entries(res.data.thiefInfo[0]).map((atr) => {
-					if (atr[0].localeCompare('thiefId') && atr[1].length === 0) {
-						atr[1] = [''];
-					}
-					thiefInfo[atr[0]] = atr[1];
-				});
-				setIsLoading(false);
-				if (res.data.imageUrls.length !== 0) {
-					setRenderImageFiles(res.data.imageUrls)
-				}
-				DebugLogs('ThiefEdit get response', res.data, debug);
-			})
 			.catch((err) => {
 				DebugLogs('ThiefEdit get error', err, debug);
 			});
+		Object.entries(res.data.thiefInfo[0]).map((atr) => {
+			if (atr[0].localeCompare('thiefId') && atr[1].length === 0) {
+				atr[1] = [''];
+			}
+			thiefInfo[atr[0]] = atr[1];
+		});
+		setIsLoading(false);
+		if (res.data.imageUrls.length !== 0) {
+			setRenderImageFiles(res.data.imageUrls)
+		}
+		DebugLogs('ThiefEdit get response', res.data, debug);
 	}
 
 	useEffect(() => {
@@ -170,7 +173,7 @@ export default function ThiefEdit() {
 					/>
 					<div className="form-btns">
 						<LinkButton type="button" to="back">Back</LinkButton>
-						{!isLoading && <FormButton type="submit">Submit</FormButton>}
+						<FormButton type="submit" disabled={isLoading}>Submit</FormButton>
 					</div>
 					{wasSubmitted && <div className="form-btns">Submitted!</div>}
 				</Form>

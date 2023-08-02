@@ -117,9 +117,15 @@ export function MultiField(props: MultiFieldProps) {
 }
 
 interface FormButtonProps extends React.HTMLButtonElement {
+	disabled?: boolean;
+	onClick?: (e: any) => void;
 	[key: string]: any;
 }
 export function FormButton(props: FormButtonProps) {
+	const { disabled, onClick, ...rest } = props;
+	if (props.disabled) {
+		return <button {...rest} disabled />;
+	}
 	return <button {...props} />;
 }
 

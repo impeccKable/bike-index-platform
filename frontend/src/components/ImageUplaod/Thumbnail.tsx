@@ -41,8 +41,9 @@ export function Thumbnail(props: ThumbnailProps) {
 
  // returns a thumbnail image and an ImageModal if the current file is being viewed
 	return (
-		<div className="thumbnail">
+		<div>
 			<img
+				className="thumbnail"
 				key={props.index}
 				src={imageUrl}
 				onClick={handleImageClick}
