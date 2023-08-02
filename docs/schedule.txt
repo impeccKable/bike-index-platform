@@ -146,10 +146,6 @@ Schedule
 			x 1hr  Add user email verification through firebase
 			x 1hr  Give more specific error messages for login failures
 	Sprint 6 (8/15)
-		By meeting
-			Change order of userList columns
-			(Data import) Don't do anything when no file is selected
-
 		Bruce
 		Cheng
 		Cristian
