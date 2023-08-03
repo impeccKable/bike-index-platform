@@ -14,9 +14,17 @@ const GetByPageName = async (pageName: string) => {
 
 const UpdatePageContent = async (pageName: string, body: string) => {
     body = body.replace("'", "''");
-    let query = `UPDATE text_content SET body = '${body}' WHERE page_name = '${pageName}';`;
-    let response = await db.any(query);
+    let query = `SELECT contentid FROM text_content WHERE page_name = '${pageName}'`;
+    let entryExists = await db.any(query);
 
+    if (entryExists.length === 0) {
+        query = `INSERT INTO text_content (page_name, label, body) VALUES ('${pageName}','','${body}')`;
+    }
+    else {
+        query = `UPDATE text_content SET body = '${body}' WHERE page_name = '${pageName}';`;
+    }
+
+    let response = await db.any(query);
     console.log("Update Response: ", response);
 };
 

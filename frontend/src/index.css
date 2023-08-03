@@ -197,7 +197,7 @@ nav button:hover {
 .text-area {
 	width: 100%;
 	border-radius: 0 5px 5px 0;
-	/*resize: none;*/
+	resize: none;
 }
 
 .btn-upd {
