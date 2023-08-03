@@ -30,7 +30,14 @@ export function Form(props: FormProps) {
 			if (!React.isValidElement(child)) {
 				return null;
 			}
-			return React.cloneElement(child, { onChange: handleChange });
+			return React.cloneElement(child, {
+				onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+					handleChange(event);
+					if (child.props.onChange) {
+						child.props.onChange(event);
+					}
+				}
+			});
 		});
 	}
 	return (
@@ -117,9 +124,15 @@ export function MultiField(props: MultiFieldProps) {
 }
 
 interface FormButtonProps extends React.HTMLButtonElement {
+	disabled?: boolean;
+	onClick?: (e: any) => void;
 	[key: string]: any;
 }
 export function FormButton(props: FormButtonProps) {
+	const { disabled, onClick, ...rest } = props;
+	if (props.disabled) {
+		return <button {...rest} disabled />;
+	}
 	return <button {...props} />;
 }
 

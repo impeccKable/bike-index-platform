@@ -1,6 +1,10 @@
 import express from 'express';
 import db from './dbConfig';
 import { fieldToTable, fields, thiefInfoByIds } from './thiefInfo';
+import { uploadImage, deleteImage, getImage, ImageUploadError, ImageDeletionError, ImageGetError} from './imageOperation';
+import multer from 'multer';
+
+const upload = multer();
 
 const get = async (query: any) => {
 	return thiefInfoByIds([parseInt(query.thiefId)]);
@@ -36,24 +40,66 @@ const put = async (body: any) => {
 			}
 		}
 	}
+	return thiefId;
 };
 
 const router = express.Router();
 router.get('/', async (req: express.Request, res: express.Response) => {
 	try {
-		return res.json(await get(req.query));
+		res.json({
+			thiefInfo: await get(req.query),
+			imageUrls: await getImage(req.query.thiefId as string),
+		});
 	} catch (err) {
+		if (err instanceof ImageGetError) {
+			console.log('ImageGetError', err);
+			res.status(400).send("Error getting image");
+		} else {
+			console.error(err);
+			res.status(500);
+		}
+	}
+});
+
+router.get('/images', async (req: express.Request, res: express.Response) => {
+	try {
+		res.json(await getImage(req.query.thiefId as string));
+	} catch (err) {
+		if (err instanceof ImageGetError) {
+			console.error(err);
+			res.status(400).send("Error getting image");
+		}
 		console.error(err);
 		res.status(500);
 	}
-});
-router.put('/', async (req: express.Request, res: express.Response) => {
+
+})
+
+router.put('/', upload.array('newImages'), async (req: express.Request, res: express.Response) => {
 	try {
-		await put(req.body);
-		res.status(200);
+		const thiefId = await put(JSON.parse(req.body.body));
+
+		const promises = [];
+		if (req.files && req.files.length !== 0) {
+			promises.push(uploadImage(req.files as Express.Multer.File[], thiefId));
+		}
+		if (req.body.deletedImages) {
+			promises.push(deleteImage(JSON.parse(req.body.deletedImages), thiefId));
+		}
+		await Promise.all(promises);
+
+		res.status(200).json({ thiefId });
 	} catch (err) {
-		console.error(err);
-		res.status(500);
+		if (err instanceof ImageUploadError) {
+			console.error(err);
+			res.status(422).send("Error uploading file");
+		} else if (err instanceof ImageDeletionError) {
+			console.error(err);
+			res.status(422).send("Error deleting file");
+		} else {
+			console.error(err);
+			res.status(500);
+		}
 	}
 });
 export default router;

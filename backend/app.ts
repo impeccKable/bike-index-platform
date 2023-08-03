@@ -3,6 +3,7 @@
 import express from "express";
 import search from "./src/search";
 import thiefEdit from "./src/thiefEdit";
+import userList from "./src/user";
 import stats from "./src/stats";
 import signup from "./src/signup";
 import login from "./src/login";
@@ -36,6 +37,7 @@ app.use(express.json());
 router.use("/search", search);
 router.use("/thiefEdit", thiefEdit);
 router.use("/textContent", textContent);
+router.use(["/userList", "/userEdit"], userList);
 router.use("/stats", stats);
 router.use("/signup", signup);
 router.use("/login", login);

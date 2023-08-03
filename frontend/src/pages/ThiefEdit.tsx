@@ -7,7 +7,7 @@ import {
 	FormButton,
 	LinkButton,
 } from '../components/Form';
-import { FileUpload } from '../components/FileUpload';
+import { ImageUpload } from '../components/ImageUplaod/ImageUpload';
 import { useSearchParams } from 'react-router-dom';
 import { httpClient } from '../services/HttpClient';
 import { useRecoilValue } from 'recoil';
@@ -15,13 +15,18 @@ import { debugState } from '../services/Recoil';
 import loading from '../assets/loading.gif';
 import DebugLogs from '../services/DebugLogs';
 
+
 export default function ThiefEdit() {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [isLoading, setIsLoading] = useState(true);
 	const [showLoadGif, setShowLoadGif] = useState(false);
 	const [wasSubmitted, setWasSubmitted] = useState(false);
-	const urlThiefId = searchParams.get('thiefId');
+	const fakeIamges = ["https://t0.gstatic.com/licensed-image?q=tbn:ANd9GcQkrjYxSfSHeCEA7hkPy8e2JphDsfFHZVKqx-3t37E4XKr-AT7DML8IwtwY0TnZsUcQ", "https://hips.hearstapps.com/hmg-prod/images/beautiful-smooth-haired-red-cat-lies-on-the-sofa-royalty-free-image-1678488026.jpg?crop=0.88847xw:1xh;center,top&resize=1200:*", "https://programmerhumor.io/wp-content/uploads/2021/06/programmerhumor-io-python-memes-backend-memes-41e437ca7369eb4.jpg"]
+	const [renderImageFiles, setRenderImageFiles] = useState<(File | string)[]>([]);
+	const [newImages, setNewImages] = useState<(File | string)[]>([]);
+	const [deletedImages, setDeletedImages] = useState<(File | string)[]>([]);
 	const debug = useRecoilValue(debugState);
+	const url = new URL(window.location.href);
 
 	setTimeout(() => {
 		setShowLoadGif(true);
@@ -40,13 +45,41 @@ export default function ThiefEdit() {
 		note: [''],
 	});
 
-	function handleFormSubmit(e: any) {
+	async function handleFormSubmit(e: any) {
+		setIsLoading(true);
 		e.preventDefault();
 		let results = CompareResults(e.dataDict);
-		httpClient.put('/thiefEdit', results)
+
+		const formData = new FormData();
+		formData.append('body', JSON.stringify(results));
+		if (newImages.length !== 0) {
+			newImages.forEach((image) => {
+				formData.append(`newImages`, image);
+			})
+		}
+		if (deletedImages.length !== 0) {
+			formData.append('deletedImages', JSON.stringify(deletedImages));
+		}
+
+		const res = await httpClient.put('/thiefEdit', formData)
 			.catch(err => {
-				DebugLogs('ThiefEdit post error', err, debug);
+				DebugLogs('ThiefEdit post error', err.message, debug);
 			});
+
+		if (res) {
+			if (thiefInfo.thiefId === 'new') {
+				setThiefInfo(prevThiefInfo => {
+					return { ...prevThiefInfo, thiefId: res.data.thiefId }
+				})
+			}
+			setDeletedImages([]);
+			setNewImages([]);
+		}
+
+		url.searchParams.set('thiefId', res.data.thiefId);
+		window.history.replaceState({ path: url.href }, '', url.href);
+
+		setIsLoading(false);
 		setWasSubmitted(true);
 		setTimeout(() => {
 			setWasSubmitted(false);
@@ -56,9 +89,10 @@ export default function ThiefEdit() {
 	const CompareResults = (submitData: any) => {
 		//Ex: newValues.name[0].push('Something'), 0 = old values
 		let results = {
-			thiefId: urlThiefId,
+			thiefId: url.searchParams.get('thiefId'),
 		};
 		const consoleMessages: any = [];
+		const newThiefInfo = {...thiefInfo};
 
 		// need to split this one
 		Object.entries(submitData).map((field) => {
@@ -68,86 +102,58 @@ export default function ThiefEdit() {
 			if (keyValue !== 'thiefId') {
 				let newValues = field[1].split(',');
 				let oldValues = thiefInfo[`${field[0]}`];
+				newThiefInfo[keyValue] = oldValues.slice();
+
 				results[keyValue] = [];
 				oldValues.forEach(oldVal => {
 					if (!newValues.includes(oldVal)) {
 						results[keyValue].push([oldVal, '']);
+						newThiefInfo[keyValue] = newThiefInfo[keyValue].filter(value => value !== oldVal);
 					}
 				});
 				newValues.forEach(newVal => {
 					if (!oldValues.includes(newVal)) {
 						results[keyValue].push(['', newVal]);
+						if (!newThiefInfo[keyValue].includes(newVal)) {
+							newThiefInfo[keyValue].push(newVal);
+						}
 					}
 				});
-
-
-				// let test = Math.max(newValues.length, oldValues.length);
-				// for (let i = 0; i < test; i++) {
-				// 	let oldVal = oldValues[i] ? oldValues[i] : '0';
-				// 	let newVal = newValues[i] ? newValues[i] : '0';
-
-				// 	if (oldVal !== newVal) {
-
-				// 		if (results[keyValue] === undefined) {
-				// 			results[keyValue] = [];
-				// 		}
-				// 		results[keyValue].push([oldVal, newVal])
-				// 	}
-				// }
-				// Object.entries(results).map((thiefProperty) => {
-				// 	//[0, string] add
-				// 	//[string, 0] delete
-				// 	// [string, string] update
-				// 	//result = result.property.map
-
-				// 	if (thiefProperty[0] !== 'thiefId') {
-				// 		thiefProperty[1].map((propertyArray) => {
-				// 			if (propertyArray[0] === '0') {
-				// 				consoleMessages.push(`Adding: ${propertyArray[1]}`);
-				// 			} else if (propertyArray[1] === '0') {
-				// 				consoleMessages.push(`Deleting: ${propertyArray[0]}`);
-				// 			} else {
-				// 				consoleMessages.push(
-				// 					`Updating '${propertyArray[0]}' to '${propertyArray[1]}'`
-				// 				);
-				// 			}
-				// 		});
-				// 	} else {
-				// 		consoleMessages.push(`Thief ID: ${thiefProperty[1]}`);
-				// 	}
-				// });
 			}
 			DebugLogs('Submit Changes', consoleMessages, debug);
 		});
+		setThiefInfo(newThiefInfo);
 		return results;
 	};
 
+	async function get() {
+		const res = await httpClient
+												.get(`/thiefEdit?thiefId=${url.searchParams.get('thiefId')}`)
+												.catch((err) => {
+													DebugLogs('ThiefEdit get error', err.message, debug);
+												});
+			Object.entries(res.data.thiefInfo[0]).map((atr) => {
+				if (atr[0].localeCompare('thiefId') && atr[1].length === 0) {
+					atr[1] = [''];
+				}
+				thiefInfo[atr[0]] = atr[1];
+			}) 
+			setIsLoading(false);
+			if (res.data.imageUrls.length !== 0 && renderImageFiles.length === 0) {
+				setRenderImageFiles(res.data.imageUrls)
+			}
+			DebugLogs('ThiefEdit get response', res.data, debug);
+}
+
 	useEffect(() => {
 		DebugLogs('ThiefEdit Component', '', debug);
-		if (urlThiefId === 'new') {
+		if (url.searchParams.get('thiefId') === 'new') {
 			setIsLoading(false);
 			thiefInfo.thiefId = 'new';
 			setThiefInfo(thiefInfo);
 			return;
 		}
-		httpClient
-			.get(`/thiefEdit?thiefId=${urlThiefId}`)
-			.then((res: any) => {
-				Object.entries(res.data[0]).map((atr) => {
-					if (atr[0].localeCompare('thiefId') && atr[1].length === 0) {
-						atr[1] = [''];
-						thiefInfo[`${atr[0]}`] = atr[1];
-					} else {
-						thiefInfo[`${atr[0]}`] = atr[1];
-					}
-				});
-				setIsLoading(false);
-				setThiefInfo(thiefInfo);
-				DebugLogs('ThiefEdit get response', res.data, debug);
-			})
-			.catch((err) => {
-				DebugLogs('ThiefEdit get error', err, debug);
-			});
+		get();
 	}, []);
 
 	return (
@@ -169,10 +175,19 @@ export default function ThiefEdit() {
 					<MultiField label="Bike Serial" name="bikeSerial" data={thiefInfo.bikeSerial} disabled={isLoading} component={FormInput}/>
 					<MultiField label="Phrase"      name="phrase"     data={thiefInfo.phrase}     disabled={isLoading} component={FormInput} type="textarea"/>
 					<MultiField label="Notes"       name="note"       data={thiefInfo.note}       disabled={isLoading} component={FormInput} type="textarea"/>
-					<FileUpload label="File Upload" />
+					<ImageUpload
+						label="Images"
+						isLoading={isLoading}
+						renderImageFiles={renderImageFiles}
+						setRenderImageFiles={setRenderImageFiles}
+						newImages={newImages}
+						setNewImages={setNewImages}
+						deletedImages={deletedImages}
+						setDeletedImages={setDeletedImages}
+					/>
 					<div className="form-btns">
 						<LinkButton type="button" to="back">Back</LinkButton>
-						<FormButton type="submit">Submit</FormButton>
+						<FormButton type="submit" disabled={isLoading}>Submit</FormButton>
 					</div>
 					{wasSubmitted && <div className="form-btns">Submitted!</div>}
 				</Form>

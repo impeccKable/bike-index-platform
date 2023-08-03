@@ -2,7 +2,7 @@
 Questions
 	How should we handle 20+ urls?
 	Do any other fields have 20+?
-	Should addresses be split into their separate fields?
+	What should be shown when a search type is selected?
 Schedule
 	Sprint 1 (5/23)
 		Mockup pages (Emerson/Cristian)
@@ -103,21 +103,20 @@ Schedule
 		Bruce
 			Email Bryan about using the site
 		Cheng
-			~ !! 8hr  File upload
-				Research
-					Where do we store it? (different server)
-					What kind of files? Mobile phone photo formats?
-					Show picture thumbnails?
-				25mb cap
+			x !! 30hr  File upload
+				x Research
+					x Where do we store it? (different server)
+					x What kind of files? Mobile phone photo formats?
+					x Show picture thumbnails?
+				x 25mb cap
 			x 2hr  Make run.sh and stop.sh scripts
-
-			1hr  Add npm i to the script
+			x 1hr  Add npm i to the script
 		Cristian
 			x 1hr  Restart backend on save (nodemon)
-			~ 1hr  Create UserList page
-			1hr  Create UserEdit page
+			x 1hr  Create UserList page
+			~ 1hr  Create UserEdit page
 			x 2hr  CSS: Nav bar move with page
-			2hr  Site management
+			~ 2hr  Site management
 				Editing interface for verbiage on every page
 				Store as rows in the database (new table)
 		Emerson
@@ -130,14 +129,9 @@ Schedule
 			x 1hr  Fix psql user permissions for 'ec2-user'
 			x 1hr  Add a way to delete a thief
 			x 1hr  Show all thieves with no search
-			1hr  Move pages functionality to backend (page=2)
-			1hr  Show how many results
 
 			x 1hr  Combine about and stats pages
 			x 1hr  Billy extra names bug (thief edit submission was not working)
-			1hr  Re-show fields on thief edit upon submit
-				(to show what's actually in the database)
-			1hr  Add date to downloaded thief data csv
 			x 1hr  Rename (again) to Verify Password on signup page
 				Remove password error upon a re-submit
 			x 1hr  Show Thief ID as new for new thief
@@ -145,22 +139,80 @@ Schedule
 			x 1hr  Fix add new thief
 		Matt
 			x 1hr  Test Note submission is not working
-			~ 12hr Sign-up redirects back to main page on fresh browser (cache issue)
-				Verify user token upon reload
-				Check for a valid token
-			1hr  Add user email verification through firebase
-
+			x 12hr Sign-up redirects back to main page on fresh browser (cache issue)
+				x Verify user token upon reload
+				x Check for a valid token
+			x 1hr  Password resets
+			x 1hr  Add user email verification through firebase
 			x 1hr  Give more specific error messages for login failures
 	Sprint 6 (8/15)
-		Roles
-			Thief id editable by admin
-			Option to combine multiple thieves (verify this works on thief id change)
-		Make it robust to exceptions/database errors
-		Add loading gif to stats table?
-		Remove FormButton (redundant with <button>)
-		Testing
-		Polish
-		Polish
-		Polish
+		Bruce
+		Cheng
+		Cristian
+		Emerson
+		Matt
+
+		Notes from meeting
+			bug with deleting a thief and checking a number
+			Track date of entry for thieves
+			Make registration and image submission clearer (load icon somewhere else?),
+			Make csv upload robust to whether there's a header
+			Should we let the other 3 people use it? How does this affect roles?
+
+		Tasks
+			Sumbit changes upon edit? Back button submits changes? Add cancel button? Add a 'unsaved changes' check before leaving page?
+				It just seems like a source of frustration to upload images and then click the back button
+
+			Put prev/next buttons in a static location?
+			Automatically upload upon a file select?
+			Test search functionality
+			Add column order functionality to link table (that doesn't throw errors)
+			User list doesn't update when changing search type
+
+			Add ability to add pdfs
+			Add ability to collapse the many rows of urls
+			Mess around with uploading/deleting images until it gives an error
+			Create delete all images, submit
+			Simplify login logic
+			Search fails on ^&*&(*$#@!@#$%^&*()
+
+			Forward user to https if they use http
+
+			Roles
+				Thief id editable by admin
+				Option to combine multiple thieves (verify this works on thief id change)
+			Make it robust to exceptions/database errors
+
+			Upload env files to capstone folder
+			Remove request verification page
+			Remove forgot password page
+			Add message that a verification email was sent to sign up page
+			Add an error diologue when login with unverified email (with a link to resend email)
+			Add an error diologue when password is incorrect (with a link to reset password)
+			Change firebase project name
+			Fix url path names (uncapitalize, shorten)
+
+			User listing search put parameters into url
+			Ability to change email
+
+			Move pages functionality to backend (page=2)
+			Show how many results
+			Re-show fields on thief edit upon submit
+				(to show what's actually in the database)
+			Add date to downloaded thief data csv
+
+			Show number of lines submitted and number of data items
+			Error when submitting with no file chosen (data import)
+			209 data items on import, 23something when uploading Data_2.csv
+			Clear all button for fields
+			Way to combine thief
+
+			Error in console log when reloading pages (react loading things in a weird order)
+			Testing auth protected routes
+				(reloading page booted even with fresh token)
+
+			Allow other files
+			Move scripts to bike-index-.. repo
+			Add loading gif to stats table?
 	Sprint 7 (8/29)
 	Completion/Presentation (9/1)
