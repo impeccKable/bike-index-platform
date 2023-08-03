@@ -124,7 +124,7 @@ export const AuthProvider = ({ children }: any) => {
 				.data,
 		};
 		
-			setIsAdmin(user.bikeIndex.role.toLowerCase() === 'admin');
+		useEffect(() => {setIsAdmin(user.bikeIndex.role.toLowerCase() === 'admin')});
 		if (user.bikeIndex.banned === true) {
 			throw new Error('User is banned');
 		} else if (user.bikeIndex.approved === false) {
