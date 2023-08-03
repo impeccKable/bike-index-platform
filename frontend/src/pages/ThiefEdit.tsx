@@ -61,19 +61,24 @@ export default function ThiefEdit() {
 			formData.append('deletedImages', JSON.stringify(deletedImages));
 		}
 
-		let res = await httpClient.put('/thiefEdit', formData)
+		const res = await httpClient.put('/thiefEdit', formData)
 			.catch(err => {
 				DebugLogs('ThiefEdit post error', err.message, debug);
 			});
-		setDeletedImages([]);
-		setNewImages([]);
+
+		if (res) {
+			if (thiefInfo.thiefId === 'new') {
+				setThiefInfo(prevThiefInfo => {
+					return { ...prevThiefInfo, thiefId: res.data.thiefId }
+				})
+			}
+			setDeletedImages([]);
+			setNewImages([]);
+		}
 
 		url.searchParams.set('thiefId', res.data.thiefId);
 		window.history.replaceState({ path: url.href }, '', url.href);
 
-		// console.log(renderImageFiles);
-		// await displayThiefInfo();
-		console.log(renderImageFiles);
 		setIsLoading(false);
 		setWasSubmitted(true);
 		setTimeout(() => {
