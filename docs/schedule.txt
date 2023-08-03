@@ -152,9 +152,24 @@ Schedule
 		Emerson
 		Matt
 
-		Tasks
-			Add column order functionality to link table (that doesn't throw errors)
+		Notes from meeting
+			bug with deleting a thief and checking a number
+			Track date of entry for thieves
+			Make registration and image submission clearer (load icon somewhere else?),
+			Make csv upload robust to whether there's a header
+			Should we let the other 3 people use it? How does this affect roles?
 
+		Tasks
+			Sumbit changes upon edit? Back button submits changes? Add cancel button? Add a 'unsaved changes' check before leaving page?
+				It just seems like a source of frustration to upload images and then click the back button
+
+			Put prev/next buttons in a static location?
+			Automatically upload upon a file select?
+			Test search functionality
+			Add column order functionality to link table (that doesn't throw errors)
+			User list doesn't update when changing search type
+
+			Add ability to add pdfs
 			Add ability to collapse the many rows of urls
 			Mess around with uploading/deleting images until it gives an error
 			Create delete all images, submit
