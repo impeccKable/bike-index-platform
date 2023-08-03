@@ -61,19 +61,24 @@ export default function ThiefEdit() {
 			formData.append('deletedImages', JSON.stringify(deletedImages));
 		}
 
-		let res = await httpClient.put('/thiefEdit', formData)
+		const res = await httpClient.put('/thiefEdit', formData)
 			.catch(err => {
 				DebugLogs('ThiefEdit post error', err.message, debug);
 			});
-		setDeletedImages([]);
-		setNewImages([]);
+
+		if (res) {
+			if (thiefInfo.thiefId === 'new') {
+				setThiefInfo(prevThiefInfo => {
+					return { ...prevThiefInfo, thiefId: res.data.thiefId }
+				})
+			}
+			setDeletedImages([]);
+			setNewImages([]);
+		}
 
 		url.searchParams.set('thiefId', res.data.thiefId);
 		window.history.replaceState({ path: url.href }, '', url.href);
 
-		// console.log(renderImageFiles);
-		await displayThiefInfo();
-		console.log(renderImageFiles);
 		setIsLoading(false);
 		setWasSubmitted(true);
 		setTimeout(() => {
@@ -87,6 +92,7 @@ export default function ThiefEdit() {
 			thiefId: url.searchParams.get('thiefId'),
 		};
 		const consoleMessages: any = [];
+		const newThiefInfo = {...thiefInfo};
 
 		// need to split this one
 		Object.entries(submitData).map((field) => {
@@ -96,41 +102,48 @@ export default function ThiefEdit() {
 			if (keyValue !== 'thiefId') {
 				let newValues = field[1].split(',');
 				let oldValues = thiefInfo[`${field[0]}`];
+				newThiefInfo[keyValue] = oldValues.slice();
+
 				results[keyValue] = [];
 				oldValues.forEach(oldVal => {
 					if (!newValues.includes(oldVal)) {
 						results[keyValue].push([oldVal, '']);
+						newThiefInfo[keyValue] = newThiefInfo[keyValue].filter(value => value !== oldVal);
 					}
 				});
 				newValues.forEach(newVal => {
 					if (!oldValues.includes(newVal)) {
 						results[keyValue].push(['', newVal]);
+						if (!newThiefInfo[keyValue].includes(newVal)) {
+							newThiefInfo[keyValue].push(newVal);
+						}
 					}
 				});
 			}
 			DebugLogs('Submit Changes', consoleMessages, debug);
 		});
+		setThiefInfo(newThiefInfo);
 		return results;
 	};
 
-	async function displayThiefInfo() {
-		let res = await httpClient
-			.get(`/thiefEdit?thiefId=${url.searchParams.get('thiefId')}`)
-			.catch((err) => {
-				DebugLogs('ThiefEdit get error', err, debug);
-			});
-		Object.entries(res.data.thiefInfo[0]).map((atr) => {
-			if (atr[0].localeCompare('thiefId') && atr[1].length === 0) {
-				atr[1] = [''];
+	async function get() {
+		const res = await httpClient
+												.get(`/thiefEdit?thiefId=${url.searchParams.get('thiefId')}`)
+												.catch((err) => {
+													DebugLogs('ThiefEdit get error', err.message, debug);
+												});
+			Object.entries(res.data.thiefInfo[0]).map((atr) => {
+				if (atr[0].localeCompare('thiefId') && atr[1].length === 0) {
+					atr[1] = [''];
+				}
+				thiefInfo[atr[0]] = atr[1];
+			}) 
+			setIsLoading(false);
+			if (res.data.imageUrls.length !== 0 && renderImageFiles.length === 0) {
+				setRenderImageFiles(res.data.imageUrls)
 			}
-			thiefInfo[atr[0]] = atr[1];
-		});
-		setIsLoading(false);
-		if (res.data.imageUrls.length !== 0) {
-			setRenderImageFiles(res.data.imageUrls)
-		}
-		DebugLogs('ThiefEdit get response', res.data, debug);
-	}
+			DebugLogs('ThiefEdit get response', res.data, debug);
+}
 
 	useEffect(() => {
 		DebugLogs('ThiefEdit Component', '', debug);
@@ -140,7 +153,7 @@ export default function ThiefEdit() {
 			setThiefInfo(thiefInfo);
 			return;
 		}
-		displayThiefInfo();
+		get();
 	}, []);
 
 	return (
@@ -164,6 +177,7 @@ export default function ThiefEdit() {
 					<MultiField label="Notes"       name="note"       data={thiefInfo.note}       disabled={isLoading} component={FormInput} type="textarea"/>
 					<ImageUpload
 						label="Images"
+						isLoading={isLoading}
 						renderImageFiles={renderImageFiles}
 						setRenderImageFiles={setRenderImageFiles}
 						newImages={newImages}

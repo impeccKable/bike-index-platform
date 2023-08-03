@@ -1,5 +1,3 @@
-import path from 'path';
-import crypto from 'crypto';
 import { PutObjectCommand, GetObjectCommand, DeleteObjectCommand, ListObjectsCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { s3Client } from './s3Client';
@@ -27,22 +25,10 @@ export class ImageGetError extends Error {
 
 // upload images to S3 bucket
 export async function uploadImage(uploadedFiles: Express.Multer.File[], thiefId: number) {
-	let baseName: string | null;
-	let promises = [];
+	const promises = [];
 	for (const file of uploadedFiles) {
-		// generate unique file name
-		baseName = generateUniqueFilename(file.originalname);
-
-		// if generate name fails throw an error
-		if (baseName === null) {
-			throw new ImageUploadError("Fail to generate unique file name");
-		}
-
-		// sanitize the name for s3 bucket
-		baseName = sanitize(baseName);
-
 		// define the key for S3 bucket object
-		const key = `thiefs/${thiefId}/images/${baseName}`;
+		const key = `thiefs/${thiefId}/images/${file.originalname}`;
 
 		const params = {
 			Bucket: config.bucketName,
@@ -52,31 +38,34 @@ export async function uploadImage(uploadedFiles: Express.Multer.File[], thiefId:
 		};
 
 		// try to put object in the S3 bucket
-		try {
-			promises.push(s3Client.send(new PutObjectCommand(params)));
-			console.log(`Uploading ${params.Key} to ${params.Bucket}`);
-		} catch (err) {
-			throw new ImageUploadError(`Error uploaidng image to s3: ${err}`);
-		}
+			promises.push(s3Client.send(new PutObjectCommand(params))
+				.then(() => {
+					console.log(`Uploading ${params.Key} to ${params.Bucket}`);
+				})
+				.catch(err => {
+					throw new ImageUploadError(`Error uploaidng image to s3: ${err}`);
+			}));
 	}
 	return Promise.all(promises);
 }
 
 // delete images from S3 bucket
-export async function deleteImage(deletedFile: string[]) {
-	let promises = [];
-	for (const key of deletedFile) {
+export async function deleteImage(deletedFile: string[], thiefId: string) {
+	const promises = [];
+	for (const filename of deletedFile) {
+		const key = `thiefs/${thiefId}/images/${filename}`;
 		const params = {
 			Bucket: config.bucketName,
 			Key: key
 		};
 
-		try {
-			promises.push(s3Client.send(new DeleteObjectCommand(params)));
-			console.log(`Deleting object ${key} from bucket ${config.bucketName}`);
-		} catch (err) {
-			throw new ImageDeletionError(`Error deleting object from s3: ${err}`);
-		}
+		promises.push(s3Client.send(new DeleteObjectCommand(params))
+			.then(() => {
+				console.log(`Deleting object ${key} from bucket ${config.bucketName}`);
+			})
+			.catch(err => {
+				throw new ImageDeletionError(`Error deleting object from s3: ${err}`);
+			}));
 	}
 	return Promise.all(promises);
 }
@@ -127,22 +116,4 @@ async function getTempImageUrl(keys: (string | undefined)[]): Promise<string[]> 
 	}
 
 	return urls;
-}
-
-
-function generateUniqueFilename(filename: string): string | null {
-	try {
-		const extension = path.extname(filename);
-		const basename = path.basename(filename, extension);
-		const randomString = crypto.randomBytes(5).toString('hex');
-
-		return `${basename}-${randomString}${extension}`;
-	} catch (err) {
-		return null;
-	}
-}
-
-// replacing non-alphanumeric and characters not safe for s3 bucket with a hyphen
-function sanitize(filename: string): string {
-	return filename.replace(/[^a-zA-Z0-9!_.*()'-]/g, '-');
 }

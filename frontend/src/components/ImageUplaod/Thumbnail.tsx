@@ -4,6 +4,7 @@ import { ImageModal } from './ImageModal';
 interface ThumbnailProps {
 	file: string | File;
 	index: number;
+	isLoading: boolean;
 	handleNext: () => void;
 	handlePrev: () => void;
 	handleDelete: () => void;
@@ -48,7 +49,7 @@ export function Thumbnail(props: ThumbnailProps) {
 				src={imageUrl}
 				onClick={handleImageClick}
 			/>
-			{props.currentViewing === props.file && (
+			{props.currentViewing === props.file && !props.isLoading && (
 				<ImageModal
 					imageUrl={imageUrl}
 					handleClose={handleCloseModal}

@@ -6,6 +6,7 @@ import { Thumbnail } from './Thumbnail';
 
 interface FileUploadProps {
 	label: string;
+	isLoading: boolean;
 	renderImageFiles: (File | string)[];
 	setRenderImageFiles: (iamges: (File | string)[]) => void;
 	newImages: (File | string)[];
@@ -14,9 +15,29 @@ interface FileUploadProps {
 	setDeletedImages: (deletedImages: (File | string)[]) => void;
 }
 
-function extractObjectKeyForS3Deletion(url: string): string {
-	const urlObj = new URL(url);
-	return urlObj.pathname.substring(1);
+function processFilename(filename: string): string {
+	return sanitize(generateUniqueFilename(filename));
+}
+
+function generateUniqueFilename(filename: string): string {
+	const extension = filename.split('.').pop();
+	const basename = filename.split('.')[0];
+	const randomString = Math.random().toString(36).substring(2, 12);
+
+	return `${basename}-${randomString}.${extension}`;
+}
+
+// replacing non-alphanumeric and characters not safe for s3 bucket with a hyphen
+function sanitize(filename: string): string {
+	return filename.replace(/[^a-zA-Z0-9!_.*()'-]/g, '-');
+}
+
+function extractObjectKeyForS3Deletion(deletedImage: string | File): string {
+	if (deletedImage instanceof File) {
+		return deletedImage.name;
+	} else {
+		return new URL(deletedImage).pathname.split('/').pop() || "";
+	}
 }
 
 // responsible for the image uploading functionality
@@ -70,8 +91,10 @@ export function ImageUpload(props: FileUploadProps) {
 	// adds the selectedFile to the newImages and renderImageFiles arrays in the parent component
 	function handleUpload() {
 		if (selectedFile) {
-			props.setRenderImageFiles([...props.renderImageFiles, selectedFile]);
-			props.setNewImages([...props.newImages, selectedFile]);
+			const newFile = new File([selectedFile], processFilename(selectedFile.name), {type: selectedFile.type, lastModified: selectedFile.lastModified});
+			console.log(newFile.name)
+			props.setRenderImageFiles([...props.renderImageFiles, newFile]);
+			props.setNewImages([...props.newImages, newFile]);
 			setIsModalOpen(false);
 		}
 	}
@@ -86,7 +109,7 @@ export function ImageUpload(props: FileUploadProps) {
 		if (props.newImages.includes(deletedFile)) {
 			props.setNewImages(props.newImages.filter(file => file !== deletedFile));
 		} else {
-			props.setDeletedImages([...props.deletedImages, extractObjectKeyForS3Deletion(deletedFile as string)]);
+			props.setDeletedImages([...props.deletedImages, extractObjectKeyForS3Deletion(deletedFile)]);
 		}
 
 		props.setRenderImageFiles(newFileList);
@@ -98,7 +121,7 @@ export function ImageUpload(props: FileUploadProps) {
 		<>
 			<label>{props.label}</label>
 			<div className="upload-file-field">
-				{props.renderImageFiles.map((item, index) => ( <Thumbnail key={index} file={item} index={index} handleNext={() => handleNext(index)}
+				{props.renderImageFiles.map((item, index) => ( <Thumbnail key={index} file={item} index={index} handleNext={() => handleNext(index)} isLoading={props.isLoading}
 					handlePrev={() => handlePrev(index)} handleDelete={() => handleDelete(index)} currentViewing={currentViewing} setCurrentViewing={setCurrentViewing} /> ))}
 				<button className={`file-upload-btn ${props.renderImageFiles.length > 0 ? 'expanded' : ''}`} type="button" onClick={handleAddButton}>
 					＋
