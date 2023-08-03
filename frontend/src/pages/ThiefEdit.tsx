@@ -126,21 +126,24 @@ export default function ThiefEdit() {
 		return results;
 	};
 
-	async function displayThiefInfo() {
-		let res = await httpClient
-			.get(`/thiefEdit?thiefId=${url.searchParams.get('thiefId')}`)
-			.catch((err) => {
-				DebugLogs('ThiefEdit get error', err, debug);
-			});
-		Object.entries(res.data[0]).map((atr) => {
-			if (atr[0].localeCompare('thiefId') && atr[1].length === 0) {
-				atr[1] = [''];
+	async function get() {
+		const res = await httpClient
+												.get(`/thiefEdit?thiefId=${url.searchParams.get('thiefId')}`)
+												.catch((err) => {
+													DebugLogs('ThiefEdit get error', err.message, debug);
+												});
+			Object.entries(res.data.thiefInfo[0]).map((atr) => {
+				if (atr[0].localeCompare('thiefId') && atr[1].length === 0) {
+					atr[1] = [''];
+				}
+				thiefInfo[atr[0]] = atr[1];
+			}) 
+			setIsLoading(false);
+			if (res.data.imageUrls.length !== 0 && renderImageFiles.length === 0) {
+				setRenderImageFiles(res.data.imageUrls)
 			}
-			thiefInfo[atr[0]] = atr[1];
-		});
-		setIsLoading(false);
-		DebugLogs('ThiefEdit get response', res.data, debug);
-	}
+			DebugLogs('ThiefEdit get response', res.data, debug);
+}
 
 	useEffect(() => {
 		DebugLogs('ThiefEdit Component', '', debug);
@@ -150,16 +153,7 @@ export default function ThiefEdit() {
 			setThiefInfo(thiefInfo);
 			return;
 		}
-		httpClient.get(`/thiefEdit/images?thiefId=${url.searchParams.get('thiefId')}`)
-			.then(res => {
-				if (res.data.length !== 0 && renderImageFiles.length === 0) {
-					setRenderImageFiles(res.data)
-				}
-			})
-			.catch((err) => {
-				DebugLogs('ThiefEdit get error', err.message, debug);
-			});
-		displayThiefInfo();
+		get();
 	}, []);
 
 	return (
