@@ -177,6 +177,7 @@ export default function ThiefEdit() {
 					<MultiField label="Notes"       name="note"       data={thiefInfo.note}       disabled={isLoading} component={FormInput} type="textarea"/>
 					<ImageUpload
 						label="Images"
+						isLoading={isLoading}
 						renderImageFiles={renderImageFiles}
 						setRenderImageFiles={setRenderImageFiles}
 						newImages={newImages}

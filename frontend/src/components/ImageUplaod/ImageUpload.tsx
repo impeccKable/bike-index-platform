@@ -6,6 +6,7 @@ import { Thumbnail } from './Thumbnail';
 
 interface FileUploadProps {
 	label: string;
+	isLoading: boolean;
 	renderImageFiles: (File | string)[];
 	setRenderImageFiles: (iamges: (File | string)[]) => void;
 	newImages: (File | string)[];
@@ -120,7 +121,7 @@ export function ImageUpload(props: FileUploadProps) {
 		<>
 			<label>{props.label}</label>
 			<div className="upload-file-field">
-				{props.renderImageFiles.map((item, index) => ( <Thumbnail key={index} file={item} index={index} handleNext={() => handleNext(index)}
+				{props.renderImageFiles.map((item, index) => ( <Thumbnail key={index} file={item} index={index} handleNext={() => handleNext(index)} isLoading={props.isLoading}
 					handlePrev={() => handlePrev(index)} handleDelete={() => handleDelete(index)} currentViewing={currentViewing} setCurrentViewing={setCurrentViewing} /> ))}
 				<button className={`file-upload-btn ${props.renderImageFiles.length > 0 ? 'expanded' : ''}`} type="button" onClick={handleAddButton}>
 					＋
