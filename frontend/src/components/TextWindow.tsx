@@ -21,14 +21,30 @@ export default function TextWindow(props: any) {
 
         GetTextContent();
     }, []);
+
+    async function HandleUpdate() {
+        const data = {
+            'pageName': props.pageName,
+            'body': headerText
+        }
+        const response = await httpClient.put("/textContent", data);
+
+        console.log("Put Response Text Content", response);
+    }
     
 
     return (
         <>
             <div className="text-window">
                 <div>
-                    <button hidden={adminRole} className="btn-darkgreen">Update</button>
-                    <textarea defaultValue={headerText} className="text-area" readOnly={!adminRole}></textarea>
+                    <button title='Save Text Changes' hidden={adminRole} className="btn-upd" onClick={HandleUpdate}>&#8634;</button>
+                    <textarea 
+                        defaultValue={headerText}
+                        className="text-area"
+                        readOnly={adminRole}
+                        onChange={(event: any) => {
+							setHeaderText(event.target.value);
+						}}></textarea>
                 </div>
             </div>
         </>

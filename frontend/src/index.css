@@ -190,13 +190,21 @@ nav button:hover {
 }
 
 .text-window > div {
+	display: inline-flex;
 	width: 100%;
 }
 
 .text-area {
 	width: 100%;
-	border-radius: 5px;
-	resize: none;
+	border-radius: 0 5px 5px 0;
+	/*resize: none;*/
+}
+
+.btn-upd {
+	margin: 0px;
+	border-radius: 5px 0 0 5px;
+	font-size:x-large;
+	padding: 1%;
 }
 
 
