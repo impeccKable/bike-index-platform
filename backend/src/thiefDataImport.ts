@@ -40,7 +40,6 @@ const processFile = (req: any) => {
 			let thiefId = row[0];
 			if (thiefId === '') { continue; }
 			if (parseInt(thiefId) > maxThiefId) {
-				console.log(`New max thief id: ${thiefId}`);
 				maxThiefId = parseInt(thiefId);
 			}
 			for (let i = 1; i < columnToTable.length; i++) {
