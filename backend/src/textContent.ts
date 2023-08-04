@@ -7,9 +7,9 @@ import db from "./dbConfig";
 const router = express.Router();
 
 const GetByPageName = async (pageName: string) => {
-    let query = `SELECT body FROM text_content WHERE page_name = '${pageName}';`;
+    let query = `SELECT contentid, page_name, label, body, ishidden FROM text_content WHERE page_name = '${pageName}';`;
     let response = await db.one(query);
-    return response.body;
+    return response;
 }
 
 const UpdatePageContent = async (pageName: string, body: string) => {
@@ -18,7 +18,7 @@ const UpdatePageContent = async (pageName: string, body: string) => {
     let entryExists = await db.any(query);
 
     if (entryExists.length === 0) {
-        query = `INSERT INTO text_content (page_name, label, body) VALUES ('${pageName}','','${body}')`;
+        query = `INSERT INTO text_content (page_name, label, body, ishidden) VALUES ('${pageName}','','${body}', 'false')`;
     }
     else {
         query = `UPDATE text_content SET body = '${body}' WHERE page_name = '${pageName}';`;

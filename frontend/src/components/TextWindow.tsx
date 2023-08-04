@@ -9,15 +9,16 @@ export default function TextWindow(props: any) {
     const [headerText, setHeaderText] = useState("");
     const [oldValue, setOldValue] = useState("");
     const [showHeader, setShowHeader] = useState(false);
+    const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
         const GetTextContent = async () => {
             const response =  await httpClient.get(`/textContent?pageName=${props.pageName}`);
             if (response.status === 200) {
-                setHeaderText(response.data);
-                setOldValue(response.data);
+                setHeaderText(response.data.body);
+                setOldValue(response.data.body);
 
-                if (response.data !== "") {
+                if (response.data.body !== "" && !response.data.ishidden) {
                     setShowHeader(true);
                 }
             }
@@ -50,6 +51,7 @@ export default function TextWindow(props: any) {
                 { showHeader 
                 ?
                 <div>
+                    <button title='View Window Settings' hidden={!adminStatus} className="btn-stg" onClick={() => {setShowModal(true)}}>&#9881;</button>
                     <button title='Save Text Changes' hidden={!adminStatus} className="btn-upd" onClick={HandleUpdate}>&#8634;</button>
                     <textarea 
                         defaultValue={headerText}
@@ -60,9 +62,35 @@ export default function TextWindow(props: any) {
 						}}></textarea>
                 </div>
                 :
-                <div><button onClick={() => {setShowHeader(true)}}>Show Header Panel</button></div>
+                <div>
+                    <button onClick={() => {setShowHeader(true)}}>Show Header Panel</button>
+                </div>
                 }
             </div>
+            { showModal &&
+            <div id="myModal" className="modal" hidden={true}>
+                <div className="modal-content">
+                    <span className="close" onClick={() => {setShowModal(false)}}>&times;</span>
+                    <h4>Header Text Settings</h4>
+                    <div>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th>Hide Panel From Viewers</th>
+                                    <td>
+                                        <label htmlFor="SetHidden">Hide Text from View</label>
+                                        <input type='checkbox' id="SetHidden"></input>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <label htmlFor="SetLabel">Text Label</label>
+                        <input type='checkbox' id="SetLabel"></input>
+                    </div>
+                </div>
+            </div>
+            }
         </>
     )
 }
