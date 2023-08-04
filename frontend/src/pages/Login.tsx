@@ -17,41 +17,28 @@ export default function Login() {
 			try{
 				await auth?.handleLogin(email, password);
 				navigate("/thiefList");
-			} catch (error) {
-				if(error.message === 'User email is not verified'){
-					loginFailureAlert("email-not-verified");
-				} else if(error.message === 'User is not verified'){
-					loginFailureAlert("user-not-verified");
-				} else if(error.message.includes('wrong-password')){
-					loginFailureAlert("wrong-password");
-				} else {
-					loginFailureAlert("unknown-error");
-					console.log(error);
-				};
+			} catch (error:any) {
+				loginFailureAlert(error);
 			};
 		};
 		f();
 	};
 
-	const loginFailureAlert = (alertType:string) => {
+	const loginFailureAlert = (error:Error) => {
 		const alert = document.getElementById("login-alert");
-		switch(alertType){
-			case "email-not-verified":
-				alert!.innerHTML = "Email not verified. Please check your email for a verification link. ";
-				alert!.innerHTML += "To request another verification email visit ";
-				alert!.innerHTML += "<a href='/requestverification'>here</a>.";
-				break;
-			case "user-not-verified":
-				alert!.innerHTML = "User not verified. Please contact an administrator.";
-				break;
-			case "wrong-password":
-				alert!.innerHTML = "Wrong password. Please try again or reset your password ";
-				alert!.innerHTML += "<a href='/forgot'>here</a>.";
-				break;
-			default:
-				alert!.innerHTML = "Login error. Please try again.";
-				break;
-			};
+		if(error.message === 'User email is not verified'){
+			alert!.innerHTML = "Email not verified. Please check your email for a verification link. ";
+			alert!.innerHTML += "To request another verification email visit ";
+			alert!.innerHTML += "<a href='/requestverification'>here</a>.";
+		} else if(error.message === 'User is not verified'){
+			alert!.innerHTML = "User not verified. Please contact an administrator.";
+		} else if(error.message.includes('wrong-password')){
+			alert!.innerHTML = "Wrong password. Please try again or reset your password ";
+			alert!.innerHTML += "<a href='/forgot'>here</a>.";
+		} else {
+			alert!.innerHTML = "Login error. Please try again.";
+			console.log(error);
+		};
 	};
 
 	return (
