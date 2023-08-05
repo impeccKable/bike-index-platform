@@ -148,57 +148,70 @@ Schedule
 	Sprint 6 (8/15)
 		Bruce
 		Cheng
+			File uploads
+				Allow other files (pdfs, etc)
+				Automatically upload file upon a file select? Automatically go to file select upon + click.
+			Thief List
+				Ascending/descending
+				Put prev/next buttons in a static location?
+				Test search functionality
+				Move pages functionality to backend (page=2)
+				Show how many results
+				Universal search
 		Cristian
+			User List
+				Add column order functionality to link table (that doesn't throw errors)
+				User list doesn't update when changing search type (with search text entered)
+				User listing search put parameters into url
+			Thief Edit
+				Grey out Submit button until changes are made. Put red border on changed fields.
+				Add ability to collapse the many rows of urls (any fields over 8, scroll bar or collapse)
+				'Clear all' button for fields (still needs submit, boots them to thief list when all fields are empty)
+				Admin ability to change thief id field to combine multiple thieves (this might work by just making thief id an editable field?) (merge in history log?)
+			History page
+				Track all data item edits
+				Columns: Datetime | User | Action (delete or add) | New thief or deleted thief? | ThiefID | Data type | Data
+					date | epeters | new | new thief | 3 | Name | Emerson Peters
+					date | epeters | new | new thief | 3 | url | &*$*&^%(*&#&^)
+					date | epeters | new |           | 3 | Name | Em the perfectionist
 		Emerson
+			Backups
+				Periodically update a clone of the database
+			Data
+				Add date to downloaded thief data csv
+				Show number of lines submitted and number of data items
+				Add loading gif to stats table?
+			Misc
+				Move run/stop scripts to bike-index-.. repo
+				x Upload env files to capstone folder
+				x Fix url path names (uncapitalize, shorten)
 		Matt
+			Roles
+				Ability to change user roles
+			Login & Sign up                                     .5 hours (includes research, he can take some more)
+				Make registration and image submission clearer (load icon somewhere else?),
+				Simplify login logic
+				Forward user to https if they use http
+				Remove request verification page
+				Remove forgot password page
+				Add message that a verification email was sent to sign up page
+				Add an error diologue when login with unverified email (with a link to resend email)
+				Add an error diologue when password is incorrect (with a link to reset password)
+				Change firebase project name
+				Ability to change email
+			User Edit
+				Frontend
+				Approve users
+			Misc
+				Make it robust to exceptions/database errors
+				There's an error in console log when reloading pages (react loading things in a weird order)
+				Test auth protected routes (reloading page booted even with fresh token)
+		Everyone
+			Clean up code (console logs, variable names, dir names, simplifications, consistency, etc)
 
-		Questions
-			Should we let the other 3 people use it? How does this affect roles?
-		Login & Sign up
-			Make registration and image submission clearer (load icon somewhere else?),
-			Simplify login logic
-			Forward user to https if they use http
-			Remove request verification page
-			Remove forgot password page
-			Add message that a verification email was sent to sign up page
-			Add an error diologue when login with unverified email (with a link to resend email)
-			Add an error diologue when password is incorrect (with a link to reset password)
-			Change firebase project name
-			Ability to change email
-		Thief List
-			Put prev/next buttons in a static location?
-			Test search functionality
-			Search fails on ^&*&(*$#@!@#$%^&*()
-			Move pages functionality to backend (page=2)
-			Show how many results
-		User List
-			Add column order functionality to link table (that doesn't throw errors)
-			User list doesn't update when changing search type
-			User listing search put parameters into url
-		Thief Edit
-			Track date of entry for thieves
-			Sumbit changes upon edit? Back button submits changes? Add cancel button? Add a 'unsaved changes' check before leaving page? (It just seems like a source of frustration to upload images and then click the back button)
-			Add ability to collapse the many rows of urls
-			'Clear all' button for fields
-			Option to combine multiple thieves (this might work by just making thief id an editable field?)
-		File uploads
-			Mess around with uploading/deleting images until it gives an error
-			Allow other files (pdfs, etc)
-			Automatically upload file upon a file select?
-		Data
-			Make csv upload robust to whether there's a header
-			Add date to downloaded thief data csv
-			Show number of lines submitted and number of data items
-		Misc
-			Thief id editable by admin
-			Add loading gif to stats table?
-			Make it robust to exceptions/database errors
-			Move run/stop scripts to bike-index-.. repo
-			Upload env files to capstone folder
-			Fix url path names (uncapitalize, shorten)
-			There's an error in console log when reloading pages (react loading things in a weird order)
-			Test auth protected routes (reloading page booted even with fresh token)
-			Clean up console logs (or remove if they aren't useful)
-			Clean up code (variable names, dir names, simplifications, consistency, etc)
+		New
+			Switch router.use("/search", search); and router.use("/thief", thiefEdit); to be router.use(["/thiefs", "/thief"], thiefList); to match users
 	Sprint 7 (8/29)
+		Polish
+			Make thief table columns resizeable
 	Completion/Presentation (9/1)
