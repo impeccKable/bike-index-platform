@@ -190,13 +190,14 @@ Schedule
 				Ability to change user roles
 			Login & Sign up                                     .5 hours (includes research, he can take some more)
 				Make registration and image submission clearer (load icon somewhere else?),
-				Simplify login logic
+				[x]Simplify login logic
 				Forward user to https if they use http
-				Remove request verification page
-				Remove forgot password page
-				Add message that a verification email was sent to sign up page
-				Add an error diologue when login with unverified email (with a link to resend email)
-				Add an error diologue when password is incorrect (with a link to reset password)
+				[x]Remove request verification page
+				[x]Remove forgot password page
+				[x]Add message that a verification email was sent to sign up page
+				[x]Add an error diologue when login with unverified email (with a link to resend email)
+				[x]Add an error diologue when password is incorrect (with a link to reset password)
+				Add login alert for temporarily disabled accounts(too many failed logins)
 				Change firebase project name
 				Ability to change email
 			User Edit

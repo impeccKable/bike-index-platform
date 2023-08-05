@@ -125,7 +125,7 @@ export const AuthProvider = ({ children }: any) => {
 		if (user.bikeIndex.banned === true) {
 			throw new Error('User is banned');
 		} else if (user.bikeIndex.approved === false) {
-			throw new Error('User is not verified');
+			throw new Error('User is not approved');
 		} else if(user.firebase.emailVerified === false) {
 			throw new Error('User email is not verified');
 		}
