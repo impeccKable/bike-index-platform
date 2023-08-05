@@ -1,7 +1,4 @@
-import { useRecoilValue } from 'recoil';
-import DebugLogs from '../../services/DebugLogs';
-import { debugState } from '../../services/Recoil';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Thumbnail } from './Thumbnail';
 
 interface FileUploadProps {
@@ -45,19 +42,17 @@ function extractObjectKeyForS3Deletion(deletedImage: string | File): string {
 // also takes care of displaying the ImageModal when a thumbnail is clicked
 export function ImageUpload(props: FileUploadProps) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	const [currentViewing, setCurrentViewing] = useState<File | string | null>(null);
-	const debug = useRecoilValue(debugState);
-	DebugLogs('ImageUpload', '', debug);
 	const maxSize = 1024 * 1024 * 25;
 	const fileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+	const fileInputRef = useRef<HTMLInputElement>(null);
+
 	// handler for the Add button
 	// opens the modal and resets the errorMessage and selectedFile state variables
 	function handleAddButton() {
-		setIsModalOpen(true);
+		fileInputRef.current?.click();
 		setErrorMessage(null);
-		setSelectedFile(null);
 	}
 
 	// handler for the file input change event
@@ -68,11 +63,13 @@ export function ImageUpload(props: FileUploadProps) {
 			const file = event.target.files[0];
 
 			if (!fileTypes.includes(file.type)) {
+				setIsModalOpen(true);
 				setErrorMessage("Invalid file type");
 			} else if (!(file.size <= maxSize)) {
+				setIsModalOpen(true);
 				setErrorMessage("File size is too large");
 			} else {
-				setSelectedFile(file);
+				handleUpload(file);
 			}
 		}
 	}
@@ -89,14 +86,12 @@ export function ImageUpload(props: FileUploadProps) {
 	}
 
 	// adds the selectedFile to the newImages and renderImageFiles arrays in the parent component
-	function handleUpload() {
-		if (selectedFile) {
-			const newFile = new File([selectedFile], processFilename(selectedFile.name), {type: selectedFile.type, lastModified: selectedFile.lastModified});
-			console.log(newFile.name)
-			props.setRenderImageFiles([...props.renderImageFiles, newFile]);
-			props.setNewImages([...props.newImages, newFile]);
-			setIsModalOpen(false);
-		}
+	function handleUpload(file: File) {
+		const newFile = new File([file], processFilename(file.name), {type: file.type, lastModified: file.lastModified});
+		console.log(newFile.name)
+		props.setRenderImageFiles([...props.renderImageFiles, newFile]);
+		props.setNewImages([...props.newImages, newFile]);
+		setIsModalOpen(false);
 	}
 
 	// removes the file from the renderImageFiles and newImages arrays in the parent component
@@ -126,15 +121,14 @@ export function ImageUpload(props: FileUploadProps) {
 				<button className={`file-upload-btn ${props.renderImageFiles.length > 0 ? 'expanded' : ''}`} type="button" onClick={handleAddButton}>
 					＋
 				</button>
+				<input type="file" onChange={handleSelectFileChange} ref={fileInputRef} />
 			</div>
 
 			{isModalOpen && (
 				<div className="modal">
 					<div className="modal-content">
 						<span className="modal-btn close" onClick={() => setIsModalOpen(false)}>&#215;</span>
-						<input type="file" className="file-name" onChange={handleSelectFileChange} />
 						<span className="error-message">{errorMessage}</span>
-						<button type="button" className="confirm" disabled={!!errorMessage || !selectedFile} onClick={handleUpload}>Upload</button>
 					</div>
 				</div>
 			)}
