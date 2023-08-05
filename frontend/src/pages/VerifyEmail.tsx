@@ -3,7 +3,7 @@ import { Form, FormInput, FormButton, LinkButton } from "../components/Form";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../services/AuthProvider";
 
-export default function RequestVerification() {
+export default function VerifyEmail() {
 	const [submitted, setSubmitted] = useState(false);
 	const auth = useAuth();
 	const navigate = useNavigate();
@@ -15,7 +15,7 @@ export default function RequestVerification() {
 		const f = async () => {
 			await auth.handleVerificationRequest(email, password);
 		};
-		
+
 		e.preventDefault();
 		f();
 		setSubmitted(true);
@@ -48,7 +48,7 @@ export default function RequestVerification() {
 						<LinkButton to="..">Back</LinkButton>
 						<FormButton type="submit">Submit</FormButton>
 					</div>
-					
+
 				</Form>
 				{submitted && submitMessage}
 			</div>

@@ -6,8 +6,8 @@ import ThiefList from "./pages/ThiefList";
 import ThiefEdit from "./pages/ThiefEdit";
 import UserList from "./pages/UserList";
 // import UserEdit from "./pages/UserEdit";
-import RequestVerification from "./pages/RequestVerification";
-import DataImport from "./pages/Data";
+import VerifyEmail from "./pages/VerifyEmail";
+import DataMgmt from "./pages/DataMgmt";
 import About from "./pages/About";
 import { AuthProtected } from "./components/AuthProtected";
 import { Logout } from "./pages/Logout";
@@ -28,17 +28,17 @@ export default function App() {
 	return (
 		<div className="App">
 			<Routes>
-				<Route path="/"          element={<Login />}></Route>
-				<Route path="/signup"    element={<Signup />}></Route>
-				<Route path="/forgot"    element={<ForgotPass />}></Route>
-				<Route path="/thiefList" element={<ThiefList />}></Route>
-				<Route path="/thiefEdit" element={<ThiefEdit />}></Route>
-				<Route path="/userList"  element={<UserList />}></Route>
-				{/* <Route path="/userEdit"  element={<UserEdit />}></Route> */}
-				<Route path="/import"    element={<DataImport />}></Route>
-				<Route path="/about"     element={<AuthProtected><About /></AuthProtected>}></Route>
-				<Route path="/logout"    element={<Logout />}></Route>
-				<Route path="/requestverification" element={<RequestVerification />}></Route>
+				<Route path="/"       element={<Login       />}></Route>
+				<Route path="/signup" element={<Signup      />}></Route>
+				<Route path="/verify" element={<VerifyEmail />}></Route>
+				<Route path="/forgot" element={<ForgotPass  />}></Route>
+				<Route path="/thiefs" element={<ThiefList   />}></Route>
+				<Route path="/thief"  element={<ThiefEdit   />}></Route>
+				<Route path="/users"  element={<UserList    />}></Route>
+				{/* <Route path="/user"   element={<UserEdit    />}></Route> */}
+				<Route path="/data"   element={<DataMgmt    />}></Route>
+				<Route path="/about"  element={<AuthProtected><About /></AuthProtected>}></Route>
+				<Route path="/logout" element={<Logout      />}></Route>
 			</Routes>
 		</div>
 	);

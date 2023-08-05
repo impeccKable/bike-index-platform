@@ -16,7 +16,7 @@ export default function Login() {
 		const f = async () => {
 			try{
 				await auth?.handleLogin(email, password);
-				navigate("/thiefList");
+				navigate("/thiefs");
 			} catch (error) {
 				if(error.message === 'User email is not verified'){
 					loginFailureAlert("email-not-verified");
@@ -39,7 +39,7 @@ export default function Login() {
 			case "email-not-verified":
 				alert!.innerHTML = "Email not verified. Please check your email for a verification link. ";
 				alert!.innerHTML += "To request another verification email visit ";
-				alert!.innerHTML += "<a href='/requestverification'>here</a>.";
+				alert!.innerHTML += "<a href='/verify'>here</a>.";
 				break;
 			case "user-not-verified":
 				alert!.innerHTML = "User not verified. Please contact an administrator.";

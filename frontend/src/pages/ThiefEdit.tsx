@@ -61,9 +61,9 @@ export default function ThiefEdit() {
 			formData.append('deletedImages', JSON.stringify(deletedImages));
 		}
 
-		const res = await httpClient.put('/thiefEdit', formData)
+		const res = await httpClient.put('/thief', formData)
 			.catch(err => {
-				DebugLogs('ThiefEdit post error', err.message, debug);
+				DebugLogs('Thief put error', err.message, debug);
 			});
 
 		if (res) {
@@ -126,34 +126,38 @@ export default function ThiefEdit() {
 		return results;
 	};
 
-	async function get() {
-		const res = await httpClient
-												.get(`/thiefEdit?thiefId=${url.searchParams.get('thiefId')}`)
-												.catch((err) => {
-													DebugLogs('ThiefEdit get error', err.message, debug);
-												});
-			Object.entries(res.data.thiefInfo[0]).map((atr) => {
-				if (atr[0].localeCompare('thiefId') && atr[1].length === 0) {
-					atr[1] = [''];
-				}
-				thiefInfo[atr[0]] = atr[1];
-			}) 
-			setIsLoading(false);
-			if (res.data.imageUrls.length !== 0 && renderImageFiles.length === 0) {
-				setRenderImageFiles(res.data.imageUrls)
+	async function async_get(thiefId: string) {
+		let res: any;
+		try {
+			res = await httpClient.get(`/thief?thiefId=${thiefId}`)
+		} catch (err: any) {
+			DebugLogs('Thief get error', err.message, debug);
+			return;
+		}
+		Object.entries(res.data.thiefInfo[0]).map((atr) => {
+			if (atr[0].localeCompare('thiefId') && atr[1].length === 0) {
+				atr[1] = [''];
 			}
-			DebugLogs('ThiefEdit get response', res.data, debug);
-}
+			thiefInfo[atr[0]] = atr[1];
+		})
+		setIsLoading(false);
+		if (res.data.imageUrls.length !== 0 && renderImageFiles.length === 0) {
+			setRenderImageFiles(res.data.imageUrls)
+		}
+		DebugLogs('Thief get response', res.data, debug);
+	}
 
 	useEffect(() => {
 		DebugLogs('ThiefEdit Component', '', debug);
-		if (url.searchParams.get('thiefId') === 'new') {
+		let thiefId = url.searchParams.get('thiefId');
+		if (thiefId === 'new') {
 			setIsLoading(false);
 			thiefInfo.thiefId = 'new';
 			setThiefInfo(thiefInfo);
 			return;
+		} else if (thiefId) {
+			async_get(thiefId);
 		}
-		get();
 	}, []);
 
 	return (
