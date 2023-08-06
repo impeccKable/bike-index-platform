@@ -79,9 +79,11 @@ export default function Signup() {
 				</Form>
 				{submitted && (
 					<div>
-						<p>Your request to sign up has been submitted!</p>
-						<p>Please check your inbox for a verification email.</p>
-						<p>We will review your application and get back to you.</p>
+						<p>
+						Your request to sign up has been submitted!
+						Please check your inbox for a verification email.
+						We will review your application and get back to you.
+						</p>
 					</div>
 				)}
 				{passwordMismatch && (

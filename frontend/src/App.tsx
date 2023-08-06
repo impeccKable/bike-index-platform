@@ -1,12 +1,10 @@
 import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import ForgotPass from "./pages/ForgotPass";
 import ThiefList from "./pages/ThiefList";
 import ThiefEdit from "./pages/ThiefEdit";
 import UserList from "./pages/UserList";
 // import UserEdit from "./pages/UserEdit";
-import RequestVerification from "./pages/RequestVerification";
 import DataImport from "./pages/Data";
 import About from "./pages/About";
 import { AuthProtected } from "./components/AuthProtected";
@@ -30,7 +28,6 @@ export default function App() {
 			<Routes>
 				<Route path="/"          element={<Login />}></Route>
 				<Route path="/signup"    element={<Signup />}></Route>
-				<Route path="/forgot"    element={<ForgotPass />}></Route>
 				<Route path="/thiefList" element={<AuthProtected><ThiefList /></AuthProtected>}></Route>
 				<Route path="/thiefEdit" element={<AuthProtected><ThiefEdit /></AuthProtected>}></Route>
 				<Route path="/userList"  element={<AuthProtected><UserList /></AuthProtected>}></Route>
@@ -38,7 +35,6 @@ export default function App() {
 				<Route path="/import"    element={<AuthProtected><DataImport /></AuthProtected>}></Route>
 				<Route path="/about"     element={<AuthProtected><About /></AuthProtected>}></Route>
 				<Route path="/logout"    element={<AuthProtected><Logout /></AuthProtected>}></Route>
-				<Route path="/requestverification" element={<RequestVerification />}></Route>
 			</Routes>
 		</div>
 	);
