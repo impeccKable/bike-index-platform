@@ -78,7 +78,7 @@ export default function Signup() {
 					</div>
 				</Form>
 				<div className="notecard-links">
-					<a href="/requestverification">Request Verification Email</a>
+					<a href="/verify">Request Verification Email</a>
 				</div>
 				{submitted && (
 					<div>
