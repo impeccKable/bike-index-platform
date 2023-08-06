@@ -31,13 +31,13 @@ export default function App() {
 				<Route path="/"          element={<Login />}></Route>
 				<Route path="/signup"    element={<Signup />}></Route>
 				<Route path="/forgot"    element={<ForgotPass />}></Route>
-				<Route path="/thiefList" element={<ThiefList />}></Route>
-				<Route path="/thiefEdit" element={<ThiefEdit />}></Route>
-				<Route path="/userList"  element={<UserList />}></Route>
+				<Route path="/thiefList" element={<AuthProtected><ThiefList /></AuthProtected>}></Route>
+				<Route path="/thiefEdit" element={<AuthProtected><ThiefEdit /></AuthProtected>}></Route>
+				<Route path="/userList"  element={<AuthProtected><UserList /></AuthProtected>}></Route>
 				{/* <Route path="/userEdit"  element={<UserEdit />}></Route> */}
-				<Route path="/import"    element={<DataImport />}></Route>
+				<Route path="/import"    element={<AuthProtected><DataImport /></AuthProtected>}></Route>
 				<Route path="/about"     element={<AuthProtected><About /></AuthProtected>}></Route>
-				<Route path="/logout"    element={<Logout />}></Route>
+				<Route path="/logout"    element={<AuthProtected><Logout /></AuthProtected>}></Route>
 				<Route path="/requestverification" element={<RequestVerification />}></Route>
 			</Routes>
 		</div>

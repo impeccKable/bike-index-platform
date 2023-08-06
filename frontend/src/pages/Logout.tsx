@@ -11,7 +11,7 @@ export function Logout() {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		auth?.handleLogout;
+		auth?.handleLogout();
 		navigate("/");
 	}, []);
 

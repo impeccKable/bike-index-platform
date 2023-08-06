@@ -84,6 +84,7 @@ export const AuthProvider = ({ children }: any) => {
 
 	const handleLogout = () => {
 		updateUser(null);
+		localStorage.removeItem('user');
 		signOut(auth);
 	};
 
