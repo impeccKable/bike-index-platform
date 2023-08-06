@@ -385,4 +385,7 @@ nav button:hover {
 	margin-left: 0;
 }
 
+#alert-link:hover {
+	cursor: pointer;
+}
 
