@@ -197,6 +197,7 @@ Schedule
 				[x]Add message that a verification email was sent to sign up page
 				[x]Add an error diologue when login with unverified email (with a link to resend email)
 				[x]Add an error diologue when password is incorrect (with a link to reset password)
+				[x]Add an error for too many requests to Firebase
 				Add login alert for temporarily disabled accounts(too many failed logins)
 				Change firebase project name
 				Ability to change email
@@ -204,9 +205,10 @@ Schedule
 				Frontend
 				Approve users
 			Misc
+				[x]Fix bug with AuthProtected loading before AuthProvider useEffect
 				Make it robust to exceptions/database errors
-				There's an error in console log when reloading pages (react loading things in a weird order)
-				Test auth protected routes (reloading page booted even with fresh token)
+				[?]There's an error in console log when reloading pages (react loading things in a weird order)
+				[IP]Test auth protected routes (reloading page booted even with fresh token)
 		Everyone
 			Clean up code (console logs, variable names, dir names, simplifications, consistency, etc)
 
