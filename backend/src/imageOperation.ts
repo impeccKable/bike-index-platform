@@ -42,6 +42,7 @@ export async function uploadImage(
 			Key: key,
 			Body: file.buffer,
 			ContentType: file.mimetype,
+			CacheControl: 'max-age=3600',
 		};
 
 		return s3Client

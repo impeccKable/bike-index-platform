@@ -7,7 +7,7 @@ import {
 	FormButton,
 	LinkButton,
 } from '../components/Form';
-import { ImageUpload } from '../components/ImageUplaod/ImageUpload';
+import { ImageUpload } from '../components/ImageUplaod/FileUpload';
 import { useSearchParams } from 'react-router-dom';
 import { httpClient } from '../services/HttpClient';
 import { useRecoilValue } from 'recoil';
@@ -92,7 +92,7 @@ export default function ThiefEdit() {
 			thiefId: url.searchParams.get('thiefId'),
 		};
 		const consoleMessages: any = [];
-		const newThiefInfo = {...thiefInfo};
+		const newThiefInfo = { ...thiefInfo };
 
 		// need to split this one
 		Object.entries(submitData).map((field) => {
@@ -128,22 +128,22 @@ export default function ThiefEdit() {
 
 	async function get() {
 		const res = await httpClient
-												.get(`/thiefEdit?thiefId=${url.searchParams.get('thiefId')}`)
-												.catch((err) => {
-													DebugLogs('ThiefEdit get error', err.message, debug);
-												});
-			Object.entries(res.data.thiefInfo[0]).map((atr) => {
-				if (atr[0].localeCompare('thiefId') && atr[1].length === 0) {
-					atr[1] = [''];
-				}
-				thiefInfo[atr[0]] = atr[1];
-			}) 
-			setIsLoading(false);
-			if (res.data.imageUrls.length !== 0 && renderImageFiles.length === 0) {
-				setRenderImageFiles(res.data.imageUrls)
+			.get(`/thiefEdit?thiefId=${url.searchParams.get('thiefId')}`)
+			.catch((err) => {
+				DebugLogs('ThiefEdit get error', err.message, debug);
+			});
+		Object.entries(res.data.thiefInfo[0]).map((atr) => {
+			if (atr[0].localeCompare('thiefId') && atr[1].length === 0) {
+				atr[1] = [''];
 			}
-			DebugLogs('ThiefEdit get response', res.data, debug);
-}
+			thiefInfo[atr[0]] = atr[1];
+		})
+		setIsLoading(false);
+		if (res.data.imageUrls.length !== 0 && renderImageFiles.length === 0) {
+			setRenderImageFiles(res.data.imageUrls)
+		}
+		DebugLogs('ThiefEdit get response', res.data, debug);
+	}
 
 	useEffect(() => {
 		DebugLogs('ThiefEdit Component', '', debug);
@@ -162,21 +162,21 @@ export default function ThiefEdit() {
 			<main>
 				<h1>
 					Thief Edit {isLoading && showLoadGif && (
-						<img src={loading} alt="loading" width="30px" height="30px"/>
+						<img src={loading} alt="loading" width="30px" height="30px" />
 					)}
 				</h1>
 				<Form onSubmit={handleFormSubmit}>
-					<FormInput  label="Thief ID"    name="thiefId"    value={thiefInfo.thiefId}   disabled={true}/>
-					<MultiField label="Name"        name="name"       data={thiefInfo.name}       disabled={isLoading} component={FormInput}/>
-					<MultiField label="Email"       name="email"      data={thiefInfo.email}      disabled={isLoading} component={FormInput}/>
-					<MultiField label="Url"         name="url"        data={thiefInfo.url}        disabled={isLoading} component={FormInput}/>
-					<MultiField label="Address"     name="addr"       data={thiefInfo.addr}       disabled={isLoading} component={FormInput}/>
-					<MultiField label="Phone"       name="phone"      data={thiefInfo.phone}      disabled={isLoading} component={FormInput} type="phone"/>
-					<MultiField label="Bike Serial" name="bikeSerial" data={thiefInfo.bikeSerial} disabled={isLoading} component={FormInput}/>
-					<MultiField label="Phrase"      name="phrase"     data={thiefInfo.phrase}     disabled={isLoading} component={FormInput} type="textarea"/>
-					<MultiField label="Notes"       name="note"       data={thiefInfo.note}       disabled={isLoading} component={FormInput} type="textarea"/>
+					<FormInput label="Thief ID" name="thiefId" value={thiefInfo.thiefId} disabled={true} />
+					<MultiField label="Name" name="name" data={thiefInfo.name} disabled={isLoading} component={FormInput} />
+					<MultiField label="Email" name="email" data={thiefInfo.email} disabled={isLoading} component={FormInput} />
+					<MultiField label="Url" name="url" data={thiefInfo.url} disabled={isLoading} component={FormInput} />
+					<MultiField label="Address" name="addr" data={thiefInfo.addr} disabled={isLoading} component={FormInput} />
+					<MultiField label="Phone" name="phone" data={thiefInfo.phone} disabled={isLoading} component={FormInput} type="phone" />
+					<MultiField label="Bike Serial" name="bikeSerial" data={thiefInfo.bikeSerial} disabled={isLoading} component={FormInput} />
+					<MultiField label="Phrase" name="phrase" data={thiefInfo.phrase} disabled={isLoading} component={FormInput} type="textarea" />
+					<MultiField label="Notes" name="note" data={thiefInfo.note} disabled={isLoading} component={FormInput} type="textarea" />
 					<ImageUpload
-						label="Images"
+						label="Files"
 						isLoading={isLoading}
 						renderImageFiles={renderImageFiles}
 						setRenderImageFiles={setRenderImageFiles}
