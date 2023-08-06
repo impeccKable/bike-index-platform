@@ -101,11 +101,11 @@ export default function ThiefList() {
 							setSearchText(event.target.value);
 						}}
 					></input>
-					<LinkButton className="AddThiefButton" to="/thiefEdit?thiefId=new">
+					<LinkButton className="AddThiefButton" to="/thief?thiefId=new">
 						Add New
 					</LinkButton>
 				</div>
-				<LinkTable header={header} data={thiefs} linkBase='/thiefEdit?thiefId=' />
+				<LinkTable header={header} data={thiefs} linkBase='/thief?thiefId=' />
 			</main>
 		</div>
 	);

@@ -16,7 +16,7 @@ export default function Login() {
 		const f = async () => {
 			try{
 				await auth?.handleLogin(email, password);
-				navigate("/thiefList");
+				navigate("/thiefs");
 			} catch (error:any) {
 				loginFailureAlert(error, email, password);
 			};
