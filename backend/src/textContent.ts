@@ -28,6 +28,25 @@ const UpdatePageContent = async (pageName: string, body: string) => {
     console.log("Update Response: ", response);
 };
 
+async function UpdatePageContentModified(data: any) {
+    let query = "UPDATE text_content SET ";
+    let commaDelimited = false;
+    
+    Object.keys(data).forEach( (key, index) => {
+        if (commaDelimited) {
+            query += ', ';
+        }
+        if (key.toLowerCase() !== 'pagename') {
+            query += `${key} = '${data[key]}'`;
+            commaDelimited = true;
+        }
+    });
+
+    query += ` WHERE page_name = '${data.pageName}';`;
+
+    return await db.any(query);
+}
+
 
 router.get('/', async (req: express.Request, res: express.Response) => {
     let pageName = req.query.pageName;
@@ -37,7 +56,8 @@ router.get('/', async (req: express.Request, res: express.Response) => {
 
 router.put('/', async (req: express.Request, res: express.Response) => {
     console.log("put request", req.body);
-    let response = UpdatePageContent(req.body.pageName, req.body.body);
+    UpdatePageContentModified(req.body);
+    //let response = UpdatePageContent(req.body.pageName, req.body.body);
     res.json("Test");
 });
 
