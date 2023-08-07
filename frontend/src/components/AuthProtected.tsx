@@ -4,16 +4,16 @@ import { useEffect } from "react";
 import { useNavigate } from "../../node_modules/react-router-dom/dist/index";
 
 export const AuthProtected = ({ children }: any) => {
-	const { user }: any = useAuth();
-
-	// TODO: make this component dependent on user
+	const { user, loading }: any = useAuth();
 
 	useEffect(() => {
 		console.log(user);
-	}, [user]);
+	}, [loading]);
 
-	if (!user) {
+	if (!loading&&!user) {
 		return <Navigate to="/" replace />;
+	} else if (loading) {
+		return <div>Loading...</div>;
 	}
 
 	return children;
