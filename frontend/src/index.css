@@ -256,6 +256,19 @@ nav button:hover {
 	border-color: #686868;
 }
 
+.loading-icon {
+	margin: 0 0.75rem;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+}
+
+
+
 /* ============= Specific Pages ============= */
 .login-page .card {
 	width: 20rem;
@@ -383,6 +396,7 @@ nav button:hover {
 }
 .data-page form button {
 	margin-left: 0;
+	margin-right: 0;
 }
 
 #alert-link:hover {

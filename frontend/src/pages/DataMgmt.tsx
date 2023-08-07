@@ -2,7 +2,7 @@ import { useState } from "react";
 import Navbar from "../components/Navbar";
 import { Form, FormButton } from "../components/Form";
 import { httpClient } from "../services/HttpClient";
-import loading from '../assets/loading.gif';
+import LoadingIcon from '../components/LoadingIcon';
 
 export default function DataMgmt() {
 	const [newDataCnts, setNewDataCnts]: any = useState(null);
@@ -63,7 +63,7 @@ export default function DataMgmt() {
 					<input name="csvfile" type="file" accept=".csv" onChange={handleSelectFileChange} />
 					<div className="form-btns">
 						<FormButton type="submit" disabled={!isFileSelected}>Upload</FormButton>
-						{isLoadingImport && (<img src={loading} alt="loading" width="30px" height="30px" />)}
+						<LoadingIcon when={isLoadingImport} />
 					</div>
 				</Form>
 				{newDataCnts && (
@@ -90,7 +90,7 @@ export default function DataMgmt() {
 				<Form onSubmit={handleExport}>
 					<div className="form-btns">
 						<FormButton type="submit">Download</FormButton>
-						{isLoadingExport && (<img src={loading} alt="loading" width="30px" height="30px" />)}
+						<LoadingIcon when={isLoadingExport}/>
 					</div>
 				</Form>
 			</main>
