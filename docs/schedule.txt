@@ -211,6 +211,7 @@ Schedule
 
 		New
 			Switch router.use("/search", search); and router.use("/thief", thiefEdit); to be router.use(["/thiefs", "/thief"], thiefList); to match users
+			Clean up README.md
 	Sprint 7 (8/29)
 		Polish
 			Make thief table columns resizeable

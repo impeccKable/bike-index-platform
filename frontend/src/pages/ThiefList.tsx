@@ -6,6 +6,7 @@ import { debugState } from '../services/Recoil';
 import { httpClient } from '../services/HttpClient';
 import LinkTable from '../components/LinkTable';
 import DebugLogs from '../services/DebugLogs';
+import LoadingIcon from '../components/LoadingIcon';
 
 // @ts-ignore
 export interface Thief extends React.HTMLInputElement {
@@ -29,6 +30,7 @@ export default function ThiefList() {
 	const [searchText, setSearchText] = useState('');
 	const latestSearchText = useRef(searchText);
 	const [thiefs, setThiefs] = useState<Thief[]>([]);
+	const [isLoading, setIsLoading] = useState(true);
 	const debug = useRecoilValue(debugState)
 	const url = new URL(window.location.href);
 
@@ -68,6 +70,7 @@ export default function ThiefList() {
 			// Discard results if the search text has changed since the request was made
 			if (latestSearchText.current !== searchText) return;
 			setThiefs(thiefs);
+			setIsLoading(false);
 			DebugLogs('Thief search get response', response.data, debug)
 		};
 		GetThiefs();
@@ -77,7 +80,7 @@ export default function ThiefList() {
 		<div className="formal thieflist-page">
 			<Navbar />
 			<main>
-				<h1>Thief Listing</h1>
+				<h1>Thief Listing<LoadingIcon when={isLoading} delay={1}/></h1>
 				<div className="searchbar">
 					<label htmlFor="SearchType">Search Type</label>
 					<select

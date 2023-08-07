@@ -1,25 +1,19 @@
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
-import {
-	Form,
-	MultiField,
-	FormInput,
-	FormButton,
-	LinkButton,
-} from '../components/Form';
+import { Form, MultiField, FormInput, FormButton, LinkButton } from '../components/Form';
 import { ImageUpload } from '../components/ImageUplaod/ImageUpload';
 import { useSearchParams } from 'react-router-dom';
 import { httpClient } from '../services/HttpClient';
 import { useRecoilValue } from 'recoil';
 import { debugState } from '../services/Recoil';
-import loading from '../assets/loading.gif';
+import LoadingIcon from '../components/LoadingIcon';
 import DebugLogs from '../services/DebugLogs';
 
 
 export default function ThiefEdit() {
 	const [searchParams, setSearchParams] = useSearchParams();
-	const [isLoading, setIsLoading] = useState(true);
-	const [showLoadGif, setShowLoadGif] = useState(false);
+	const [isLoadingInit, setIsLoadingInit] = useState(true);
+	const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
 	const [wasSubmitted, setWasSubmitted] = useState(false);
 	const fakeIamges = ["https://t0.gstatic.com/licensed-image?q=tbn:ANd9GcQkrjYxSfSHeCEA7hkPy8e2JphDsfFHZVKqx-3t37E4XKr-AT7DML8IwtwY0TnZsUcQ", "https://hips.hearstapps.com/hmg-prod/images/beautiful-smooth-haired-red-cat-lies-on-the-sofa-royalty-free-image-1678488026.jpg?crop=0.88847xw:1xh;center,top&resize=1200:*", "https://programmerhumor.io/wp-content/uploads/2021/06/programmerhumor-io-python-memes-backend-memes-41e437ca7369eb4.jpg"]
 	const [renderImageFiles, setRenderImageFiles] = useState<(File | string)[]>([]);
@@ -27,10 +21,6 @@ export default function ThiefEdit() {
 	const [deletedImages, setDeletedImages] = useState<(File | string)[]>([]);
 	const debug = useRecoilValue(debugState);
 	const url = new URL(window.location.href);
-
-	setTimeout(() => {
-		setShowLoadGif(true);
-	}, 1000);
 
 	// thiefInfo at beginning
 	const [thiefInfo, setThiefInfo] = useState({
@@ -46,7 +36,7 @@ export default function ThiefEdit() {
 	});
 
 	async function handleFormSubmit(e: any) {
-		setIsLoading(true);
+		setIsLoadingSubmit(true);
 		e.preventDefault();
 		let results = CompareResults(e.dataDict);
 
@@ -79,7 +69,7 @@ export default function ThiefEdit() {
 		url.searchParams.set('thiefId', res.data.thiefId);
 		window.history.replaceState({ path: url.href }, '', url.href);
 
-		setIsLoading(false);
+		setIsLoadingSubmit(false);
 		setWasSubmitted(true);
 		setTimeout(() => {
 			setWasSubmitted(false);
@@ -140,7 +130,8 @@ export default function ThiefEdit() {
 			}
 			thiefInfo[atr[0]] = atr[1];
 		})
-		setIsLoading(false);
+		setIsLoadingInit(false);
+		setIsLoadingSubmit(false);
 		if (res.data.imageUrls.length !== 0 && renderImageFiles.length === 0) {
 			setRenderImageFiles(res.data.imageUrls)
 		}
@@ -151,7 +142,7 @@ export default function ThiefEdit() {
 		DebugLogs('ThiefEdit Component', '', debug);
 		let thiefId = url.searchParams.get('thiefId');
 		if (thiefId === 'new') {
-			setIsLoading(false);
+			setIsLoadingInit(false);
 			thiefInfo.thiefId = 'new';
 			setThiefInfo(thiefInfo);
 			return;
@@ -160,15 +151,12 @@ export default function ThiefEdit() {
 		}
 	}, []);
 
+	let isLoading = isLoadingInit || isLoadingSubmit;
 	return (
 		<div className="formal thiefedit-page">
 			<Navbar />
 			<main>
-				<h1>
-					Thief Edit {isLoading && showLoadGif && (
-						<img src={loading} alt="loading" width="30px" height="30px"/>
-					)}
-				</h1>
+				<h1>Thief Edit<LoadingIcon when={isLoadingInit} delay={1}/></h1>
 				<Form onSubmit={handleFormSubmit}>
 					<FormInput  label="Thief ID"    name="thiefId"    value={thiefInfo.thiefId}   disabled={true}/>
 					<MultiField label="Name"        name="name"       data={thiefInfo.name}       disabled={isLoading} component={FormInput}/>
@@ -192,6 +180,7 @@ export default function ThiefEdit() {
 					<div className="form-btns">
 						<LinkButton type="button" to="back">Back</LinkButton>
 						<FormButton type="submit" disabled={isLoading}>Submit</FormButton>
+						<LoadingIcon when={isLoadingSubmit} style={{margin: 0}}/>
 					</div>
 					{wasSubmitted && <div className="form-btns">Submitted!</div>}
 				</Form>
