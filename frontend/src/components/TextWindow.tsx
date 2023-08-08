@@ -89,7 +89,7 @@ export default function TextWindow(props: any) {
                 ?
                 <div>
                     <button title='View Window Settings' hidden={!adminStatus} className="btn-stg" onClick={() => {setShowModal(true); setModalMessage("");}}>&#9881;</button>
-                    <button title='Save Text Changes' hidden={!adminStatus} className="btn-upd" onClick={HandleUpdate}>&#8634;</button>
+                    <button title='Save Text Changes' hidden={!adminStatus} className="btn-upd" onClick={HandleUpdate}>✔</button>
                     <textarea 
                         defaultValue={headerText}
                         className="text-area"

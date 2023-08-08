@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import LinkTable from "../components/LinkTable";
 import { LinkButton } from "../components/Form";
 import { httpClient } from "../services/HttpClient";
+import TextWindow from "../components/TextWindow";
 
 // react
 import {useState, useEffect, useRef} from 'react';
@@ -39,6 +40,7 @@ export default function UserList() {
     const [searchText, setSearchText] = useState("");
     const [userData, setUserData] = useState<User[]>([]);
     const preSearchText = useRef(searchText);
+    const pageName = "User List";
 
     useEffect(() => {
         const GetUsers = async () => {
@@ -62,7 +64,8 @@ export default function UserList() {
         <div className="formal">
             <Navbar/>
             <main>
-            <h1>User Listing</h1>
+            <h1>{pageName}</h1>
+            <TextWindow pageName={pageName} />
             <div className="searchbar">
                 <label htmlFor="SearchType">Search Type</label>
                 <select
