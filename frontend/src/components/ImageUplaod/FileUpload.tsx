@@ -33,7 +33,7 @@ function extractObjectKeyForS3Deletion(deletedImage: string | File): string {
 	if (deletedImage instanceof File) {
 		return deletedImage.name;
 	} else {
-		return new URL(deletedImage).pathname.split('/').pop() || "";
+		return new URL(deletedImage).pathname.slice(1);
 	}
 }
 

@@ -19,12 +19,31 @@ interface ThumbnailProps {
 
 const fileTypeIcons = {
 	'application/pdf': pdfIcon,
+	'pdf': pdfIcon,
 	'text/plain': txtIco,
+	'txt': txtIco,
 	'application/msword': docIcon,
+	'doc': docIcon,
 	'application/vnd.openxmlformats-officedocument.wordprocessingml.document': docIcon,
+	'docx': docIcon,
 	'application/vnd.ms-excel': xlsIcon,
+	'xls': xlsIcon,
 	'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': xlsIcon,
+	'xlsx': xlsIcon,
 };
+
+function extractFileExtension(fileNameOrUrl: string): string | undefined {
+	return new URL(fileNameOrUrl).pathname.slice(1).split('.').pop()?.toLowerCase();
+}
+
+function getIconForFileType(file: string | File): string | undefined {
+	if (typeof file === 'string') {
+		const extension = extractFileExtension(file);
+		return fileTypeIcons[extension as keyof typeof fileTypeIcons];
+	} else {
+		return fileTypeIcons[file.type as keyof typeof fileTypeIcons];
+	}
+}
 
 
 // this component is responsible for displaying a single thumbnail image
@@ -36,13 +55,11 @@ export function Thumbnail(props: ThumbnailProps) {
 	useEffect(() => {
 		if (typeof props.file === 'string') {
 			setImageUrl(props.file);
+			setIcon(getIconForFileType(props.file))
 		} else {
-			const fileType = fileTypeIcons[props.file.type as keyof typeof fileTypeIcons];
-			if (fileType) {
-				setIcon(fileType);
-			}
 			const createdUrl = URL.createObjectURL(props.file);
 			setImageUrl(createdUrl);
+			setIcon(getIconForFileType(props.file))
 
 			return () => {
 				URL.revokeObjectURL(createdUrl);

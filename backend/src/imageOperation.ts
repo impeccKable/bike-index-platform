@@ -28,6 +28,20 @@ export class ImageGetError extends Error {
 	}
 }
 
+const fileTypeFolders: { [key: string]: string } = {
+	'application/pdf': 'pdfs',
+	'text/plain': 'txts',
+	'application/msword': 'docs',
+	'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docs',
+	'application/vnd.ms-excel': 'xls',
+	'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'xls',
+};
+
+function getFolderName(type: string): string {
+	return fileTypeFolders[type] || 'images';
+}
+
+
 // upload images to S3 bucket
 export async function uploadImage(
 	uploadedFiles: Express.Multer.File[],
@@ -35,7 +49,8 @@ export async function uploadImage(
 ) {
 	const promises = uploadedFiles.map((file) => {
 		// define the key for S3 bucket object
-		const key = `thiefs/${thiefId}/images/${file.originalname}`;
+		const folderName = getFolderName(file.mimetype);
+		const key = `thiefs/${thiefId}/${folderName}/${file.originalname}`;
 
 		const params = {
 			Bucket: config.bucketName,
@@ -58,13 +73,12 @@ export async function uploadImage(
 }
 
 // delete images from S3 bucket
-export async function deleteImage(deletedFile: string[], thiefId: string) {
+export async function deleteImage(deletedFile: string[]) {
 	const promises = [];
 	for (const filename of deletedFile) {
-		const key = `thiefs/${thiefId}/images/${filename}`;
 		const params = {
 			Bucket: config.bucketName,
-			Key: key,
+			Key: filename,
 		};
 
 		promises.push(
@@ -72,7 +86,7 @@ export async function deleteImage(deletedFile: string[], thiefId: string) {
 				.send(new DeleteObjectCommand(params))
 				.then(() => {
 					console.log(
-						`Deleting object ${key} from bucket ${config.bucketName}`
+						`Deleting object ${filename} from bucket ${config.bucketName}`
 					);
 				})
 				.catch((err) => {
@@ -85,7 +99,7 @@ export async function deleteImage(deletedFile: string[], thiefId: string) {
 
 // get images from S3 bucket
 export async function getImage(thiefId: string): Promise<string[]> {
-	const prefix = `thiefs/${thiefId}/images/`;
+	const prefix = `thiefs/${thiefId}/`;
 
 	const params = {
 		Bucket: config.bucketName,

@@ -1,7 +1,7 @@
 import express from 'express';
 import db from './dbConfig';
 import { fieldToTable, fields, thiefInfoByIds } from './thiefInfo';
-import { uploadImage, deleteImage, getImage, ImageUploadError, ImageDeletionError, ImageGetError} from './imageOperation';
+import { uploadImage, deleteImage, getImage, ImageUploadError, ImageDeletionError, ImageGetError } from './imageOperation';
 import multer from 'multer';
 
 const upload = multer();
@@ -61,20 +61,6 @@ router.get('/', async (req: express.Request, res: express.Response) => {
 	}
 });
 
-router.get('/images', async (req: express.Request, res: express.Response) => {
-	try {
-		res.json(await getImage(req.query.thiefId as string));
-	} catch (err) {
-		if (err instanceof ImageGetError) {
-			console.error(err);
-			res.status(400).send("Error getting image");
-		}
-		console.error(err);
-		res.status(500);
-	}
-
-})
-
 router.put('/', upload.array('newImages'), async (req: express.Request, res: express.Response) => {
 	try {
 		const thiefId = await put(JSON.parse(req.body.body));
@@ -84,7 +70,7 @@ router.put('/', upload.array('newImages'), async (req: express.Request, res: exp
 			promises.push(uploadImage(req.files as Express.Multer.File[], thiefId));
 		}
 		if (req.body.deletedImages) {
-			promises.push(deleteImage(JSON.parse(req.body.deletedImages), thiefId));
+			promises.push(deleteImage(JSON.parse(req.body.deletedImages)));
 		}
 		await Promise.all(promises);
 
