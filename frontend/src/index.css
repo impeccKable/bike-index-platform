@@ -197,6 +197,8 @@ nav button:hover {
 	width: 100%;
 	border-radius: 0 5px 5px 0;
 	resize: none;
+	background-color: #242424;
+	border-style: none;
 }
 
 .btn-upd {
