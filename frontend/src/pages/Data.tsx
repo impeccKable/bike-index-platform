@@ -3,12 +3,14 @@ import Navbar from "../components/Navbar";
 import { Form, FormButton } from "../components/Form";
 import { httpClient } from "../services/HttpClient";
 import loading from '../assets/loading.gif';
+import TextWindow from "../components/TextWindow";
 
 export default function DataImport() {
 	const [newDataCnts, setNewDataCnts]: any = useState(null);
 	const [isFileSelected, setIsFileSelected] = useState(false);
 	const [isLoadingImport, setIsLoadingImport] = useState(false);
 	const [isLoadingExport, setIsLoadingExport] = useState(false);
+	let pageName = 'Data Management';
 
 	async function handleImport(e: any) {
 		try {
@@ -58,7 +60,8 @@ export default function DataImport() {
 		<div className="formal data-page">
 			<Navbar />
 			<main>
-				<h1>Data Management</h1>
+				<h1>{pageName}</h1>
+				<TextWindow pageName={pageName}/>
 				<h3>Import data from .csv</h3>
 				<Form onSubmit={handleImport}>
 					<input name="csvfile" type="file" accept=".csv" onChange={handleSelectFileChange} />

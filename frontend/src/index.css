@@ -186,7 +186,6 @@ nav button:hover {
 	justify-content: center;
 	margin: auto;
 	width: 60%;
-	margin-bottom: 3%;
 }
 
 .text-window > div {
@@ -210,6 +209,7 @@ nav button:hover {
 .btn-stg {
 	margin: 0px;
 	border-radius: 5px 0 0 5px;
+	border-right-color: #3f7dc9;
 	font-size:x-large;
 	padding: 1%;
 }

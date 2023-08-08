@@ -14,6 +14,7 @@ import { useRecoilValue } from 'recoil';
 import { debugState } from '../services/Recoil';
 import loading from '../assets/loading.gif';
 import DebugLogs from '../services/DebugLogs';
+import TextWindow from '../components/TextWindow';
 
 
 export default function ThiefEdit() {
@@ -27,6 +28,7 @@ export default function ThiefEdit() {
 	const [deletedImages, setDeletedImages] = useState<(File | string)[]>([]);
 	const debug = useRecoilValue(debugState);
 	const url = new URL(window.location.href);
+	const pageName = "Thief Edit";
 
 	setTimeout(() => {
 		setShowLoadGif(true);
@@ -161,10 +163,11 @@ export default function ThiefEdit() {
 			<Navbar />
 			<main>
 				<h1>
-					Thief Edit {isLoading && showLoadGif && (
+					{pageName} {isLoading && showLoadGif && (
 						<img src={loading} alt="loading" width="30px" height="30px"/>
 					)}
 				</h1>
+				<TextWindow pageName={pageName}/>
 				<Form onSubmit={handleFormSubmit}>
 					<FormInput  label="Thief ID"    name="thiefId"    value={thiefInfo.thiefId}   disabled={true}/>
 					<MultiField label="Name"        name="name"       data={thiefInfo.name}       disabled={isLoading} component={FormInput}/>

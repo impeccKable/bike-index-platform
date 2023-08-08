@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { isAdmin } from '../services/Recoil';
 import { useRecoilValue } from 'recoil';
 import { httpClient } from '../services/HttpClient';
+import loading from '../assets/loading.gif';
 
 export default function TextWindow(props: any) {
     const [adminStatus, setAdminStatus] = useState(useRecoilValue(isAdmin));
@@ -10,9 +11,11 @@ export default function TextWindow(props: any) {
     const [headerLabel, setHeaderLabel] = useState("");
     const [oldValue, setOldValue] = useState("");
     const [showHeaderOld, setShowHeaderOld] = useState(false);
+    const [isHidden, setIsHidden] = useState(false);
     const [showModal, setShowModal] = useState(false);
-
     const [modalMessage, setModalMessage] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
+    const [updateMessage, setUpdateMessage] = useState("");
 
     useEffect(() => {
         const GetTextContent = async () => {
@@ -30,6 +33,7 @@ export default function TextWindow(props: any) {
             else {
                 setHeaderText("Not Available");
             }
+            setIsLoading(false);
         };
 
         GetTextContent();
@@ -38,23 +42,34 @@ export default function TextWindow(props: any) {
     async function HandleUpdate() {
 
         if (oldValue === headerText) {
-            console.log("No Changes Detected");
-            return;
+            setUpdateMessage("No Changes Detected.");
         }
-        const data = {
-            'pageName': props.pageName,
-            'body': headerText
+        else {
+            const data = {
+                'pageName': props.pageName,
+                'body': headerText
+            }
+            const response = await httpClient.put("/textContent", data);
+            
+            if (response.status === 200) {
+                setOldValue(headerText);
+                setUpdateMessage("Update Successful!");
+            }
+            else {
+                setUpdateMessage("Error, Try Again.");
+            }
         }
-        const response = await httpClient.put("/textContent", data);
 
-        console.log("Put Response Text Content", response);
+       setTimeout(() => {
+            setUpdateMessage("");
+        }, 10000);
     }
 
     async function  UpdateSettings() {
         const data = {
             pageName: props.pageName,
             label: headerLabel,
-            isHidden: showHeaderOld
+            isHidden: isHidden
         }
         const response = await httpClient.put("/textContent", data);
 
@@ -65,10 +80,10 @@ export default function TextWindow(props: any) {
             setModalMessage("Error Try Again");
         }
     }
-    
 
     return (
         <>
+        <div className="bottom-spacer">
             <div className="text-window">
                 { showHeaderOld 
                 ?
@@ -80,15 +95,21 @@ export default function TextWindow(props: any) {
                         className="text-area"
                         readOnly={!adminStatus}
                         onChange={(event: any) => {
-							setHeaderText(event.target.value);
-						}}></textarea>
+                            setHeaderText(event.target.value);
+				    	}}></textarea>
                 </div>
                 :
                 <div>
+                    { isLoading ?
+                    <img src={loading} alt="loading" width="30px" height="30px"/>
+                    :
                     <button hidden={!adminStatus} onClick={() => {setShowHeaderOld(true)}}>Show Header Panel</button>
+                }
                 </div>
                 }
             </div>
+            <div className="text-window"><h4>{updateMessage}</h4></div>
+        </div>
             { showModal &&
             <div id="myModal" className="modal" hidden={true}>
                 <div className="modal-content">
@@ -98,8 +119,8 @@ export default function TextWindow(props: any) {
                         <table>
                             <tbody>
                                 <tr>
-                                    <th><label htmlFor="SetHidden">Hide Text On Render</label></th>
-                                    <td><input type='checkbox' id="SetHidden" checked={!showHeaderOld} onChange={() => {setShowHeaderOld(showHeaderOld ? true : false)}}></input></td>
+                                    <th><label htmlFor="SetHidden">Show Header On Render</label></th>
+                                    <td><input type='checkbox' id="SetHidden" checked={showHeaderOld} onChange={() => {setIsHidden(showHeaderOld); setShowHeaderOld(!showHeaderOld)}}></input></td>
                                 </tr>
                                 <tr>
                                     <th><label htmlFor="SetLabel">Set Header Label</label></th>

@@ -4,10 +4,12 @@ import { httpClient } from '../services/HttpClient';
 import { debugState } from '../services/Recoil';
 import { useRecoilValue } from 'recoil';
 import DebugLogs from '../services/DebugLogs';
+import TextWindow from '../components/TextWindow';
 
 export default function About() {
 	const [stats, setStats]: any = useState({});
-	const debug = useRecoilValue(debugState)
+	const debug = useRecoilValue(debugState);
+	let pageName = "About";
 
 	useEffect(() => {
 		DebugLogs('About Component', '', debug)
@@ -27,7 +29,8 @@ export default function About() {
 	return <div className="formal about-page">
 		<Navbar />
 		<main>
-			<h1>About</h1>
+			<h1>{pageName}</h1>
+			<TextWindow pageName={pageName}/>
 			<p>This is a demo of the Bike Index Platform website.</p>
 			<br />
 			<h3>Database totals:</h3>
