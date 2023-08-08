@@ -1,30 +1,32 @@
 
-import { useState, useEffect } from 'react';
-import { isAdmin } from '../services/Recoil';
-import { useRecoilValue } from 'recoil';
 import { httpClient } from '../services/HttpClient';
+import { isAdmin } from '../services/Recoil';
+import { useState, useEffect } from 'react';
 import loading from '../assets/loading.gif';
+import { useRecoilValue } from 'recoil';
 
 export default function TextWindow(props: any) {
     const [adminStatus, setAdminStatus] = useState(useRecoilValue(isAdmin));
-    const [headerText, setHeaderText] = useState("");
-    const [headerLabel, setHeaderLabel] = useState("");
-    const [oldValue, setOldValue] = useState("");
     const [showHeaderOld, setShowHeaderOld] = useState(false);
-    const [isHidden, setIsHidden] = useState(false);
-    const [showModal, setShowModal] = useState(false);
-    const [modalMessage, setModalMessage] = useState("");
-    const [isLoading, setIsLoading] = useState(true);
     const [updateMessage, setUpdateMessage] = useState("");
+    const [modalMessage, setModalMessage] = useState("");
+    const [headerLabel, setHeaderLabel] = useState("");
+    const [showModal, setShowModal] = useState(false);
+    const [headerText, setHeaderText] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
+    const [isHidden, setIsHidden] = useState(false);
+    const [oldValue, setOldValue] = useState("");
 
     useEffect(() => {
         const GetTextContent = async () => {
+            // grabs this pages content or inserts new then fetches
             const response =  await httpClient.get(`/textContent?pageName=${props.pageName}`);
-            if (response.status === 200) {
+            
+            if (response.status === 200) {    
                 setHeaderText(response.data.body);
+                // keep track of changes
                 setOldValue(response.data.body);
                 setHeaderLabel(response.data.label);
-                
 
                 if (response.data.body !== "" && !response.data.ishidden) {
                     setShowHeaderOld(true);
@@ -35,12 +37,10 @@ export default function TextWindow(props: any) {
             }
             setIsLoading(false);
         };
-
         GetTextContent();
     }, []);
 
     async function HandleUpdate() {
-
         if (oldValue === headerText) {
             setUpdateMessage("No Changes Detected.");
         }
