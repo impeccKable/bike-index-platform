@@ -2,9 +2,9 @@ import { useState } from "react";
 import Navbar from "../components/Navbar";
 import { Form, FormButton } from "../components/Form";
 import { httpClient } from "../services/HttpClient";
-import loading from '../assets/loading.gif';
+import LoadingIcon from '../components/LoadingIcon';
 
-export default function DataImport() {
+export default function DataMgmt() {
 	const [newDataCnts, setNewDataCnts]: any = useState(null);
 	const [isFileSelected, setIsFileSelected] = useState(false);
 	const [isLoadingImport, setIsLoadingImport] = useState(false);
@@ -42,9 +42,8 @@ export default function DataImport() {
 
 	function download(filename: string, text: string) {
 		var blob = new Blob([text], { type: "text/plain" });
-		var url = window.URL.createObjectURL(blob);
 		var a = document.createElement("a");
-		a.href = url;
+		a.href = window.URL.createObjectURL(blob);
 		a.download = filename;
 		a.click();
 	}
@@ -64,7 +63,7 @@ export default function DataImport() {
 					<input name="csvfile" type="file" accept=".csv" onChange={handleSelectFileChange} />
 					<div className="form-btns">
 						<FormButton type="submit" disabled={!isFileSelected}>Upload</FormButton>
-						{isLoadingImport && (<img src={loading} alt="loading" width="30px" height="30px" />)}
+						<LoadingIcon when={isLoadingImport} />
 					</div>
 				</Form>
 				{newDataCnts && (
@@ -91,7 +90,7 @@ export default function DataImport() {
 				<Form onSubmit={handleExport}>
 					<div className="form-btns">
 						<FormButton type="submit">Download</FormButton>
-						{isLoadingExport && (<img src={loading} alt="loading" width="30px" height="30px" />)}
+						<LoadingIcon when={isLoadingExport}/>
 					</div>
 				</Form>
 			</main>

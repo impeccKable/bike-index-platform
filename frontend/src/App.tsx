@@ -1,13 +1,11 @@
 import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import ForgotPass from "./pages/ForgotPass";
 import ThiefList from "./pages/ThiefList";
 import ThiefEdit from "./pages/ThiefEdit";
 import UserList from "./pages/UserList";
 // import UserEdit from "./pages/UserEdit";
-import RequestVerification from "./pages/RequestVerification";
-import DataImport from "./pages/Data";
+import DataMgmt from "./pages/DataMgmt";
 import About from "./pages/About";
 import { AuthProtected } from "./components/AuthProtected";
 import { Logout } from "./pages/Logout";
@@ -30,15 +28,13 @@ export default function App() {
 			<Routes>
 				<Route path="/"          element={<Login />}></Route>
 				<Route path="/signup"    element={<Signup />}></Route>
-				<Route path="/forgot"    element={<ForgotPass />}></Route>
-				<Route path="/thiefList" element={<ThiefList />}></Route>
-				<Route path="/thiefEdit" element={<ThiefEdit />}></Route>
-				<Route path="/userList"  element={<UserList />}></Route>
+				<Route path="/thiefs"    element={<AuthProtected><ThiefList /></AuthProtected>}></Route>
+				<Route path="/thief"     element={<AuthProtected><ThiefEdit /></AuthProtected>}></Route>
+				<Route path="/users"     element={<AuthProtected><UserList /></AuthProtected>}></Route>
 				{/* <Route path="/userEdit"  element={<UserEdit />}></Route> */}
-				<Route path="/import"    element={<DataImport />}></Route>
-				<Route path="/about"     element={<AuthProtected><About /></AuthProtected>}></Route>
-				<Route path="/logout"    element={<Logout />}></Route>
-				<Route path="/requestverification" element={<RequestVerification />}></Route>
+				<Route path="/data"      element={<AuthProtected><DataMgmt /></AuthProtected>}></Route>
+				<Route path="/about"     element={<AuthProtected><About  /></AuthProtected>}></Route>
+				<Route path="/logout"    element={<AuthProtected><Logout /></AuthProtected>}></Route>
 			</Routes>
 		</div>
 	);
