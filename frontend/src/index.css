@@ -199,6 +199,7 @@ nav button:hover {
 	resize: none;
 	background-color: #242424;
 	border-style: none;
+	pointer-events: none;
 }
 
 .text-area-edit {
