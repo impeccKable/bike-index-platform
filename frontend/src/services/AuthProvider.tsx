@@ -40,6 +40,7 @@ export type UserInfo = {
 
 export type AuthContextProps = {
 	user: UserInfo | null;
+	loading: boolean;
 	handleLogin: (email: string, password: string) => Promise<void>;
 	handleLogout: () => void;
 	handleSignUp: (email: string, password: string) => Promise<string>;
@@ -49,9 +50,9 @@ export type AuthContextProps = {
 };
 
 export const AuthProvider = ({ children }: any) => {
-	const navigate = useNavigate();
 	const [user, setUser] = useState<UserInfo | null>(null);
 	const devMode = useRecoilValue(devState);
+	const [loading, setLoading] = useState(true);
 	const [isAd, setIsAdmin] = useRecoilState(isAdmin);
 
 	if (useRecoilValue(debugState) == true) {
@@ -84,6 +85,7 @@ export const AuthProvider = ({ children }: any) => {
 
 	const handleLogout = () => {
 		updateUser(null);
+		localStorage.removeItem('user');
 		signOut(auth);
 	};
 
@@ -128,7 +130,7 @@ export const AuthProvider = ({ children }: any) => {
 		if (user.bikeIndex.banned === true) {
 			throw new Error('User is banned');
 		} else if (user.bikeIndex.approved === false) {
-			throw new Error('User is not verified');
+			throw new Error('User is not approved');
 		} else if(user.firebase.emailVerified === false) {
 			throw new Error('User email is not verified');
 		}
@@ -180,18 +182,20 @@ export const AuthProvider = ({ children }: any) => {
 	}
 
 	useEffect(() => {
+		console.log('AuthProvider useEffect');
 		const prevUser = retrieveUser();
 		if (prevUser) {
 			updateAxios(prevUser.firebase.stsTokenManager.accessToken);
 		}
 		setUser(prevUser);
-		console.log('AuthProvider useEffect');
+		setLoading(false);
 	}, []);
 
 	return (
 		<AuthContext.Provider
 			value={{
 				user,
+				loading,
 				handleLogin,
 				handleLogout,
 				handleSignUp,

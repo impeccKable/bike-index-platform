@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 interface LinkTableProps extends React.HTMLInputElement {
 	header: any;
 	data: Array<any>;
-	linkBase: string; // e.g. '/thiefEdit?thiefId='
+	linkBase: string; // e.g. '/thief?thiefId='
 	[key: string]: any;
 }
 

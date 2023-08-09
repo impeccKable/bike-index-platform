@@ -5,10 +5,12 @@ import { debugState } from '../services/Recoil';
 import { useRecoilValue } from 'recoil';
 import DebugLogs from '../services/DebugLogs';
 import TextWindow from '../components/TextWindow';
+import LoadingIcon from '../components/LoadingIcon';
 
 export default function About() {
 	const [stats, setStats]: any = useState({});
-	const debug = useRecoilValue(debugState);
+	const [isLoading, setIsLoading] = useState(true);
+	const debug = useRecoilValue(debugState)
 	let pageName = "About";
 
 	useEffect(() => {
@@ -17,7 +19,10 @@ export default function About() {
 			const response = await httpClient.get("/stats");
 			return response.data;
 		}
-		getStats().then(setStats);
+		getStats().then((stats: any) => {
+			setStats(stats)
+			setIsLoading(false);
+		});
 	}, []);
 
 	useEffect(() => {
@@ -33,7 +38,7 @@ export default function About() {
 			<TextWindow pageName={pageName}/>
 			<p>This is a demo of the Bike Index Platform website.</p>
 			<br />
-			<h3>Database totals:</h3>
+			<h3>Database totals:<LoadingIcon when={isLoading} delay={1}/></h3>
 			<table>
 				<tbody>
 					<tr><td>Users    </td><td>{stats.users    }</td></tr>

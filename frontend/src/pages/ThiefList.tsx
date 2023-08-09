@@ -6,6 +6,7 @@ import { debugState } from '../services/Recoil';
 import { httpClient } from '../services/HttpClient';
 import LinkTable from '../components/LinkTable';
 import DebugLogs from '../services/DebugLogs';
+import LoadingIcon from '../components/LoadingIcon';
 import TextWindow from '../components/TextWindow';
 
 // @ts-ignore
@@ -30,6 +31,7 @@ export default function ThiefList() {
 	const [searchText, setSearchText] = useState('');
 	const latestSearchText = useRef(searchText);
 	const [thiefs, setThiefs] = useState<Thief[]>([]);
+	const [isLoading, setIsLoading] = useState(true);
 	const debug = useRecoilValue(debugState)
 	const url = new URL(window.location.href);
 	const pageName = "Thief Listing";
@@ -38,7 +40,7 @@ export default function ThiefList() {
 	useEffect(() => {
 		const searchType = url.searchParams.get('searchType');
 		const searchText = url.searchParams.get('searchText');
-		setSearchType(searchType ? searchType : 'name');
+		setSearchType(searchType ? searchType : 'all');
 		setSearchText(searchText ? searchText : '');
 		DebugLogs('ThiefList Component', '', debug)
 	}, []);
@@ -70,6 +72,7 @@ export default function ThiefList() {
 			// Discard results if the search text has changed since the request was made
 			if (latestSearchText.current !== searchText) return;
 			setThiefs(thiefs);
+			setIsLoading(false);
 			DebugLogs('Thief search get response', response.data, debug)
 		};
 		GetThiefs();
@@ -79,7 +82,7 @@ export default function ThiefList() {
 		<div className="formal thieflist-page">
 			<Navbar />
 			<main>
-				<h1>{pageName}</h1>
+				<h1>{pageName}<LoadingIcon when={isLoading} delay={1}/></h1>
 				<TextWindow pageName={pageName} />
 				<div className="searchbar">
 					<label htmlFor="SearchType">Search Type</label>
@@ -90,6 +93,7 @@ export default function ThiefList() {
 							setSearchType(event.target[event.target.selectedIndex].value);
 						}}
 					>
+						<option value="all">All</option>
 						<option value="name">Name</option>
 						<option value="phone">Phone Number</option>
 						<option value="email">Email</option>
@@ -104,11 +108,11 @@ export default function ThiefList() {
 							setSearchText(event.target.value);
 						}}
 					></input>
-					<LinkButton className="AddThiefButton" to="/thiefEdit?thiefId=new">
+					<LinkButton className="AddThiefButton" to="/thief?thiefId=new">
 						Add New
 					</LinkButton>
 				</div>
-				<LinkTable header={header} data={thiefs} linkBase='/thiefEdit?thiefId=' />
+				<LinkTable header={header} data={thiefs} linkBase='/thief?thiefId=' />
 			</main>
 		</div>
 	);

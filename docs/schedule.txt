@@ -74,7 +74,7 @@ Schedule
 					API calls
 	Sprint 4 (7/18)
 		em (done)
-			- Comma delimited spacing when mutliple feilds exist for name, etc
+			- Comma delimited spacing when mutliple fields exist for name, etc
 			Convert all spaces to tabs for indenting
 			Combine host/port in frontend .env
 			- Fix back button from thiefEdit to thiefList
@@ -146,73 +146,120 @@ Schedule
 			x 1hr  Add user email verification through firebase
 			x 1hr  Give more specific error messages for login failures
 	Sprint 6 (8/15)
+		Questions for Bryan
+			Data sanitization
+				What format would you like for phone numbers?
+					One idea would be that an entry of "503-654-9482" would be stripped of formatting "5036549482" and then formatted appropriately "(503) 654-9482"
+					Another example: "52 971 314.1592" -> "529713141592" -> "+52 (971) 314-1592"
+					This would allow searching for specific international codes like "+52" or area codes like "(971)"
+				Do we need to search for addresses of specific states?
+					Right now, we can only search for 'OR' which will match 'Hawthorne Blvd'
+				Are there any other fields that should be sanitized?
+			Thief list
+				What columns should show in the thief list page?
+				What fields should be searchable? All of them?
+					Thief Id,Name,Email,Url,Address,Phone,Bike Serial,Phrase,Notes
+			Verbiage
+				How much verbiage do you plan on putting on each page?
+				How would you like them to look?
+			Backups
+				Should we make data backups?
+				Should we backup files that were uploaded?
+			History log
+				What would you like to track in the history log?
+					We are thinking of having a separate page with a table (possibly searchable?):
+					Datetime | User | Action (delete or add) | New thief or deleted thief? | ThiefID | Data type | Data
+					( Bryan deletes the thief )
+					2023-08-14 14:28:52 | 'bhance' | 'delete' | 'deleting' | 3 | 'note' | 'hillsboro oregon fence'
+					2023-08-14 14:28:52 | 'bhance' | 'delete' | 'deleting' | 3 | 'name' | 'John Smith'
+
+					( rjones changes the note to 'hillsboro oregon fence' )
+					2023-08-10 13:02:27 | 'rjones' | 'add'    |            | 3 | 'note' | 'hillsboro oregon fence'
+					2023-08-10 13:02:27 | 'rjones' | 'delete' |            | 3 | 'note' | 'fence'
+
+					( Bryan adds thief 'John Smith' with a note of 'fence' )
+					2023-08-08 17:06:48 | 'bhance' | 'add'    | 'new'      | 3 | 'note' | 'fence'
+					2023-08-08 17:06:48 | 'bhance' | 'add'    | 'new'      | 3 | 'name' | 'John Smith'
+				Would you like to see the user and date of edit for each field on the thief edit page?
+					We are thinking of adding the info to the right of the fields:
+					Name  [ John Smith               ] [+] [-]     bhance    8/8/23
+					Notes [ hillsboro oregon fence   ] [+] [-]     rjones    8/10/23
+				Should we show the most recent editor for each thief on the thief list page?
+				How important is all of this history logging?
 		Bruce
 		Cheng
+			File uploads
+				x Allow other files (pdfs, etc)
+				x Automatically upload file upon a file select? Automatically go to file select upon + click.
+			Thief List
+				Ascending/descending
+				Put prev/next buttons in a static location?
+				Test search functionality
+				Move pages functionality to backend (page=2)
+				Show how many results
+				Universal search
 		Cristian
+			x Editable text boxes on each page
+			User List
+				Add column order functionality to link table (that doesn't throw errors)
+				User list doesn't update when changing search type (with search text entered)
+				User listing search put parameters into url
+			Thief Edit
+				Grey out Submit button until changes are made. Put red border on changed fields.
+				Add ability to collapse the many rows of urls (any fields over 8, scroll bar or collapse)
+				'Clear all' button for fields (still needs submit, boots them to thief list when all fields are empty)
+				Admin ability to change thief id field to combine multiple thieves (this might work by just making thief id an editable field?) (merge in history log?)
+			History page
+				Track all data item edits
+				Columns: Datetime | User | Action (delete or add) | New thief or deleted thief? | ThiefID | Data type | Data
+					date | epeters | new | new thief | 3 | Name | Emerson Peters
+					date | epeters | new | new thief | 3 | url | &*$*&^%(*&#&^)
+					date | epeters | new |           | 3 | Name | Em the perfectionist
 		Emerson
+			Backups
+				Periodically update a clone of the database
+			Data
+				Add date to downloaded thief data csv
+				Show number of lines submitted and number of data items
+				x Add loading gif to stats table
+			Misc
+				Move run/stop scripts to bike-index-.. repo
+				x Upload env files to capstone folder
+				x Fix url path names (uncapitalize, shorten)
 		Matt
-
-		Notes from meeting
-			bug with deleting a thief and checking a number
-			Track date of entry for thieves
-			Make registration and image submission clearer (load icon somewhere else?),
-			Make csv upload robust to whether there's a header
-			Should we let the other 3 people use it? How does this affect roles?
-
-		Tasks
-			Sumbit changes upon edit? Back button submits changes? Add cancel button? Add a 'unsaved changes' check before leaving page?
-				It just seems like a source of frustration to upload images and then click the back button
-
-			Put prev/next buttons in a static location?
-			Automatically upload upon a file select?
-			Test search functionality
-			Add column order functionality to link table (that doesn't throw errors)
-			User list doesn't update when changing search type
-
-			Add ability to add pdfs
-			Add ability to collapse the many rows of urls
-			Mess around with uploading/deleting images until it gives an error
-			Create delete all images, submit
-			Simplify login logic
-			Search fails on ^&*&(*$#@!@#$%^&*()
-
-			Forward user to https if they use http
-
 			Roles
-				Thief id editable by admin
-				Option to combine multiple thieves (verify this works on thief id change)
-			Make it robust to exceptions/database errors
+				Ability to change user roles
+			Login & Sign up                                     .5 hours (includes research, he can take some more)
+				Make registration and image submission clearer (load icon somewhere else?),
+				[x]Simplify login logic
+				Forward user to https if they use http
+				[x]Remove request verification page
+				[x]Remove forgot password page
+				[x]Add message that a verification email was sent to sign up page
+				[x]Add an error diologue when login with unverified email (with a link to resend email)
+				[x]Add an error diologue when password is incorrect (with a link to reset password)
+				[x]Add an error for too many requests to Firebase
+				Add login alert for temporarily disabled accounts(too many failed logins)
+				Change firebase project name
+				Ability to change email
+			User Edit
+				Frontend
+				Approve users
+			Misc
+				[x]Fix bug with AuthProtected loading before AuthProvider useEffect
+				Make it robust to exceptions/database errors
+				[?]There's an error in console log when reloading pages (react loading things in a weird order)
+				[IP]Test auth protected routes (reloading page booted even with fresh token)
+		Everyone
+			Clean up code (console logs, variable names, dir names, simplifications, consistency, etc)
 
-			Upload env files to capstone folder
-			Remove request verification page
-			Remove forgot password page
-			Add message that a verification email was sent to sign up page
-			Add an error diologue when login with unverified email (with a link to resend email)
-			Add an error diologue when password is incorrect (with a link to reset password)
-			Change firebase project name
-			Fix url path names (uncapitalize, shorten)
-
-			User listing search put parameters into url
-			Ability to change email
-
-			Move pages functionality to backend (page=2)
-			Show how many results
-			Re-show fields on thief edit upon submit
-				(to show what's actually in the database)
-			Add date to downloaded thief data csv
-
-			Show number of lines submitted and number of data items
-			Error when submitting with no file chosen (data import)
-			209 data items on import, 23something when uploading Data_2.csv
-			Clear all button for fields
-			Way to combine thief
-
-			Error in console log when reloading pages (react loading things in a weird order)
-			Testing auth protected routes
-				(reloading page booted even with fresh token)
-
-			Allow other files
-			Move scripts to bike-index-.. repo
-			Add loading gif to stats table?
+		New
+			Switch router.use("/search", search); and router.use("/thief", thiefEdit); to be router.use(["/thiefs", "/thief"], thiefList); to match users
+			Clean up README.md
+			Standardize/sanitize inputs
+				Phone numbers?
+			Universal search
 	Sprint 7 (8/29)
+		Polish
+			Make thief table columns resizeable
 	Completion/Presentation (9/1)

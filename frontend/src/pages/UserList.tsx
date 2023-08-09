@@ -47,7 +47,7 @@ export default function UserList() {
             preSearchText.current = searchText;
             let key = searchText === "" ? "All" : searchText;
 
-            const response = await httpClient.get(`/userList?searchKey=${key}&searchType=${searchType}`);
+            const response = await httpClient.get(`/users?searchKey=${key}&searchType=${searchType}`);
             if (response.status === 200) {
                 console.log("Success 200 ");
             }
@@ -94,7 +94,7 @@ export default function UserList() {
                 </input>
                 <LinkButton className="AddThiefButton" to="">Add New</LinkButton>
             </div>
-            {<LinkTable header={tableHeaders} data={userData} linkBase="/userEdit/"></LinkTable>}
+            {<LinkTable header={tableHeaders} data={userData} linkBase="/user/"></LinkTable>}
             </main>
         </div>
     );

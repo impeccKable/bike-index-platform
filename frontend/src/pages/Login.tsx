@@ -16,42 +16,69 @@ export default function Login() {
 		const f = async () => {
 			try{
 				await auth?.handleLogin(email, password);
-				navigate("/thiefList");
-			} catch (error) {
-				if(error.message === 'User email is not verified'){
-					loginFailureAlert("email-not-verified");
-				} else if(error.message === 'User is not verified'){
-					loginFailureAlert("user-not-verified");
-				} else if(error.message.includes('wrong-password')){
-					loginFailureAlert("wrong-password");
-				} else {
-					loginFailureAlert("unknown-error");
-					console.log(error);
-				};
+				navigate("/thiefs");
+			} catch (error:any) {
+				loginFailureAlert(error, email, password);
 			};
 		};
 		f();
 	};
 
-	const loginFailureAlert = (alertType:string) => {
+	const loginFailureAlert = (error:Error, email:string, password:string) => {
 		const alert = document.getElementById("login-alert");
-		switch(alertType){
-			case "email-not-verified":
-				alert!.innerHTML = "Email not verified. Please check your email for a verification link. ";
-				alert!.innerHTML += "To request another verification email visit ";
-				alert!.innerHTML += "<a href='/requestverification'>here</a>.";
-				break;
-			case "user-not-verified":
-				alert!.innerHTML = "User not verified. Please contact an administrator.";
-				break;
-			case "wrong-password":
-				alert!.innerHTML = "Wrong password. Please try again or reset your password ";
-				alert!.innerHTML += "<a href='/forgot'>here</a>.";
-				break;
-			default:
-				alert!.innerHTML = "Login error. Please try again.";
-				break;
-			};
+		const link = document.getElementById("alert-link");
+		if(error.message === 'User email is not verified'){
+			verificationAlert(alert!, link!, email, password);
+		} else if(error.message === 'User is not approved'){
+			alert!.innerHTML = "User application not approved. Please contact an administrator.";
+		} else if(error.message.includes('wrong-password')){
+			passwordFailureAlert(alert!, link!, email);
+		} else if(error.message.includes('user-not-found')){
+			alert!.innerHTML = "The email entered does not match any user. Please try again or register for a new account.";
+		} else if(error.message.includes('too-many-requests')){
+			alert!.innerHTML = "Too many requests. Please wait and try again later.";
+			console.log(error);
+			link!.innerHTML = "";
+		} else {
+			alert!.innerHTML = "Login error. Please try again.";
+			console.log(error);
+		};
+	};
+
+	const verificationAlert = (alert:HTMLElement, link:HTMLElement, email:string, password:string) => {
+		alert.innerHTML = "Email not verified. Please check your email for a verification link. ";
+		link.innerHTML = "Click here to resend verification email";
+		link.onclick = () => { 
+			try{
+				auth.handleVerificationRequest(email, password); 
+			} catch (error:any) {
+				if(error.message.includes("too-many-requests")){
+					alert.innerHTML = "Too many requests. Please wait and try again later.";
+				} else {
+					alert.innerHTML = "Unknown error. Please try again.";
+				}
+			}
+			alert.innerHTML = "Verification email sent. Please check your email for a verification link. ";
+			link.innerHTML = "";
+		};
+	};
+
+	const passwordFailureAlert = (alert:HTMLElement, link:HTMLElement, email:string) => {
+		alert.innerHTML = "Wrong password. Please try again or ";
+		link.innerHTML = "click here to send a password reset email";
+		link.onclick = () => {	
+			try{
+				auth.handlePasswordReset(email);
+			} catch (error:any) {
+				if(error.message.includes("too-many-requests")){
+					alert.innerHTML = "Too many requests. Please wait and try again later.";
+				} else {
+					alert.innerHTML = "Unknown error. Please try again.";
+				}
+			}
+			alert.innerHTML = "Password reset email sent. Please check your email for a password reset link. ";
+			link.innerHTML = "";
+		};
 	};
 
 	return (
@@ -64,10 +91,10 @@ export default function Login() {
 					<FormButton type="submit">Sign In</FormButton>
 					<div className="notecard-links">
 						<a href="/signup">Sign Up</a>
-						<a href="/forgot">Forgot Password?</a>
 					</div>
 				</Form>
 				<div id="login-alert"/>
+				<a id="alert-link"/>
 			</div>
 		</div>
 	);
