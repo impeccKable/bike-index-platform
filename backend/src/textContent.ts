@@ -14,20 +14,18 @@ const router = express.Router();
 const GetByPageName = async (pageName: string) => {
     try 
     {
-        let query = `SELECT contentid FROM text_content WHERE page_name = '${pageName}'`;
-        let exists = await db.any(query);
+        let exists = await db.any("SELECT contentid FROM text_content WHERE page_name = ($1)", [pageName]);
 
         if (exists.length === 0 && !IsNullOrEmpty(pageName)) {
-            query = `INSERT INTO text_content (page_name, label, body, isHidden) VALUES ('${pageName}', '${pageName}', '', 'false');`;
-            let result = await db.any(query);
+            let result = await db.any("INSERT INTO text_content (page_name, label, body, isHidden) VALUES ($1, $2, $3, $4);",[pageName, pageName, '', false]);
         }
         
-        query = `SELECT contentid, page_name, label, body, ishidden FROM text_content WHERE page_name = '${pageName}';`;
-        let response = await db.any(query);
+        let response = await db.any("SELECT contentid, page_name, label, body, ishidden FROM text_content WHERE page_name = ($1);", [pageName]);
         return response[0];
     }
-    catch (exc) {
-        console.log(`[ backend.src.textContent.ts.GetByPageName() ] Error Attempting To Query for Text Content: Error Message: ${exc}`);
+    catch (exc)
+    {
+        console.log(`[ backend.src.textContent.ts.GetByPageName() ] Error Attempting To Query for ${pageName} Text Content: Error Message: ${exc}`);
         return {body:"No Data Found"};
     }
 }
@@ -45,29 +43,36 @@ function IsNullOrEmpty(value: any) {
 async function UpdatePageContent(data: any) {
     try 
     {
-        let query = `SELECT contentid FROM text_content WHERE page_name = '${data["pageName"]}'`;
-        let exists = await db.any(query);
+        //let query = `SELECT contentid FROM text_content WHERE page_name = ($1)`;
+        let exists = await db.any("SELECT contentid FROM text_content WHERE page_name = ($1)", [data["pageName"]]);
         
         if (exists.length !== 0 && !IsNullOrEmpty(data["pageName"])) {
-            query = "UPDATE text_content SET ";
+            let query = "UPDATE text_content SET ";
+            let parameters: string[] = [];
             let commaDelimited = false;
+            let pageIndex = 1;
             Object.keys(data).forEach( (key, index) => {
                 if (commaDelimited) {
                     query += ', ';
                 }
                 if (key.toLowerCase() !== 'pagename') {
-                    query += `${key} = '${data[key]}'`;
+                    query += `${key} = ($${pageIndex})`;
+                    parameters.push(data[key]);
                     commaDelimited = true;
+                    pageIndex += 1;
                 }
             });
-            query += ` WHERE page_name = '${data.pageName}';`;
-            return await db.any(query);
+            query += ` WHERE page_name = ($${pageIndex});`;
+            parameters.push(data.pageName);
+            return await db.any(query, parameters);
         }
         else {
-            console.log(`[ backend.src.textContent.ts.GetByPageName() ] Page '${data.pageName}' Not Found. Update Not Executed.`);
+            console.log(`[ backend.src.textContent.ts.GetByPageName() ] Page '${data.pageName}' Not Found in text_content table. Update Not Executed.`);
+            return {body:"No Data Found"};
         }
     }
-    catch (exc) {
+    catch (exc) 
+    {
         console.log(`[ backend.src.textContent.ts.UpdatePageContent() ] Error Attempting To Update Text Content: Exception Message: ${exc}`);
         return {body:"No Data Found"};
     }
@@ -76,8 +81,14 @@ async function UpdatePageContent(data: any) {
 router.get('/', async (req: express.Request, res: express.Response) => {
     try 
     {
-        let pageName = req.query.pageName;
-        res.json(await GetByPageName(pageName?.toString() ?? ""));
+        let response = await GetByPageName(req.query.pageName?.toString() ?? "");
+        if (response.body !== "No Data Found") 
+        {
+            res.json(response);
+        }
+        else {
+            res.status(500).json(response);
+        }
     }
     catch (exc)
     {
@@ -88,8 +99,14 @@ router.get('/', async (req: express.Request, res: express.Response) => {
 router.put('/', async (req: express.Request, res: express.Response) => {
     try 
     {
-        UpdatePageContent(req.body);
-        res.json("Test");
+        const response = await UpdatePageContent(req.body);
+        // error status not working...
+        if (response.body !== "No Data Found") {
+            res.json("Success");
+        }
+        else {
+            return res.status(500);
+        }
     }
     catch (exc)
     {

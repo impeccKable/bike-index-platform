@@ -72,7 +72,6 @@ export default function TextWindow(props: any) {
             isHidden: isHidden
         }
         const response = await httpClient.put("/textContent", data);
-
         if (response.status === 200) {
             setModalMessage("Save Complete!");
         }
@@ -92,7 +91,7 @@ export default function TextWindow(props: any) {
                     <button title='Save Text Changes' hidden={!adminStatus} className="btn-upd" onClick={HandleUpdate}>✔</button>
                     <textarea 
                         defaultValue={headerText}
-                        className="text-area"
+                        className={!adminStatus ? "text-area-blendin" : "text-area-edit"}
                         readOnly={!adminStatus}
                         onChange={(event: any) => {
                             setHeaderText(event.target.value);
