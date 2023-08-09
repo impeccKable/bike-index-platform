@@ -146,11 +146,51 @@ Schedule
 			x 1hr  Add user email verification through firebase
 			x 1hr  Give more specific error messages for login failures
 	Sprint 6 (8/15)
+		Questions for Bryan
+			Data sanitization
+				What format would you like for phone numbers?
+					One idea would be that an entry of "503-654-9482" would be stripped of formatting "5036549482" and then formatted appropriately "(503) 654-9482"
+					Another example: "52 971 314.1592" -> "529713141592" -> "+52 (971) 314-1592"
+					This would allow searching for specific international codes like "+52" or area codes like "(971)"
+				Do we need to search for addresses of specific states?
+					Right now, we can only search for 'OR' which will match 'Hawthorne Blvd'
+				Are there any other fields that should be sanitized?
+			Thief list
+				What columns should show in the thief list page?
+				What fields should be searchable? All of them?
+					Thief Id,Name,Email,Url,Address,Phone,Bike Serial,Phrase,Notes
+			Verbiage
+				How much verbiage do you plan on putting on each page?
+				How would you like them to look?
+			Backups
+				Should we make data backups?
+				Should we backup files that were uploaded?
+			History log
+				What would you like to track in the history log?
+					We are thinking of having a separate page with a table (possibly searchable?):
+					Datetime | User | Action (delete or add) | New thief or deleted thief? | ThiefID | Data type | Data
+					( Bryan deletes the thief )
+					2023-08-14 14:28:52 | 'bhance' | 'delete' | 'deleting' | 3 | 'note' | 'hillsboro oregon fence'
+					2023-08-14 14:28:52 | 'bhance' | 'delete' | 'deleting' | 3 | 'name' | 'John Smith'
+
+					( rjones changes the note to 'hillsboro oregon fence' )
+					2023-08-10 13:02:27 | 'rjones' | 'add'    |            | 3 | 'note' | 'hillsboro oregon fence'
+					2023-08-10 13:02:27 | 'rjones' | 'delete' |            | 3 | 'note' | 'fence'
+
+					( Bryan adds thief 'John Smith' with a note of 'fence' )
+					2023-08-08 17:06:48 | 'bhance' | 'add'    | 'new'      | 3 | 'note' | 'fence'
+					2023-08-08 17:06:48 | 'bhance' | 'add'    | 'new'      | 3 | 'name' | 'John Smith'
+				Would you like to see the user and date of edit for each field on the thief edit page?
+					We are thinking of adding the info to the right of the fields:
+					Name  [ John Smith               ] [+] [-]     bhance    8/8/23
+					Notes [ hillsboro oregon fence   ] [+] [-]     rjones    8/10/23
+				Should we show the most recent editor for each thief on the thief list page?
+				How important is all of this history logging?
 		Bruce
 		Cheng
 			File uploads
-				Allow other files (pdfs, etc)
-				Automatically upload file upon a file select? Automatically go to file select upon + click.
+				x Allow other files (pdfs, etc)
+				x Automatically upload file upon a file select? Automatically go to file select upon + click.
 			Thief List
 				Ascending/descending
 				Put prev/next buttons in a static location?
@@ -159,6 +199,7 @@ Schedule
 				Show how many results
 				Universal search
 		Cristian
+			x Editable text boxes on each page
 			User List
 				Add column order functionality to link table (that doesn't throw errors)
 				User list doesn't update when changing search type (with search text entered)
@@ -180,7 +221,7 @@ Schedule
 			Data
 				Add date to downloaded thief data csv
 				Show number of lines submitted and number of data items
-				Add loading gif to stats table?
+				x Add loading gif to stats table
 			Misc
 				Move run/stop scripts to bike-index-.. repo
 				x Upload env files to capstone folder
@@ -215,6 +256,9 @@ Schedule
 		New
 			Switch router.use("/search", search); and router.use("/thief", thiefEdit); to be router.use(["/thiefs", "/thief"], thiefList); to match users
 			Clean up README.md
+			Standardize/sanitize inputs
+				Phone numbers?
+			Universal search
 	Sprint 7 (8/29)
 		Polish
 			Make thief table columns resizeable
