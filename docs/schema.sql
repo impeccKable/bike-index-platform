@@ -75,14 +75,6 @@
 	);
 	grant select, update, insert, delete on note to "ec2-user";
 
--- File
-	create table file (
-		thief_id     int,
-		file         text,  -- (url to file server)
-		primary key (thief_id, file)
-	);
-	grant select, update, insert, delete on file to "ec2-user";
-
 -- Bi_user
 	create table bi_user (
 		user_uid     text,
@@ -100,12 +92,14 @@
 
 -- History
 	create table history (
-		-- Actions from post/get requests, store it as a json object
-		history_id   int,
-		datetime     timestamp,
-		user_uid     int,
-		source       text,  -- ip?
-		message      text
+		history_id       int,
+		datetime         timestamp,
+		user_uid         text,
+		action           text,
+		changed_thief_id int,
+		changed_user_uid text,
+		data_type        text,
+		data             text,
 	);
 	grant select, update, insert, delete on history to "ec2-user";
 

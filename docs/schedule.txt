@@ -192,41 +192,60 @@ Schedule
 				x Allow other files (pdfs, etc)
 				x Automatically upload file upon a file select? Automatically go to file select upon + click.
 			Thief List
-				Ascending/descending
-				Put prev/next buttons in a static location?
-				Test search functionality
-				Move pages functionality to backend (page=2)
-				Show how many results
-				Universal search
+				~ Put prev/next buttons in a static location?
+				x Test search functionality
+				x Move pages functionality to backend (page=2)
+				~ Show how many results
+				x Universal search
+				Sorting functionality
+					Closest match
+					Recency
+					Thief id
+					Alphabetically
+				Add other field types to the search type drop-down (Thief Id,Name,Email,Url,Address,Phone,Bike Serial,Phrase,Notes)
 		Cristian
 			x Editable text boxes on each page
-			User List
-				Add column order functionality to link table (that doesn't throw errors)
-				User list doesn't update when changing search type (with search text entered)
-				User listing search put parameters into url
+			~ User List
+				x Add column order functionality to link table (that doesn't throw errors)
+				x User list doesn't update when changing search type (with search text entered)
+				x User listing search put parameters into url
+				Clean up code
 			Thief Edit
 				Grey out Submit button until changes are made. Put red border on changed fields.
 				Add ability to collapse the many rows of urls (any fields over 8, scroll bar or collapse)
-				'Clear all' button for fields (still needs submit, boots them to thief list when all fields are empty)
+				(Front end) 'Clear all' button for fields (still needs submit, boots them to thief list when all fields are empty)
 				Admin ability to change thief id field to combine multiple thieves (this might work by just making thief id an editable field?) (merge in history log?)
 			History page
-				Track all data item edits
-				Columns: Datetime | User | Action (delete or add) | New thief or deleted thief? | ThiefID | Data type | Data
-					date | epeters | new | new thief | 3 | Name | Emerson Peters
-					date | epeters | new | new thief | 3 | url | &*$*&^%(*&#&^)
-					date | epeters | new |           | 3 | Name | Em the perfectionist
+				Datetime            | User     | Action            | ThiefID | Data type | Data
+				( Bryan deletes the thief )
+				2023-08-14 14:28:52 | 'bhance' | 'remove (delete)' | 3       | 'note'    | 'hillsboro oregon fence'
+				2023-08-14 14:28:52 | 'bhance' | 'remove (delete)' | 3       | 'name'    | 'John Smith'
+				( rjones changes the note to 'hillsboro oregon fence' )
+				2023-08-10 13:02:27 | 'rjones' | 'add'             | 3       | 'note'    | 'hillsboro oregon fence'
+				2023-08-10 13:02:27 | 'rjones' | 'remove'          | 3       | 'note'    | 'fence'
+				( Bryan adds thief 'John Smith' with a note of 'fence' )
+				2023-08-08 17:06:48 | 'bhance' | 'add (new)'       | 3       | 'note'    | 'fence'
+				2023-08-08 17:06:48 | 'bhance' | 'add (new)'       | 3       | 'name'    | 'John Smith'
+
+				Create a history page (sort by recency)
+				Button on theif edit page to go to history page filtered by theif id
+				Button on user  edit page to go to history page filtered by user
 		Emerson
 			Backups
 				Periodically update a clone of the database
+				A way to restore from backup
 			Data
 				Add date to downloaded thief data csv
 				Show number of lines submitted and number of data items
 				x Add loading gif to stats table
 			Misc
+				Bug in search for things in notes
+				Store phone numbers in standard format of "+52 (971) 314-1592" to allow for searches by area code
 				Move run/stop scripts to bike-index-.. repo
 				x Upload env files to capstone folder
 				x Fix url path names (uncapitalize, shorten)
 				x Universal search
+				Clean up README.md
 		Matt
 			Roles
 				Ability to change user roles
@@ -254,11 +273,7 @@ Schedule
 		Everyone
 			Clean up code (console logs, variable names, dir names, simplifications, consistency, etc)
 
-		New
-			Switch router.use("/search", search); and router.use("/thief", thiefEdit); to be router.use(["/thiefs", "/thief"], thiefList); to match users
-			Clean up README.md
-			Standardize/sanitize inputs
-				Phone numbers?
+
 	Sprint 7 (8/29)
 		Polish
 			Make thief table columns resizeable
