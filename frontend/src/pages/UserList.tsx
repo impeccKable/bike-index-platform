@@ -10,23 +10,23 @@ import {useState, useEffect, useRef} from 'react';
 
 
 const tableHeaders = {
-    'ID':           { maxWidth: "20rem", minWidth: "20rem" },
-    'Email':        { maxWidth: "14rem", minWidth: "14rem" },
+    'ID':           { maxWidth: "20rem", minWidth: "20rem", display: "none" },
     'Name':         { maxWidth: "12rem", minWidth: "12rem" },
-    'Title':        { maxWidth: "7rem",  minWidth: "7rem"  },
-    'Organization': { maxWidth: "13rem", minWidth: "13rem" },
+    'Email':        { maxWidth: "14rem", minWidth: "14rem" },
     'Phone':        { maxWidth: "6rem",  minWidth: "6rem"  },
     'Role':         { maxWidth: "5rem",  minWidth: "5rem"  },
+    'Title':        { maxWidth: "7rem",  minWidth: "7rem"  },
+    'Organization': { maxWidth: "13rem", minWidth: "13rem" },
     'Approved':     { maxWidth: "5rem",  minWidth: "5rem"  },
     'Banned':       { maxWidth: "5rem",  minWidth: "5rem"  },
 }
 
 export interface User extends React.HTMLInputElement {
+	title: string;
+    email: string;
 	userid: number;
-	email: string;
 	first: string;
 	last: string;
-	title: string;
 	org: string;
 	phone: string;
 	role: string;
@@ -39,8 +39,14 @@ export default function UserList() {
     const [searchText, setSearchText] = useState("");
     const [userData, setUserData] = useState<User[]>([]);
     const preSearchText = useRef(searchText);
+    const url = new URL(window.location.href);
+
+    
 
     useEffect(() => {
+        url.searchParams.set('searchType', searchType);
+        url.searchParams.set('searchText', searchText);
+        window.history.replaceState({path: url.href}, "", url.href);
         const GetUsers = async () => {
             preSearchText.current = searchText;
             let key = searchText === "" ? "All" : searchText;
@@ -56,7 +62,7 @@ export default function UserList() {
             setUserData(response.data);
         }
         GetUsers();
-    }, [searchText]);
+    }, [searchText, searchType]);
 
     return (
         <div className="formal">
