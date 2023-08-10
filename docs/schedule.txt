@@ -226,6 +226,7 @@ Schedule
 				Move run/stop scripts to bike-index-.. repo
 				x Upload env files to capstone folder
 				x Fix url path names (uncapitalize, shorten)
+				x Universal search
 		Matt
 			Roles
 				Ability to change user roles
@@ -258,7 +259,6 @@ Schedule
 			Clean up README.md
 			Standardize/sanitize inputs
 				Phone numbers?
-			Universal search
 	Sprint 7 (8/29)
 		Polish
 			Make thief table columns resizeable
