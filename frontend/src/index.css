@@ -212,7 +212,8 @@ nav button:hover {
 	padding-left: 2rem;
 	padding-right: 2rem;
 }
-.form-btns button:disabled {
+.form-btns button:disabled,
+.prev-next-button button:disabled {
 	background-color: #303030;
 	color: #a0a0a0;
 	cursor: default;
@@ -334,11 +335,6 @@ nav button:hover {
 .modal-content .close:focus {
 	cursor: pointer;
 	color: white;
-}
-
-.modal-content .confirm:disabled {
-	background-color: grey;
-	cursor: not-allowed;
 }
 
 .modal-content .error-message {
