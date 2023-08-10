@@ -38,7 +38,7 @@ export default function ThiefList() {
 	useEffect(() => {
 		const searchType = url.searchParams.get('searchType');
 		const searchText = url.searchParams.get('searchText');
-		setSearchType(searchType ? searchType : 'name');
+		setSearchType(searchType ? searchType : 'all');
 		setSearchText(searchText ? searchText : '');
 		DebugLogs('ThiefList Component', '', debug)
 	}, []);
@@ -90,6 +90,7 @@ export default function ThiefList() {
 							setSearchType(event.target[event.target.selectedIndex].value);
 						}}
 					>
+						<option value="all">All</option>
 						<option value="name">Name</option>
 						<option value="phone">Phone Number</option>
 						<option value="email">Email</option>
