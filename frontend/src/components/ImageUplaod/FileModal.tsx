@@ -1,4 +1,4 @@
-interface ImageModalProps {
+interface FileModalProps {
 	imageUrl: string;
 	handleClose: () => void;
 	handleNext: () => void;
@@ -9,7 +9,7 @@ interface ImageModalProps {
 
 // component for display image in a single image in a modal
 // receives the imageUrl, event handler functions as props from its parent component
-export function ImageModal(props: ImageModalProps) {
+export function FileModal(props: FileModalProps) {
 
 	// handler for clicking the image within the modal
 	// stops the event propagation to prevent the modal from closing and opens the image in a new tab.

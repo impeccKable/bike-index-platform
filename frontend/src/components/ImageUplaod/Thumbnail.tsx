@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ImageModal } from './FileModal';
+import { FileModal } from './FileModal';
 import pdfIcon from '../../assets/pdf.png';
 import docIcon from '../../assets/doc.png';
 import txtIco from '../../assets/txt.png';
@@ -87,7 +87,7 @@ export function Thumbnail(props: ThumbnailProps) {
 				onClick={handleImageClick}
 			/>
 			{props.currentViewing === props.file && !props.isLoading && (
-				<ImageModal
+				<FileModal
 					imageUrl={imageUrl}
 					handleClose={handleCloseModal}
 					handleNext={props.handleNext}

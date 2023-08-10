@@ -40,7 +40,7 @@ function extractObjectKeyForS3Deletion(deletedImage: string | File): string {
 // responsible for the image uploading functionality
 // displays a file input for selecting files, an upload button, and a list of thumbnail images
 // also takes care of displaying the ImageModal when a thumbnail is clicked
-export function ImageUpload(props: FileUploadProps) {
+export function FileUpload(props: FileUploadProps) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	const [currentViewing, setCurrentViewing] = useState<File | string | null>(null);
