@@ -2,7 +2,7 @@
 // Components
 import Navbar from "../components/Navbar";
 import LinkTable from "../components/LinkTable";
-import { LinkButton } from "../components/Form";
+import { FormInput, LinkButton, FormInputProps } from "../components/Form";
 import { httpClient } from "../services/HttpClient";
 
 // react
@@ -34,14 +34,22 @@ export interface User extends React.HTMLInputElement {
 	banned: string;
 }
 
+const SearchTypeProps: FormInputProps = {
+    id:"SearchType",
+    name:"SearchType",
+    type:"select",
+    label:"Search Type",
+    labelProps: {
+        htmlFor:"SearchType"
+    }
+}
+
 export default function UserList() {
     const [searchType, setSearchType] = useState('name');
     const [searchText, setSearchText] = useState("");
     const [userData, setUserData] = useState<User[]>([]);
     const preSearchText = useRef(searchText);
     const url = new URL(window.location.href);
-
-    
 
     useEffect(() => {
         url.searchParams.set('searchType', searchType);
@@ -70,32 +78,15 @@ export default function UserList() {
             <main>
             <h1>User Listing</h1>
             <div className="searchbar">
-                <label htmlFor="SearchType">Search Type</label>
-                <select
-                id="SearchType"
-                name="SearchType"
-                onChange={(event: any) => {
-                    setSearchType(event.target[event.target.selectedIndex].value);
-                }}
-                >
+                <FormInput {...SearchTypeProps} onChange={(event: any) => {setSearchType(event.target[event.target.selectedIndex].value);}}>
                     <option value="name">Name</option>
                     <option value="phone">Phone Number</option>
                     <option value="email">Email</option>
                     <option value="title">Title</option>
                     <option value="org">Organization</option>
-                </select>
-                <label htmlFor="UserSearch">Search</label>
-                <input
-                    id="UserSearch"
-                    type={searchType}
-                    required
-                    value={searchText}
-                    onChange={(event: any) => {
-                        setSearchText(event.target.value);
-                    }}
-                    >
-                </input>
-                <LinkButton className="AddThiefButton" to="">Add New</LinkButton>
+                </FormInput>
+                <FormInput id="UserSearch" type={searchType} label={"Search"} value={searchText} name="UserSearch" labelProps={{htmlFor:"UserSearch"}} onChange={(event: any) => {setSearchText(event.target.value);}}/>
+                <LinkButton className="AddThiefButton" to="/user?userId=new">Add New</LinkButton>
             </div>
             {<LinkTable header={tableHeaders} data={userData} linkBase="/user?userId="></LinkTable>}
             </main>
