@@ -1,4 +1,6 @@
 # Custom
+frontend.out
+backend.out
 /backend/userFiles
 **/package-lock.json
 
