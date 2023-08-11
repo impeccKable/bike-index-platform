@@ -11,15 +11,15 @@ const router = express.Router();
 /// Params:
 ///     - "pageName": page name that text content belongs to.
 /// Returns: array of {contentid:"", page_name:"", label:"", body:"", isHidden:""}
-const GetByPageName = async (pageName: string) => {
-    try 
+async function GetByPageName(pageName: string) {
+    try
     {
         let exists = await db.any("SELECT contentid FROM text_content WHERE page_name = ($1)", [pageName]);
 
         if (exists.length === 0 && !IsNullOrEmpty(pageName)) {
             let result = await db.any("INSERT INTO text_content (page_name, label, body, isHidden) VALUES ($1, $2, $3, $4);",[pageName, pageName, '', false]);
         }
-        
+
         let response = await db.any("SELECT contentid, page_name, label, body, ishidden FROM text_content WHERE page_name = ($1);", [pageName]);
         return response[0];
     }
@@ -36,16 +36,16 @@ function IsNullOrEmpty(value: any) {
 
 /// Summary: Updates a text content row in the database if it exists.
 ///          Rows updated are those found in the object at run time.
-///          if the page does not exist in the table 
+///          if the page does not exist in the table
 /// Params:
-///     - "data": Object of table attributes to update 
+///     - "data": Object of table attributes to update
 /// Returns: No Return value.
 async function UpdatePageContent(data: any) {
-    try 
+    try
     {
         //let query = `SELECT contentid FROM text_content WHERE page_name = ($1)`;
         let exists = await db.any("SELECT contentid FROM text_content WHERE page_name = ($1)", [data["pageName"]]);
-        
+
         if (exists.length !== 0 && !IsNullOrEmpty(data["pageName"])) {
             let query = "UPDATE text_content SET ";
             let parameters: string[] = [];
@@ -71,7 +71,7 @@ async function UpdatePageContent(data: any) {
             return {body:"No Data Found"};
         }
     }
-    catch (exc) 
+    catch (exc)
     {
         console.log(`[ backend.src.textContent.ts.UpdatePageContent() ] Error Attempting To Update Text Content: Exception Message: ${exc}`);
         return {body:"No Data Found"};
@@ -79,10 +79,10 @@ async function UpdatePageContent(data: any) {
 }
 
 router.get('/', async (req: express.Request, res: express.Response) => {
-    try 
+    try
     {
         let response = await GetByPageName(req.query.pageName?.toString() ?? "");
-        if (response.body !== "No Data Found") 
+        if (response.body !== "No Data Found")
         {
             res.json(response);
         }
@@ -97,7 +97,7 @@ router.get('/', async (req: express.Request, res: express.Response) => {
 });
 
 router.put('/', async (req: express.Request, res: express.Response) => {
-    try 
+    try
     {
         const response = await UpdatePageContent(req.body);
         // error status not working...

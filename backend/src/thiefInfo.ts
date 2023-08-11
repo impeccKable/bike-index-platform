@@ -12,7 +12,7 @@ export const fieldToTable: {[key: string]: string} = {
 };
 export const fields = Object.keys(fieldToTable);
 
-export const thiefInfoByIds = async (thiefIds: number[]) => {
+export async function thiefInfoByIds(thiefIds: number[]) {
 	if (thiefIds.length === 0) {
 		return [];
 	}

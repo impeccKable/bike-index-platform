@@ -78,7 +78,7 @@ export default function ThiefEdit() {
 		}, 3000);
 	}
 
-	const CompareResults = (submitData: any) => {
+	function CompareResults(submitData: any) {
 		//Ex: newValues.name[0].push('Something'), 0 = old values
 		let results = {
 			thiefId: url.searchParams.get('thiefId'),

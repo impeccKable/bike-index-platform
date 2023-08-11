@@ -49,7 +49,7 @@ export type AuthContextProps = {
 	handlePasswordReset: (email: string) => void;
 };
 
-export const AuthProvider = ({ children }: any) => {
+export function AuthProvider({ children }: any) {
 	const [user, setUser] = useState<UserInfo | null>(null);
 	const devMode = useRecoilValue(devState);
 	const [loading, setLoading] = useState(true);
@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }: any) => {
 		console.log('AuthProvider');
 	}
 
-	const updateAxios = async (token: string) => {
+	async function updateAxios(token: string) {
 		console.log(`token: ...${token.slice(-10)}`);
 		httpClient.interceptors.request.use(
 			async (config: any) => {
@@ -78,18 +78,18 @@ export const AuthProvider = ({ children }: any) => {
 		);
 	};
 
-	const updateUser = (newUser: UserInfo | null) => {
+	function updateUser(newUser: UserInfo | null) {
 		localStorage.setItem('user', JSON.stringify(newUser));
 		setUser(newUser);
 	};
 
-	const handleLogout = () => {
+	function handleLogout() {
 		updateUser(null);
 		localStorage.removeItem('user');
 		signOut(auth);
 	};
 
-	const verifyUserToken = async (user: UserInfo) => {
+	async function verifyUserToken (user: UserInfo) {
 
 		if (!user) {
 			handleLogout();
@@ -105,7 +105,7 @@ export const AuthProvider = ({ children }: any) => {
 
 	};
 
-	const retrieveUser = () => {
+	function retrieveUser() {
 		let user = JSON.parse(localStorage.getItem('user') ?? 'null');
 		verifyUserToken(user);
 		return user;
@@ -113,7 +113,7 @@ export const AuthProvider = ({ children }: any) => {
 
 
 	//Login handler function, can throw an error if user is banned, not verified, or if the password is incorrect
-	const handleLogin = async (email: string, password: string) => {
+	async function handleLogin(email: string, password: string) {
 		let login;
 		if (devMode) {
 			login = await signInWithEmailAndPassword(auth, 'email@email.com', 'password');
@@ -125,7 +125,7 @@ export const AuthProvider = ({ children }: any) => {
 			bikeIndex: (await httpClient.post('/login', { uid: login.user.uid }))
 				.data,
 		};
-		
+
 		useEffect(() => {setIsAdmin(user.bikeIndex.role.toLowerCase() === 'admin')});
 		if (user.bikeIndex.banned === true) {
 			throw new Error('User is banned');
@@ -138,7 +138,7 @@ export const AuthProvider = ({ children }: any) => {
 		updateUser(user);
 	};
 
-	const handleSignUp = async (email: string, password: string) => {
+	async function handleSignUp (email: string, password: string) {
 		try {
 			let userData = await createUserWithEmailAndPassword(
 				auth,
@@ -153,7 +153,7 @@ export const AuthProvider = ({ children }: any) => {
 		return '';
 	};
 
-	const handleDelete = async (user: User) => {
+	async function handleDelete (user: User) {
 		try {
 			const uid = user.uid;
 			await deleteUser(user);
@@ -163,7 +163,7 @@ export const AuthProvider = ({ children }: any) => {
 		}
 	};
 
-	const handleVerificationRequest = async (email: string, password:string ) => {
+	async function handleVerificationRequest (email: string, password:string ) {
 		try{
 			let login = await signInWithEmailAndPassword(auth, email, password);
 			await sendEmailVerification(login.user);
@@ -173,7 +173,7 @@ export const AuthProvider = ({ children }: any) => {
 		}
 	};
 
-	const handlePasswordReset = async (email: string) => {
+	async function handlePasswordReset (email: string) {
 		try{
 			await sendPasswordResetEmail(auth, email);
 		} catch (err) {
@@ -209,6 +209,6 @@ export const AuthProvider = ({ children }: any) => {
 	);
 };
 
-export const useAuth = (): any => {
+export function useAuth(): any {
 	return useContext(AuthContext);
 };

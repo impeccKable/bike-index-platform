@@ -15,7 +15,7 @@ export default function About() {
 
 	useEffect(() => {
 		DebugLogs('About Component', '', debug)
-		const getStats = async () => {
+		async function getStats() {
 			const response = await httpClient.get("/stats");
 			return response.data;
 		}

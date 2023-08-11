@@ -52,7 +52,7 @@ export default function ThiefList() {
 		url.searchParams.set('searchText', searchText);
 		window.history.replaceState({ path: url.href }, '', url.href);
 
-		const GetThiefs = async () => {
+		async function GetThiefs() {
 			latestSearchText.current = searchText;
 			const response = await httpClient.get(
 				`/search?searchType=${searchType}&searchText=${searchText}`
