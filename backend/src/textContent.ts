@@ -38,8 +38,8 @@ function IsNullOrEmpty(value: any) {
 ///          Rows updated are those found in the object at run time.
 ///          if the page does not exist in the table 
 /// Params:
-///     - "pageName": page name that text content belongs to.
-/// Returns: array of {contentid:"", page_name:"", label:"", body:"", isHidden:""}
+///     - "data": Object of table attributes to update 
+/// Returns: No Return value.
 async function UpdatePageContent(data: any) {
     try 
     {
