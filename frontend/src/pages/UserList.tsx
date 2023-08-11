@@ -44,12 +44,34 @@ const SearchTypeProps: FormInputProps = {
     }
 }
 
+const SearchInputProps: FormInputProps = {
+    id:"UserSearch",
+    type: "name",
+    label: "Search",
+    value: "",
+    name: "UserSearch",
+    labelProps: {
+        htmlFor:"UserSearch"
+    } 
+}
+
 export default function UserList() {
     const [searchType, setSearchType] = useState('name');
-    const [searchText, setSearchText] = useState("");
+    const [searchText, setSearchText] = useState('');
     const [userData, setUserData] = useState<User[]>([]);
+
+    // Keeps track of old value, avoid unecessary query.
     const preSearchText = useRef(searchText);
     const url = new URL(window.location.href);
+    SearchInputProps.type = searchType;
+    SearchInputProps.value = searchText;
+
+    useEffect(() => {
+        const type = url.searchParams.get("searchType");
+        const text = url.searchParams.get("searchText");
+        setSearchType(type ? type : "name");
+        setSearchText(text ? text : "");
+    },[]);
 
     useEffect(() => {
         url.searchParams.set('searchType', searchType);
@@ -85,7 +107,7 @@ export default function UserList() {
                     <option value="title">Title</option>
                     <option value="org">Organization</option>
                 </FormInput>
-                <FormInput id="UserSearch" type={searchType} label={"Search"} value={searchText} name="UserSearch" labelProps={{htmlFor:"UserSearch"}} onChange={(event: any) => {setSearchText(event.target.value);}}/>
+                <FormInput {...SearchInputProps} onChange={(event: any) => {setSearchText(event.target.value);}}/>
                 <LinkButton className="AddThiefButton" to="/user?userId=new">Add New</LinkButton>
             </div>
             {<LinkTable header={tableHeaders} data={userData} linkBase="/user?userId="></LinkTable>}
