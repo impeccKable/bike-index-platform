@@ -1,5 +1,5 @@
-import express from "express";
-import { auth } from "../app";
+import express from 'express';
+import { auth } from '../../app';
 
 export const validToken = (req: express.Request):boolean => {
 	let token = '';

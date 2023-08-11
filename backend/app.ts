@@ -1,15 +1,15 @@
 /** @format */
 
 import express from "express";
-import search from "./src/search";
-import thiefEdit from "./src/thiefEdit";
-import userList from "./src/user";
-import stats from "./src/stats";
-import signup from "./src/signup";
-import login from "./src/login";
-import token from "./src/token";
-import thiefDataImport from "./src/thiefDataImport";
-import thiefDataExport from "./src/thiefDataExport";
+import search from "./src/routes/search";
+import thiefEdit from "./src/routes/thiefEdit";
+import userList from "./src/routes/user";
+import stats from "./src/routes/stats";
+import signup from "./src/routes/signup";
+import login from "./src/routes/login";
+import token from "./src/routes/token";
+import thiefDataImport from "./src/routes/thiefDataImport";
+import thiefDataExport from "./src/routes/thiefDataExport";
 //@ts-ignore
 //import serviceAccount from 'serviceProvider.json';
 

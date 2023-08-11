@@ -16,7 +16,7 @@ export default function Login() {
 		const f = async () => {
 			try{
 				await auth?.handleLogin(email, password);
-				navigate("/thiefs");
+				navigate("/thieves");
 			} catch (error:any) {
 				loginFailureAlert(error, email, password);
 			};
@@ -48,9 +48,9 @@ export default function Login() {
 	const verificationAlert = (alert:HTMLElement, link:HTMLElement, email:string, password:string) => {
 		alert.innerHTML = "Email not verified. Please check your email for a verification link. ";
 		link.innerHTML = "Click here to resend verification email";
-		link.onclick = () => { 
+		link.onclick = () => {
 			try{
-				auth.handleVerificationRequest(email, password); 
+				auth.handleVerificationRequest(email, password);
 			} catch (error:any) {
 				if(error.message.includes("too-many-requests")){
 					alert.innerHTML = "Too many requests. Please wait and try again later.";
@@ -66,7 +66,7 @@ export default function Login() {
 	const passwordFailureAlert = (alert:HTMLElement, link:HTMLElement, email:string) => {
 		alert.innerHTML = "Wrong password. Please try again or ";
 		link.innerHTML = "click here to send a password reset email";
-		link.onclick = () => {	
+		link.onclick = () => {
 			try{
 				auth.handlePasswordReset(email);
 			} catch (error:any) {

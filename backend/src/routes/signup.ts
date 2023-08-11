@@ -1,5 +1,5 @@
 import express from 'express';
-import db from './dbConfig';
+import { db } from '../config';
 
 const post = async (req: any) => {
   req.body.role = 'readWrite'; // TODO: change this to readOnly

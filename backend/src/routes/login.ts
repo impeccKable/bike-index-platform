@@ -1,5 +1,5 @@
-import express from "express";
-import db from "./dbConfig";
+import express from 'express';
+import { db } from '../config';
 
 const post = async (req: any) =>{
 	return await db.one(`

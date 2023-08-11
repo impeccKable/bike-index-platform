@@ -1,4 +1,4 @@
-import db from "./dbConfig";
+import { db } from './config';
 
 export const fieldToTable: {[key: string]: string} = {
 	"name":       "name",
@@ -11,8 +11,9 @@ export const fieldToTable: {[key: string]: string} = {
 	"note":       "note",
 };
 export const fields = Object.keys(fieldToTable);
+export const tables = Object.values(fieldToTable);
 
-export const thiefInfoByIds = async (thiefIds: number[]) => {
+export const thiefDataByIds = async (thiefIds: number[]) => {
 	if (thiefIds.length === 0) {
 		return [];
 	}
