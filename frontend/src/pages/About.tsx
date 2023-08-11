@@ -36,7 +36,7 @@ export default function About() {
 		<main>
 			<h1>{pageName}</h1>
 			<TextWindow pageName={pageName}/>
-			<p>This is a demo of the Bike Index Platform website.</p>
+			<br />
 			<br />
 			<h3>Database totals:<LoadingIcon when={isLoading} delay={1}/></h3>
 			<table>
