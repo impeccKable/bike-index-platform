@@ -2,141 +2,106 @@
 import { httpClient } from '../services/HttpClient';
 import { isAdmin } from '../services/Recoil';
 import { useState, useEffect } from 'react';
-import loading from '../assets/loading.gif';
+import LoadingIcon from './LoadingIcon';
 import { useRecoilValue } from 'recoil';
 
 export default function TextWindow(props: any) {
 	const [adminStatus, setAdminStatus] = useState(useRecoilValue(isAdmin));
-	const [showHeaderOld, setShowHeaderOld] = useState(false);
-	const [updateMessage, setUpdateMessage] = useState("");
-	const [modalMessage, setModalMessage] = useState("");
-	const [headerLabel, setHeaderLabel] = useState("");
-	const [showModal, setShowModal] = useState(false);
-	const [headerText, setHeaderText] = useState("");
 	const [isLoading, setIsLoading] = useState(true);
+	const [showSettings, setShowSettings] = useState(false);
+	const [message, setMessage] = useState("");
 	const [isHidden, setIsHidden] = useState(false);
-	const [oldValue, setOldValue] = useState("");
+	const [verbiage, setVerbiage] = useState("");
+	const [label, setLabel] = useState("");
 
 	useEffect(() => {
-		async function GetTextContent() {
+		async function getTextContent() {
 			// grabs this pages content or inserts new then fetches
 			const response = await httpClient.get(`/textContent?pageName=${props.pageName}`);
-
 			if (response.status === 200) {
-				setHeaderText(response.data.body);
-				// keep track of changes
-				setOldValue(response.data.body);
-				setHeaderLabel(response.data.label);
-
-				if (response.data.body !== "" && !response.data.ishidden) {
-					setShowHeaderOld(true);
+				setVerbiage(response.data.body);
+				setLabel(response.data.label);
+				if (response.data.ishidden) {
+					setIsHidden(true);
 				}
-			}
-			else {
-				setHeaderText("Not Available");
 			}
 			setIsLoading(false);
 		};
-		GetTextContent();
+		getTextContent();
 	}, []);
 
-	async function HandleUpdate() {
-		if (oldValue === headerText) {
-			setUpdateMessage("No Changes Detected.");
-		}
-		else {
-			const data = {
-				'pageName': props.pageName,
-				'body': headerText
-			}
-			const response = await httpClient.put("/textContent", data);
-
-			if (response.status === 200) {
-				setOldValue(headerText);
-				setUpdateMessage("Update Successful!");
-			}
-			else {
-				setUpdateMessage("Error, Try Again.");
-			}
-		}
-
-		setTimeout(() => {
-			setUpdateMessage("");
-		}, 10000);
-	}
-
-	async function UpdateSettings() {
-		const data = {
-			pageName: props.pageName,
-			label: headerLabel,
-			isHidden: isHidden
-		}
+	async function updateData(data: any) {
+		data['pageName'] = props.pageName;
+		console.log(data);
 		const response = await httpClient.put("/textContent", data);
 		if (response.status === 200) {
-			setModalMessage("Save Complete!");
+			setMessage("Updated!");
+		} else {
+			setMessage("An error occured...");
 		}
-		else {
-			setModalMessage("Error Try Again");
-		}
+		// TODO: This is buggy :(
+		setTimeout(() => {
+			setMessage("");
+		}, 2000);
 	}
 
+	if (!adminStatus) {
+		return isHidden ? <></> : verbiage;
+	}
 	return (
 		<>
-		<div className="bottom-spacer">
-			<div className="text-window">
-				{ showHeaderOld
-				?
-				<div>
-					<button title='View Window Settings' hidden={!adminStatus} className="btn-stg" onClick={() => {setShowModal(true); setModalMessage("");}}>&#9881;</button>
-					<button title='Save Text Changes' hidden={!adminStatus} className="btn-upd" onClick={HandleUpdate}>✔</button>
+		<div className="text-window">
+			{isHidden ? <>
+				<div className='edit'>
+					<LoadingIcon when={isLoading} />
+					<button
+						onClick={() => {updateData({ishidden: false}); setIsHidden(false)}}
+					>Enable Verbiage</button>
+					<LoadingIcon when={false} /> {/* Just to center the button XD */}
+				</div>
+			</> : <>
+				<div className='edit'>
+					<LoadingIcon when={isLoading} />
 					<textarea
-						defaultValue={headerText}
-						className={!adminStatus ? "text-area-blendin" : "text-area-edit"}
-						readOnly={!adminStatus}
-						onChange={(event: any) => {
-							setHeaderText(event.target.value);
-						}}></textarea>
+					defaultValue={verbiage}
+					onChange={(event: any) => {setVerbiage(event.target.value)}}
+					/>
+					<button
+						title='Save Text Changes'
+						className="fancy-button"
+						onClick={() => {updateData({body: verbiage})}}
+					>✔</button>
+					<button
+						title='Toggle Visibility'
+						className="fancy-button"
+						onClick={() => {updateData({ishidden: true}); setIsHidden(true)}}
+					>👁</button>
+					<button
+						title='Text Window Settings'
+						className="fancy-button fancy-button-end"
+						onClick={() => {setShowSettings(true)}}
+					>⚙</button>
 				</div>
-				:
-				<div>
-					{ isLoading ?
-					<img src={loading} alt="loading" width="30px" height="30px"/>
-					:
-					<button hidden={!adminStatus} onClick={() => {setShowHeaderOld(true)}}>Show Header Panel</button>
-				}
-				</div>
-				}
-			</div>
-			<div className="text-window"><h4>{updateMessage}</h4></div>
-		</div>
-			{ showModal &&
-			<div id="myModal" className="modal" hidden={true}>
+			</>}
+			<div className='message'>{message}</div>
+			{ showSettings &&
+			<div className="modal">
 				<div className="modal-content">
-					<h4>Header Text Settings</h4>
-					<span className="close" onClick={() => {setShowModal(false)}}>&times;</span>
-					<div>
-						<table>
-							<tbody>
-								<tr>
-									<th><label htmlFor="SetHidden">Show Header On Render</label></th>
-									<td><input type='checkbox' id="SetHidden" checked={showHeaderOld} onChange={() => {setIsHidden(showHeaderOld); setShowHeaderOld(!showHeaderOld)}}></input></td>
-								</tr>
-								<tr>
-									<th><label htmlFor="SetLabel">Set Header Label</label></th>
-									<td><input type='text' id="SetLabel" value={headerLabel} onChange={(event:any) => {setHeaderLabel(event.target.value)}}></input></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-					<div>
-						<button onClick={UpdateSettings}>Save Changes</button>
-					</div>
-					<div>
-						<p>{modalMessage}</p>
-					</div>
+					<span className="close" onClick={() => {setShowSettings(false)}}>×</span>
+					<h4>Label Name:</h4>
+					<input
+						type='text'
+						id="SetLabel"
+						value={label}
+						onChange={(event:any) => {setLabel(event.target.value)}}
+					></input>
+					<button
+						onClick={() => {updateData({label: label}); setShowSettings(false)}}
+					>Save</button>
 				</div>
 			</div>
 			}
+		</div>
 		</>
 	)
 }

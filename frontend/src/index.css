@@ -25,6 +25,9 @@ body {
 h1 {
 	text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
 }
+h4 {
+	margin: 1rem 0;
+}
 a {
 	font-weight: 500;
 	color: #558dd1;
@@ -181,46 +184,40 @@ nav button:hover {
 }
 
 /* ============= Custom ============= */
-.text-window {
+
+.text-window .edit {
 	display: flex;
 	justify-content: center;
 	margin: auto;
-	width: 60%;
+	max-width: 40rem;
 }
-
-.text-window > div {
-	display: inline-flex;
-	width: 100%;
-}
-
-.text-area-blendin {
-	width: 100%;
-	border-radius: 0 5px 5px 0;
-	resize: none;
-	background-color: #242424;
-	border-style: none;
-	pointer-events: none;
-}
-
-.text-area-edit {
-	width: 100%;
-	border-radius: 0 5px 5px 0;
-	resize: none;
-}
-
-.btn-upd {
-	margin: 0px;
-	border-radius: 0 0 0 0;
-	font-size:x-large;
-	padding: 1%;
-}
-
-.btn-stg {
-	margin: 0px;
+.text-window .edit textarea {
+	font-family: inherit;
 	border-radius: 5px 0 0 5px;
+}
+.text-window .edit .fancy-button {
+	margin: 0px;
+	font-size: 1.5rem;
+	padding: 0.5rem;
+	border-radius: 0;
 	border-right-color: #3f7dc9;
-	font-size:x-large;
-	padding: 1%;
+}
+.text-window .edit .fancy-button-end {
+	border-radius: 0 5px 5px 0;
+	border-right-color: #00000000;
+}
+.text-window .message {
+	display: flex;
+	justify-content: center;
+	height: 1rem;
+	margin: 1rem;
+}
+.text-window .modal-content {
+	flex-direction: column;
+	align-items: center;
+}
+.text-window .modal-content button {
+	margin-top: 1rem;
 }
 
 
@@ -356,7 +353,7 @@ nav button:hover {
 .image-modal .modal-content {
 	width: fit-content;
 	max-width: 80%;
-	max-height: 85vh;;
+	max-height: 85vh;
 	overflow-y: auto;
 }
 
