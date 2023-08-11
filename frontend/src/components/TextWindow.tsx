@@ -6,13 +6,16 @@ import LoadingIcon from './LoadingIcon';
 import { useRecoilValue } from 'recoil';
 
 export default function TextWindow(props: any) {
-	const [adminStatus, setAdminStatus] = useState(useRecoilValue(isAdmin));
+	// const [adminStatus, setAdminStatus] = useState(useRecoilValue(isAdmin));
+	// const [adminStatus, setAdminStatus] = useState(false);
+	const [adminStatus, setAdminStatus] = useState(true);
+	const [preview, setPreview] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
-	const [showSettings, setShowSettings] = useState(false);
+	// const [showSettings, setShowSettings] = useState(false);
 	const [message, setMessage] = useState("");
 	const [isHidden, setIsHidden] = useState(false);
 	const [verbiage, setVerbiage] = useState("");
-	const [label, setLabel] = useState("");
+	// const [label, setLabel] = useState("");
 
 	useEffect(() => {
 		async function getTextContent() {
@@ -20,7 +23,7 @@ export default function TextWindow(props: any) {
 			const response = await httpClient.get(`/textContent?pageName=${props.pageName}`);
 			if (response.status === 200) {
 				setVerbiage(response.data.body);
-				setLabel(response.data.label);
+				// setLabel(response.data.label);
 				if (response.data.ishidden) {
 					setIsHidden(true);
 				}
@@ -42,12 +45,22 @@ export default function TextWindow(props: any) {
 		// TODO: This is buggy :(
 		setTimeout(() => {
 			setMessage("");
-		}, 2000);
+		}, 4000);
 	}
 
-	if (!adminStatus) {
-		return isHidden ? <></> : verbiage;
+	// Show the verbiage
+	if (!adminStatus || preview) {
+		if (isHidden) { return; }
+		// make multiple lines into <p> tags
+		let text = verbiage.split('\n').map((item: string, key: number) => {
+			return <p key={key}>{item}</p>
+		});
+		return <>
+			<div>{text}</div>
+			{ preview && <button onClick={() => {setPreview(false);}}>Done</button> }
+		</>
 	}
+	// Show the edit window
 	return (
 		<>
 		<div className="text-window">
@@ -72,19 +85,24 @@ export default function TextWindow(props: any) {
 						onClick={() => {updateData({body: verbiage})}}
 					>✔</button>
 					<button
-						title='Toggle Visibility'
+						title='Preview'
 						className="fancy-button"
-						onClick={() => {updateData({ishidden: true}); setIsHidden(true)}}
+						onClick={() => {setPreview(true);}}
 					>👁</button>
 					<button
+						title='Disable Verbiage'
+						className="fancy-button fancy-button-end"
+						onClick={() => {updateData({ishidden: true}); setIsHidden(true)}}
+					>⊠</button>
+					{/* <button
 						title='Text Window Settings'
 						className="fancy-button fancy-button-end"
 						onClick={() => {setShowSettings(true)}}
-					>⚙</button>
+					>⚙</button> */}
 				</div>
 			</>}
 			<div className='message'>{message}</div>
-			{ showSettings &&
+			{/* { showSettings &&
 			<div className="modal">
 				<div className="modal-content">
 					<span className="close" onClick={() => {setShowSettings(false)}}>×</span>
@@ -100,7 +118,7 @@ export default function TextWindow(props: any) {
 					>Save</button>
 				</div>
 			</div>
-			}
+			} */}
 		</div>
 		</>
 	)
