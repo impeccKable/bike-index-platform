@@ -8,7 +8,8 @@ import { useRecoilValue } from 'recoil';
 export default function TextWindow(props: any) {
 	// const [adminStatus, setAdminStatus] = useState(useRecoilValue(isAdmin));
 	// const [adminStatus, setAdminStatus] = useState(false);
-	const [adminStatus, setAdminStatus] = useState(true);
+	console.log("role",JSON.parse(localStorage.getItem("user")??'').bikeIndex.role);
+	const [adminStatus, setAdminStatus] = useState(JSON.parse(localStorage.getItem("user")??"")?.bikeIndex?.role?.toLowerCase() === 'admin' ?? false);
 	const [preview, setPreview] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
 	// const [showSettings, setShowSettings] = useState(false);
@@ -16,6 +17,8 @@ export default function TextWindow(props: any) {
 	const [isHidden, setIsHidden] = useState(false);
 	const [verbiage, setVerbiage] = useState("");
 	// const [label, setLabel] = useState("");
+	//const user = localStorage.setItem('user', JSON.stringify(newUser));
+
 
 	useEffect(() => {
 		async function getTextContent() {

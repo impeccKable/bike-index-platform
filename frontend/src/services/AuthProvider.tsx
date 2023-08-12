@@ -53,7 +53,6 @@ export function AuthProvider({ children }: any) {
 	const [user, setUser] = useState<UserInfo | null>(null);
 	const devMode = useRecoilValue(devState);
 	const [loading, setLoading] = useState(true);
-	const [isAd, setIsAdmin] = useRecoilState(isAdmin);
 
 	if (useRecoilValue(debugState) == true) {
 		console.log('AuthProvider');
@@ -126,7 +125,6 @@ export function AuthProvider({ children }: any) {
 				.data,
 		};
 
-		useEffect(() => {setIsAdmin(user.bikeIndex.role.toLowerCase() === 'admin')});
 		if (user.bikeIndex.banned === true) {
 			throw new Error('User is banned');
 		} else if (user.bikeIndex.approved === false) {

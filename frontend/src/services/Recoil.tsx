@@ -17,9 +17,3 @@ export const userState = atom({
 	default: null,
 });
 
-export const isAdmin = atom({
-	key: "admin",
-	default: false,
-});
-
-
