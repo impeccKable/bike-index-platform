@@ -232,21 +232,22 @@ Schedule
 				Button on user  edit page to go to history page filtered by user
 		Emerson
 			Backups
-				Periodically update a clone of the database
-				A way to restore from backup
+				[ ] Periodically update a clone of the database
+				[ ] A way to restore from backup
 			Data
-				Add date to downloaded thief data csv
-				Show number of lines submitted and number of data items
-				x Add loading gif to stats table
+				[X] Add date to downloaded thief data csv
+				[X] Show number of lines submitted and number of data items
+				[x] Add loading gif to stats table
 			Misc
-				Store phone numbers in standard format of "+52 (971) 314-1592" to allow for searches by area code
+				[X] Bug in search for things in notes
+				[ ] Store phone numbers in standard format of "+52 (971) 314-1592" to allow for searches by area code
 					Leaving off: thiefDataImport and thiefEdit need to be combined to one interface now
-				x Move run/stop scripts to bike-index-.. repo
-				x Upload env files to capstone folder
-				x Fix url path names (uncapitalize, shorten)
-				x Universal search
-				Clean up README.md
-				Look for all todos
+				[x] Move run/stop scripts to bike-index-.. repo
+				[x] Upload env files to capstone folder
+				[x] Fix url path names (uncapitalize, shorten)
+				[x] Universal search
+				[X] Clean up README.md
+				[X] Look for all todos
 		Matt
 			Roles
 				Ability to change user roles
