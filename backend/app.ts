@@ -8,6 +8,7 @@ import stats from "./src/stats";
 import signup from "./src/signup";
 import login from "./src/login";
 import token from "./src/token";
+import textContent from "./src/textContent";
 import thiefDataImport from "./src/thiefDataImport";
 import thiefDataExport from "./src/thiefDataExport";
 //@ts-ignore
@@ -35,6 +36,7 @@ app.use(express.json());
 
 router.use("/search", search);
 router.use("/thief", thiefEdit);
+router.use("/textContent", textContent);
 router.use(["/users", "/user"], userList);
 router.use("/stats", stats);
 router.use("/signup", signup);

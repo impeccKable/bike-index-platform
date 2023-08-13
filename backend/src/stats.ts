@@ -1,7 +1,7 @@
 import express from "express";
 import db from "./dbConfig";
 
-const get = async () => {
+async function get() {
 	let [
 		thieves, users, urls, phones, emails, addresses, names
 	] = await Promise.all([

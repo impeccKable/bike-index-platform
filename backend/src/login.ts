@@ -1,17 +1,14 @@
 import express from "express";
 import db from "./dbConfig";
 
-const post = async (req: any) =>{
+async function post(req: any) {
 	return await db.one(`
-		SELECT
-			role,
-				approved,
-				banned
-			FROM bi_user
-			WHERE user_uid = $1
-		`,[
-			req.body.uid,
-		]);
+		SELECT role, approved, banned
+		FROM bi_user
+		WHERE user_uid = $1
+		`,
+		[req.body.uid]
+	);
 }
 
 const router = express.Router();

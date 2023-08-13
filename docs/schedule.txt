@@ -239,13 +239,14 @@ Schedule
 				Show number of lines submitted and number of data items
 				x Add loading gif to stats table
 			Misc
-				Bug in search for things in notes
 				Store phone numbers in standard format of "+52 (971) 314-1592" to allow for searches by area code
-				Move run/stop scripts to bike-index-.. repo
+					Leaving off: thiefDataImport and thiefEdit need to be combined to one interface now
+				x Move run/stop scripts to bike-index-.. repo
 				x Upload env files to capstone folder
 				x Fix url path names (uncapitalize, shorten)
 				x Universal search
 				Clean up README.md
+				Look for all todos
 		Matt
 			Roles
 				Ability to change user roles
@@ -272,8 +273,6 @@ Schedule
 				[IP]Test auth protected routes (reloading page booted even with fresh token)
 		Everyone
 			Clean up code (console logs, variable names, dir names, simplifications, consistency, etc)
-
-
 	Sprint 7 (8/29)
 		Polish
 			Make thief table columns resizeable
