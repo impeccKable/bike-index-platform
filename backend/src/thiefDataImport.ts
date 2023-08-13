@@ -18,7 +18,7 @@ import db from './dbConfig';
 let columnToTable = [ 'thief_id', 'name', 'email', 'url', 'addr', 'phone', 'bike_serial', 'phrase', 'note', ];
 
 const processFile = (req: any) => {
-	let newDataCnts: any = { 'thief': 0, 'name': 0, 'email': 0, 'url': 0, 'addr': 0, 'phone': 0, 'bike_serial': 0, 'phrase': 0, 'note': 0, };
+	let newDataCnts: any = { 'rowCnt': 0, 'dataCnt': 0, 'thief': 0, 'name': 0, 'email': 0, 'url': 0, 'addr': 0, 'phone': 0, 'bike_serial': 0, 'phrase': 0, 'note': 0, };
 	let maxThiefId = -1;
 
 	const tryInsertRow = async (table: string, thief_id: string, val: string) => {
@@ -37,6 +37,7 @@ const processFile = (req: any) => {
 		const rows = parse(fileContents, { skipEmptyLines: true, fromLine: 2, });
 		let inserts: any = [];
 		for (let row of rows) {
+			newDataCnts['rowCnt']++;
 			let thiefId = row[0];
 			if (thiefId === '') { continue; }
 			if (parseInt(thiefId) > maxThiefId) {
@@ -45,6 +46,7 @@ const processFile = (req: any) => {
 			for (let i = 1; i < columnToTable.length; i++) {
 				let val = row[i];
 				if (val === '') { continue; }
+				newDataCnts['dataCnt']++;
 				let col = columnToTable[i];
 				inserts.push(tryInsertRow(col, thiefId, val));
 			}

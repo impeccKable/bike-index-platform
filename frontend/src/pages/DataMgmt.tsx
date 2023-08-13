@@ -32,7 +32,9 @@ export default function DataMgmt() {
 		try {
 			setIsLoadingExport(true);
 			const response = await httpClient.get("/thiefDataExport");
-			download('Thief data.csv', response.data);
+			const date = new Date();
+			const filename = `Thief data ${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}.csv`;
+			download(filename, response.data);
 			setIsLoadingExport(false);
 		} catch (error) {
 			setIsLoadingExport(false);
@@ -66,8 +68,16 @@ export default function DataMgmt() {
 						<LoadingIcon when={isLoadingImport} />
 					</div>
 				</Form>
-				{newDataCnts && (
+				{newDataCnts && (<>
+					<br />
 					<div>
+						<h3>Recieved:</h3>
+						<table>
+							<tbody>
+								<tr><td>Rows </td><td>{newDataCnts.rowCnt }</td></tr>
+								<tr><td>Items</td><td>{newDataCnts.dataCnt}</td></tr>
+							</tbody>
+						</table>
 						<h3>New unique data:</h3>
 						<table>
 							<tbody>
@@ -83,7 +93,7 @@ export default function DataMgmt() {
 							</tbody>
 						</table>
 					</div>
-				)}
+				</>)}
 				<br />
 				<br />
 				<h3>Export all thief data to .csv</h3>
