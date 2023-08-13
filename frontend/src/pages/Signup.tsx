@@ -24,7 +24,7 @@ export default function Signup() {
 			return;
 		}
 
-		const f = async () => {
+		async function f() {
 			const user = await auth?.handleSignUp(
 				e.dataDict.email,
 				e.dataDict.password

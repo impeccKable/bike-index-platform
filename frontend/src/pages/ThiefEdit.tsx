@@ -8,6 +8,7 @@ import { useRecoilValue } from 'recoil';
 import { debugState } from '../services/Recoil';
 import LoadingIcon from '../components/LoadingIcon';
 import DebugLogs from '../services/DebugLogs';
+import TextWindow from '../components/TextWindow';
 
 
 export default function ThiefEdit() {
@@ -21,6 +22,7 @@ export default function ThiefEdit() {
 	const [deletedImages, setDeletedImages] = useState<(File | string)[]>([]);
 	const debug = useRecoilValue(debugState);
 	const url = new URL(window.location.href);
+	const pageName = "Thief Edit";
 
 	// thiefInfo at beginning
 	const [thiefInfo, setThiefInfo] = useState({
@@ -76,7 +78,7 @@ export default function ThiefEdit() {
 		}, 3000);
 	}
 
-	const CompareResults = (submitData: any) => {
+	function CompareResults(submitData: any) {
 		//Ex: newValues.name[0].push('Something'), 0 = old values
 		let results = {
 			thiefId: url.searchParams.get('thiefId'),
@@ -156,7 +158,8 @@ export default function ThiefEdit() {
 		<div className="formal thiefedit-page">
 			<Navbar />
 			<main>
-				<h1>Thief Edit<LoadingIcon when={isLoadingInit} delay={1}/></h1>
+				<h1>{pageName}<LoadingIcon when={isLoadingInit} delay={1}/></h1>
+				<TextWindow pageName={pageName}/>
 				<Form onSubmit={handleFormSubmit}>
 					<FormInput  label="Thief ID"    name="thiefId"    value={thiefInfo.thiefId}   disabled={true}/>
 					<MultiField label="Name"        name="name"       data={thiefInfo.name}       disabled={isLoading} component={FormInput}/>

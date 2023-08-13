@@ -4,16 +4,18 @@ import { httpClient } from '../services/HttpClient';
 import { debugState } from '../services/Recoil';
 import { useRecoilValue } from 'recoil';
 import DebugLogs from '../services/DebugLogs';
+import TextWindow from '../components/TextWindow';
 import LoadingIcon from '../components/LoadingIcon';
 
 export default function About() {
 	const [stats, setStats]: any = useState({});
 	const [isLoading, setIsLoading] = useState(true);
 	const debug = useRecoilValue(debugState)
+	let pageName = "About";
 
 	useEffect(() => {
 		DebugLogs('About Component', '', debug)
-		const getStats = async () => {
+		async function getStats() {
 			const response = await httpClient.get("/stats");
 			return response.data;
 		}
@@ -32,8 +34,9 @@ export default function About() {
 	return <div className="formal about-page">
 		<Navbar />
 		<main>
-			<h1>About</h1>
-			<p>This is a demo of the Bike Index Platform website.</p>
+			<h1>{pageName}</h1>
+			<TextWindow pageName={pageName}/>
+			<br />
 			<br />
 			<h3>Database totals:<LoadingIcon when={isLoading} delay={1}/></h3>
 			<table>

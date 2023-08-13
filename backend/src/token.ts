@@ -1,7 +1,7 @@
 import express from "express";
 import { auth } from "../app";
 
-export const validToken = (req: express.Request):boolean => {
+export function validToken(req: express.Request):boolean {
 	let token = '';
 	if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
 		token = req.headers.authorization.split(' ')[1];

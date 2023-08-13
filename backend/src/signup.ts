@@ -1,7 +1,7 @@
 import express from 'express';
 import db from './dbConfig';
 
-const post = async (req: any) => {
+async function post(req: any) {
 	req.body.role = 'readWrite';
 	req.body.approved = false;
 	req.body.banned = false;

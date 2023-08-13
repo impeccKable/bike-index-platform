@@ -1,5 +1,5 @@
 
-export const withLowercaseKeys = (obj: any) => {
+export function withLowercaseKeys(obj: any) {
 	for (let key in obj) {
 		let newKey = key.toLowerCase();
 		if (newKey !== key) {
