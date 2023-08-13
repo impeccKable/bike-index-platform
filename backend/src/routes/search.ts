@@ -3,7 +3,7 @@ import { db } from '../config';
 import { fieldToTable, thiefDataByIds } from '../thiefData';
 
 // Get matching thief_ids
-const get = async (query: any) => {
+async function get(query: any) {
 	let searchType: string = query.searchType;
 	let searchText: string = query.searchText;
 	let thiefIds: Array<number> = [];

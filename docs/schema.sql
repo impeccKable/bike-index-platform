@@ -107,3 +107,15 @@
 	create sequence next_thief_id;
 	-- currval(), nextval(), setval() permissions
 	grant select, update on next_thief_id to "ec2-user";
+
+
+-- Text Content 
+	create table text_content (
+		contentID SERIAL PRIMARY KEY,
+		page_name TEXT NOT NULL,
+		label TEXT NULL,
+		body TEXT NULL,
+		isHidden BOOLEAN NULL
+	);
+	grant select, update, insert, delete ON text_content TO "ec2-user";
+	grant USAGE, select on sequence text_content_contentid_seq to "ec2-user";

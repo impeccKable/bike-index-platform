@@ -17,11 +17,11 @@ const upload = multer({
 
 let columnToTable = [ 'thief_id', 'name', 'email', 'url', 'addr', 'phone', 'bike_serial', 'phrase', 'note', ];
 
-const processFile = (req: any) => {
+function processFile(req: any) {
 	let newDataCnts: any = { 'thief': 0, 'name': 0, 'email': 0, 'url': 0, 'addr': 0, 'phone': 0, 'bike_serial': 0, 'phrase': 0, 'note': 0, };
 	let maxThiefId = -1;
 
-	const tryInsertRow = async (table: string, thief_id: string, val: string) => {
+	async function tryInsertRow(table: string, thief_id: string, val: string) {
 		try {
 			await db.none(`INSERT INTO ${table} VALUES ($1, $2);`, [thief_id, val]);
 			newDataCnts[table]++;

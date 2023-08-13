@@ -5,7 +5,7 @@ import fs from 'fs';
 import { fieldToTable, fields, thiefDataByIds } from '../thiefData';
 import { csvStandardHeader } from './thiefDataImport';
 
-const get = async (res: express.Response) => {
+async function get(res: express.Response) {
 	let query = "SELECT thief_id FROM "
 		+ fields.map((field, idx) =>
 			`(SELECT thief_id FROM ${fieldToTable[field]})`

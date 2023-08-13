@@ -7,6 +7,7 @@ import { httpClient } from '../services/HttpClient';
 import LinkTable from '../components/LinkTable';
 import DebugLogs from '../services/DebugLogs';
 import LoadingIcon from '../components/LoadingIcon';
+import TextWindow from '../components/TextWindow';
 
 // @ts-ignore
 export interface Thief extends React.HTMLInputElement {
@@ -33,6 +34,7 @@ export default function ThiefList() {
 	const [isLoading, setIsLoading] = useState(true);
 	const debug = useRecoilValue(debugState)
 	const url = new URL(window.location.href);
+	const pageName = "Thief Listing";
 
 	// Set the search text and search type from the url
 	useEffect(() => {
@@ -50,7 +52,7 @@ export default function ThiefList() {
 		url.searchParams.set('searchText', searchText);
 		window.history.replaceState({ path: url.href }, '', url.href);
 
-		const getThieves = async () => {
+		async function getThieves() {
 			latestSearchText.current = searchText;
 			const response = await httpClient.get(
 				`/search?searchType=${searchType}&searchText=${searchText}`
@@ -80,7 +82,8 @@ export default function ThiefList() {
 		<div className="formal thieflist-page">
 			<Navbar />
 			<main>
-				<h1>Thief Listing<LoadingIcon when={isLoading} delay={1}/></h1>
+				<h1>{pageName}<LoadingIcon when={isLoading} delay={1}/></h1>
+				<TextWindow pageName={pageName} />
 				<div className="searchbar">
 					<label htmlFor="SearchType">Search Type</label>
 					<select
