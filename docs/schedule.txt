@@ -205,13 +205,14 @@ Schedule
 				Add other field types to the search type drop-down (Thief Id,Name,Email,Url,Address,Phone,Bike Serial,Phrase,Notes)
 		Cristian
 			x Editable text boxes on each page
-			~ User List
+			x User List
 				x Add column order functionality to link table (that doesn't throw errors)
 				x User list doesn't update when changing search type (with search text entered)
 				x User listing search put parameters into url
-				Clean up code
-			Thief Edit
-				Grey out Submit button until changes are made. Put red border on changed fields.
+				x Clean up code
+			~ Thief Edit
+				x Grey out Submit button until changes are made.
+				Put red border on changed fields.
 				Add ability to collapse the many rows of urls (any fields over 8, scroll bar or collapse)
 				(Front end) 'Clear all' button for fields (still needs submit, boots them to thief list when all fields are empty)
 				Admin ability to change thief id field to combine multiple thieves (this might work by just making thief id an editable field?) (merge in history log?)
