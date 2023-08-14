@@ -60,7 +60,7 @@ export function MultiField(props: MultiFieldProps) {
 	if (useRecoilValue(debugState) == true) {
 		console.log("MultiField");
 	}
-	const { label, name, component: Component, onChange, ...rest } = props;
+	const { label, name, component: Component, onChange, disableSubmit, ...rest } = props;
 	const [values, setValues] = useState(['']);
 
 	useEffect(() => {
@@ -73,6 +73,7 @@ export function MultiField(props: MultiFieldProps) {
 		let newValues = [...values];
 		newValues[idx] = e.target.value;
 		updateValues(newValues);
+		disableSubmit(false);
 	}
 	function addField(idx: number) {
 		let newValues = [...values];
@@ -87,6 +88,7 @@ export function MultiField(props: MultiFieldProps) {
 			newValues = [''];
 		}
 		updateValues(newValues);
+		disableSubmit(false);
 	}
 	function updateValues(newValues: string[]) {
 		setValues(newValues);
@@ -112,6 +114,7 @@ export function MultiField(props: MultiFieldProps) {
 							name={idx == 0 ? name : name + idx}
 							value={value}
 							onChange={(e: any) => handleInput(e, idx)}
+							className={value === '' && idx !== 0 ? 'red-bordered' : ''}
 							{...rest}
 						/>
 						<button type="button" onClick={() => addField(idx)}>＋</button>
