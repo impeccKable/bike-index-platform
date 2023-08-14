@@ -12,6 +12,7 @@ import TextWindow from '../components/TextWindow';
 
 
 export default function ThiefEdit() {
+	const [notChanged, setNotChanged] = useState(true);
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [isLoadingInit, setIsLoadingInit] = useState(true);
 	const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
@@ -158,18 +159,21 @@ export default function ThiefEdit() {
 		<div className="formal thiefedit-page">
 			<Navbar />
 			<main>
-				<h1>{pageName}<LoadingIcon when={isLoadingInit} delay={1}/></h1>
+				<span className={notChanged ? '' : 'unsaved-changes'}>
+					<h1>{pageName}<LoadingIcon when={isLoadingInit} delay={1}/></h1>
+					<h3>{notChanged ? '' : "* Unsaved Changes"}</h3>
+				</span>
 				<TextWindow pageName={pageName}/>
 				<Form onSubmit={handleFormSubmit}>
 					<FormInput  label="Thief ID"    name="thiefId"    value={thiefInfo.thiefId}   disabled={true}/>
-					<MultiField label="Name"        name="name"       data={thiefInfo.name}       disabled={isLoading} component={FormInput}/>
-					<MultiField label="Email"       name="email"      data={thiefInfo.email}      disabled={isLoading} component={FormInput}/>
-					<MultiField label="Url"         name="url"        data={thiefInfo.url}        disabled={isLoading} component={FormInput}/>
-					<MultiField label="Address"     name="addr"       data={thiefInfo.addr}       disabled={isLoading} component={FormInput}/>
-					<MultiField label="Phone"       name="phone"      data={thiefInfo.phone}      disabled={isLoading} component={FormInput} type="phone"/>
-					<MultiField label="Bike Serial" name="bikeSerial" data={thiefInfo.bikeSerial} disabled={isLoading} component={FormInput}/>
-					<MultiField label="Phrase"      name="phrase"     data={thiefInfo.phrase}     disabled={isLoading} component={FormInput} type="textarea"/>
-					<MultiField label="Notes"       name="note"       data={thiefInfo.note}       disabled={isLoading} component={FormInput} type="textarea"/>
+					<MultiField disableSubmit={setNotChanged} label="Name"        name="name"       data={thiefInfo.name}       disabled={isLoading} component={FormInput}/>
+					<MultiField disableSubmit={setNotChanged} label="Email"       name="email"      data={thiefInfo.email}      disabled={isLoading} component={FormInput}/>
+					<MultiField disableSubmit={setNotChanged} label="Url"         name="url"        data={thiefInfo.url}        disabled={isLoading} component={FormInput}/>
+					<MultiField disableSubmit={setNotChanged} label="Address"     name="addr"       data={thiefInfo.addr}       disabled={isLoading} component={FormInput}/>
+					<MultiField disableSubmit={setNotChanged} label="Phone"       name="phone"      data={thiefInfo.phone}      disabled={isLoading} component={FormInput} type="phone"/>
+					<MultiField disableSubmit={setNotChanged} label="Bike Serial" name="bikeSerial" data={thiefInfo.bikeSerial} disabled={isLoading} component={FormInput}/>
+					<MultiField disableSubmit={setNotChanged} label="Phrase"      name="phrase"     data={thiefInfo.phrase}     disabled={isLoading} component={FormInput} type="textarea"/>
+					<MultiField disableSubmit={setNotChanged} label="Notes"       name="note"       data={thiefInfo.note}       disabled={isLoading} component={FormInput} type="textarea"/>
 					<ImageUpload
 						label="Images"
 						isLoading={isLoading}
@@ -182,7 +186,7 @@ export default function ThiefEdit() {
 					/>
 					<div className="form-btns">
 						<LinkButton type="button" to="back">Back</LinkButton>
-						<FormButton type="submit" disabled={isLoading}>Submit</FormButton>
+						<FormButton type="submit" disabled={isLoading || notChanged}>Submit</FormButton>
 						<LoadingIcon when={isLoadingSubmit} style={{margin: 0}}/>
 					</div>
 					{wasSubmitted && <div className="form-btns">Submitted!</div>}
