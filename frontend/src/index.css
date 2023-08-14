@@ -220,6 +220,18 @@ nav button:hover {
 	margin-top: 1rem;
 }
 
+.red-bordered {
+	border-style: solid;
+	border-width: thin;
+	border-color: #ff0c00bd;
+}
+
+.unsaved-changes {
+	display: flex;
+	align-items: center;
+	color: darkred;
+}
+
 
 .multi-field button,
 .file-upload-btn {
