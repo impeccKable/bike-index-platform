@@ -20,7 +20,7 @@ The tool is made in [TypeScript](https://www.typescriptlang.org/) and uses [Node
 
 ## License
 
-
+[tbd]
 
 # Installation
 
@@ -45,7 +45,6 @@ add line:
 listen_addresses = '*'
 
 
-<!-- ## Requirements -->
 ## Setup
 
 Install [Node.js](https://nodejs.org/en/download)
@@ -72,6 +71,15 @@ cd backend; npm run s
 
 ## To run on EC2:
 ```
-./scripts/run_frontend.sh
-./scripts/run_backend.sh
+./scripts/run_all.sh
 ```
+
+# Backups
+
+A backup script is making a monthly copy of the database into a `.sql` file that is compressed with `gzip`. If something were to happen, the database can be re-created by following these steps:
+
+1. Create a new database using `schema.sql`
+2. Unzip the backup file with `gunzip`
+3. Re-populate the tables using the `.sql` backup file
+
+This process will need some understanding of psql commands.
