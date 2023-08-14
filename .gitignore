@@ -1,8 +1,9 @@
 # Custom
-frontend.out
-backend.out
-/backend/userFiles
+
 **/package-lock.json
+/backend/userFiles
+/db_backups
+*.out
 
 
 
