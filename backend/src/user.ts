@@ -24,7 +24,7 @@ router.get("/:userId", async (req: express.Request, res: express.Response) => {
 		}
 		return res.json(await GetUserByID(userID));
 	} catch (exc) {
-		console.log(`[ backend.src.user.ts.get('/') Error Attempting To Get All Users. Message: ${exc} ]`)
+		console.log(`[ backend.src.user.ts.get('/:userId') Error Attempting To Get All Users. Message: ${exc} ]`)
 	}
 });
 
