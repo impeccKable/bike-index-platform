@@ -83,6 +83,10 @@ export default function ThiefList() {
 		GetThiefs();
 	}, [searchType, searchText, page]);
 
+	useEffect(() => {
+		setpage(1);
+	}, [searchText]);
+
 	return (
 		<div className="formal thieflist-page">
 			<Navbar />
@@ -101,6 +105,8 @@ export default function ThiefList() {
 						<option value="name">Name</option>
 						<option value="phone">Phone Number</option>
 						<option value="email">Email</option>
+						<option value="url">Url</option>
+						<option value="addr">Address</option>
 					</select>
 					<label htmlFor="ThiefSearch">Search</label>
 					<input

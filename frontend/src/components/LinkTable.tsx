@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NavigateBtn } from './NavigateBtn';
 
@@ -59,7 +59,7 @@ export default function LinkTable(props: LinkTableProps) {
 			</table>
 			<NavigateBtn
 				total={props.pagemeta.totalRows}
-				page={props.page}
+				currentPage={props.page}
 				setpage={(props.setpage)}
 				totalPages={props.pagemeta.totalPages}
 			/>

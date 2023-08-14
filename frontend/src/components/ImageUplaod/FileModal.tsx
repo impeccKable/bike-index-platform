@@ -20,6 +20,8 @@ export function FileModal(props: FileModalProps) {
 
 	return (
 		<div className="image-modal">
+			<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+				rel="stylesheet"></link>
 			<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.12.313/build/pdf.min.js"></script>
 			<div className="modal" onClick={props.handleClose}>
 				<div className="modal-content">
@@ -30,7 +32,7 @@ export function FileModal(props: FileModalProps) {
 			</div>
 			<div className="image-modal-btns">
 				<span className="modal-btn prev" onClick={props.handlePrev}>&lt;</span>
-				<span className="modal-btn delete" onClick={props.handleDelete}>&#x1F5D1;</span>
+				<span className="modal-btn delete material-icons" onClick={props.handleDelete}>delete</span>
 				<span className="modal-btn next" onClick={props.handleNext}>&gt;</span>
 			</div>
 		</div>

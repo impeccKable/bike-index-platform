@@ -13,10 +13,8 @@ export const searchableTable: { [key: string]: string } = {
 	"phone": "phone",
 };
 
-// Get matching thief_ids
 const get = async (query: any) => {
 	let { searchType, searchText, page = 1 } = query;
-	//  keep track of scores (counts) for each thief_id
 	const scores: Map<number, number> = new Map();
 	const offset = (page - 1) * MAX_ROW;
 	const isSearchTextValid = searchText && searchText.trim() !== "";
@@ -27,20 +25,38 @@ const get = async (query: any) => {
 
 
 	const queryForTable = (table: string) => {
-		return `
-			SELECT thief_id, COUNT(thief_id) as count
-			FROM ${table}
-			${isSearchTextValid ? `WHERE ${table} ILIKE $1` : ""}
-			GROUP BY thief_id`;
+		if (isSearchTextValid) {
+			return `
+				WITH ExactMatches AS (
+					SELECT thief_id, 0 as distance
+					FROM ${table} 
+					WHERE ${table} ILIKE $2
+				),
+				SimilarMatches AS (
+						SELECT thief_id, MIN(levenshtein(${table}, $1)) as distance
+						FROM ${table}
+						WHERE levenshtein(${table}, $1) <= 2
+						AND thief_id NOT IN (SELECT thief_id FROM ExactMatches)
+						GROUP BY thief_id
+				)
+				SELECT * FROM ExactMatches 
+				UNION ALL
+				SELECT * FROM SimilarMatches 
+				ORDER BY distance ASC, thief_id DESC;`;
+		} else {
+			return `
+				SELECT thief_id
+				FROM ${table}
+				GROUP BY thief_id`;
+		}
 	};
 
 	const getScores = async (table: string) => {
 		try {
-			const params = isSearchTextValid ? [`%${searchText}%`] : [];
+			const params = isSearchTextValid ? [searchText, `%${searchText}%`] : [];
 			const result = await db.any(queryForTable(table), params);
-			// update the scores map with counts, add to the existing count if it exists
 			result.forEach((item: any) => {
-				scores.set(item.thief_id, (scores.get(item.thief_id) || 0) + item.count);
+				scores.set(item.thief_id, (scores.get(item.thief_id) || 0) + item.distance);
 			});
 		} catch (err) {
 			console.error(`Error querying table ${table}`, err);
@@ -48,7 +64,7 @@ const get = async (query: any) => {
 	}
 
 	if (searchType === "all") {
-		await Promise.all(Object.values(searchableTable).map(getScores));
+		await Promise.all(Object.values(fieldToTable).map(getScores));
 	} else {
 		const table = fieldToTable[searchType];
 		if (!table) {
@@ -59,7 +75,7 @@ const get = async (query: any) => {
 
 	const allThiefIds = Array.from(scores.keys());
 	if (isSearchTextValid) {
-		allThiefIds.sort((a, b) => (scores.get(b) || 0) - (scores.get(a) || 0));
+		allThiefIds.sort((a, b) => (scores.get(a) || 0) - (scores.get(b) || 0));
 	} else {
 		allThiefIds.sort((a, b) => b - a);
 	}
@@ -88,7 +104,7 @@ router.get("/", async (req: express.Request, res: express.Response) => {
 		return res.json(await get(req.query));
 	} catch (err) {
 		console.error(err);
-		res.status(500);
+		res.status(500).send("Internal Server Error");
 	}
 });
 export default router;
