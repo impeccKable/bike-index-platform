@@ -59,8 +59,6 @@ export default function UserList() {
     const [searchType, setSearchType] = useState('name');
     const [searchText, setSearchText] = useState('');
     const [userData, setUserData] = useState<User[]>([]);
-
-    // Keeps track of old value, avoid unecessary query.
     const preSearchText = useRef(searchText);
     const url = new URL(window.location.href);
     SearchInputProps.type = searchType;
@@ -89,6 +87,7 @@ export default function UserList() {
                 console.log(`Failure Status ${response.status}`);
             }
 
+            if (preSearchText.current !== searchText) return;
             setUserData(response.data);
         }
         GetUsers();
@@ -100,12 +99,12 @@ export default function UserList() {
             <main>
             <h1>User Listing</h1>
             <div className="searchbar">
-                <FormInput {...SearchTypeProps} onChange={(event: any) => {setSearchType(event.target[event.target.selectedIndex].value);}}>
+                <FormInput {...SearchTypeProps} value={searchType} onChange={(event: any) => {setSearchType(event.target[event.target.selectedIndex].value);}}>
                     <option value="name">Name</option>
                     <option value="phone">Phone Number</option>
                     <option value="email">Email</option>
                     <option value="title">Title</option>
-                    <option value="org">Organization</option>
+                    <option value="organization">Organization</option>
                 </FormInput>
                 <FormInput {...SearchInputProps} onChange={(event: any) => {setSearchText(event.target.value);}}/>
                 <LinkButton className="AddThiefButton" to="/user?userId=new">Add New</LinkButton>
