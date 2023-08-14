@@ -232,8 +232,8 @@ Schedule
 				Button on user  edit page to go to history page filtered by user
 		Emerson
 			Backups
-				[ ] Periodically update a clone of the database
-				[ ] A way to restore from backup
+				[X] Periodically update a clone of the database
+				[X] A way to restore from backup
 			Data
 				[X] Add date to downloaded thief data csv
 				[X] Show number of lines submitted and number of data items
@@ -242,12 +242,38 @@ Schedule
 				[X] Bug in search for things in notes
 				[ ] Store phone numbers in standard format of "+52 (971) 314-1592" to allow for searches by area code
 					Leaving off: thiefDataImport and thiefEdit need to be combined to one interface now
+
+					function standardizePhoneNum(text: string): string {
+						// only keep digits, reverse order
+						let digits = text.replace(/\D/g, '').split('').reverse().join('');
+						let output = '';
+						let i;
+						for (i = 1; i <= digits.length; i++) { // 1-based index
+							if (i == 5 ) { output = '-'  + output; }
+							if (i == 8 ) { output = ') ' + output; }
+							if (i == 11) { output = ' '  + output; }
+							output = digits[i-1] + output;
+							if (i == 10) { output = '('  + output; }
+						}
+						if (i == 9 || i == 10) { output = '(' + output; }
+						if (i >= 12) { output = '+' + output; }
+						return output;
+					}
+
 				[x] Move run/stop scripts to bike-index-.. repo
 				[x] Upload env files to capstone folder
 				[x] Fix url path names (uncapitalize, shorten)
 				[x] Universal search
 				[X] Clean up README.md
 				[X] Look for all todos
+				[ ] Universal search of '+512ada 503.201.7-823' returns thief 512
+				[ ] Give number of thieves on about page
+				[ ] Increase page size
+				[ ] Put db host in env
+				[ ] Strip spaces from inputs
+			Ideas
+				[ ] Fuzzy match in search
+				[ ] Data analysis page (find duplicates, fuzzy match)
 		Matt
 			Roles
 				Ability to change user roles
