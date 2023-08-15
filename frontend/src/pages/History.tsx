@@ -18,20 +18,21 @@ type History = {
 	data: string;
 }
 
-const header = {``
-'ID': { },
-'Time': { },
-'User': { maxWidth: "6rem", minWidth: "6rem" },
-'Action': { maxWidth: "3rem", minWidth: "3rem" },
-'Changed Thief': { maxWidth: "4rem", minWidth: "4rem" },
-'Changed User': { maxWidth: "4rem", minWidth: "4rem" },
-'Type': { maxWidth: "4rem", minWidth: "4rem" },
-'Data': { },
+const header = {
+	'ID': {},
+	'Time': {},
+	'User': { maxWidth: "6rem", minWidth: "6rem" },
+	'Action': { maxWidth: "3rem", minWidth: "3rem" },
+	'Changed Thief': { maxWidth: "4rem", minWidth: "4rem" },
+	'Changed User': { maxWidth: "4rem", minWidth: "4rem" },
+	'Type': { maxWidth: "4rem", minWidth: "4rem" },
+	'Data': {},
 }
 
 export default function History() {
 	const [history, setHistory] = useState<History[]>([]);
 	const [page, setpage] = useState(1);
+	const [id, setId] = useState<string | null>(null);
 	const [pagemeta, setpagemeta] = useState({ totalRows: 0, totalPages: 0 });
 	const debug = useRecoilValue(debugState);
 	const location = useLocation();
@@ -40,9 +41,17 @@ export default function History() {
 	useEffect(() => {
 		const queryParams = new URLSearchParams(location.search);
 		const id = queryParams.get('thiefId');
+		setId(id);
 		console.log('id', id)
 
-		httpClient.get(`/history?thiefId=${id}&page=${page}`)
+		let url;
+		if (id !== null) {
+			url = `/history?thiefId=${id}&page=${page}`;
+		} else {
+			url = `/history?thiefId=&page=${page}`;
+		}
+
+		httpClient.get(url)
 			.then(res => {
 				setHistory(res.data);
 				DebugLogs('Hisotry get response', res.data, debug);
@@ -64,7 +73,7 @@ export default function History() {
 			.catch((err: any) => {
 				DebugLogs('History get error', err, debug);
 			});
-	}, [page]);
+	}, [page, id]);
 
 	return (
 		<div className="formal history-page">
