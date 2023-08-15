@@ -18,7 +18,8 @@ router.get("/", async (req: express.Request, res: express.Response) => {
 
 router.get("/:userId", async (req: express.Request, res: express.Response) => {
 	try {
-		let userID = req.params.userId?.toString() ?? '';
+		let userID = req.params.userId?.toString()?.replace("userId=", '') ?? '';
+		console.log("userID: ", userID);
 		if (!userID) {
 			return {};
 		}
