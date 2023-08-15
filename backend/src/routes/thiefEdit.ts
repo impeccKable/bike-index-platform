@@ -1,15 +1,16 @@
 import express from 'express';
-import db from './dbConfig';
-import { fieldToTable, fields, thiefInfoByIds } from './thiefInfo';
-import { uploadImage, deleteImage, getImage, ImageUploadError, ImageDeletionError, ImageGetError} from './imageOperation';
+import { db } from '../config';
+import { fieldToTable, fields, thiefDataByIds } from '../thiefData';
+import { uploadImage, deleteImage, getImage, ImageUploadError, ImageDeletionError, ImageGetError} from '../imageOperation';
 import multer from 'multer';
 
 const upload = multer();
 
-const get = async (query: any) => {
-	return thiefInfoByIds([parseInt(query.thiefId)]);
+async function get(query: any) {
+	return thiefDataByIds([parseInt(query.thiefId)]);
 };
-const put = async (body: any) => {
+
+async function put(body: any) {
 	let thiefId = body.thiefId;
 	if (thiefId == 'new') {
 		// (new thief, get next thief_id)

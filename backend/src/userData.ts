@@ -1,4 +1,4 @@
-import db from "./dbConfig";
+import {db} from "./config";
 
 const types: any = {
     userid: true,

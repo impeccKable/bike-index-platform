@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useNavigate } from "../../node_modules/react-router-dom/dist/index";
 
-export const AuthProtected = ({ children }: any) => {
+export function AuthProtected({ children }: any) {
 	const { user, loading }: any = useAuth();
 
 	useEffect(() => {

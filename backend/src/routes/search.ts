@@ -1,10 +1,9 @@
-import express from "express";
-import db from "./dbConfig";
-import { fieldToTable, thiefInfoByIds } from "./thiefInfo";
-import { validToken } from "./token";
+import express from 'express';
+import { db } from '../config';
+import { fieldToTable, thiefDataByIds } from '../thiefData';
 
 // Get matching thief_ids
-const get = async (query: any) => {
+async function get(query: any) {
 	let searchType: string = query.searchType;
 	let searchText: string = query.searchText;
 	let thiefIds: Array<number> = [];
@@ -79,7 +78,7 @@ const get = async (query: any) => {
 		}
 		thiefIds = thiefIds.map((obj: any) => obj.thief_id);
 	}
-	return await thiefInfoByIds(thiefIds);
+	return await thiefDataByIds(thiefIds);
 }
 
 const router = express.Router();

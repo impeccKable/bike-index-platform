@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import LinkTable from "../components/LinkTable";
 import { FormInput, LinkButton, FormInputProps } from "../components/Form";
 import { httpClient } from "../services/HttpClient";
+import TextWindow from "../components/TextWindow";
 
 // react
 import {useState, useEffect, useRef} from 'react';
@@ -61,6 +62,7 @@ export default function UserList() {
     const [userData, setUserData] = useState<User[]>([]);
     const preSearchText = useRef(searchText);
     const url = new URL(window.location.href);
+	const pageName = "User List";
     SearchInputProps.type = searchType;
     SearchInputProps.value = searchText;
 
@@ -79,13 +81,13 @@ export default function UserList() {
             preSearchText.current = searchText;
             let key = searchText === "" ? "All" : searchText;
 
-            const response = await httpClient.get(`/users?searchKey=${key}&searchType=${searchType}`);
-            if (response.status === 200) {
-                console.log("Success 200 ");
-            }
-            else {
-                console.log(`Failure Status ${response.status}`);
-            }
+			const response = await httpClient.get(`/users?searchKey=${key}&searchType=${searchType}`);
+			if (response.status === 200) {
+				console.log("Success 200 ");
+			}
+			else {
+				console.log(`Failure Status ${response.status}`);
+			}
 
             if (preSearchText.current !== searchText) return;
             setUserData(response.data);
@@ -97,7 +99,8 @@ export default function UserList() {
         <div className="formal">
             <Navbar/>
             <main>
-            <h1>User Listing</h1>
+            <h1>{pageName}</h1>
+			<TextWindow pageName={pageName} />
             <div className="searchbar">
                 <FormInput {...SearchTypeProps} value={searchType} onChange={(event: any) => {setSearchType(event.target[event.target.selectedIndex].value);}}>
                     <option value="name">Name</option>

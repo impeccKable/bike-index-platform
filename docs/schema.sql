@@ -75,14 +75,6 @@
 	);
 	grant select, update, insert, delete on note to "ec2-user";
 
--- File
-	create table file (
-		thief_id     int,
-		file         text,  -- (url to file server)
-		primary key (thief_id, file)
-	);
-	grant select, update, insert, delete on file to "ec2-user";
-
 -- Bi_user
 	create table bi_user (
 		user_uid     text,
@@ -100,12 +92,14 @@
 
 -- History
 	create table history (
-		-- Actions from post/get requests, store it as a json object
-		history_id   int,
-		datetime     timestamp,
-		user_uid     int,
-		source       text,  -- ip?
-		message      text
+		history_id       int,
+		datetime         timestamp,
+		user_uid         text,
+		action           text,
+		changed_thief_id int,
+		changed_user_uid text,
+		data_type        text,
+		data             text,
 	);
 	grant select, update, insert, delete on history to "ec2-user";
 
@@ -113,3 +107,15 @@
 	create sequence next_thief_id;
 	-- currval(), nextval(), setval() permissions
 	grant select, update on next_thief_id to "ec2-user";
+
+
+-- Text Content 
+	create table text_content (
+		contentID SERIAL PRIMARY KEY,
+		page_name TEXT NOT NULL,
+		label TEXT NULL,
+		body TEXT NULL,
+		isHidden BOOLEAN NULL
+	);
+	grant select, update, insert, delete ON text_content TO "ec2-user";
+	grant USAGE, select on sequence text_content_contentid_seq to "ec2-user";

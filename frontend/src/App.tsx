@@ -21,6 +21,9 @@ export default function App() {
 		setDebug(true);
 		// setDev(true);
 		if (debug == true) { console.log("App"); }
+		if (window.location.protocol === 'http:') {
+			window.location.href = window.location.href.replace('http', 'https');
+		}
 	})
 
 	return (
@@ -28,7 +31,7 @@ export default function App() {
 			<Routes>
 				<Route path="/"          element={<Login />}></Route>
 				<Route path="/signup"    element={<Signup />}></Route>
-				<Route path="/thiefs"    element={<AuthProtected><ThiefList /></AuthProtected>}></Route>
+				<Route path="/thieves"   element={<AuthProtected><ThiefList /></AuthProtected>}></Route>
 				<Route path="/thief"     element={<AuthProtected><ThiefEdit /></AuthProtected>}></Route>
 				<Route path="/users"     element={<AuthProtected><UserList /></AuthProtected>}></Route>
 				{/* <Route path="/userEdit"  element={<UserEdit />}></Route> */}

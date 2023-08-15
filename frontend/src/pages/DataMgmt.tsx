@@ -71,7 +71,7 @@ export default function DataMgmt() {
 						<h3>New unique data:</h3>
 						<table>
 							<tbody>
-								<tr><td>Thiefs   </td><td>{newDataCnts.thief      }</td></tr>
+								<tr><td>Thieves  </td><td>{newDataCnts.thief      }</td></tr>
 								<tr><td>Names    </td><td>{newDataCnts.name       }</td></tr>
 								<tr><td>Emails   </td><td>{newDataCnts.email      }</td></tr>
 								<tr><td>URLs     </td><td>{newDataCnts.url        }</td></tr>
