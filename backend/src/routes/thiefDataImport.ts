@@ -1,6 +1,7 @@
-import express from "express";
-import { parse } from "csv/sync";
-import fs from "fs";
+import express from 'express';
+import { parse } from 'csv/sync';
+import fs from 'fs';
+import { db } from '../config';
 
 export const csvStandardHeader =
 	[ 'Thief Id', 'Name', 'Email', 'Url', 'Address', 'Phone', 'Bike Serial', 'Phrase', 'Notes' ]
@@ -13,7 +14,6 @@ const upload = multer({
 		cb(null, `import_${Date.now()}.csv`);
 	}
 });
-import db from './dbConfig';
 
 let columnToTable = [ 'thief_id', 'name', 'email', 'url', 'addr', 'phone', 'bike_serial', 'phrase', 'note', ];
 

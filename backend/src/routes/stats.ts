@@ -1,5 +1,5 @@
-import express from "express";
-import db from "./dbConfig";
+import express from 'express';
+import { db } from '../config';
 
 async function get() {
 	let [
