@@ -188,58 +188,49 @@ Schedule
 				How important is all of this history logging?
 		Bruce
 		Cheng
-			File uploads
+			x File uploads
 				x Allow other files (pdfs, etc)
 				x Automatically upload file upon a file select? Automatically go to file select upon + click.
-			Thief List
-				~ Put prev/next buttons in a static location?
+			~ Thief List
+				x Put prev/next buttons in a static location?
 				x Test search functionality
 				x Move pages functionality to backend (page=2)
-				~ Show how many results
+				x Show how many results
 				x Universal search
 				Sorting functionality
 					Closest match
 					Recency
 					Thief id
 					Alphabetically
-				Add other field types to the search type drop-down (Thief Id,Name,Email,Url,Address,Phone,Bike Serial,Phrase,Notes)
+				x Add other field types to the search type drop-down (Thief Id,Name,Email,Url,Address,Phone,Bike Serial,Phrase,Notes)
+				Make buttons for next/prev not selectable
+			~ History page
+				x Create a history page (sort by recency)
+				x Button on theif edit page to go to history page filtered by theif id
+				Button on user  edit page to go to history page filtered by user
 		Cristian
 			x Editable text boxes on each page
-			~ User List
+			x User List
 				x Add column order functionality to link table (that doesn't throw errors)
 				x User list doesn't update when changing search type (with search text entered)
 				x User listing search put parameters into url
-				Clean up code
-			Thief Edit
-				Grey out Submit button until changes are made. Put red border on changed fields.
-				Add ability to collapse the many rows of urls (any fields over 8, scroll bar or collapse)
-				(Front end) 'Clear all' button for fields (still needs submit, boots them to thief list when all fields are empty)
+				x Clean up code
+			~ Thief Edit
+				x Grey out Submit button until changes are made
+				x Put red border on changed fields
+				x Add ability to collapse the many rows of urls (any fields over 8, scroll bar or collapse)
+				~ (Front end) 'Clear all' button for fields (still needs submit, boots them to thief list when all fields are empty)
 				Admin ability to change thief id field to combine multiple thieves (this might work by just making thief id an editable field?) (merge in history log?)
-			History page
-				Datetime            | User     | Action            | ThiefID | Data type | Data
-				( Bryan deletes the thief )
-				2023-08-14 14:28:52 | 'bhance' | 'remove (delete)' | 3       | 'note'    | 'hillsboro oregon fence'
-				2023-08-14 14:28:52 | 'bhance' | 'remove (delete)' | 3       | 'name'    | 'John Smith'
-				( rjones changes the note to 'hillsboro oregon fence' )
-				2023-08-10 13:02:27 | 'rjones' | 'add'             | 3       | 'note'    | 'hillsboro oregon fence'
-				2023-08-10 13:02:27 | 'rjones' | 'remove'          | 3       | 'note'    | 'fence'
-				( Bryan adds thief 'John Smith' with a note of 'fence' )
-				2023-08-08 17:06:48 | 'bhance' | 'add (new)'       | 3       | 'note'    | 'fence'
-				2023-08-08 17:06:48 | 'bhance' | 'add (new)'       | 3       | 'name'    | 'John Smith'
-
-				Create a history page (sort by recency)
-				Button on theif edit page to go to history page filtered by theif id
-				Button on user  edit page to go to history page filtered by user
 		Emerson
 			Backups
-				[X] Periodically update a clone of the database
-				[X] A way to restore from backup
+				[x] Periodically update a clone of the database
+				[x] A way to restore from backup
 			Data
-				[X] Add date to downloaded thief data csv
-				[X] Show number of lines submitted and number of data items
+				[x] Add date to downloaded thief data csv
+				[x] Show number of lines submitted and number of data items
 				[x] Add loading gif to stats table
 			Misc
-				[X] Bug in search for things in notes
+				[?] Bug in search for things in notes
 				[ ] Store phone numbers in standard format of "+52 (971) 314-1592" to allow for searches by area code
 					Leaving off: thiefDataImport and thiefEdit need to be combined to one interface now
 
@@ -264,8 +255,8 @@ Schedule
 				[x] Upload env files to capstone folder
 				[x] Fix url path names (uncapitalize, shorten)
 				[x] Universal search
-				[X] Clean up README.md
-				[X] Look for all todos
+				[x] Clean up README.md
+				[x] Look for all todos
 				[ ] Universal search of '+512ada 503.201.7-823' returns thief 512
 				[ ] Give number of thieves on about page
 				[ ] Increase page size
@@ -275,6 +266,10 @@ Schedule
 				[ ] Fuzzy match in search
 				[ ] Data analysis page (find duplicates, fuzzy match)
 		Matt
+			User Edit
+				Make users not approved by default
+				Frontend
+				Approve users
 			Roles
 				Ability to change user roles
 			Login & Sign up                                     .5 hours (includes research, he can take some more)
@@ -290,9 +285,6 @@ Schedule
 				Add login alert for temporarily disabled accounts(too many failed logins)
 				Change firebase project name
 				Ability to change email
-			User Edit
-				Frontend
-				Approve users
 			Misc
 				[x]Fix bug with AuthProtected loading before AuthProvider useEffect
 				Make it robust to exceptions/database errors
@@ -304,3 +296,18 @@ Schedule
 		Polish
 			Make thief table columns resizeable
 	Completion/Presentation (9/1)
+
+
+
+Old
+				Datetime            | User     | Action            | ThiefID | Data type | Data
+				( Bryan deletes the thief )
+				2023-08-14 14:28:52 | 'bhance' | 'remove (delete)' | 3       | 'note'    | 'hillsboro oregon fence'
+				2023-08-14 14:28:52 | 'bhance' | 'remove (delete)' | 3       | 'name'    | 'John Smith'
+				( rjones changes the note to 'hillsboro oregon fence' )
+				2023-08-10 13:02:27 | 'rjones' | 'add'             | 3       | 'note'    | 'hillsboro oregon fence'
+				2023-08-10 13:02:27 | 'rjones' | 'remove'          | 3       | 'note'    | 'fence'
+				( Bryan adds thief 'John Smith' with a note of 'fence' )
+				2023-08-08 17:06:48 | 'bhance' | 'add (new)'       | 3       | 'note'    | 'fence'
+				2023-08-08 17:06:48 | 'bhance' | 'add (new)'       | 3       | 'name'    | 'John Smith'
+
