@@ -2,6 +2,7 @@ import express from 'express';
 import { parse } from 'csv/sync';
 import fs from 'fs';
 import { db } from '../config';
+import { insertThiefData } from '../thiefData';
 
 export const csvStandardHeader =
 	[ 'Thief Id', 'Name', 'Email', 'Url', 'Address', 'Phone', 'Bike Serial', 'Phrase', 'Notes' ]
@@ -18,27 +19,19 @@ const upload = multer({
 let columnToTable = [ 'thief_id', 'name', 'email', 'url', 'addr', 'phone', 'bike_serial', 'phrase', 'note', ];
 
 function processFile(req: any) {
-	let newDataCnts: any = { 'thief': 0, 'name': 0, 'email': 0, 'url': 0, 'addr': 0, 'phone': 0, 'bike_serial': 0, 'phrase': 0, 'note': 0, };
-	let maxThiefId = -1;
-
-	async function tryInsertRow(table: string, thief_id: string, val: string) {
-		try {
-			await db.none(`INSERT INTO ${table} VALUES ($1, $2);`, [thief_id, val]);
-			newDataCnts[table]++;
-		} catch (err: any) {
-			// duplicate primary key constraint
-			if (err.code === '23505') { return; }
-			else { throw err; }
-		}
-	};
-
 	return new Promise(async (resolve, reject) => {
+		let newDataCnts: any = { 'thief': 0, 'name': 0, 'email': 0, 'url': 0, 'addr': 0, 'phone': 0, 'bike_serial': 0, 'phrase': 0, 'note': 0, };
+		let thiefIds = new Set();
+		let maxThiefId = -1;
+
 		const fileContents = fs.readFileSync(req.file.path, 'utf8');
 		const rows = parse(fileContents, { skipEmptyLines: true, fromLine: 2, });
 		let inserts: any = [];
 		for (let row of rows) {
 			let thiefId = row[0];
 			if (thiefId === '') { continue; }
+			thiefId = parseInt(thiefId);
+			thiefIds.add(thiefId);
 			if (parseInt(thiefId) > maxThiefId) {
 				maxThiefId = parseInt(thiefId);
 			}
@@ -46,7 +39,7 @@ function processFile(req: any) {
 				let val = row[i];
 				if (val === '') { continue; }
 				let col = columnToTable[i];
-				inserts.push(tryInsertRow(col, thiefId, val));
+				inserts.push(insertThiefData(col, thiefId, val));
 			}
 		}
 		console.log(`Recieved ${inserts.length} thief data items`)
@@ -58,7 +51,12 @@ function processFile(req: any) {
 			await db.one(`SELECT setval('next_thief_id', ${maxThiefId});`);
 		}
 
-		await Promise.all(inserts);
+		for (let i = 0; i < inserts.length; i++) {
+			if (await inserts[i]) {
+				newDataCnts.thief++;
+			}
+		}
+
 		resolve(newDataCnts);
 	});
 }

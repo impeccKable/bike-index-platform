@@ -66,3 +66,29 @@ export async function thiefDataByIds(thiefIds: number[]) {
 	}
 	return thieves;
 }
+
+// Returns true if the data was updated, false if the data already existed
+export async function insertThiefData(table: string, thiefId: string, newVal: string): Promise<boolean> {
+	return new Promise((resolve, reject) => {
+		db.none(`INSERT INTO ${table} VALUES ($1, $2);`, [thiefId, newVal])
+			.then(() => resolve(true))
+			.catch((err: any) => {
+				// duplicate primary key constraint
+				if (err.code === '23505') { resolve(false); }
+				else { reject(err); }
+			});
+	});
+}
+
+export async function deleteThiefData(table: string, thiefId: string, oldVal: string): Promise<void> {
+	return new Promise((resolve, reject) => {
+		db.none(`DELETE FROM ${table} WHERE thief_id = $1 AND ${table} = $2`, [thiefId, oldVal])
+			.then(() => resolve());
+	});
+}
+
+
+
+
+
+// Example promise function:
