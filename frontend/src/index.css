@@ -257,6 +257,15 @@ nav button:hover {
 	border-color: #686868;
 }
 
+.tr-link.no-link:hover > td {
+	background-color: inherit;
+	/* border-color: inherit; */
+}
+
+.tr-link.no-link > td {
+	cursor: default;
+}
+
 .loading-icon {
 	margin: 0 0.75rem;
 	-webkit-touch-callout: none;
@@ -298,6 +307,13 @@ nav button:hover {
 	display: none;
 }
 
+.thiefedit-page .title {
+	display: flex;
+}
+
+.title > button {
+	align-self: center;
+}
 
 
 /* ============= Specific Pages ============= */
@@ -432,4 +448,3 @@ nav button:hover {
 #alert-link:hover {
 	cursor: pointer;
 }
-

@@ -7,6 +7,7 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { s3Client } from './s3Client';
 import { config } from './config';
+import { logHistory } from './history';
 
 // custom error class for image errors
 export class ImageUploadError extends Error {
@@ -46,7 +47,7 @@ const s3ParamsBase = {
 }
 
 // upload images to S3 bucket
-export async function uploadImage(uploadedFiles: Express.Multer.File[], thiefId: number) {
+export async function uploadImage(uploadedFiles: Express.Multer.File[], thiefId: number, action: string) {
 	const promises = uploadedFiles.map(async (file) => {
 		const folderName = getFolderName(file.mimetype);
 		const key = `thiefs/${thiefId}/${folderName}/${file.originalname}`;
@@ -64,17 +65,25 @@ export async function uploadImage(uploadedFiles: Express.Multer.File[], thiefId:
 		} catch (err) {
 			throw new ImageUploadError(`Error uploading ${key} to S3: ${err}`);
 		}
+
+		try {
+			await logHistory({ user_uid: 'someUser', changed_thief_id: thiefId, data_type: 'file', data: `${file.originalname}` }, action);
+		} catch (err) {
+			console.log('Error while logging history:', err);
+			throw err;
+		}
 	});
 
 	await Promise.all(promises);
 }
 
 // delete images from S3 bucket
-export async function deleteImage(deletedFile: string[]) {
+export async function deleteImage(deletedFile: string[], thiefId: number) {
 	const promises = deletedFile.map(async filename => {
+		const key = filename;
 		const params = {
 			...s3ParamsBase,
-			Key: filename,
+			Key: key,
 		};
 
 		try {
@@ -83,7 +92,15 @@ export async function deleteImage(deletedFile: string[]) {
 		} catch (err) {
 			throw new ImageDeletionError(`Error deleting object from s3: ${err}`);
 		}
+
+		try {
+			await logHistory({ user_uid: 'someUser', changed_thief_id: thiefId, data_type: 'file', data: `${filename}` }, 'delete');
+		} catch (err) {
+			console.log('Error while logging history:', err);
+			throw err;
+		}
 	});
+
 
 	await Promise.all(promises);
 }

@@ -8,7 +8,7 @@ import {
 	LinkButton,
 } from '../components/Form';
 import { FileUpload } from '../components/ImageUplaod/FileUpload';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { httpClient } from '../services/HttpClient';
 import { useRecoilValue } from 'recoil';
 import { debugState } from '../services/Recoil';
@@ -21,12 +21,12 @@ export default function ThiefEdit() {
 	const [isLoadingInit, setIsLoadingInit] = useState(true);
 	const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
 	const [wasSubmitted, setWasSubmitted] = useState(false);
-	const fakeIamges = ["https://t0.gstatic.com/licensed-image?q=tbn:ANd9GcQkrjYxSfSHeCEA7hkPy8e2JphDsfFHZVKqx-3t37E4XKr-AT7DML8IwtwY0TnZsUcQ", "https://hips.hearstapps.com/hmg-prod/images/beautiful-smooth-haired-red-cat-lies-on-the-sofa-royalty-free-image-1678488026.jpg?crop=0.88847xw:1xh;center,top&resize=1200:*", "https://programmerhumor.io/wp-content/uploads/2021/06/programmerhumor-io-python-memes-backend-memes-41e437ca7369eb4.jpg"]
 	const [renderImageFiles, setRenderImageFiles] = useState<(File | string)[]>([]);
 	const [newImages, setNewImages] = useState<(File | string)[]>([]);
 	const [deletedImages, setDeletedImages] = useState<(File | string)[]>([]);
 	const debug = useRecoilValue(debugState);
 	const url = new URL(window.location.href);
+	const navigate = useNavigate();
 
 	// thiefInfo at beginning
 	const [thiefInfo, setThiefInfo] = useState({
@@ -40,6 +40,11 @@ export default function ThiefEdit() {
 		phrase: [''],
 		note: [''],
 	});
+
+	function handleHisotryClick() {
+		const thiefId = thiefInfo.thiefId;
+		navigate(`/history?thiefId=${thiefId}`);
+	}
 
 	async function handleFormSubmit(e: any) {
 		setIsLoadingSubmit(true);
@@ -162,7 +167,11 @@ export default function ThiefEdit() {
 		<div className="formal thiefedit-page">
 			<Navbar />
 			<main>
-				<h1>Thief Edit<LoadingIcon when={isLoadingInit} delay={1} /></h1>
+				<div className="title">
+					<h1>Thief Edit<LoadingIcon when={isLoadingInit} delay={1} /></h1>
+					<button onClick={handleHisotryClick}>History</button>
+				</div>
+
 				<Form onSubmit={handleFormSubmit}>
 					<FormInput label="Thief ID" name="thiefId" value={thiefInfo.thiefId} disabled={true} />
 					<MultiField label="Name" name="name" data={thiefInfo.name} disabled={isLoading} component={FormInput} />

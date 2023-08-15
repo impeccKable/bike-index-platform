@@ -6,7 +6,6 @@ interface LinkTableProps extends React.HTMLInputElement {
 	header: any;
 	data: Array<any>;
 	linkBase: string; // e.g. '/thief?thiefId='
-	setPage: React.Dispatch<React.SetStateAction<number>>;
 	[key: string]: any;
 }
 
@@ -38,10 +37,10 @@ export default function LinkTable(props: LinkTableProps) {
 							return (
 								<tr
 									key={row[idName]}
-									className="tr-link" // (so header row is not included)
-									onClick={() =>
-										navigate(`${linkBase}${row[idName]}`)
-									}
+									className={`tr-link ${props.noNavigate ? "no-link" : ""}`} // (so header row is not included)
+									{...(props.noNavigate ? {} : {
+										onClick: () => navigate(`${linkBase}${row[idName]}`)
+									})}
 								>
 									{Object.values(row).map((cell: any, idx) => {
 										if (Array.isArray(cell)) {
