@@ -3,7 +3,7 @@ import { db } from '../config';
 
 async function post(req: any) {
 	req.body.role = 'readWrite'; // TODO: change this to readOnly
-	req.body.approved = true; // TODO: change this to false
+	req.body.approved = false;
 	req.body.banned = false;
 	await db.any(
 		`INSERT INTO bi_user (
