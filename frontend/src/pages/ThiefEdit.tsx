@@ -22,8 +22,20 @@ export default function ThiefEdit() {
 	const [newImages, setNewImages] = useState<(File | string)[]>([]);
 	const [deletedImages, setDeletedImages] = useState<(File | string)[]>([]);
 	const debug = useRecoilValue(debugState);
+	const [showModal, setShowModal] = useState(false);
 	const url = new URL(window.location.href);
 	const pageName = "Thief Edit";
+
+	const [clearByParts, setClearByParts] = useState({
+		name: false,
+		email: false,
+		url: false,
+		addr: false,
+		phone: false,
+		bikeSerial: false,
+		phrase: false,
+		note: false,
+	});
 
 	// thiefInfo at beginning
 	const [thiefInfo, setThiefInfo] = useState({
@@ -37,6 +49,8 @@ export default function ThiefEdit() {
 		phrase: [''],
 		note: [''],
 	});
+
+	
 
 	async function handleFormSubmit(e: any) {
 		setIsLoadingSubmit(true);
@@ -141,6 +155,18 @@ export default function ThiefEdit() {
 		DebugLogs('Thief get response', res.data, debug);
 	}
 
+	function ClearAllFields(state: boolean) {
+		let clearStates = {...clearByParts};
+		let timeOffset = 0;
+		setShowModal(false);
+
+		Object.entries(clearStates).forEach((fieldType)=> {
+			//@ts-ignore
+			clearStates[fieldType[0]] = state;
+			setClearByParts(clearStates);			
+		});
+	}
+
 	useEffect(() => {
 		DebugLogs('ThiefEdit Component', '', debug);
 		let thiefId = url.searchParams.get('thiefId');
@@ -164,16 +190,17 @@ export default function ThiefEdit() {
 					<h3>{notChanged ? '' : "* Unsaved Changes"}</h3>
 				</span>
 				<TextWindow pageName={pageName}/>
+				<button type="button" onClick={()=>{setShowModal(!showModal);}}>Clear All</button>
 				<Form onSubmit={handleFormSubmit}>
 					<FormInput  label="Thief ID"    name="thiefId"    value={thiefInfo.thiefId}   disabled={true}/>
-					<MultiField disableSubmit={setNotChanged} label="Name"        name="name"       data={thiefInfo.name}       disabled={isLoading} component={FormInput}/>
-					<MultiField disableSubmit={setNotChanged} label="Email"       name="email"      data={thiefInfo.email}      disabled={isLoading} component={FormInput}/>
-					<MultiField disableSubmit={setNotChanged} label="Url"         name="url"        data={thiefInfo.url}        disabled={isLoading} component={FormInput}/>
-					<MultiField disableSubmit={setNotChanged} label="Address"     name="addr"       data={thiefInfo.addr}       disabled={isLoading} component={FormInput}/>
-					<MultiField disableSubmit={setNotChanged} label="Phone"       name="phone"      data={thiefInfo.phone}      disabled={isLoading} component={FormInput} type="phone"/>
-					<MultiField disableSubmit={setNotChanged} label="Bike Serial" name="bikeSerial" data={thiefInfo.bikeSerial} disabled={isLoading} component={FormInput}/>
-					<MultiField disableSubmit={setNotChanged} label="Phrase"      name="phrase"     data={thiefInfo.phrase}     disabled={isLoading} component={FormInput} type="textarea"/>
-					<MultiField disableSubmit={setNotChanged} label="Notes"       name="note"       data={thiefInfo.note}       disabled={isLoading} component={FormInput} type="textarea"/>
+					<MultiField clearAll={clearByParts.name} disableSubmit={setNotChanged} label="Name"        name="name"       data={thiefInfo.name}       disabled={isLoading} component={FormInput}/>
+					<MultiField clearAll={clearByParts.email} disableSubmit={setNotChanged} label="Email"       name="email"      data={thiefInfo.email}      disabled={isLoading} component={FormInput}/>
+					<MultiField clearAll={clearByParts.url} disableSubmit={setNotChanged} label="Url"         name="url"        data={thiefInfo.url}        disabled={isLoading} component={FormInput}/>
+					<MultiField clearAll={clearByParts.addr} disableSubmit={setNotChanged} label="Address"     name="addr"       data={thiefInfo.addr}       disabled={isLoading} component={FormInput}/>
+					<MultiField clearAll={clearByParts.phone} disableSubmit={setNotChanged} label="Phone"       name="phone"      data={thiefInfo.phone}      disabled={isLoading} component={FormInput} type="phone"/>
+					<MultiField clearAll={clearByParts.bikeSerial} disableSubmit={setNotChanged} label="Bike Serial" name="bikeSerial" data={thiefInfo.bikeSerial} disabled={isLoading} component={FormInput}/>
+					<MultiField clearAll={clearByParts.phrase} disableSubmit={setNotChanged} label="Phrase"      name="phrase"     data={thiefInfo.phrase}     disabled={isLoading} component={FormInput} type="textarea"/>
+					<MultiField clearAll={clearByParts.note} disableSubmit={setNotChanged} label="Notes"       name="note"       data={thiefInfo.note}       disabled={isLoading} component={FormInput} type="textarea"/>
 					<ImageUpload
 						label="Images"
 						isLoading={isLoading}
@@ -192,6 +219,18 @@ export default function ThiefEdit() {
 					{wasSubmitted && <div className="form-btns">Submitted!</div>}
 				</Form>
 			</main>
+			{showModal && 
+			<div id="ModalDiv" className="modal">
+				<div className="modal-content">
+					<span className="close" onClick={()=>{setShowModal(false)}}>&times;</span>
+					<div>
+						<h1>Are you sure you want to clear all fields?</h1>
+					</div>
+					<div>
+						<button type="button" onClick={()=>{ClearAllFields(true)}}>Yes, Clear All</button>
+					</div>
+				</div>
+			</div>}
 		</div>
 	);
 }
