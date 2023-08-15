@@ -94,7 +94,7 @@ export default function UserList() {
 				</input>
 				<LinkButton className="AddThiefButton" to="">Add New</LinkButton>
 			</div>
-			{<LinkTable header={tableHeaders} data={userData} linkBase="/user/"></LinkTable>}
+			{<LinkTable header={tableHeaders} data={userData} linkBase="/user?userId="></LinkTable>}
 			</main>
 		</div>
 	);
