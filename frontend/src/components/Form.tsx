@@ -62,6 +62,8 @@ export function MultiField(props: MultiFieldProps) {
 	}
 	const { label, name, component: Component, onChange, disableSubmit, ...rest } = props;
 	const [values, setValues] = useState(['']);
+	const [collapsed, setCollapsed] = useState(false);
+	let parentSubmitDisabled = true;
 
 	useEffect(() => {
 		if (rest.data) {
@@ -69,15 +71,24 @@ export function MultiField(props: MultiFieldProps) {
 		}
 	}, [rest.data]);
 
+	function DisableParentSubmit (state: boolean) {
+		if (disableSubmit) {
+			disableSubmit(state);
+			parentSubmitDisabled = false;
+		}
+	}
+
 	function handleInput(e: any, idx: number) {
+		e.target.className += `${e.target.className} red-bordered`;
 		let newValues = [...values];
 		newValues[idx] = e.target.value;
 		updateValues(newValues);
-		disableSubmit(false);
+		DisableParentSubmit(false);
 	}
 	function addField(idx: number) {
 		let newValues = [...values];
 		newValues.splice(idx + 1, 0, ''); // insert a new empty field
+		setCollapsed(newValues.length > 7);
 		updateValues(newValues);
 	}
 
@@ -88,7 +99,7 @@ export function MultiField(props: MultiFieldProps) {
 			newValues = [''];
 		}
 		updateValues(newValues);
-		disableSubmit(false);
+		DisableParentSubmit(false);
 	}
 	function updateValues(newValues: string[]) {
 		setValues(newValues);
@@ -108,19 +119,37 @@ export function MultiField(props: MultiFieldProps) {
 		<>
 			<label>{label}</label>
 			<ol className='multi-field'>
+				{collapsed ? 
+				<>
+				<li><button hidden={values.length < 3} id="ExpBtn" type="button" onClick={()=>{setCollapsed(!collapsed)}}>Expand</button></li>
+				<li key={name}>
+						<Component
+							name={name}
+							value={values[0]}
+							onChange={(e: any) => handleInput(e, 0)}
+							{...rest}
+						/>
+						<button type="button" onClick={() => addField(0)}>＋</button>
+						<button type="button" onClick={() => removeField(0)}>－</button>
+				</li>
+				<li>{values.length > 1 ? <>• • •</> : <></>}</li>
+				</>
+				:
+				<>
+				<button hidden={values.length < 3} id="ClpBtn" type="button"  onClick={()=>{setCollapsed(!collapsed)}}>Collapse</button>
 				{values.map((value: string, idx: number) => (
 					<li key={idx == 0 ? name : name + idx}>
 						<Component
 							name={idx == 0 ? name : name + idx}
 							value={value}
 							onChange={(e: any) => handleInput(e, idx)}
-							className={value === '' && idx !== 0 ? 'red-bordered' : ''}
 							{...rest}
 						/>
 						<button type="button" onClick={() => addField(idx)}>＋</button>
 						<button type="button" onClick={() => removeField(idx)}>－</button>
 					</li>
 				))}
+				</>}
 			</ol>
 		</>
 	);
