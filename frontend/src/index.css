@@ -185,6 +185,12 @@ nav button:hover {
 
 /* ============= Custom ============= */
 
+#ExpBtn, 
+#ClpBtn {
+	width: 100%;
+	margin-left: 0;
+}
+
 .text-window .edit {
 	display: flex;
 	justify-content: center;
