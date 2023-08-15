@@ -60,10 +60,9 @@ export function MultiField(props: MultiFieldProps) {
 	if (useRecoilValue(debugState) == true) {
 		console.log("MultiField");
 	}
-	const { label, name, component: Component, onChange, disableSubmit, ...rest } = props;
+	const { label, name, component: Component, onChange, disableSubmit, clearAll, ...rest } = props;
 	const [values, setValues] = useState(['']);
 	const [collapsed, setCollapsed] = useState(false);
-	let parentSubmitDisabled = true;
 
 	useEffect(() => {
 		if (rest.data) {
@@ -71,10 +70,13 @@ export function MultiField(props: MultiFieldProps) {
 		}
 	}, [rest.data]);
 
+	if (clearAll) {
+		removeAllFields();
+	}
+
 	function DisableParentSubmit (state: boolean) {
 		if (disableSubmit) {
 			disableSubmit(state);
-			parentSubmitDisabled = false;
 		}
 	}
 
@@ -100,6 +102,12 @@ export function MultiField(props: MultiFieldProps) {
 		}
 		updateValues(newValues);
 		DisableParentSubmit(false);
+	}
+	function removeAllFields() {
+		if (values.length >= 1 && values[0] !== '') {
+			updateValues(['']);
+			DisableParentSubmit(false);
+		}
 	}
 	function updateValues(newValues: string[]) {
 		setValues(newValues);
