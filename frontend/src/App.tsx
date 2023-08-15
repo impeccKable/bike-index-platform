@@ -21,7 +21,7 @@ export default function App() {
 		setDebug(true);
 		// setDev(true);
 		if (debug == true) { console.log("App"); }
-		if (window.location.protocol === 'http:') {
+		if (dev === false && window.location.protocol === 'http:') {
 			window.location.href = window.location.href.replace('http', 'https');
 		}
 	})
@@ -29,15 +29,15 @@ export default function App() {
 	return (
 		<div className="App">
 			<Routes>
-				<Route path="/"          element={<Login />}></Route>
-				<Route path="/signup"    element={<Signup />}></Route>
-				<Route path="/thieves"   element={<AuthProtected><ThiefList /></AuthProtected>}></Route>
-				<Route path="/thief"     element={<AuthProtected><ThiefEdit /></AuthProtected>}></Route>
-				<Route path="/users"     element={<AuthProtected><UserList /></AuthProtected>}></Route>
+				<Route path="/" element={<Login />}></Route>
+				<Route path="/signup" element={<Signup />}></Route>
+				<Route path="/thieves" element={<AuthProtected><ThiefList /></AuthProtected>}></Route>
+				<Route path="/thief" element={<AuthProtected><ThiefEdit /></AuthProtected>}></Route>
+				<Route path="/users" element={<AuthProtected><UserList /></AuthProtected>}></Route>
 				{/* <Route path="/userEdit"  element={<UserEdit />}></Route> */}
-				<Route path="/data"      element={<AuthProtected><DataMgmt /></AuthProtected>}></Route>
-				<Route path="/about"     element={<AuthProtected><About  /></AuthProtected>}></Route>
-				<Route path="/logout"    element={<AuthProtected><Logout /></AuthProtected>}></Route>
+				<Route path="/data" element={<AuthProtected><DataMgmt /></AuthProtected>}></Route>
+				<Route path="/about" element={<AuthProtected><About /></AuthProtected>}></Route>
+				<Route path="/logout" element={<AuthProtected><Logout /></AuthProtected>}></Route>
 			</Routes>
 		</div>
 	);

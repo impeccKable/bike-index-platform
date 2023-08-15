@@ -357,10 +357,6 @@ nav button:hover {
 	overflow-y: auto;
 }
 
-.upload-file-field input {
-	display: none;
-}
-
 .modal-content .close {
 	font-size: 28px;
 	font-weight: bold;
@@ -443,3 +439,6 @@ nav button:hover {
 	cursor: pointer;
 }
 
+.upload-file-field input {
+	display: none;
+}
