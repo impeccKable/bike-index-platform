@@ -107,7 +107,7 @@ export default function UserList() {
                     <option value="phone">Phone Number</option>
                     <option value="email">Email</option>
                     <option value="title">Title</option>
-                    <option value="organization">Organization</option>
+                    <option value="org">Organization</option>
                 </FormInput>
                 <FormInput {...SearchInputProps} onChange={(event: any) => {setSearchText(event.target.value);}}/>
                 <LinkButton className="AddThiefButton" to="/user?userId=new">Add New</LinkButton>
