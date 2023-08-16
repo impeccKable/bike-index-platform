@@ -20,7 +20,7 @@ let columnToTable = [ 'thief_id', 'name', 'email', 'url', 'addr', 'phone', 'bike
 
 function processFile(req: any) {
 	return new Promise(async (resolve, reject) => {
-		let newDataCnts: any = { 'thief': 0, 'name': 0, 'email': 0, 'url': 0, 'addr': 0, 'phone': 0, 'bike_serial': 0, 'phrase': 0, 'note': 0, };
+		let newDataCnts: any = { 'rowCnt': 0, 'dataCnt': 0, 'thiefCnt': 0, 'name': 0, 'email': 0, 'url': 0, 'addr': 0, 'phone': 0, 'bike_serial': 0, 'phrase': 0, 'note': 0, };
 		let thiefIds = new Set();
 		let maxThiefId = -1;
 
@@ -28,21 +28,26 @@ function processFile(req: any) {
 		const rows = parse(fileContents, { skipEmptyLines: true, fromLine: 2, });
 		let inserts: any = [];
 		for (let row of rows) {
+			newDataCnts['rowCnt']++;
 			let thiefId = row[0];
 			if (thiefId === '') { continue; }
 			thiefId = parseInt(thiefId);
-			thiefIds.add(thiefId);
-			if (parseInt(thiefId) > maxThiefId) {
-				maxThiefId = parseInt(thiefId);
+			if (!thiefIds.has(thiefId)) {
+				thiefIds.add(thiefId);
+				newDataCnts['thiefCnt']++;
+			}
+			if (thiefId > maxThiefId) {
+				maxThiefId = thiefId;
 			}
 			for (let i = 1; i < columnToTable.length; i++) {
 				let val = row[i];
 				if (val === '') { continue; }
+				newDataCnts['dataCnt']++;
 				let col = columnToTable[i];
-				inserts.push(insertThiefData(col, thiefId, val));
+				inserts.push([insertThiefData(col, thiefId, val), col]);
 			}
 		}
-		console.log(`Recieved ${inserts.length} thief data items`)
+		console.log(`Received ${inserts.length} thief data items`) // I swear to god, I now hate e and i when they are next to each other
 
 		// Update next_thief_id
 		let lastThiefId = (await db.one(`SELECT last_value FROM next_thief_id;`)).last_value;
@@ -52,8 +57,9 @@ function processFile(req: any) {
 		}
 
 		for (let i = 0; i < inserts.length; i++) {
-			if (await inserts[i]) {
-				newDataCnts.thief++;
+			let [promise, col] = inserts[i];
+			if (await promise) {
+				newDataCnts[col]++;
 			}
 		}
 
