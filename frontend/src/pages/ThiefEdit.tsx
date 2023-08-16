@@ -79,42 +79,30 @@ export default function ThiefEdit() {
 	}
 
 	function CompareResults(submitData: any) {
-		//Ex: newValues.name[0].push('Something'), 0 = old values
-		let results = {
-			thiefId: url.searchParams.get('thiefId'),
-		};
-		const consoleMessages: any = [];
-		const newThiefInfo = {...thiefInfo};
+		let newThiefInfo = { ...thiefInfo };
+		let results = { thiefId: url.searchParams.get('thiefId') };
+		for (const [key, value] of Object.entries(submitData)) {
+			if (key === 'thiefId') { continue; }
+			let oldVals = [...thiefInfo[key]];
+			let newVals = value.split(',');
+			let delVals = [];
+			let addVals = [];
 
-		// need to split this one
-		Object.entries(submitData).map((field) => {
-			// field[0] is key, field[1] is value
-			let keyValue = field[0];
-
-			if (keyValue !== 'thiefId') {
-				let newValues = field[1].split(',');
-				let oldValues = thiefInfo[`${field[0]}`];
-				newThiefInfo[keyValue] = oldValues.slice();
-
-				results[keyValue] = [];
-				oldValues.forEach(oldVal => {
-					if (!newValues.includes(oldVal)) {
-						results[keyValue].push([oldVal, '']);
-						newThiefInfo[keyValue] = newThiefInfo[keyValue].filter(value => value !== oldVal);
-					}
-				});
-				newValues.forEach(newVal => {
-					if (!oldValues.includes(newVal)) {
-						results[keyValue].push(['', newVal]);
-						if (!newThiefInfo[keyValue].includes(newVal)) {
-							newThiefInfo[keyValue].push(newVal);
-						}
-					}
-				});
+			for (let i = 0; i < oldVals.length; i++) {
+				if (!newVals.includes(oldVals[i])) {
+					delVals.push(oldVals[i]);
+				}
 			}
-			DebugLogs('Submit Changes', consoleMessages, debug);
-		});
+			for (let i = 0; i < newVals.length; i++) {
+				if (!oldVals.includes(newVals[i])) {
+					addVals.push(newVals[i]);
+				}
+			}
+			newThiefInfo[key] = [...newVals];
+			results[key] = { addVals: addVals, delVals: delVals }
+		}
 		setThiefInfo(newThiefInfo);
+		DebugLogs('Thief edit changes', results, debug)
 		return results;
 	};
 
