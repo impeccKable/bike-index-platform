@@ -81,7 +81,11 @@ export function MultiField(props: MultiFieldProps) {
 	}
 
 	function handleInput(e: any, idx: number) {
-		e.target.className += `${e.target.className} red-bordered`;
+
+		if (!e.target.classList.value.includes('red-bordered')) {
+			e.target.classList.add('red-bordered');
+		}
+
 		let newValues = [...values];
 		newValues[idx] = e.target.value;
 		updateValues(newValues);
