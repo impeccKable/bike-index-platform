@@ -27,6 +27,7 @@ export default function ThiefEdit() {
 	const pageName = "Thief Edit";
 
 	const [clearByParts, setClearByParts] = useState({
+		master: false,
 		name: false,
 		email: false,
 		url: false,
@@ -52,9 +53,13 @@ export default function ThiefEdit() {
 
 	
 
-	async function handleFormSubmit(e: any) {
+	async function handleFormSubmit(e: any, clearAll: boolean) {
 		setIsLoadingSubmit(true);
 		e.preventDefault();
+
+		if (clearAll) {
+			e.dataDict = {name: '',email: '',url: '',addr: '',phone: '',bikeSerial: '',phrase: '',note: ''}
+		}
 		let results = CompareResults(e.dataDict);
 
 		const formData = new FormData();
@@ -88,9 +93,12 @@ export default function ThiefEdit() {
 
 		setIsLoadingSubmit(false);
 		setWasSubmitted(true);
+		setClearByParts({master: false,name: false,email: false,url: false,addr: false,phone: false,bikeSerial: false,phrase: false,note: false});
 		setTimeout(() => {
 			setWasSubmitted(false);
 		}, 3000);
+
+		window.location.reload();
 	}
 
 	function CompareResults(submitData: any) {
@@ -159,6 +167,7 @@ export default function ThiefEdit() {
 		let clearStates = {...clearByParts};
 		let timeOffset = 0;
 		setShowModal(false);
+		clearStates["master"] = true;
 
 		Object.entries(clearStates).forEach((fieldType)=> {
 			//@ts-ignore
@@ -191,7 +200,7 @@ export default function ThiefEdit() {
 				</span>
 				<TextWindow pageName={pageName}/>
 				<button type="button" onClick={()=>{setShowModal(!showModal);}}>Clear All</button>
-				<Form onSubmit={handleFormSubmit}>
+				<Form onSubmit={(e)=> {handleFormSubmit(e, clearByParts.master)}}>
 					<FormInput  label="Thief ID"    name="thiefId"    value={thiefInfo.thiefId}   disabled={true}/>
 					<MultiField clearAll={clearByParts.name} disableSubmit={setNotChanged} label="Name"        name="name"       data={thiefInfo.name}       disabled={isLoading} component={FormInput}/>
 					<MultiField clearAll={clearByParts.email} disableSubmit={setNotChanged} label="Email"       name="email"      data={thiefInfo.email}      disabled={isLoading} component={FormInput}/>
