@@ -21,10 +21,10 @@ export default function UserEdit() {
 
 	// Admins can view other users but users can only view their own page
 	const [userInfo, setUserInfo] = useState({
-		userId: '', //Only visible to admins,
+		userid: [''], //Only visible to admins,
 		email: [''],
-		firstName: [''],
-		lastName: [''],
+		first_name: [''],
+		last_name: [''],
 		title: [''],
 		org: [''],
 		phone: [''],
@@ -99,12 +99,12 @@ export default function UserEdit() {
 	async function async_get(userId: string) {
 		let res: any;
 		try {
-			res = await httpClient.get(`/user/userId=${userId}`)
+			res = await httpClient.get(`/user?userId=${userId}`)
 		} catch (err: any) {
 			DebugLogs('User get error', err.message, debug);
 			return;
 		}
-		Object.entries(res.data.userInfo[0]).map((atr) => {
+		Object.entries(res.data[0]).map((atr) => {
 			if (atr[0].localeCompare('userId') && atr[1].length === 0) {
 				atr[1] = [''];
 			}
@@ -136,16 +136,16 @@ export default function UserEdit() {
 				<h1>{pageName}<LoadingIcon when={isLoadingInit} delay={1}/></h1>
 				<TextWindow pageName={pageName}/>
 				<Form onSubmit={handleFormSubmit}>
-					<FormInput  label="User UID"       name="userId"     value={userInfo.userId}    disabled={true}/>
-					<FormInput  label="Email"          name="email"      data={userInfo.email}      disabled={isLoading} component={FormInput}/>
-					<FormInput  label="First Name"     name="first_name" data={userInfo.firstName}  disabled={isLoading} component={FormInput}/>
-					<FormInput  label="Last Name"      name="last_name"  data={userInfo.lastName}   disabled={isLoading} component={FormInput}/>
-					<FormInput  label="Title"          name="title"      data={userInfo.phone}      disabled={isLoading} component={FormInput} type="title"   />
-					<FormInput  label="Organization"   name="org"        data={userInfo.org}        disabled={isLoading} component={FormInput} type="org"     />
-					<FormInput  label="Phone"          name="phone"      data={userInfo.phone}      disabled={isLoading} component={FormInput} type="phone"   />
-					<FormInput  label="Role"           name="role"       data={userInfo.role}       disabled={isLoading} component={FormInput} type="role"    />
-					<FormInput  label="Approved"       name="approved"   data={userInfo.approved}   disabled={isLoading} component={FormInput} type="approved"/>
-					<FormInput  label="Banned"         name="banned"     data={userInfo.banned}     disabled={isLoading} component={FormInput} type="banned"  />
+					<FormInput  label="User UID"       name="userid"     value={userInfo.userid}     disabled={true}/>
+					<FormInput  label="Email"          name="email"      value={userInfo.email}      disabled={true}      component={FormInput}/>
+					<FormInput  label="First Name"     name="first_name" value={userInfo.first_name} disabled={isLoading} component={FormInput}/>
+					<FormInput  label="Last Name"      name="last_name"  value={userInfo.last_name}  disabled={isLoading} component={FormInput}/>
+					<FormInput  label="Title"          name="title"      value={userInfo.phone}      disabled={isLoading} component={FormInput}/>
+					<FormInput  label="Organization"   name="org"        value={userInfo.org}        disabled={isLoading} component={FormInput}/>
+					<FormInput  label="Phone"          name="phone"      value={userInfo.phone}      disabled={isLoading} component={FormInput} type="phone"   />
+					<FormInput  label="Role"           name="role"       value={userInfo.role}       disabled={isLoading} component={FormInput}/>
+					<FormInput  label="Approved"       name="approved"   value={userInfo.approved}   disabled={isLoading} component={FormInput}/>
+					<FormInput  label="Banned"         name="banned"     value={userInfo.banned}     disabled={isLoading} component={FormInput}/>
     				<div className="form-btns">
 						<LinkButton type="button" to="back">Back</LinkButton>
 						<FormButton type="submit" disabled={isLoading}>Submit</FormButton>

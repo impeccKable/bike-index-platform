@@ -278,6 +278,8 @@ Schedule
 				[ ] Drop token checks onto all backend requests
 				[x] Fix bug with AuthProtected loading before AuthProvider useEffect
 				[ ] Make it robust to exceptions/database errors
+					- https://stackoverflow.com/questions/56973265/what-does-express-async-handler-do
+					- https://expressjs.com/en/guide/error-handling.html
 			Bugs
 				[ ] 502 error (when trying to log in)
 				[~] Test auth protected routes (reloading page booted even with fresh token)
