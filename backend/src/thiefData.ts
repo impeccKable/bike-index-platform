@@ -13,7 +13,7 @@ export const fieldToTable: {[key: string]: string} = {
 export const fields = Object.keys(fieldToTable);
 export const tables = Object.values(fieldToTable);
 
-export async function thiefDataByIds(thiefIds: number[]) {
+export async function getThiefData(thiefIds: number[]) {
 	if (thiefIds.length === 0) {
 		return [];
 	}
@@ -66,3 +66,44 @@ export async function thiefDataByIds(thiefIds: number[]) {
 	}
 	return thieves;
 }
+
+function standardizePhoneNum(text: string): string {
+	// only keep digits, reverse order
+	let digits = text.replace(/\D/g, '').split('').reverse().join('');
+	let output = '';
+	let i;
+	for (i = 1; i <= digits.length; i++) { // 1-based index
+		if (i == 5 ) { output = '-'  + output; }
+		if (i == 8 ) { output = ') ' + output; }
+		if (i == 11) { output = ' '  + output; }
+		output = digits[i-1] + output;
+		if (i == 10) { output = '('  + output; }
+	}
+	if (i == 9 || i == 10) { output = '(' + output; }
+	if (i >= 12) { output = '+' + output; }
+	return output;
+}
+
+// Returns true if the data was updated, false if the data already existed
+export async function insertThiefData(table: string, thiefId: string, newVal: string): Promise<boolean> {
+	return new Promise((resolve, reject) => {
+		if (table === 'phone') {
+			newVal = standardizePhoneNum(newVal);
+		}
+		db.none(`INSERT INTO ${table} VALUES ($1, $2);`, [thiefId, newVal])
+			.then(() => resolve(true))
+			.catch((err: any) => {
+				// duplicate primary key constraint
+				if (err.code === '23505') { resolve(false); }
+				else { reject(err); }
+			});
+	});
+}
+
+export async function deleteThiefData(table: string, thiefId: string, oldVal: string): Promise<void> {
+	return new Promise((resolve, reject) => {
+		db.none(`DELETE FROM ${table} WHERE thief_id = $1 AND ${table} = $2`, [thiefId, oldVal])
+			.then(() => resolve());
+	});
+}
+
