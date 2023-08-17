@@ -99,7 +99,7 @@ export default function UserEdit() {
 	async function async_get(userId: string) {
 		let res: any;
 		try {
-			res = await httpClient.get(`/user?userId=${userId}`)
+			res = await httpClient.get(`/user/userId=${userId}`)
 		} catch (err: any) {
 			DebugLogs('User get error', err.message, debug);
 			return;
@@ -137,15 +137,15 @@ export default function UserEdit() {
 				<TextWindow pageName={pageName}/>
 				<Form onSubmit={handleFormSubmit}>
 					<FormInput  label="User UID"       name="userId"     value={userInfo.userId}    disabled={true}/>
-					<MultiField label="Email"          name="email"      data={userInfo.email}      disabled={isLoading} component={FormInput}/>
-					<MultiField label="First Name"     name="first_name" data={userInfo.firstName}  disabled={isLoading} component={FormInput}/>
-					<MultiField label="Last Name"      name="last_name"  data={userInfo.lastName}   disabled={isLoading} component={FormInput}/>
-					<MultiField label="Title"          name="title"      data={userInfo.phone}      disabled={isLoading} component={FormInput} type="phone"/>
-					<MultiField label="Organization"   name="org"        data={userInfo.org}        disabled={isLoading} component={FormInput} type="org"/>
-					<MultiField label="Phone"          name="phone"      data={userInfo.phone}      disabled={isLoading} component={FormInput} type="phone"/>
-					<MultiField label="Role"           name="role"       data={userInfo.role}       disabled={isLoading} component={FormInput} type="phone"/>
-					<MultiField label="Approved"       name="approved"   data={userInfo.approved}   disabled={isLoading} component={FormInput} type="phone"/>
-					<MultiField label="Banned"         name="banned"     data={userInfo.banned}     disabled={isLoading} component={FormInput} type="phone"/>
+					<FormInput  label="Email"          name="email"      data={userInfo.email}      disabled={isLoading} component={FormInput}/>
+					<FormInput  label="First Name"     name="first_name" data={userInfo.firstName}  disabled={isLoading} component={FormInput}/>
+					<FormInput  label="Last Name"      name="last_name"  data={userInfo.lastName}   disabled={isLoading} component={FormInput}/>
+					<FormInput  label="Title"          name="title"      data={userInfo.phone}      disabled={isLoading} component={FormInput} type="title"   />
+					<FormInput  label="Organization"   name="org"        data={userInfo.org}        disabled={isLoading} component={FormInput} type="org"     />
+					<FormInput  label="Phone"          name="phone"      data={userInfo.phone}      disabled={isLoading} component={FormInput} type="phone"   />
+					<FormInput  label="Role"           name="role"       data={userInfo.role}       disabled={isLoading} component={FormInput} type="role"    />
+					<FormInput  label="Approved"       name="approved"   data={userInfo.approved}   disabled={isLoading} component={FormInput} type="approved"/>
+					<FormInput  label="Banned"         name="banned"     data={userInfo.banned}     disabled={isLoading} component={FormInput} type="banned"  />
     				<div className="form-btns">
 						<LinkButton type="button" to="back">Back</LinkButton>
 						<FormButton type="submit" disabled={isLoading}>Submit</FormButton>

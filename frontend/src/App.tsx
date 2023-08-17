@@ -31,7 +31,7 @@ export default function App() {
 				<Route path="/thiefs"    element={<AuthProtected><ThiefList /></AuthProtected>}></Route>
 				<Route path="/thief"     element={<AuthProtected><ThiefEdit /></AuthProtected>}></Route>
 				<Route path="/users"     element={<AuthProtected><UserList  /></AuthProtected>}></Route>
-				<Route path="/userEdit"  element={<AuthProtected><UserEdit  /></AuthProtected>}></Route>
+				<Route path="/user"      element={<AuthProtected><UserEdit  /></AuthProtected>}></Route>
 				<Route path="/data"      element={<AuthProtected><DataMgmt  /></AuthProtected>}></Route>
 				<Route path="/about"     element={<AuthProtected><About     /></AuthProtected>}></Route>
 				<Route path="/logout"    element={<AuthProtected><Logout    /></AuthProtected>}></Route>
