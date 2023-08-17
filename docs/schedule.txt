@@ -189,91 +189,62 @@ Schedule
 		Bruce
 		Cheng
 			File uploads
-				x Allow other files (pdfs, etc)
-				x Automatically upload file upon a file select? Automatically go to file select upon + click.
+				[x] Allow other files (pdfs, etc)
+				[x] Automatically upload file upon a file select? Automatically go to file select upon + click.
 			Thief List
-				~ Put prev/next buttons in a static location?
-				x Test search functionality
-				x Move pages functionality to backend (page=2)
-				~ Show how many results
-				x Universal search
-				Sorting functionality
-					Closest match
-					Recency
-					Thief id
-					Alphabetically
-				Add other field types to the search type drop-down (Thief Id,Name,Email,Url,Address,Phone,Bike Serial,Phrase,Notes)
-		Cristian
-			x Editable text boxes on each page
-			~ User List
-				x Add column order functionality to link table (that doesn't throw errors)
-				x User list doesn't update when changing search type (with search text entered)
-				x User listing search put parameters into url
-				Clean up code
-			Thief Edit
-				Grey out Submit button until changes are made. Put red border on changed fields.
-				Add ability to collapse the many rows of urls (any fields over 8, scroll bar or collapse)
-				(Front end) 'Clear all' button for fields (still needs submit, boots them to thief list when all fields are empty)
-				Admin ability to change thief id field to combine multiple thieves (this might work by just making thief id an editable field?) (merge in history log?)
+				[x] Put prev/next buttons in a static location?
+				[x] Test search functionality
+				[x] Move pages functionality to backend (page=2)
+				[x] Show how many results
+				[x] Universal search
+				[ ] Sorting functionality
+					[ ] Closest match
+					[ ] Recency
+					[ ] Thief id
+					[ ] Alphabetically
+				[x] Add other field types to the search type drop-down (Thief Id,Name,Email,Url,Address,Phone,Bike Serial,Phrase,Notes)
+				[ ] Make buttons for next/prev not selectable
+				[ ] Choose file not hidden
 			History page
-				Datetime            | User     | Action            | ThiefID | Data type | Data
-				( Bryan deletes the thief )
-				2023-08-14 14:28:52 | 'bhance' | 'remove (delete)' | 3       | 'note'    | 'hillsboro oregon fence'
-				2023-08-14 14:28:52 | 'bhance' | 'remove (delete)' | 3       | 'name'    | 'John Smith'
-				( rjones changes the note to 'hillsboro oregon fence' )
-				2023-08-10 13:02:27 | 'rjones' | 'add'             | 3       | 'note'    | 'hillsboro oregon fence'
-				2023-08-10 13:02:27 | 'rjones' | 'remove'          | 3       | 'note'    | 'fence'
-				( Bryan adds thief 'John Smith' with a note of 'fence' )
-				2023-08-08 17:06:48 | 'bhance' | 'add (new)'       | 3       | 'note'    | 'fence'
-				2023-08-08 17:06:48 | 'bhance' | 'add (new)'       | 3       | 'name'    | 'John Smith'
-
-				Create a history page (sort by recency)
-				Button on theif edit page to go to history page filtered by theif id
-				Button on user  edit page to go to history page filtered by user
+				[x] Create a history page (sort by recency)
+				[x] Button on theif edit page to go to history page filtered by theif id
+				[ ] Button on user  edit page to go to history page filtered by user
+		Cristian
+			[x] Editable text boxes on each page
+			User List
+				[x] Add column order functionality to link table (that doesn't throw errors)
+				[x] User list doesn't update when changing search type (with search text entered)
+				[x] User listing search put parameters into url
+				[x] Clean up code
+			Thief Edit
+				[x] Grey out Submit button until changes are made
+				[x] Put red border on changed fields
+				[x] Add ability to collapse the many rows of urls (any fields over 8, scroll bar or collapse)
+				[~] (Front end) 'Clear all' button for fields (still needs submit, boots them to thief list when all fields are empty)
+				[ ] Admin ability to change thief id field to combine multiple thieves (this might work by just making thief id an editable field?) (merge in history log?)
 		Emerson
 			Backups
-				[X] Periodically update a clone of the database
-				[X] A way to restore from backup
+				[x] Periodically update a clone of the database
+				[x] A way to restore from backup
 			Data
-				[X] Add date to downloaded thief data csv
-				[X] Show number of lines submitted and number of data items
+				[x] Add date to downloaded thief data csv
+				[x] Show number of lines submitted and number of data items
 				[x] Add loading gif to stats table
 			Misc
-				[X] Bug in search for things in notes
+				[?] Bug in search for things in notes
 				[ ] Store phone numbers in standard format of "+52 (971) 314-1592" to allow for searches by area code
 					Leaving off: thiefDataImport and thiefEdit need to be combined to one interface now
-
-					function standardizePhoneNum(text: string): string {
-						// only keep digits, reverse order
-						let digits = text.replace(/\D/g, '').split('').reverse().join('');
-						let output = '';
-						let i;
-						for (i = 1; i <= digits.length; i++) { // 1-based index
-							if (i == 5 ) { output = '-'  + output; }
-							if (i == 8 ) { output = ') ' + output; }
-							if (i == 11) { output = ' '  + output; }
-							output = digits[i-1] + output;
-							if (i == 10) { output = '('  + output; }
-						}
-						if (i == 9 || i == 10) { output = '(' + output; }
-						if (i >= 12) { output = '+' + output; }
-						return output;
-					}
-
 				[x] Move run/stop scripts to bike-index-.. repo
 				[x] Upload env files to capstone folder
 				[x] Fix url path names (uncapitalize, shorten)
 				[x] Universal search
-				[X] Clean up README.md
-				[X] Look for all todos
+				[x] Clean up README.md
+				[x] Look for all todos
 				[ ] Universal search of '+512ada 503.201.7-823' returns thief 512
 				[ ] Give number of thieves on about page
 				[ ] Increase page size
 				[ ] Put db host in env
 				[ ] Strip spaces from inputs
-			Ideas
-				[ ] Fuzzy match in search
-				[ ] Data analysis page (find duplicates, fuzzy match)
 		Matt
 			Roles
 				Ability to change user roles
@@ -303,19 +274,66 @@ Schedule
 					- Can't be an admin controlled action, needs credentials
 				Authprotected loading page changes(wait 1sec then show loading gif)
 			User Edit
-				Create frontend page
-				Approve users
+				[ ] Make users not approved by default
+				[ ] Frontend
+				[ ] Approve users
+			Roles
+				[ ] Ability to change user roles
+				Admin Features	
+					[ ] View UserList and change user values
+					[ ] Approve users, ban users, change bikeIndex values(except email)
+					[ ] Upload .csv
+					[ ] Change description/text-blurb boxes on pages
+			Login & Sign up
+				[ ] Make registration and image submission clearer (load icon somewhere else?),
+				[x] Simplify login logic
+				[ ] Forward user to https if they use http
+				[x] Remove request verification page
+				[x] Remove forgot password page
+				[x] Add message that a verification email was sent to sign up page
+				[x] Add an error diologue when login with unverified email (with a link to resend email)
+				[x] Add an error diologue when password is incorrect (with a link to reset password)
+				[x] Add an error for too many requests to Firebase
+				[ ] Add login alert for temporarily disabled accounts(too many failed logins)
+				[ ] Change firebase project name
+				[ ] Ability to change email
+				[ ] 502 error (when trying to log in)
+				[ ] Error handle signup page and login page
+				[ ] Make email & password required
+				[ ] Pressing Enter doesn't work on forms
 			Misc
-				[x]Fix bug with AuthProtected loading before AuthProvider useEffect
-				Make it robust to exceptions/database errors
-				[?]There's an error in console log when reloading pages (react loading things in a weird order)
+				[ ] Drop token checks onto all backend requests
+				[x] Fix bug with AuthProtected loading before AuthProvider useEffect
+				[ ] Make it robust to exceptions/database errors
+				[?] There's an error in console log when reloading pages (react loading things in a weird order)
 					- Possibly fixed with the changes to AuthProtected
-				[IP]Test auth protected routes (reloading page booted even with fresh token)
+				[~] Test auth protected routes (reloading page booted even with fresh token)
 		Everyone
-			Clean up code (console logs, variable names, dir names, simplifications, consistency, etc)
+			[ ] Standardize backend routes
+			[ ] Clean up code (console logs, variable names, dir names, simplifications, consistency, etc)
+			[ ] Change how the token/login lifetime works
+			[ ] Error handling of requests
 	Sprint 7 (8/29)
 		Mobile format
 			Make the website responsive
+		Backlog
+			Fuzzy match in search
+			Data analysis page (find duplicates, fuzzy match)
 		Polish
 			Make thief table columns resizeable
 	Completion/Presentation (9/1)
+
+
+
+Old
+	Datetime            | User     | Action            | ThiefID | Data type | Data
+	( Bryan deletes the thief )
+	2023-08-14 14:28:52 | 'bhance' | 'remove (delete)' | 3       | 'note'    | 'hillsboro oregon fence'
+	2023-08-14 14:28:52 | 'bhance' | 'remove (delete)' | 3       | 'name'    | 'John Smith'
+	( rjones changes the note to 'hillsboro oregon fence' )
+	2023-08-10 13:02:27 | 'rjones' | 'add'             | 3       | 'note'    | 'hillsboro oregon fence'
+	2023-08-10 13:02:27 | 'rjones' | 'remove'          | 3       | 'note'    | 'fence'
+	( Bryan adds thief 'John Smith' with a note of 'fence' )
+	2023-08-08 17:06:48 | 'bhance' | 'add (new)'       | 3       | 'note'    | 'fence'
+	2023-08-08 17:06:48 | 'bhance' | 'add (new)'       | 3       | 'name'    | 'John Smith'
+

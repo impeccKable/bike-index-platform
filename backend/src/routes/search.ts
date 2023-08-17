@@ -1,7 +1,6 @@
-import express from "express";
-import db from "./dbConfig";
-import { fieldToTable, thiefInfoByIds } from "./thiefInfo";
-import { validToken } from "./token";
+import express from 'express';
+import { db } from '../config';
+import { fieldToTable, getThiefData } from '../thiefData';
 
 // Get matching thief_ids
 async function get(query: any) {
@@ -79,7 +78,7 @@ async function get(query: any) {
 		}
 		thiefIds = thiefIds.map((obj: any) => obj.thief_id);
 	}
-	return await thiefInfoByIds(thiefIds);
+	return await getThiefData(thiefIds);
 }
 
 const router = express.Router();

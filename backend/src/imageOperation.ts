@@ -5,8 +5,7 @@ import {
 	ListObjectsCommand,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { s3Client } from './s3Client';
-import { config } from './config';
+import { config, s3Client } from './config';
 
 // custom error class for image errors
 export class ImageUploadError extends Error {
@@ -29,13 +28,10 @@ export class ImageGetError extends Error {
 }
 
 // upload images to S3 bucket
-export async function uploadImage(
-	uploadedFiles: Express.Multer.File[],
-	thiefId: number
-) {
+export async function uploadImage(uploadedFiles: Express.Multer.File[], thiefId: number) {
 	const promises = uploadedFiles.map((file) => {
 		// define the key for S3 bucket object
-		const key = `thiefs/${thiefId}/images/${file.originalname}`;
+		const key = `thieves/${thiefId}/images/${file.originalname}`;
 
 		const params = {
 			Bucket: config.bucketName,
@@ -60,7 +56,7 @@ export async function uploadImage(
 export async function deleteImage(deletedFile: string[], thiefId: string) {
 	const promises = [];
 	for (const filename of deletedFile) {
-		const key = `thiefs/${thiefId}/images/${filename}`;
+		const key = `thieves/${thiefId}/images/${filename}`;
 		const params = {
 			Bucket: config.bucketName,
 			Key: key,
@@ -84,7 +80,7 @@ export async function deleteImage(deletedFile: string[], thiefId: string) {
 
 // get images from S3 bucket
 export async function getImage(thiefId: string): Promise<string[]> {
-	const prefix = `thiefs/${thiefId}/images/`;
+	const prefix = `thieves/${thiefId}/images/`;
 
 	const params = {
 		Bucket: config.bucketName,
@@ -115,9 +111,7 @@ export async function getImage(thiefId: string): Promise<string[]> {
 }
 
 // generate temporary URLs for S3 objects
-async function getTempImageUrl(
-	keys: (string | undefined)[]
-): Promise<string[]> {
+async function getTempImageUrl(keys: (string | undefined)[]): Promise<string[]> {
 	const urls: string[] = [];
 
 	for (const key of keys) {

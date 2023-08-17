@@ -10,63 +10,21 @@ Created by:
 
 ## Description
 
-## Setup/Installation Requirements
+This tool is a web-based interface to access and modify data regarding bike thieves. The core functionality is being able to create, edit, and search through the thief info. The info is mostly text-based, but it is also possible to attach auxillary files such as images and pdfs to each thief. Admin users also have the ability to import and export the text data via `.csv` files. The tool requires authentication through a login screen, and the accounts are created or verified by an admin through a user managment interface.
 
-## Setup/Installation
-https://nodejs.org/en/download
-https://pnpm.io/installation
-
-### Frontend
-`cd frontend`
-`npm i`
-`pnpm run dev`
-
-`pnpm run dev -- --host`
-
-### Backend
-For Windows (run in powershell):
-`Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted`
-`npm i`
-`npm start`
-
-## Known Bugs
-
-## Support and contact details
+![Screenshot of the search page](/docs/screenshot.png "Screenshot of the search page")
 
 ## Technologies Used
 
+The tool is made in [TypeScript](https://www.typescriptlang.org/) and uses [Node.js](https://nodejs.org/en/about) with [React Express](https://www.react.express/). It consists of a frontend and backend (which can later be used as an API if needed). It is currently hosted using [Amazon AWS](https://aws.amazon.com/) services, with an [EC2](https://aws.amazon.com/ec2/) server, [RDS](https://aws.amazon.com/rds/) database, and [S3](https://aws.amazon.com/s3/) bucket.
+
 ## License
 
-## Original Creation
-### Frontend
-https://expressjs.com/en/starter/installing.html
+[tbd]
 
-(Yes to chocolatey (and run script))
-`npm init`
-`npm install express`
-`npm install -g pnpm`
-`pnpm create vite`
-`cd frontend`
-`pnpm install express`
-```
-√ Project name: ... frontend
-√ Select a framework: » React
-√ Select a variant: » TypeScript + SWC
-```
-`pnpm install react-router-dom`
-### Backend
-`npm init @eslint/config`
-```
-√ How would you like to use ESLint? · problems
-√ What type of modules does your project use? · esm
-√ Which framework does your project use? · react
-√ Does your project use TypeScript? · Yes
-√ Where does your code run? · browser, node
-√ What format do you want your config file to be in? · JSON
-√ Would you like to install them now? · Yes
-√ Which package manager do you want to use? · pnpm
-```
-### EC2 setup
+# Installation
+
+## EC2 pre-setup
 sudo yum install git
 sudo yum install npm
 sudo yum install nmap
@@ -86,3 +44,42 @@ sudo nano /var/lib/pgsql/data/postgresql.conf
 add line:
 listen_addresses = '*'
 
+
+## Setup
+
+Install [Node.js](https://nodejs.org/en/download)
+
+Install [Pnpm](https://pnpm.io/installation)
+
+Install [Bike Index Platform](https://github.com/impeccKable/bike-index-platform):
+```
+git clone git@github.com:impeccKable/bike-index-platform
+cd ./bike-index-platform/frontend; npm i
+cd ../backend; npm i
+```
+
+(for Windows machines, you may need to run this in powershell):
+```
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
+```
+
+## To run locally:
+```
+cd frontend; pnpm run s
+cd backend; npm run s
+```
+
+## To run on EC2:
+```
+./scripts/run_all.sh
+```
+
+# Backups
+
+A backup script is making a monthly copy of the database into a `.sql` file that is compressed with `gzip`. If something were to happen, the database can be re-created by following these steps:
+
+1. Create a new database using `schema.sql`
+2. Unzip the backup file with `gunzip`
+3. Re-populate the tables using the `.sql` backup file
+
+This process will need some understanding of psql commands.

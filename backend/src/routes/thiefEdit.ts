@@ -1,13 +1,14 @@
 import express from 'express';
-import db from './dbConfig';
-import { fieldToTable, fields, thiefInfoByIds } from './thiefInfo';
-import { uploadImage, deleteImage, getImage, ImageUploadError, ImageDeletionError, ImageGetError} from './imageOperation';
+import { db } from '../config';
+import { fieldToTable, fields, getThiefData } from '../thiefData';
+import { uploadImage, deleteImage, getImage, ImageUploadError, ImageDeletionError, ImageGetError} from '../imageOperation';
 import multer from 'multer';
+import { insertThiefData, deleteThiefData } from '../thiefData';
 
 const upload = multer();
 
 async function get(query: any) {
-	return thiefInfoByIds([parseInt(query.thiefId)]);
+	return getThiefData([parseInt(query.thiefId)]);
 };
 
 async function put(body: any) {
@@ -18,27 +19,17 @@ async function put(body: any) {
 	}
 	thiefId = parseInt(thiefId);
 	for (let field of fields) {
-		if (!body[field]) {
-			continue;
+		if (!body[field]) { continue; }
+		let table = fieldToTable[field];
+		let delVals = body[field].delVals;
+		let addVals = body[field].addVals;
+		for (let delVal of delVals) {
+			if (delVal === '') { continue; }
+			deleteThiefData(table, thiefId, delVal);
 		}
-		for (let [oldVal, newVal] of body[field]) {
-			let table = fieldToTable[field];
-			if (newVal === '') {
-				await db.none(
-					`DELETE FROM ${table} WHERE thief_id = $1 AND ${table} = $2`,
-					[thiefId, oldVal]
-				);
-			} else if (oldVal === '') {
-				await db.none(
-					`INSERT INTO ${table} (thief_id, ${table}) VALUES ($1, $2)`,
-					[thiefId, newVal]
-				);
-			} else {
-				await db.none(
-					`UPDATE ${table} SET ${table} = $1 WHERE thief_id = $2 AND ${table} = $3`,
-					[newVal, thiefId, oldVal]
-				);
-			}
+		for (let addVal of addVals) {
+			if (addVal === '') { continue; }
+			insertThiefData(table, thiefId, addVal);
 		}
 	}
 	return thiefId;

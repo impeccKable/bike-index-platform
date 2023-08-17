@@ -16,7 +16,7 @@ export default function Login() {
 		async function f() {
 			try{
 				await auth?.handleLogin(email, password);
-				navigate("/thiefs");
+				navigate("/thieves");
 			} catch (error:any) {
 				loginFailureAlert(error, email, password);
 			};
