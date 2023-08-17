@@ -231,28 +231,9 @@ Schedule
 				[x] Show number of lines submitted and number of data items
 				[x] Add loading gif to stats table
 			Misc
-				[ ] Remove silly comments on pages
 				[?] Bug in search for things in notes
 				[ ] Store phone numbers in standard format of "+52 (971) 314-1592" to allow for searches by area code
 					Leaving off: thiefDataImport and thiefEdit need to be combined to one interface now
-
-					function standardizePhoneNum(text: string): string {
-						// only keep digits, reverse order
-						let digits = text.replace(/\D/g, '').split('').reverse().join('');
-						let output = '';
-						let i;
-						for (i = 1; i <= digits.length; i++) { // 1-based index
-							if (i == 5 ) { output = '-'  + output; }
-							if (i == 8 ) { output = ') ' + output; }
-							if (i == 11) { output = ' '  + output; }
-							output = digits[i-1] + output;
-							if (i == 10) { output = '('  + output; }
-						}
-						if (i == 9 || i == 10) { output = '(' + output; }
-						if (i >= 12) { output = '+' + output; }
-						return output;
-					}
-
 				[x] Move run/stop scripts to bike-index-.. repo
 				[x] Upload env files to capstone folder
 				[x] Fix url path names (uncapitalize, shorten)

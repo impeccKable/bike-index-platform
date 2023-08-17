@@ -136,7 +136,7 @@ export function FormButton(props: FormButtonProps) {
 	return <button {...props} />;
 }
 
-interface FormInputProps extends React.HTMLInputElement {
+export interface FormInputProps extends React.HTMLInputElement {
 	name: string;
 	label?: string;
 	labelProps?: React.HTMLElement;
