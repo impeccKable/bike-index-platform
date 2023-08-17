@@ -9,9 +9,12 @@ import LoadingIcon from '../components/LoadingIcon';
 import DebugLogs from '../services/DebugLogs';
 import TextWindow from '../components/TextWindow';
 
+//Add dynamically displayed password field to form to re-authenticate for email changes
+//Add admin view and regular view
+//Add success and failure dialogs
+
 
 export default function UserEdit() {
-	const [searchParams, setSearchParams] = useSearchParams();
 	const [isLoadingInit, setIsLoadingInit] = useState(true);
 	const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
 	const [wasSubmitted, setWasSubmitted] = useState(false);
@@ -29,8 +32,8 @@ export default function UserEdit() {
 		org: [''],
 		phone: [''],
 		role: [''],
-		approved: [''], //Only visible to admins
-		banned: [''], //Only visible to admins
+		approved: false, //Only visible to admins
+		banned: false, //Only visible to admins
 	});
 
 	async function handleFormSubmit(e: any) {
@@ -114,7 +117,6 @@ export default function UserEdit() {
 		setIsLoadingSubmit(false);
 		DebugLogs('User get response', res.data, debug);
 	}
-
 	useEffect(() => {
 		DebugLogs('UserEdit Component', '', debug);
 		let userId = url.searchParams.get('userId');
@@ -137,15 +139,33 @@ export default function UserEdit() {
 				<TextWindow pageName={pageName}/>
 				<Form onSubmit={handleFormSubmit}>
 					<FormInput  label="User UID"       name="userid"     value={userInfo.userid}     disabled={true}/>
-					<FormInput  label="Email"          name="email"      value={userInfo.email}      disabled={true}      component={FormInput}/>
-					<FormInput  label="First Name"     name="first_name" value={userInfo.first_name} disabled={isLoading} component={FormInput}/>
-					<FormInput  label="Last Name"      name="last_name"  value={userInfo.last_name}  disabled={isLoading} component={FormInput}/>
-					<FormInput  label="Title"          name="title"      value={userInfo.phone}      disabled={isLoading} component={FormInput}/>
-					<FormInput  label="Organization"   name="org"        value={userInfo.org}        disabled={isLoading} component={FormInput}/>
-					<FormInput  label="Phone"          name="phone"      value={userInfo.phone}      disabled={isLoading} component={FormInput} type="phone"   />
-					<FormInput  label="Role"           name="role"       value={userInfo.role}       disabled={isLoading} component={FormInput}/>
-					<FormInput  label="Approved"       name="approved"   value={userInfo.approved}   disabled={isLoading} component={FormInput}/>
-					<FormInput  label="Banned"         name="banned"     value={userInfo.banned}     disabled={isLoading} component={FormInput}/>
+					<FormInput  label="Email"          name="email"      value={userInfo.email}      disabled={true}      />
+					<FormInput  label="First Name"     name="first_name" value={userInfo.first_name} disabled={isLoading} />
+					<FormInput  label="Last Name"      name="last_name"  value={userInfo.last_name}  disabled={isLoading} />
+					<FormInput  label="Title"          name="title"      value={userInfo.phone}      disabled={isLoading} />
+					<FormInput  label="Organization"   name="org"        value={userInfo.org}        disabled={isLoading} />
+					<FormInput  label="Phone"          name="phone"      value={userInfo.phone}      disabled={isLoading}  type="phone"   />
+					<FormInput  label="Role"           name="role"       value={userInfo.role.toString()}       disabled={isLoading} onChange={(event: any) => {userInfo.role = event.target[event.target.selectedIndex].value;}}        type="select">
+                    	<option value="admin">     Admin      </option>
+                    	<option value="readWrite"> readWrite  </option>
+                    	<option value="readOnly">  readOnly   </option>
+                	</FormInput>
+					<FormInput  label="Approved"       name="approved"   value={userInfo.approved.toString()}   disabled={isLoading} type="select" onChange={(event: any) => {
+							event.target[event.target.selectedIndex].value === "true" ?
+							userInfo.approved = true:
+							userInfo.approved = false;
+						}}>
+                    	<option value="true">      Approved   </option>
+                    	<option value="false">     Unapproved </option>
+                	</FormInput>
+					<FormInput  label="Banned"         name="banned"     value={userInfo.banned.toString()}     disabled={isLoading} type="select" onChange={(event: any) => {
+							event.target[event.target.selectedIndex].value === "true" ?
+							userInfo.banned = true :
+							userInfo.banned = false;
+						}}>
+                    	<option value="true">      Banned   </option>
+                    	<option value="false">     Unbanned </option>
+                	</FormInput>
     				<div className="form-btns">
 						<LinkButton type="button" to="back">Back</LinkButton>
 						<FormButton type="submit" disabled={isLoading}>Submit</FormButton>
