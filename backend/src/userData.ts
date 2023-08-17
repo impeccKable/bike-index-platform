@@ -26,7 +26,7 @@ export async function GetAllUsers() {
 
 export async function GetUserByID(userID: string) {
     try {
-        return await db.any("SELECT user_uid AS userid, CONCAT(first_name, ' ', last_name) as name, email, phone, role, title, org, approved, banned FROM bi_user WHERE user_uid = ($1);",[userID]);
+        return await db.any("SELECT user_uid AS userid, first_name, last_name, email, phone, role, title, org, approved, banned FROM bi_user WHERE user_uid = ($1);",[userID]);
     }
     catch (exc) {
         console.log(`[ backend.src.userData.ts.GetUserByID() ] Error Attempting To Query For UserID '${userID}'. Exception Message: ${exc}`);
