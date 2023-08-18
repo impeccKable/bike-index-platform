@@ -76,7 +76,7 @@ export default function UserEdit() {
 			if (keyValue !== 'userId') {
 				let newValue = field[1];
 				let oldValue = userInfo[`${field[0]}`];
-				newUserInfo[keyValue] = oldValue.slice();
+				newUserInfo[keyValue] = oldValue;
 
 				results[keyValue] = [];
 				if (newValue===oldValue) {
@@ -104,6 +104,9 @@ export default function UserEdit() {
 			return;
 		}
 		Object.entries(res.data[0]).map((atr) => {
+			if(atr[1]===null){
+				atr[1] = '';
+			}
 			if (atr[0].localeCompare('userId') && atr[1].length === 0) {
 				atr[1] = [''];
 			}
