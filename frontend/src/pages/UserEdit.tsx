@@ -12,9 +12,7 @@ import TextWindow from '../components/TextWindow';
 //Add dynamically displayed password field to form to re-authenticate for email changes
 //Add admin view and regular view
 //Add success and failure dialogs
-//Add null checks for response data
 //Sign-up page should require all fields or submit ""
-//Change line 106 to handle null fields returned
 
 
 export default function UserEdit() {
