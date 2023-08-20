@@ -4,7 +4,7 @@ import Signup from "./pages/Signup";
 import ThiefList from "./pages/ThiefList";
 import ThiefEdit from "./pages/ThiefEdit";
 import UserList from "./pages/UserList";
-// import UserEdit from "./pages/UserEdit";
+import UserEdit from "./pages/UserEdit";
 import DataMgmt from "./pages/DataMgmt";
 import About from "./pages/About";
 import History from "./pages/History"
@@ -37,7 +37,7 @@ export default function App() {
 				<Route path="/thieves" element={<AuthProtected><ThiefList /></AuthProtected>}></Route>
 				<Route path="/thief" element={<AuthProtected><ThiefEdit /></AuthProtected>}></Route>
 				<Route path="/users" element={<AuthProtected><UserList /></AuthProtected>}></Route>
-				{/* <Route path="/userEdit"  element={<UserEdit />}></Route> */}
+				<Route path="/user" element={<AuthProtected><UserEdit /></AuthProtected>}></Route>
 				<Route path="/data" element={<AuthProtected><DataMgmt /></AuthProtected>}></Route>
 				<Route path="/history" element={<AuthProtected><History /></AuthProtected>}></Route>
 				<Route path="/about" element={<AuthProtected><About /></AuthProtected>}></Route>

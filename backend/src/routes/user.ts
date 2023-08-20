@@ -1,5 +1,8 @@
 import express from "express";
-import { GetAllUsers, GetUserByID, GetUserBySearchType } from "../userData";
+import { GetAllUsers, GetUserByID, GetUserBySearchType, PutUserInfo } from "../userData";
+import multer from 'multer';
+
+const upload = multer();
 
 const router = express.Router();
 
@@ -25,6 +28,13 @@ router.get("/", async (req: express.Request, res: express.Response) => {
 	}
 });
 
+router.put("/", async (req: express.Request, res: express.Response) => {
+	try {
+		return res.json(await PutUserInfo(req.body));
+	} catch (exc) {
+		console.log(`[ backend.src.user.ts.put('/') Error Attempting To Put UserInfo. Message: ${exc} ]`)
+	}
+});
 //example query: http://localhost:3000/api/user/userId=2oiwJmvUawY0RcdzQx5iE1ks7kC3
 //router.get("/:userId", async (req: express.Request, res: express.Response) => {
 //	try {
