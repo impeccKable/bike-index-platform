@@ -107,7 +107,7 @@ export default function UserEdit() {
 			DebugLogs('User get error', err.message, debug);
 			return;
 		}
-		Object.entries(res.data[0]).map((atr) => {
+		Object.entries(res.data.data[0]).map((atr) => {
 			if (atr[1] === null) {
 				atr[1] = '';
 			}
@@ -121,7 +121,7 @@ export default function UserEdit() {
 		setSelectedBanned(userInfo.banned.toString());
 		setIsLoadingInit(false);
 		setIsLoadingSubmit(false);
-		DebugLogs('User get response', res.data, debug);
+		DebugLogs('User get response', res.data.data, debug);
 	}
 	useEffect(() => {
 		DebugLogs('UserEdit Component', '', debug);

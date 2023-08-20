@@ -59,9 +59,10 @@ export default function History() {
 			url = `/history?thiefId=&page=${page}`;
 		}
 
+		console.log('url', url);
+
 		httpClient.get(url)
 			.then(res => {
-				setHistory(res.data);
 				DebugLogs('Hisotry get response', res.data, debug);
 				const historyList: Array<History> = res.data.data.map((history: History) => {
 					return {

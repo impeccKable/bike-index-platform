@@ -65,7 +65,7 @@ const get = async (query: any) => {
 				data
 			FROM history`;
 
-	const whereClause = thiefId ? `WHERE ${whereForId}` : '';
+	const whereClause = (thiefId || userId) ? `WHERE ${whereForId}` : '';
 	const orderByAndLimit = `ORDER BY datetime DESC LIMIT $1 OFFSET $2`;
 	const completeQuery = `${queryWithNoUserTable} ${whereClause} ${orderByAndLimit}`;
 

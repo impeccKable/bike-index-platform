@@ -7,7 +7,7 @@ export function AuthProtected({ children }: any) {
 	const { user, loading }: any = useAuth();
 
 	useEffect(() => {
-		console.log(user);
+		console.log('user', user);
 	}, [loading]);
 
 	if (!loading&&!user) {
