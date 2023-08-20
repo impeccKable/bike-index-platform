@@ -331,6 +331,9 @@ nav button:hover {
 	line-height: 30px;
 	cursor: pointer;
 	margin: 5px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .page-control:hover,
