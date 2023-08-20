@@ -9,7 +9,7 @@ interface LinkTableProps extends React.HTMLInputElement {
 	[key: string]: any;
 }
 
-const maxRow = 10;
+const maxRow = 24;
 
 export default function LinkTable(props: LinkTableProps) {
 	const navigate = useNavigate();
