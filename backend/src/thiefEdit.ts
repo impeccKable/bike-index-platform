@@ -10,11 +10,56 @@ async function get(query: any) {
 	return thiefInfoByIds([parseInt(query.thiefId)]);
 };
 
+async function MergeThieves(body: any) {
+	console.log(`Merging Thief: ${body.thiefIdMap[0]} into Thief: ${body.thiefIdMap[1]}`);
+	Object.entries(fieldToTable).map(async (table)  => {
+		let i = 0;
+		//1.  From the current table, query for all rows with the old thief id
+		let tableEntries = await db.any(`SELECT thief_id, ${table[1]} FROM ${table[1]} WHERE thief_id = $1`, [`${body.thiefIdMap[0]}`]);
+		
+		//2.  iterate rows returned if greater than 0 and for each one first check if
+		//	  the row already exists for the new id.
+		tableEntries.map(async (row:any)=>{
+			console.log(`Table: ${table[1]}, Entry: ${i}, RID: ${row.thief_id}, RVal: ${row[table[1]]}, ${i} of ${tableEntries.length}`);
+			++i;
+
+			let isDuplicate = await db.any(`SELECT thief_id, ${table[1]} FROM ${table[1]} WHERE thief_id = $1 AND ${table[1]} = '${row[table[1]]}'`, [body.thiefIdMap[1]]);
+			if (isDuplicate.length <= 0) {
+				// update
+				console.log(`UPDATED Table ${table[1]}. Set thief_id to: '${body.thiefIdMap[1]}' where thief_id was: '${body.thiefIdMap[0]}' and the column '${table[1]}' was '${row[table[1]]}'`);
+				await db.any(`UPDATE ${table[1]} SET thief_id = $1 WHERE thief_id = $2 AND ${table[1]} = '${row[table[1]]}'`
+				,[body.thiefIdMap[1], body.thiefIdMap[0]]);
+			}
+			else {
+				// delete
+				console.log(`DELETED Row from ${table[1]} table where the thief_id was '${body.thiefIdMap[0]}'and the ${table[1]} was '${row[table[1]]}' Because its Duplicate Entry`);
+				await db.any(`DELETE FROM ${table[1]} WHERE thief_id = $1 AND ${table[1]} = $2`
+				,[body.thiefIdMap[0], row[table[1]]]);
+			}
+		});
+	});
+
+	console.log(`DELETED Thief with ID '${[body.thiefIdMap[0]]}'. No Longer Needed After Merge.`);
+	// delete old thief
+	await db.none(`DELETE FROM thief WHERE thief_id = $1`, [body.thiefIdMap[0]]);
+
+	return body.thiefIdMap[1];
+}
+
 async function put(body: any) {
 	let thiefId = body.thiefId;
 	if (thiefId == 'new') {
 		// (new thief, get next thief_id)
 		thiefId = (await db.one("SELECT nextval('next_thief_id')"))['nextval'];
+	}
+	if (thiefId === 'merge') {
+		let newThiefId = await MergeThieves(body);
+		
+		body.thiefId = newThiefId;
+		
+		body = Object.entries(body).filter(field => field[0] !== 'thiefIdMap');
+
+		return newThiefId;
 	}
 	thiefId = parseInt(thiefId);
 	for (let field of fields) {
