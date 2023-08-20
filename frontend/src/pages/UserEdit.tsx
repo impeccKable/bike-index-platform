@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import { Form, MultiField, FormInput, FormButton, LinkButton } from '../components/Form';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { httpClient } from '../services/HttpClient';
 import { useRecoilValue } from 'recoil';
 import { debugState } from '../services/Recoil';
@@ -25,6 +25,7 @@ export default function UserEdit() {
 	const debug = useRecoilValue(debugState);
 	const url = new URL(window.location.href);
 	const pageName = "User Edit";
+	const navigate = useNavigate();
 
 	// Admins can view other users but users can only view their own page
 	const [userInfo, setUserInfo] = useState({
@@ -40,13 +41,18 @@ export default function UserEdit() {
 		banned: false, //Only visible to admins
 	});
 
+	function handleHisotryClick() {
+		const userId = userInfo.userid;
+		navigate(`/history?userId=${userId}`);
+	}
+
 	async function handleFormSubmit(e: any) {
 		setIsLoadingSubmit(true);
 		e.preventDefault();
 		let results = CompareResults(e.dataDict);
 		console.log(results);
 
-        const res = await httpClient.put('/user', results)
+		const res = await httpClient.put('/user', results)
 			.catch(err => {
 				DebugLogs('User put error', err.message, debug);
 			});
@@ -64,7 +70,7 @@ export default function UserEdit() {
 			userid: url.searchParams.get('userId'),
 		};
 		const consoleMessages: any = [];
-		const newUserInfo = {...userInfo};
+		const newUserInfo = { ...userInfo };
 
 		// need to split this one
 		Object.entries(submitData).map((field) => {
@@ -77,10 +83,10 @@ export default function UserEdit() {
 				newUserInfo[keyValue] = oldValue;
 
 				results[keyValue] = [];
-				if (newValue===oldValue) {
+				if (newValue === oldValue) {
 					results[keyValue] = oldValue;
 				}
-				if (!(oldValue===newValue)) {
+				if (!(oldValue === newValue)) {
 					results[keyValue] = newValue;
 					if (!(newUserInfo[keyValue] === newValue)) {
 						newUserInfo[keyValue] = newValue;
@@ -102,7 +108,7 @@ export default function UserEdit() {
 			return;
 		}
 		Object.entries(res.data[0]).map((atr) => {
-			if(atr[1]===null){
+			if (atr[1] === null) {
 				atr[1] = '';
 			}
 			if (atr[0].localeCompare('userId') && atr[1].length === 0) {
@@ -135,46 +141,49 @@ export default function UserEdit() {
 		<div className="formal thiefedit-page">
 			<Navbar />
 			<main>
-				<h1>{pageName}<LoadingIcon when={isLoadingInit} delay={1}/></h1>
-				<TextWindow pageName={pageName}/>
+				<div className="title">
+					<h1>{pageName}<LoadingIcon when={isLoadingInit} delay={1} /></h1>
+					<button onClick={handleHisotryClick}>History</button>
+				</div>
+				<TextWindow pageName={pageName} />
 				<Form onSubmit={handleFormSubmit}>
-					<FormInput  label="User UID"       name="userid"     value={userInfo.userid}     			disabled={true}/>
-					<FormInput  label="Email"          name="email"      value={userInfo.email}      			disabled={true}      />
-					<FormInput  label="First Name"     name="first_name" defaultValue={userInfo.first_name} 			disabled={isLoading} />
-					<FormInput  label="Last Name"      name="last_name"  defaultValue={userInfo.last_name}  			disabled={isLoading} />
-					<FormInput  label="Title"          name="title"      defaultValue={userInfo.title}      			disabled={isLoading} />
-					<FormInput  label="Organization"   name="org"        defaultValue={userInfo.org}        			disabled={isLoading} />
-					<FormInput  label="Phone"          name="phone"      defaultValue={userInfo.phone}      			disabled={isLoading} type="phone"/>
-					<FormInput  label="Role"           name="role"       value={selectedRole}       disabled={isLoading} type="select" onChange={(event: any) => {
-							userInfo.role = event.target[event.target.selectedIndex].value;
-							setSelectedRole(event.target[event.target.selectedIndex].value);
-						}}>
-                    	<option value="admin">     Admin      </option>
-                    	<option value="readWrite"> readWrite  </option>
-                    	<option value="readOnly">  readOnly   </option>
-                	</FormInput>
-					<FormInput  label="Approved"       name="approved"   value={selectedApproved}   disabled={isLoading} type="select" onChange={(event: any) => {
-							event.target[event.target.selectedIndex].value === "true" ?
-							userInfo.approved = true:
+					<FormInput label="User UID" name="userid" value={userInfo.userid} disabled={true} />
+					<FormInput label="Email" name="email" value={userInfo.email} disabled={true} />
+					<FormInput label="First Name" name="first_name" defaultValue={userInfo.first_name} disabled={isLoading} />
+					<FormInput label="Last Name" name="last_name" defaultValue={userInfo.last_name} disabled={isLoading} />
+					<FormInput label="Title" name="title" defaultValue={userInfo.title} disabled={isLoading} />
+					<FormInput label="Organization" name="org" defaultValue={userInfo.org} disabled={isLoading} />
+					<FormInput label="Phone" name="phone" defaultValue={userInfo.phone} disabled={isLoading} type="phone" />
+					<FormInput label="Role" name="role" value={selectedRole} disabled={isLoading} type="select" onChange={(event: any) => {
+						userInfo.role = event.target[event.target.selectedIndex].value;
+						setSelectedRole(event.target[event.target.selectedIndex].value);
+					}}>
+						<option value="admin">     Admin      </option>
+						<option value="readWrite"> readWrite  </option>
+						<option value="readOnly">  readOnly   </option>
+					</FormInput>
+					<FormInput label="Approved" name="approved" value={selectedApproved} disabled={isLoading} type="select" onChange={(event: any) => {
+						event.target[event.target.selectedIndex].value === "true" ?
+							userInfo.approved = true :
 							userInfo.approved = false;
-							setSelectedApproved(event.target[event.target.selectedIndex].value);
-						}}>
-                    	<option value="true">      Approved   </option>
-                    	<option value="false">     Unapproved </option>
-                	</FormInput>
-					<FormInput  label="Banned"         name="banned"     value={selectedBanned}     disabled={isLoading} type="select" onChange={(event: any) => {
-							event.target[event.target.selectedIndex].value === "true" ?
+						setSelectedApproved(event.target[event.target.selectedIndex].value);
+					}}>
+						<option value="true">      Approved   </option>
+						<option value="false">     Unapproved </option>
+					</FormInput>
+					<FormInput label="Banned" name="banned" value={selectedBanned} disabled={isLoading} type="select" onChange={(event: any) => {
+						event.target[event.target.selectedIndex].value === "true" ?
 							userInfo.banned = true :
 							userInfo.banned = false;
-							setSelectedBanned(event.target[event.target.selectedIndex].value);
-						}}>
-                    	<option value="true">      Banned   </option>
-                    	<option value="false">     Unbanned </option>
-                	</FormInput>
-    				<div className="form-btns">
+						setSelectedBanned(event.target[event.target.selectedIndex].value);
+					}}>
+						<option value="true">      Banned   </option>
+						<option value="false">     Unbanned </option>
+					</FormInput>
+					<div className="form-btns">
 						<LinkButton type="button" to="back">Back</LinkButton>
 						<FormButton type="submit" disabled={isLoading}>Submit</FormButton>
-						<LoadingIcon when={isLoadingSubmit} style={{margin: 0}}/>
+						<LoadingIcon when={isLoadingSubmit} style={{ margin: 0 }} />
 					</div>
 					{wasSubmitted && <div className="form-btns">Submitted!</div>}
 				</Form>
