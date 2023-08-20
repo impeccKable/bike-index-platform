@@ -1,5 +1,5 @@
 import express from 'express';
-import db from './dbConfig';
+import { db } from '../config';
 
 export type UserInput = {
 	user_uid: string;
