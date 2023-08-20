@@ -52,3 +52,17 @@ export async function GetUserBySearchType (key: string, type: string) {
         console.log(`[ backend.src.userData.ts.GetUserBySearchType() ] Error Attempting To Query For Users by Search Key '${key}' and Search Type '${type}'. Exception Message: ${exc}`);
     }
 }
+
+export async function PutUserInfo (userInfo: any) {
+    try {
+        for(let key in userInfo) {
+            if(key === "userid") {   
+                continue;
+            }
+            await db.any(`UPDATE bi_user SET ${key} = ($1) WHERE user_uid = ($2);`, [userInfo[key], userInfo.userid]);
+        }
+    }
+    catch (exc) {
+        console.log(`[ backend.src.userData.ts.PutUserInfo() ] Error Attempting To Put User Info. Exception Message: ${exc}`);
+    }
+}
