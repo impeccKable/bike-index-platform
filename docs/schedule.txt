@@ -232,7 +232,7 @@ Schedule
 				[x] Add loading gif to stats table
 			Misc
 				[?] Bug in search for things in notes
-				[ ] Store phone numbers in standard format of "+52 (971) 314-1592" to allow for searches by area code
+				[X] Store phone numbers in standard format of "+52 (971) 314-1592" to allow for searches by area code
 					Leaving off: thiefDataImport and thiefEdit need to be combined to one interface now
 				[x] Move run/stop scripts to bike-index-.. repo
 				[x] Upload env files to capstone folder
@@ -240,12 +240,12 @@ Schedule
 				[x] Universal search
 				[x] Clean up README.md
 				[x] Look for all todos
-				[ ] Universal search of '+512ada 503.201.7-823' returns thief 512
-				[ ] Give number of thieves on about page
-				[ ] Increase page size
-				[ ] Put db host in env
-				[ ] Strip spaces from inputs
-		Matt	
+				[X] Universal search of '+512ada 503.201.7-823' returns thief 512
+				[X] Give number of thieves on about page
+				[X] Increase page size
+				[X] Put db host in env
+				[X] Strip spaces from inputs
+		Matt
 			User Edit
 				[x] Make users not approved by default
 				[x] Frontend
