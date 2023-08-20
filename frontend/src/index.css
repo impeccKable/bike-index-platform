@@ -185,6 +185,14 @@ nav button:hover {
 
 /* ============= Custom ============= */
 
+.btn-danger {
+	background-color: #690000;
+}
+
+.btn-danger:hover {
+	background-color: #8b0000;
+}
+
 #ExpBtn, 
 #ClpBtn {
 	width: 100%;
