@@ -203,12 +203,13 @@ Schedule
 					[ ] Thief id
 					[ ] Alphabetically
 				[x] Add other field types to the search type drop-down (Thief Id,Name,Email,Url,Address,Phone,Bike Serial,Phrase,Notes)
-				[ ] Make buttons for next/prev not selectable
+				[x] Make buttons for next/prev not selectable
 				[ ] Choose file not hidden
 			History page
 				[x] Create a history page (sort by recency)
 				[x] Button on theif edit page to go to history page filtered by theif id
-				[ ] Button on user  edit page to go to history page filtered by user
+				[x] Button on user  edit page to go to history page filtered by user
+				[ ] Log user in backend
 		Cristian
 			[x] Editable text boxes on each page
 			User List
