@@ -34,7 +34,8 @@ const header = {
 export default function History() {
 	const [history, setHistory] = useState<History[]>([]);
 	const [page, setpage] = useState(1);
-	const [id, setId] = useState<string | null>(null);
+	const [thiefId, setThiefId] = useState<string | null>(null);
+	const [userId, setUserId] = useState<string | null>(null);
 	const [pagemeta, setpagemeta] = useState({ totalRows: 0, totalPages: 0 });
 	const [isLoading, setIsLoading] = useState(true);
 	const pageName = "History Log";
@@ -44,13 +45,16 @@ export default function History() {
 
 	useEffect(() => {
 		const queryParams = new URLSearchParams(location.search);
-		const id = queryParams.get('thiefId');
-		setId(id);
-		console.log('id', id)
+		const thiefId = queryParams.get('thiefId');
+		const userId = queryParams.get('userId');
+		setThiefId(thiefId);
+		setUserId(userId);
 
 		let url;
-		if (id !== null) {
-			url = `/history?thiefId=${id}&page=${page}`;
+		if (thiefId !== null) {
+			url = `/history?thiefId=${thiefId}&page=${page}`;
+		} else if (userId !== null) {
+			url = `/history?userId=${userId}&page=${page}`;
 		} else {
 			url = `/history?thiefId=&page=${page}`;
 		}
@@ -78,7 +82,7 @@ export default function History() {
 				DebugLogs('History get error', err, debug);
 			});
 		setIsLoading(false);
-	}, [page, id, location.search]);
+	}, [page, thiefId, userId, location.search]);
 
 	return (
 		<div className="formal history-page">
