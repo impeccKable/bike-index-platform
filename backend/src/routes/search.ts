@@ -5,14 +5,6 @@ import { validToken } from "./token";
 
 const MAX_ROW = 24;
 
-export const searchableTable: { [key: string]: string } = {
-	"name": "name",
-	"email": "email",
-	"url": "url",
-	"addr": "addr",
-	"phone": "phone",
-};
-
 const get = async (query: any) => {
 	const { searchType, searchText, page = 1 } = query;
 	const scores: Map<number, number> = new Map();

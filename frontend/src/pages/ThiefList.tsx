@@ -110,6 +110,9 @@ export default function ThiefList() {
 						<option value="email">Email</option>
 						<option value="url">Url</option>
 						<option value="addr">Address</option>
+						<option value="bikeSerial">Bike Serial</option>
+						<option value="phrase">Phrase</option>
+						<option value="note">Note</option>
 					</select>
 					<label htmlFor="ThiefSearch">Search</label>
 					<input
