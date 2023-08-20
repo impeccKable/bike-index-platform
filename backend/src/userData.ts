@@ -1,4 +1,5 @@
 import { db } from "./config";
+import { logHistory } from "./routes/history";
 
 const types: any = {
 	userid: true,
@@ -98,6 +99,12 @@ export async function PutUserInfo(userInfo: any) {
 				continue;
 			}
 			await db.any(`UPDATE bi_user SET ${key} = ($1) WHERE user_uid = ($2);`, [userInfo[key], userInfo.userid]);
+			try {
+				await logHistory({ user_uid: "someUser", changed_user_uid: userInfo.userid, data_type: `${key}`, data: `${userInfo[key]}` }, 'update');
+			} catch (err) {
+				console.log('Error while logging user history:', err);
+				throw err;
+			}
 		}
 	}
 	catch (exc) {
