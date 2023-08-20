@@ -7,6 +7,7 @@ import { httpClient } from '../services/HttpClient';
 import LinkTable from '../components/LinkTable';
 import DebugLogs from '../services/DebugLogs';
 import LoadingIcon from '../components/LoadingIcon';
+import TextWindow from '../components/TextWindow';
 
 // @ts-ignore
 export interface Thief extends React.HTMLInputElement {
@@ -29,10 +30,11 @@ export default function ThiefList() {
 	const [searchType, setSearchType] = useState('all');
 	const [searchText, setSearchText] = useState('');
 	const latestSearchText = useRef(searchText);
-	const [thiefs, setThiefs] = useState<Thief[]>([]);
+	const [thieves, setThieves] = useState<Thief[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const debug = useRecoilValue(debugState)
 	const url = new URL(window.location.href);
+	const pageName = "Thief Listing";
 	const [page, setpage] = useState(1);
 	const [pagemeta, setpagemeta] = useState({ totalRows: 0, totalPages: 0 });
 
@@ -52,7 +54,7 @@ export default function ThiefList() {
 		url.searchParams.set('searchText', searchText);
 		window.history.replaceState({ path: url.href }, '', url.href);
 
-		const GetThiefs = async () => {
+		async function getThieves() {
 			latestSearchText.current = searchText;
 			const response = await httpClient.get(
 				`/search?searchType=${searchType}&searchText=${searchText}&page=${page}`
@@ -60,7 +62,7 @@ export default function ThiefList() {
 				DebugLogs('ThiefList get error', err, debug)
 			});
 			// Strip out the desired fields
-			const thiefs: Array<Thief> = response.data.data.map((thief: Thief) => {
+			const thieves: Array<Thief> = response.data.data.map((thief: Thief) => {
 				return {
 					thiefId: thief.thiefId,
 					name: thief.name,
@@ -76,11 +78,11 @@ export default function ThiefList() {
 			// console.log('response.meta', response.data.mata)
 			// Discard results if the search text has changed since the request was made
 			if (latestSearchText.current !== searchText) return;
-			setThiefs(thiefs);
+			setThieves(thieves);
 			setIsLoading(false);
 			DebugLogs('Thief search get response', response.data, debug)
 		};
-		GetThiefs();
+		getThieves();
 	}, [searchType, searchText, page]);
 
 	useEffect(() => {
@@ -91,7 +93,8 @@ export default function ThiefList() {
 		<div className="formal thieflist-page">
 			<Navbar />
 			<main>
-				<h1>Thief Listing<LoadingIcon when={isLoading} delay={1} /></h1>
+				<h1>{pageName}<LoadingIcon when={isLoading} delay={1} /></h1>
+				<TextWindow pageName={pageName} />
 				<div className="searchbar">
 					<label htmlFor="SearchType">Search Type</label>
 					<select
@@ -122,7 +125,7 @@ export default function ThiefList() {
 						Add New
 					</LinkButton>
 				</div>
-				<LinkTable header={header} data={thiefs} pagemeta={pagemeta} page={page} setpage={setpage} linkBase='/thief?thiefId=' />
+				<LinkTable header={header} data={thieves} pagemeta={pagemeta} page={page} setpage={setpage} linkBase='/thief?thiefId=' />
 			</main>
 		</div>
 	);

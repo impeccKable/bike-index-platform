@@ -5,9 +5,9 @@ import {
 	ListObjectsCommand,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { s3Client } from './s3Client';
-import { config } from './config';
+import { config, s3Client } from './config';
 import { logHistory } from './history';
+
 
 // custom error class for image errors
 export class ImageUploadError extends Error {
@@ -50,7 +50,7 @@ const s3ParamsBase = {
 export async function uploadImage(uploadedFiles: Express.Multer.File[], thiefId: number, action: string) {
 	const promises = uploadedFiles.map(async (file) => {
 		const folderName = getFolderName(file.mimetype);
-		const key = `thiefs/${thiefId}/${folderName}/${file.originalname}`;
+		const key = `thievs/${thiefId}/${folderName}/${file.originalname}`;
 		const params = {
 			...s3ParamsBase,
 			Key: key,
@@ -106,8 +106,8 @@ export async function deleteImage(deletedFile: string[], thiefId: number) {
 }
 
 // get images from S3 bucket
-export async function getImage(thiefId: string): Promise<string[]> {
-	const prefix = `thiefs/${thiefId}/`;
+export async function getFile(thiefId: string): Promise<string[]> {
+	const prefix = `thievs/${thiefId}/`;
 
 	const params = {
 		...s3ParamsBase,
@@ -126,11 +126,11 @@ export async function getImage(thiefId: string): Promise<string[]> {
 	const keys: (string | undefined)[] =
 		response.Contents?.map((content) => content.Key) || [];
 
-	return getTempImageUrl(keys);
+	return getTempFileUrl(keys);
 }
 
 // generate temporary URLs for S3 objects
-async function getTempImageUrl(keys: (string | undefined)[]): Promise<string[]> {
+async function getTempFileUrl(keys: (string | undefined)[]): Promise<string[]> {
 	const promises = keys.map(async key => {
 		const params = {
 			...s3ParamsBase,

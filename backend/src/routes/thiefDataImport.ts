@@ -1,6 +1,8 @@
-import express from "express";
-import { parse } from "csv/sync";
-import fs from "fs";
+import express from 'express';
+import { parse } from 'csv/sync';
+import fs from 'fs';
+import { db } from '../config';
+import { insertThiefData } from '../thiefData';
 
 export const csvStandardHeader =
 	[ 'Thief Id', 'Name', 'Email', 'Url', 'Address', 'Phone', 'Bike Serial', 'Phrase', 'Notes' ]
@@ -13,43 +15,39 @@ const upload = multer({
 		cb(null, `import_${Date.now()}.csv`);
 	}
 });
-import db from './dbConfig';
 
 let columnToTable = [ 'thief_id', 'name', 'email', 'url', 'addr', 'phone', 'bike_serial', 'phrase', 'note', ];
 
-const processFile = (req: any) => {
-	let newDataCnts: any = { 'thief': 0, 'name': 0, 'email': 0, 'url': 0, 'addr': 0, 'phone': 0, 'bike_serial': 0, 'phrase': 0, 'note': 0, };
-	let maxThiefId = -1;
-
-	const tryInsertRow = async (table: string, thief_id: string, val: string) => {
-		try {
-			await db.none(`INSERT INTO ${table} VALUES ($1, $2);`, [thief_id, val]);
-			newDataCnts[table]++;
-		} catch (err: any) {
-			// duplicate primary key constraint
-			if (err.code === '23505') { return; }
-			else { throw err; }
-		}
-	};
-
+function processFile(req: any) {
 	return new Promise(async (resolve, reject) => {
+		let newDataCnts: any = { 'rowCnt': 0, 'dataCnt': 0, 'thiefCnt': 0, 'name': 0, 'email': 0, 'url': 0, 'addr': 0, 'phone': 0, 'bike_serial': 0, 'phrase': 0, 'note': 0, };
+		let thiefIds = new Set();
+		let maxThiefId = -1;
+
 		const fileContents = fs.readFileSync(req.file.path, 'utf8');
 		const rows = parse(fileContents, { skipEmptyLines: true, fromLine: 2, });
 		let inserts: any = [];
 		for (let row of rows) {
+			newDataCnts['rowCnt']++;
 			let thiefId = row[0];
 			if (thiefId === '') { continue; }
-			if (parseInt(thiefId) > maxThiefId) {
-				maxThiefId = parseInt(thiefId);
+			thiefId = parseInt(thiefId);
+			if (!thiefIds.has(thiefId)) {
+				thiefIds.add(thiefId);
+				newDataCnts['thiefCnt']++;
+			}
+			if (thiefId > maxThiefId) {
+				maxThiefId = thiefId;
 			}
 			for (let i = 1; i < columnToTable.length; i++) {
 				let val = row[i];
 				if (val === '') { continue; }
+				newDataCnts['dataCnt']++;
 				let col = columnToTable[i];
-				inserts.push(tryInsertRow(col, thiefId, val));
+				inserts.push([insertThiefData(col, thiefId, val), col]);
 			}
 		}
-		console.log(`Recieved ${inserts.length} thief data items`)
+		console.log(`Received ${inserts.length} thief data items`) // I swear to god, I now hate e and i when they are next to each other
 
 		// Update next_thief_id
 		let lastThiefId = (await db.one(`SELECT last_value FROM next_thief_id;`)).last_value;
@@ -58,7 +56,13 @@ const processFile = (req: any) => {
 			await db.one(`SELECT setval('next_thief_id', ${maxThiefId});`);
 		}
 
-		await Promise.all(inserts);
+		for (let i = 0; i < inserts.length; i++) {
+			let [promise, col] = inserts[i];
+			if (await promise) {
+				newDataCnts[col]++;
+			}
+		}
+
 		resolve(newDataCnts);
 	});
 }

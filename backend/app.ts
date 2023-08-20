@@ -1,16 +1,17 @@
 /** @format */
 
 import express from "express";
-import search from "./src/search";
-import thiefEdit from "./src/thiefEdit";
-import userList from "./src/user";
-import stats from "./src/stats";
-import signup from "./src/signup";
-import login from "./src/login";
-import token from "./src/token";
-import thiefDataImport from "./src/thiefDataImport";
-import thiefDataExport from "./src/thiefDataExport";
-import history from "./src/history";
+import search from "./src/routes/search";
+import thiefEdit from "./src/routes/thiefEdit";
+import userList from "./src/routes/user";
+import stats from "./src/routes/stats";
+import signup from "./src/routes/signup";
+import login from "./src/routes/login";
+import token from "./src/routes/token";
+import textContent from "./src/routes/textContent";
+import thiefDataImport from "./src/routes/thiefDataImport";
+import thiefDataExport from "./src/routes/thiefDataExport";
+import history from "./src/routes/history";
 //@ts-ignore
 //import serviceAccount from 'serviceProvider.json';
 
@@ -36,6 +37,7 @@ app.use(express.json());
 
 router.use("/search", search);
 router.use("/thief", thiefEdit);
+router.use("/textContent", textContent);
 router.use(["/users", "/user"], userList);
 router.use("/stats", stats);
 router.use("/signup", signup);
