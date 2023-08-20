@@ -6,6 +6,8 @@ import { useRecoilValue } from 'recoil';
 import { debugState } from '../services/Recoil';
 import LinkTable from '../components/LinkTable';
 import { useLocation } from 'react-router-dom';
+import TextWindow from '../components/TextWindow';
+import LoadingIcon from '../components/LoadingIcon';
 
 type History = {
 	history_id: number;
@@ -34,6 +36,8 @@ export default function History() {
 	const [page, setpage] = useState(1);
 	const [id, setId] = useState<string | null>(null);
 	const [pagemeta, setpagemeta] = useState({ totalRows: 0, totalPages: 0 });
+	const [isLoading, setIsLoading] = useState(true);
+	const pageName = "History Log";
 	const debug = useRecoilValue(debugState);
 	const location = useLocation();
 
@@ -73,13 +77,15 @@ export default function History() {
 			.catch((err: any) => {
 				DebugLogs('History get error', err, debug);
 			});
-	}, [page, id]);
+		setIsLoading(false);
+	}, [page, id, location.search]);
 
 	return (
 		<div className="formal history-page">
 			<Navbar />
 			<main>
-				<h1>History Log</h1>
+				<h1>{pageName}<LoadingIcon when={isLoading} delay={1} /></h1>
+				<TextWindow pageName={pageName} />
 				<LinkTable header={header} data={history} pagemeta={pagemeta} page={page} setpage={setpage} noNavigate={true} linkBase=''></LinkTable>
 			</main>
 		</div>

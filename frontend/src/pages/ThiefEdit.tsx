@@ -159,10 +159,10 @@ export default function ThiefEdit() {
 			<main>
 				<div className="title">
 					<h1>{pageName}<LoadingIcon when={isLoadingInit} delay={1} /></h1>
-					<TextWindow pageName={pageName} />
 					<button onClick={handleHisotryClick}>History</button>
 				</div>
 
+				<TextWindow pageName={pageName} />
 				<Form onSubmit={handleFormSubmit}>
 					<FormInput label="Thief ID" name="thiefId" value={thiefInfo.thiefId} disabled={true} />
 					<MultiField label="Name" name="name" data={thiefInfo.name} disabled={isLoading} component={FormInput} />
