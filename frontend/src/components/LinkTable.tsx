@@ -9,14 +9,11 @@ interface LinkTableProps extends React.HTMLInputElement {
 	[key: string]: any;
 }
 
-const maxRow = 24;
-
 export default function LinkTable(props: LinkTableProps) {
 	const navigate = useNavigate();
 	const { header, data, linkBase, ...rest } = props;
 	const styles: any = Object.values(header);
 	const idName = data.length > 0 ? Object.keys(data[0])[0] : ''; // e.g. 'thiefId'
-	const [lowerIndex, setLowerIndex] = useState(0);
 
 	return (
 		<div>
@@ -32,28 +29,27 @@ export default function LinkTable(props: LinkTableProps) {
 					</tr>
 				</thead>
 				<tbody>
-					{data.slice(lowerIndex, lowerIndex + maxRow)
-						.map((row) => {
-							return (
-								<tr
-									key={row[idName]}
-									className={`tr-link ${props.noNavigate ? "no-link" : ""}`} // (so header row is not included)
-									{...(props.noNavigate ? {} : {
-										onClick: () => navigate(`${linkBase}${row[idName]}`)
-									})}
-								>
-									{Object.values(row).map((cell: any, idx) => {
-										if (Array.isArray(cell)) {
-											cell = cell.join(', ');
-										}
-										return <td
-											key={Object.keys(row)[idx]}
-											style={styles[idx]}
-										>{cell?.toString() ?? ''}</td>;
-									})}
-								</tr>
-							);
-						})}
+					{data.map((row) => {
+						return (
+							<tr
+								key={row[idName]}
+								className={`tr-link ${props.noNavigate ? "no-link" : ""}`} // (so header row is not included)
+								{...(props.noNavigate ? {} : {
+									onClick: () => navigate(`${linkBase}${row[idName]}`)
+								})}
+							>
+								{Object.values(row).map((cell: any, idx) => {
+									if (Array.isArray(cell)) {
+										cell = cell.join(', ');
+									}
+									return <td
+										key={Object.keys(row)[idx]}
+										style={styles[idx]}
+									>{cell?.toString() ?? ''}</td>;
+								})}
+							</tr>
+						);
+					})}
 				</tbody>
 			</table>
 			<NavigateBtn

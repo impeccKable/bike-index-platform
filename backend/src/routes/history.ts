@@ -21,8 +21,9 @@ export const logHistory = async (data: UserInput, action: string) => {
 	}
 }
 
+const MAX_ROW = 24;
+
 const get = async (query: any) => {
-	const MAX_ROW = 10;
 	const page = query.page || 1;
 	const offset = (page - 1) * MAX_ROW;
 	const thiefId = query.thiefId;

@@ -3,7 +3,7 @@ import { db } from "../config";
 import { fieldToTable, getThiefData } from "../thiefData";
 import { validToken } from "./token";
 
-const MAX_ROW = 10;
+const MAX_ROW = 24;
 
 export const searchableTable: { [key: string]: string } = {
 	"name": "name",
