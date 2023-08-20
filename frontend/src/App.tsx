@@ -22,11 +22,9 @@ export default function App() {
 		setDebug(true);
 		// setDev(true);
 		if (debug == true) { console.log("App"); }
-		// if (dev != true) {
-		// 	if (window.location.protocol === 'http:') {
-		// 		window.location.href = window.location.href.replace('http', 'https');
-		// 	}
-		// }
+			if (dev !== true && window.location.protocol === 'http:') {
+				window.location.href = window.location.href.replace('http', 'https');
+			}
 	})
 
 	return (
