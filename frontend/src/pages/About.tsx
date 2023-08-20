@@ -42,11 +42,15 @@ export default function About() {
 			<table>
 				<tbody>
 					<tr><td>Users    </td><td>{stats.users    }</td></tr>
-					<tr><td>Urls     </td><td>{stats.urls     }</td></tr>
-					<tr><td>Phones   </td><td>{stats.phones   }</td></tr>
-					<tr><td>Emails   </td><td>{stats.emails   }</td></tr>
-					<tr><td>Addresses</td><td>{stats.addresses}</td></tr>
+					<tr><td>Thieves  </td><td>{stats.thieves  }</td></tr>
 					<tr><td>Names    </td><td>{stats.names    }</td></tr>
+					<tr><td>Emails   </td><td>{stats.emails   }</td></tr>
+					<tr><td>Urls     </td><td>{stats.urls     }</td></tr>
+					<tr><td>Addresses</td><td>{stats.addresses}</td></tr>
+					<tr><td>Phones   </td><td>{stats.phones   }</td></tr>
+					<tr><td>Bike serials</td><td>{stats.bikeSerials}</td></tr>
+					<tr><td>Phrases</td><td>{stats.phrases   }</td></tr>
+					<tr><td>Notes</td><td>{stats.notes   }</td></tr>
 				</tbody>
 			</table>
 		</main>
