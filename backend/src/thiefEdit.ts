@@ -23,13 +23,16 @@ async function MergeThieves(body: any) {
 			console.log(`Table: ${table[1]}, Entry: ${i}, RID: ${row.thief_id}, RVal: ${row[table[1]]}, ${i} of ${tableEntries.length}`);
 			++i;
 
+			// query for row existng container current id / value pair 
 			let isDuplicate = await db.any(`SELECT thief_id, ${table[1]} FROM ${table[1]} WHERE thief_id = $1 AND ${table[1]} = '${row[table[1]]}'`, [body.thiefIdMap[1]]);
+			// update if there is no duplicate
 			if (isDuplicate.length <= 0) {
 				// update
 				console.log(`UPDATED Table ${table[1]}. Set thief_id to: '${body.thiefIdMap[1]}' where thief_id was: '${body.thiefIdMap[0]}' and the column '${table[1]}' was '${row[table[1]]}'`);
 				await db.any(`UPDATE ${table[1]} SET thief_id = $1 WHERE thief_id = $2 AND ${table[1]} = '${row[table[1]]}'`
 				,[body.thiefIdMap[1], body.thiefIdMap[0]]);
 			}
+			// delete if there is already an entry
 			else {
 				// delete
 				console.log(`DELETED Row from ${table[1]} table where the thief_id was '${body.thiefIdMap[0]}'and the ${table[1]} was '${row[table[1]]}' Because its Duplicate Entry`);
@@ -40,7 +43,7 @@ async function MergeThieves(body: any) {
 	});
 
 	console.log(`DELETED Thief with ID '${[body.thiefIdMap[0]]}'. No Longer Needed After Merge.`);
-	// delete old thief
+	// delete old thief entirely
 	await db.none(`DELETE FROM thief WHERE thief_id = $1`, [body.thiefIdMap[0]]);
 
 	return body.thiefIdMap[1];
