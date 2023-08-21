@@ -63,6 +63,7 @@ export function MultiField(props: MultiFieldProps) {
 	const { label, name, component: Component, onChange, disableSubmit, clearAll, ...rest } = props;
 	const [values, setValues] = useState(['']);
 	const [collapsed, setCollapsed] = useState(false);
+	const [edited, setEdited] = useState(false);
 
 	useEffect(() => {
 		if (rest.data) {
@@ -84,6 +85,7 @@ export function MultiField(props: MultiFieldProps) {
 
 		if (!e.target.classList.value.includes('red-bordered')) {
 			e.target.classList.add('red-bordered');
+			setEdited(true);
 		}
 
 		let newValues = [...values];
@@ -104,6 +106,7 @@ export function MultiField(props: MultiFieldProps) {
 		if (newValues.length === 0) {
 			newValues = [''];
 		}
+		setEdited(true);
 		updateValues(newValues);
 		DisableParentSubmit(false);
 	}
@@ -129,7 +132,7 @@ export function MultiField(props: MultiFieldProps) {
 	}
 	return (
 		<>
-			<label>{label}</label>
+			<label className={edited ? 'unsaved-changes' : ''}>{label}</label>
 			<ol className='multi-field'>
 				{collapsed ? 
 				<>
