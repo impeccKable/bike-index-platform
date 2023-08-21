@@ -53,17 +53,12 @@ async function put(body: any) {
 		thiefId = (await db.one("SELECT nextval('next_thief_id')"))['nextval'];
 	}
 	if (thiefId === 'merge') {
-		let newThiefId = await MergeThieves(body);
-		
-		body.thiefId = newThiefId;
-		
-		body = Object.entries(body).filter(field => field[0] !== 'thiefIdMap');
-
-		return newThiefId;
+		let newThiefId = await MergeThieves(body);		
+		body.thiefId, thiefId = newThiefId;
 	}
 	thiefId = parseInt(thiefId);
 	for (let field of fields) {
-		if (!body[field]) {
+		if (!body[field] || field === 'thiefIdMap') {
 			continue;
 		}
 		for (let [oldVal, newVal] of body[field]) {
