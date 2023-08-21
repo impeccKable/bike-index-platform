@@ -9,6 +9,7 @@ import { debugState } from '../services/Recoil';
 import LoadingIcon from '../components/LoadingIcon';
 import DebugLogs from '../services/DebugLogs';
 import TextWindow from '../components/TextWindow';
+import Modal from '../components/Modal';
 
 
 export default function ThiefEdit() {
@@ -22,9 +23,11 @@ export default function ThiefEdit() {
 	const [newImages, setNewImages] = useState<(File | string)[]>([]);
 	const [deletedImages, setDeletedImages] = useState<(File | string)[]>([]);
 	const debug = useRecoilValue(debugState);
-	const [showModal, setShowModal] = useState(false);
+	const [showClearModal, setShowClearModal] = useState(false);
+	const [showMergeModal, setShowMergeModal] = useState(false);
 	const [isAdmin, setIsAdmin] = useState(JSON.parse(localStorage.getItem("user")??"")?.bikeIndex?.role?.toString() === 'admin' ?? false);
 	const [thiefId, setThiefId] = useState('');
+	const [mergeDisabled, setMergeDisabled] = useState(true);
 	const url = new URL(window.location.href);
 	const pageName = "Thief Edit";
 
@@ -174,8 +177,7 @@ export default function ThiefEdit() {
 
 	function ClearAllFields(state: boolean) {
 		let clearStates = {...clearByParts};
-		let timeOffset = 0;
-		setShowModal(false);
+		setShowClearModal(false);
 		clearStates["master"] = true;
 
 		Object.entries(clearStates).forEach((fieldType)=> {
@@ -208,10 +210,10 @@ export default function ThiefEdit() {
 					<h3>{notChanged ? '' : "* Unsaved Changes"}</h3>
 				</span>
 				<TextWindow pageName={pageName}/>
-				<button type="button" onClick={()=>{setShowModal(!showModal);}}>Clear All</button>
-				{isAdmin && <button type="button" className="btn-danger">Merge Thief</button>}
+				<button type="button" onClick={()=>{setShowClearModal(!showClearModal);}}>Clear All</button>
+				{isAdmin && <button type="button" className="btn-danger" onClick={()=>{setShowMergeModal(true)}}>Edit ID</button>}
 				<Form onSubmit={(e)=> {handleFormSubmit(e, clearByParts.master)}}>
-					<FormInput  label="Thief ID" type="number" name="thiefId" value={thiefId} onChange={(event: any) => {setThiefId(event.target.value);setNotChanged(false);}} disabled={!isAdmin}/>
+					<FormInput  label="Thief ID" type="number" name="thiefId" value={thiefId} disabled={(!isAdmin || mergeDisabled)} onChange={(event: any) => {setThiefId(event.target.value);setNotChanged(false);}}/>
 					<MultiField clearAll={clearByParts.name} disableSubmit={setNotChanged} label="Name"        name="name"       data={thiefInfo.name}       disabled={isLoading} component={FormInput}/>
 					<MultiField clearAll={clearByParts.email} disableSubmit={setNotChanged} label="Email"       name="email"      data={thiefInfo.email}      disabled={isLoading} component={FormInput}/>
 					<MultiField clearAll={clearByParts.url} disableSubmit={setNotChanged} label="Url"         name="url"        data={thiefInfo.url}        disabled={isLoading} component={FormInput}/>
@@ -239,18 +241,23 @@ export default function ThiefEdit() {
 					{wasSubmitted && <div className="form-btns">Submitted!</div>}
 				</Form>
 			</main>
-			{showModal && 
-			<div id="ModalDiv" className="modal">
-				<div className="modal-content">
-					<span className="close" onClick={()=>{setShowModal(false)}}>&times;</span>
-					<div>
-						<h1>Are you sure you want to clear all fields?</h1>
-					</div>
-					<div>
-						<button type="button" onClick={()=>{ClearAllFields(true)}}>Yes, Clear All</button>
-					</div>
-				</div>
-			</div>}
+			{showClearModal && <Modal 
+									showModal={setShowClearModal}
+									submitEvent={()=>{ClearAllFields(true); setShowClearModal(false);}}
+									classNames={"warning-modal"} header="Clear All" 
+									bodyText='Are you sure you want to clear all fields?'
+									btnLabel='Yes, Clear All' 
+								/>
+			}
+			{showMergeModal && <Modal 
+									showModal={setShowMergeModal}
+									submitEvent={()=> {setMergeDisabled(false); setShowMergeModal(false);}}
+									classNames={'warning-modal'}
+									header='Merge Thieves'
+									bodyText={`Changing the Thief ID will merge all information associated to thief '${thiefId}' into the new thief ID and delete '${thiefId}'. Are you sure you want to continue?` }
+									btnLabel='Yes, Continue'
+									/>
+			}
 		</div>
 	);
 }
