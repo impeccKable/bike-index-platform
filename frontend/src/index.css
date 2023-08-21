@@ -244,6 +244,18 @@ nav button:hover {
 	display: flex;
 	align-items: center;
 	color: darkred;
+	font-weight: bold;
+}
+
+.warning-modal .modal-content {
+	display: block;
+	padding-top: 0;
+	background-color: #303030;
+	font-weight: 400;
+}
+
+.warning-modal .modal-btn {
+	background-color: #690000;
 }
 
 
