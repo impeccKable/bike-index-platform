@@ -224,6 +224,7 @@ export default function ThiefEdit() {
 						label="Images"
 						isLoading={isLoading}
 						renderImageFiles={renderImageFiles}
+						disableSubmit={setNotChanged}
 						setRenderImageFiles={setRenderImageFiles}
 						newImages={newImages}
 						setNewImages={setNewImages}

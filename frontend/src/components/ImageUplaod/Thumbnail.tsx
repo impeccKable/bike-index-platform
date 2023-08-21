@@ -4,6 +4,7 @@ import { ImageModal } from './ImageModal';
 interface ThumbnailProps {
 	file: string | File;
 	index: number;
+	isNew?: boolean;
 	isLoading: boolean;
 	handleNext: () => void;
 	handlePrev: () => void;
@@ -44,7 +45,7 @@ export function Thumbnail(props: ThumbnailProps) {
 	return (
 		<div>
 			<img
-				className="thumbnail"
+				className={`thumbnail${props.isNew?' red-bordered':''}`}
 				key={props.index}
 				src={imageUrl}
 				onClick={handleImageClick}

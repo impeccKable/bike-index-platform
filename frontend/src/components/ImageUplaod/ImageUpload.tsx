@@ -10,6 +10,7 @@ interface FileUploadProps {
 	setNewImages: (newImages: (File | string)[]) => void;
 	deletedImages: (File | string)[];
 	setDeletedImages: (deletedImages: (File | string)[]) => void;
+	disableSubmit: (disabled: boolean) => void;
 }
 
 function processFilename(filename: string): string {
@@ -92,6 +93,7 @@ export function ImageUpload(props: FileUploadProps) {
 		props.setRenderImageFiles([...props.renderImageFiles, newFile]);
 		props.setNewImages([...props.newImages, newFile]);
 		setIsModalOpen(false);
+		props.disableSubmit(false);
 	}
 
 	// removes the file from the renderImageFiles and newImages arrays in the parent component
@@ -110,13 +112,13 @@ export function ImageUpload(props: FileUploadProps) {
 		props.setRenderImageFiles(newFileList);
 
 		setCurrentViewing(null);
+		props.disableSubmit(false);
 	}
-
 	return (
 		<>
 			<label>{props.label}</label>
 			<div className="upload-file-field">
-				{props.renderImageFiles.map((item, index) => ( <Thumbnail key={index} file={item} index={index} handleNext={() => handleNext(index)} isLoading={props.isLoading}
+				{props.renderImageFiles.map((item, index) => ( <Thumbnail key={index} file={item} index={index} handleNext={() => handleNext(index)} isNew={props.newImages.includes(item)} isLoading={props.isLoading}
 					handlePrev={() => handlePrev(index)} handleDelete={() => handleDelete(index)} currentViewing={currentViewing} setCurrentViewing={setCurrentViewing} /> ))}
 				<button className={`file-upload-btn ${props.renderImageFiles.length > 0 ? 'expanded' : ''}`} type="button" onClick={handleAddButton}>
 					＋
