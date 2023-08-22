@@ -252,7 +252,8 @@ nav button:hover {
 	padding-left: 2rem;
 	padding-right: 2rem;
 }
-.form-btns button:disabled {
+.form-btns button:disabled,
+.prev-next-button button:disabled {
 	background-color: #303030;
 	color: #a0a0a0;
 	cursor: default;
@@ -296,6 +297,15 @@ nav button:hover {
 	border-color: #686868;
 }
 
+.tr-link.no-link:hover > td {
+	background-color: inherit;
+	/* border-color: inherit; */
+}
+
+.tr-link.no-link > td {
+	cursor: default;
+}
+
 .loading-icon {
 	margin: 0 0.75rem;
 	-webkit-touch-callout: none;
@@ -307,6 +317,46 @@ nav button:hover {
 	user-select: none;
 }
 
+.prev-next-button {
+	width: 63em;
+}
+
+.page-control {
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	text-align: center;
+	color: #f5f5f5;
+	line-height: 30px;
+	cursor: pointer;
+	margin: 5px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.page-control:hover,
+.page-control.disabled:hover {
+	background-color: gray;;
+}
+
+.page-control.disabled {
+	background-color: #585858;
+	cursor: default;
+}
+
+.first-btn.no-display {
+	display: none;
+}
+
+.thiefedit-page .title {
+	display: flex;
+}
+
+.title > button {
+	align-self: center;
+}
 
 
 /* ============= Specific Pages ============= */
@@ -372,11 +422,6 @@ nav button:hover {
 	color: white;
 }
 
-.modal-content .confirm:disabled {
-	background-color: grey;
-	cursor: not-allowed;
-}
-
 .modal-content .error-message {
 	color: red;
 }
@@ -415,6 +460,10 @@ nav button:hover {
 	width: 100%;
 	height: 100%;
 	cursor: pointer;
+}
+
+.modal-btn.delete {
+	font-size: 7rem;
 }
 
 .modal-btn.delete:hover,

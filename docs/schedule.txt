@@ -203,12 +203,13 @@ Schedule
 					[ ] Thief id
 					[ ] Alphabetically
 				[x] Add other field types to the search type drop-down (Thief Id,Name,Email,Url,Address,Phone,Bike Serial,Phrase,Notes)
-				[ ] Make buttons for next/prev not selectable
+				[x] Make buttons for next/prev not selectable
 				[ ] Choose file not hidden
 			History page
 				[x] Create a history page (sort by recency)
 				[x] Button on theif edit page to go to history page filtered by theif id
-				[ ] Button on user  edit page to go to history page filtered by user
+				[x] Button on user  edit page to go to history page filtered by user
+				[ ] Log user in backend
 		Cristian
 			[x] Editable text boxes on each page
 			User List
@@ -232,7 +233,7 @@ Schedule
 				[x] Add loading gif to stats table
 			Misc
 				[?] Bug in search for things in notes
-				[ ] Store phone numbers in standard format of "+52 (971) 314-1592" to allow for searches by area code
+				[X] Store phone numbers in standard format of "+52 (971) 314-1592" to allow for searches by area code
 					Leaving off: thiefDataImport and thiefEdit need to be combined to one interface now
 				[x] Move run/stop scripts to bike-index-.. repo
 				[x] Upload env files to capstone folder
@@ -240,22 +241,27 @@ Schedule
 				[x] Universal search
 				[x] Clean up README.md
 				[x] Look for all todos
-				[ ] Universal search of '+512ada 503.201.7-823' returns thief 512
-				[ ] Give number of thieves on about page
-				[ ] Increase page size
-				[ ] Put db host in env
-				[ ] Strip spaces from inputs
+				[X] Universal search of '+512ada 503.201.7-823' returns thief 512
+				[X] Give number of thieves on about page
+				[X] Increase page size
+				[X] Put db host in env
+				[X] Strip spaces from inputs
 		Matt
 			User Edit
-				[ ] Make users not approved by default
-				[ ] Frontend
+				[x] Make users not approved by default
+				[x] Frontend
 				[ ] Approve users
 			Roles
 				[ ] Ability to change user roles
+				Admin Features	
+					[ ] View UserList and change user values
+					[ ] Approve users, ban users, change bikeIndex values(except email)
+					[ ] Upload .csv
+					[ ] Change description/text-blurb boxes on pages
 			Login & Sign up
-				[ ] Make registration and image submission clearer (load icon somewhere else?),
+				[x] Make registration and image submission clearer (load icon somewhere else?),
 				[x] Simplify login logic
-				[ ] Forward user to https if they use http
+				[x] Forward user to https if they use http
 				[x] Remove request verification page
 				[x] Remove forgot password page
 				[x] Add message that a verification email was sent to sign up page
@@ -265,22 +271,30 @@ Schedule
 				[ ] Add login alert for temporarily disabled accounts(too many failed logins)
 				[ ] Change firebase project name
 				[ ] Ability to change email
-				[ ] 502 error (when trying to log in)
 				[ ] Error handle signup page and login page
-				[ ] Make email & password required
 				[ ] Pressing Enter doesn't work on forms
+				[ ] Add error checking for same email during sign-up
+				[ ] Make email & password required
 			Misc
 				[ ] Drop token checks onto all backend requests
 				[x] Fix bug with AuthProtected loading before AuthProvider useEffect
 				[ ] Make it robust to exceptions/database errors
-				[?] There's an error in console log when reloading pages (react loading things in a weird order)
+					- https://stackoverflow.com/questions/56973265/what-does-express-async-handler-do
+					- https://expressjs.com/en/guide/error-handling.html
+			Bugs
+				[ ] 502 error (when trying to log in)
 				[~] Test auth protected routes (reloading page booted even with fresh token)
+				[?] There's an error in console log when reloading pages (react loading things in a weird order)
+					- Possibly fixed with the changes to AuthProtected
+
 		Everyone
 			[ ] Standardize backend routes
 			[ ] Clean up code (console logs, variable names, dir names, simplifications, consistency, etc)
 			[ ] Change how the token/login lifetime works
 			[ ] Error handling of requests
 	Sprint 7 (8/29)
+		Mobile format
+			Make the website responsive
 		Backlog
 			Fuzzy match in search
 			Data analysis page (find duplicates, fuzzy match)

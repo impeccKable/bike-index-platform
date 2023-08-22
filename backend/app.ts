@@ -11,6 +11,7 @@ import token from "./src/routes/token";
 import textContent from "./src/routes/textContent";
 import thiefDataImport from "./src/routes/thiefDataImport";
 import thiefDataExport from "./src/routes/thiefDataExport";
+import history from "./src/routes/history";
 //@ts-ignore
 //import serviceAccount from 'serviceProvider.json';
 
@@ -44,6 +45,7 @@ router.use("/login", login);
 router.use("/token", token);
 router.use("/thiefDataImport", thiefDataImport);
 router.use("/thiefDataExport", thiefDataExport);
+router.use("/history", history);
 
 app.use("/api", router);
 

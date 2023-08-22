@@ -17,7 +17,7 @@ function processFilename(filename: string): string {
 }
 
 function generateUniqueFilename(filename: string): string {
-	const extension = filename.split('.').pop();
+	const extension = filename.split('.').pop()?.toLowerCase();
 	const basename = filename.split('.')[0];
 	const randomString = Math.random().toString(36).substring(2, 12);
 
@@ -33,19 +33,19 @@ function extractObjectKeyForS3Deletion(deletedImage: string | File): string {
 	if (deletedImage instanceof File) {
 		return deletedImage.name;
 	} else {
-		return new URL(deletedImage).pathname.split('/').pop() || "";
+		return new URL(deletedImage).pathname.slice(1);
 	}
 }
 
 // responsible for the image uploading functionality
 // displays a file input for selecting files, an upload button, and a list of thumbnail images
 // also takes care of displaying the ImageModal when a thumbnail is clicked
-export function ImageUpload(props: FileUploadProps) {
+export function FileUpload(props: FileUploadProps) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	const [currentViewing, setCurrentViewing] = useState<File | string | null>(null);
 	const maxSize = 1024 * 1024 * 25;
-	const fileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+	const fileTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf', 'text/plain', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	// handler for the Add button
@@ -87,8 +87,7 @@ export function ImageUpload(props: FileUploadProps) {
 
 	// adds the selectedFile to the newImages and renderImageFiles arrays in the parent component
 	function handleUpload(file: File) {
-		const newFile = new File([file], processFilename(file.name), {type: file.type, lastModified: file.lastModified});
-		console.log(newFile.name)
+		const newFile = new File([file], processFilename(file.name), { type: file.type, lastModified: file.lastModified });
 		props.setRenderImageFiles([...props.renderImageFiles, newFile]);
 		props.setNewImages([...props.newImages, newFile]);
 		setIsModalOpen(false);
@@ -116,8 +115,8 @@ export function ImageUpload(props: FileUploadProps) {
 		<>
 			<label>{props.label}</label>
 			<div className="upload-file-field">
-				{props.renderImageFiles.map((item, index) => ( <Thumbnail key={index} file={item} index={index} handleNext={() => handleNext(index)} isLoading={props.isLoading}
-					handlePrev={() => handlePrev(index)} handleDelete={() => handleDelete(index)} currentViewing={currentViewing} setCurrentViewing={setCurrentViewing} /> ))}
+				{props.renderImageFiles.map((item, index) => (<Thumbnail key={index} file={item} index={index} handleNext={() => handleNext(index)} isLoading={props.isLoading}
+					handlePrev={() => handlePrev(index)} handleDelete={() => handleDelete(index)} currentViewing={currentViewing} setCurrentViewing={setCurrentViewing} />))}
 				<button className={`file-upload-btn ${props.renderImageFiles.length > 0 ? 'expanded' : ''}`} type="button" onClick={handleAddButton}>
 					＋
 				</button>

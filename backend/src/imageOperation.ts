@@ -6,6 +6,8 @@ import {
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { config, s3Client } from './config';
+import { logHistory } from './routes/history';
+
 
 // custom error class for image errors
 export class ImageUploadError extends Error {
@@ -27,63 +29,88 @@ export class ImageGetError extends Error {
 	}
 }
 
-// upload images to S3 bucket
-export async function uploadImage(uploadedFiles: Express.Multer.File[], thiefId: number) {
-	const promises = uploadedFiles.map((file) => {
-		// define the key for S3 bucket object
-		const key = `thieves/${thiefId}/images/${file.originalname}`;
+const fileTypeFolders: { [key: string]: string } = {
+	'application/pdf': 'pdfs',
+	'text/plain': 'txts',
+	'application/msword': 'docs',
+	'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docs',
+	'application/vnd.ms-excel': 'xls',
+	'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'xls',
+};
 
+function getFolderName(type: string): string {
+	return fileTypeFolders[type] || 'images';
+}
+
+const s3ParamsBase = {
+	Bucket: config.bucketName,
+}
+
+// upload images to S3 bucket
+export async function uploadImage(uploadedFiles: Express.Multer.File[], thiefId: number, action: string) {
+	const promises = uploadedFiles.map(async (file) => {
+		const folderName = getFolderName(file.mimetype);
+		const key = `thievs/${thiefId}/${folderName}/${file.originalname}`;
 		const params = {
-			Bucket: config.bucketName,
+			...s3ParamsBase,
 			Key: key,
 			Body: file.buffer,
 			ContentType: file.mimetype,
+			CacheControl: 'max-age=3600',
 		};
 
-		return s3Client
-			.send(new PutObjectCommand(params))
-			.then(() => {
-				console.log(`Uploading ${params.Key} to ${params.Bucket}`);
-			})
-			.catch((err) => {
-				throw new ImageUploadError(`Error uploaidng image to s3: ${err}`);
-			});
+		try {
+			await s3Client.send(new PutObjectCommand(params));
+			console.log(`Uploaded ${key} to ${config.bucketName}`);
+		} catch (err) {
+			throw new ImageUploadError(`Error uploading ${key} to S3: ${err}`);
+		}
+
+		try {
+			await logHistory({ user_uid: 'someUser', changed_thief_id: thiefId, data_type: 'file', data: `${file.originalname}` }, action);
+		} catch (err) {
+			console.log('Error while logging history:', err);
+			throw err;
+		}
 	});
-	return Promise.all(promises);
+
+	await Promise.all(promises);
 }
 
 // delete images from S3 bucket
-export async function deleteImage(deletedFile: string[], thiefId: string) {
-	const promises = [];
-	for (const filename of deletedFile) {
-		const key = `thieves/${thiefId}/images/${filename}`;
+export async function deleteImage(deletedFile: string[], thiefId: number) {
+	const promises = deletedFile.map(async filename => {
+		const key = filename;
 		const params = {
-			Bucket: config.bucketName,
+			...s3ParamsBase,
 			Key: key,
 		};
 
-		promises.push(
-			s3Client
-				.send(new DeleteObjectCommand(params))
-				.then(() => {
-					console.log(
-						`Deleting object ${key} from bucket ${config.bucketName}`
-					);
-				})
-				.catch((err) => {
-					throw new ImageDeletionError(`Error deleting object from s3: ${err}`);
-				})
-		);
-	}
-	return Promise.all(promises);
+		try {
+			await s3Client.send(new DeleteObjectCommand(params));
+			console.log(`Deleting object ${filename} from bucket ${config.bucketName}`);
+		} catch (err) {
+			throw new ImageDeletionError(`Error deleting object from s3: ${err}`);
+		}
+
+		try {
+			await logHistory({ user_uid: 'someUser', changed_thief_id: thiefId, data_type: 'file', data: `${filename}` }, 'delete');
+		} catch (err) {
+			console.log('Error while logging history:', err);
+			throw err;
+		}
+	});
+
+
+	await Promise.all(promises);
 }
 
 // get images from S3 bucket
-export async function getImage(thiefId: string): Promise<string[]> {
-	const prefix = `thieves/${thiefId}/images/`;
+export async function getFile(thiefId: string): Promise<string[]> {
+	const prefix = `thievs/${thiefId}/`;
 
 	const params = {
-		Bucket: config.bucketName,
+		...s3ParamsBase,
 		Prefix: prefix,
 	};
 
@@ -99,32 +126,23 @@ export async function getImage(thiefId: string): Promise<string[]> {
 	const keys: (string | undefined)[] =
 		response.Contents?.map((content) => content.Key) || [];
 
-	let urls: string[] = [];
-	try {
-		// get temporary URL of images
-		urls = await getTempImageUrl(keys);
-	} catch (err) {
-		throw new ImageGetError(`Error getting signed URLs: ${err}`);
-	}
-
-	return urls;
+	return getTempFileUrl(keys);
 }
 
 // generate temporary URLs for S3 objects
-async function getTempImageUrl(keys: (string | undefined)[]): Promise<string[]> {
-	const urls: string[] = [];
-
-	for (const key of keys) {
+async function getTempFileUrl(keys: (string | undefined)[]): Promise<string[]> {
+	const promises = keys.map(async key => {
 		const params = {
-			Bucket: config.bucketName,
+			...s3ParamsBase,
 			Key: key,
 		};
 
-		const url = await getSignedUrl(s3Client, new GetObjectCommand(params), {
-			expiresIn: 3600,
-		});
-		urls.push(url);
-	}
+		try {
+			return await getSignedUrl(s3Client, new GetObjectCommand(params), { expiresIn: 3600 });
+		} catch (err) {
+			throw new ImageGetError(`Error getting signed URL for key ${key}: ${err}`);
+		}
+	})
 
-	return urls;
+	return Promise.all(promises);
 }

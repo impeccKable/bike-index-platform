@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { NavigateBtn } from './NavigateBtn';
 
 interface LinkTableProps extends React.HTMLInputElement {
 	header: any;
@@ -8,18 +9,15 @@ interface LinkTableProps extends React.HTMLInputElement {
 	[key: string]: any;
 }
 
-const maxRow = 10;
-
 export default function LinkTable(props: LinkTableProps) {
 	const navigate = useNavigate();
 	const { header, data, linkBase, ...rest } = props;
 	const styles: any = Object.values(header);
 	const idName = data.length > 0 ? Object.keys(data[0])[0] : ''; // e.g. 'thiefId'
-	const [lowerIndex, setLowerIndex] = useState(0);
 
 	return (
 		<div>
-			<table className="link-table" {...rest}>
+			<table className="link-table">
 				<thead>
 					<tr>
 						{Object.keys(header).map((colName: any, idx) => {
@@ -31,15 +29,14 @@ export default function LinkTable(props: LinkTableProps) {
 					</tr>
 				</thead>
 				<tbody>
-					{data.slice(lowerIndex, lowerIndex + maxRow)
-							.map((row) => {
+					{data.map((row) => {
 						return (
 							<tr
 								key={row[idName]}
-								className="tr-link" // (so header row is not included)
-								onClick={() =>
-									navigate(`${linkBase}${row[idName]}`)
-								}
+								className={`tr-link ${props.noNavigate ? "no-link" : ""}`} // (so header row is not included)
+								{...(props.noNavigate ? {} : {
+									onClick: () => navigate(`${linkBase}${row[idName]}`)
+								})}
 							>
 								{Object.values(row).map((cell: any, idx) => {
 									if (Array.isArray(cell)) {
@@ -55,20 +52,12 @@ export default function LinkTable(props: LinkTableProps) {
 					})}
 				</tbody>
 			</table>
-			<div className="prev-next-button">
-				{data.length > maxRow ? (
-					lowerIndex === 0 ? (
-						<button onClick={() => setLowerIndex(lowerIndex + maxRow)}>Next</button>
-					) : (
-						<>
-							<button onClick={() => setLowerIndex(lowerIndex - maxRow)}>Prev</button>{' '}
-							<button onClick={() => setLowerIndex(lowerIndex + maxRow)}>Next</button>
-						</>
-					)
-				) : (
-					<></>
-				)}
-			</div>
+			<NavigateBtn
+				total={props.pagemeta.totalRows}
+				currentPage={props.page}
+				setpage={(props.setpage)}
+				totalPages={props.pagemeta.totalPages}
+			/>
 		</div>
 	);
 }
