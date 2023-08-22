@@ -113,12 +113,8 @@ export default function ThiefEdit() {
 	function CompareResults(submitData: any) {
 		let newThiefInfo = { ...thiefInfo };
 		let results = { thiefId: url.searchParams.get('thiefId') };
+		debugger;
 		for (const [key, value] of Object.entries(submitData)) {
-			let oldVals = [...thiefInfo[key]];
-			let newVals = value.split(',');
-			let delVals = [];
-			let addVals = [];
-			
 			if (key === 'thiefId') {
 				if(isAdmin && results.thiefId !== value && !mergeDisabled) {
 					results.thiefIdMap = [results.thiefId, value];
@@ -126,6 +122,12 @@ export default function ThiefEdit() {
 				}
 			}
 			else {
+				let oldVals = [...thiefInfo[key]];
+				let newVals = value.split(',');
+				let delVals = [];
+				let addVals = [];
+
+
 				for (let i = 0; i < oldVals.length; i++) {
 					if (!newVals.includes(oldVals[i])) {
 						delVals.push(oldVals[i]);
@@ -136,10 +138,10 @@ export default function ThiefEdit() {
 						addVals.push(newVals[i]);
 					}
 				}
+
+				newThiefInfo[key] = [...newVals];
+				results[key] = { addVals: addVals, delVals: delVals }
 			}
-			
-			newThiefInfo[key] = [...newVals];
-			results[key] = { addVals: addVals, delVals: delVals }
 		}
 		setThiefInfo(newThiefInfo);
 		DebugLogs('Thief edit changes', results, debug)
