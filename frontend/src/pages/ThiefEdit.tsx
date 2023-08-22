@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import { Form, MultiField, FormInput, FormButton, LinkButton } from '../components/Form';
 import { ImageUpload } from '../components/ImageUplaod/ImageUpload';
-import { useSearchParams } from 'react-router-dom';
 import { httpClient } from '../services/HttpClient';
 import { useRecoilValue } from 'recoil';
 import { debugState } from '../services/Recoil';
@@ -14,7 +13,6 @@ import Modal from '../components/Modal';
 
 export default function ThiefEdit() {
 	const [notChanged, setNotChanged] = useState(true);
-	const [searchParams, setSearchParams] = useSearchParams();
 	const [isLoadingInit, setIsLoadingInit] = useState(true);
 	const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
 	const [wasSubmitted, setWasSubmitted] = useState(false);
@@ -103,7 +101,13 @@ export default function ThiefEdit() {
 			setWasSubmitted(false);
 		}, 3000);
 
-		window.location.reload();
+		if (clearAll) {
+			//window.location.href.split("thief")[0]
+			window.location.replace(`${window.location.href.split("thief")[0]}thiefs?searchType=all&searchText=`);
+		}
+		else {
+			window.location.reload();
+		}
 	}
 
 	function CompareResults(submitData: any) {
@@ -120,7 +124,7 @@ export default function ThiefEdit() {
 			let keyValue = field[0];
 
 			if (keyValue === 'thiefId') {
-				if(isAdmin && results.thiefId !== field[1]) {
+				if(isAdmin && results.thiefId !== field[1] && !mergeDisabled) {
 					results.thiefIdMap = [results.thiefId, field[1]];
 					results.thiefId = "merge";
 				}
@@ -211,7 +215,7 @@ export default function ThiefEdit() {
 				</span>
 				<TextWindow pageName={pageName}/>
 				<button type="button" onClick={()=>{setShowClearModal(!showClearModal);}}>Clear All</button>
-				{isAdmin && <button type="button" className="btn-danger" onClick={()=>{setShowMergeModal(true)}}>Edit ID</button>}
+				{isAdmin && <button type="button" className="btn-danger" onClick={()=>{mergeDisabled ? setShowMergeModal(true) : setMergeDisabled(true); setThiefId(thiefInfo.thiefId);}}>{mergeDisabled ? 'Edit ID' : 'Undo Edit ID' }</button>}
 				<Form onSubmit={(e)=> {handleFormSubmit(e, clearByParts.master)}}>
 					<FormInput  label="Thief ID" type="number" name="thiefId" value={thiefId} disabled={(!isAdmin || mergeDisabled)} onChange={(event: any) => {setThiefId(event.target.value);setNotChanged(false);}}/>
 					<MultiField clearAll={clearByParts.name} disableSubmit={setNotChanged} label="Name"        name="name"       data={thiefInfo.name}       disabled={isLoading} component={FormInput}/>
@@ -245,7 +249,7 @@ export default function ThiefEdit() {
 									showModal={setShowClearModal}
 									submitEvent={()=>{ClearAllFields(true); setShowClearModal(false);}}
 									classNames={"warning-modal"} header="Clear All" 
-									bodyText='Are you sure you want to clear all fields?'
+									bodyText='To delete a thief clear all then submit. Are you sure you want to clear all fields?'
 									btnLabel='Yes, Clear All' 
 								/>
 			}
@@ -254,7 +258,7 @@ export default function ThiefEdit() {
 									submitEvent={()=> {setMergeDisabled(false); setShowMergeModal(false);}}
 									classNames={'warning-modal'}
 									header='Merge Thieves'
-									bodyText={`Changing the Thief ID will merge all information associated to thief '${thiefId}' into the new thief ID and delete '${thiefId}'. Are you sure you want to continue?` }
+									bodyText={`Changing the Thief ID will merge all information associated to thief '${thiefId}' into the entered thief ID and delete '${thiefId}'. Are you sure you want to continue?` }
 									btnLabel='Yes, Continue'
 									/>
 			}
