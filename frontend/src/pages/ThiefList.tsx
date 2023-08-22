@@ -30,7 +30,7 @@ export default function ThiefList() {
 	const [searchType, setSearchType] = useState('name');
 	const [searchText, setSearchText] = useState('');
 	const latestSearchText = useRef(searchText);
-	const [thiefs, setThiefs] = useState<Thief[]>([]);
+	const [thieves, setThieves] = useState<Thief[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const debug = useRecoilValue(debugState)
 	const url = new URL(window.location.href);
@@ -52,7 +52,7 @@ export default function ThiefList() {
 		url.searchParams.set('searchText', searchText);
 		window.history.replaceState({ path: url.href }, '', url.href);
 
-		async function GetThiefs() {
+		async function getThieves() {
 			latestSearchText.current = searchText;
 			const response = await httpClient.get(
 				`/search?searchType=${searchType}&searchText=${searchText}`
@@ -60,7 +60,7 @@ export default function ThiefList() {
 				DebugLogs('ThiefList get error', err, debug)
 			});
 			// Strip out the desired fields
-			const thiefs: Array<Thief> = response.data.map((thief: Thief) => {
+			const thieves: Array<Thief> = response.data.map((thief: Thief) => {
 				return {
 					thiefId: thief.thiefId,
 					name:    thief.name,
@@ -71,11 +71,11 @@ export default function ThiefList() {
 			});
 			// Discard results if the search text has changed since the request was made
 			if (latestSearchText.current !== searchText) return;
-			setThiefs(thiefs);
+			setThieves(thieves);
 			setIsLoading(false);
 			DebugLogs('Thief search get response', response.data, debug)
 		};
-		GetThiefs();
+		getThieves();
 	}, [searchType, searchText]);
 
 	return (
@@ -112,7 +112,7 @@ export default function ThiefList() {
 						Add New
 					</LinkButton>
 				</div>
-				<LinkTable header={header} data={thiefs} linkBase='/thief?thiefId=' />
+				<LinkTable header={header} data={thieves} linkBase='/thief?thiefId=' />
 			</main>
 		</div>
 	);

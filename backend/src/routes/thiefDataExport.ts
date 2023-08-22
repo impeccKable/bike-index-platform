@@ -1,8 +1,8 @@
 import express from 'express';
-import db from './dbConfig';
+import { db } from '../config';
 import { stringify } from 'csv/sync';
-import fs from "fs";
-import { fieldToTable, fields, thiefInfoByIds } from './thiefInfo';
+import fs from 'fs';
+import { fieldToTable, fields, getThiefData } from '../thiefData';
 import { csvStandardHeader } from './thiefDataImport';
 
 async function get(res: express.Response) {
@@ -13,7 +13,7 @@ async function get(res: express.Response) {
 		).join(" UNION ") // union removes duplicates
 		+ " ORDER BY thief_id ASC";
 	let allThiefIds: number[] = (await db.any(query)).map((row: any) => row.thief_id);
-	let thiefInfos = await thiefInfoByIds(allThiefIds);
+	let thiefInfos = await getThiefData(allThiefIds);
 
 	let rows = [csvStandardHeader];
 	for (let thiefInfo of thiefInfos) {

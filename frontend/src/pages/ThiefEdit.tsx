@@ -111,48 +111,38 @@ export default function ThiefEdit() {
 	}
 
 	function CompareResults(submitData: any) {
-		//Ex: newValues.name[0].push('Something'), 0 = old values
-		let results = {
-			thiefId: url.searchParams.get('thiefId'),
-		};
-		const consoleMessages: any = [];
-		const newThiefInfo = {...thiefInfo};
-
-		// need to split this one
-		Object.entries(submitData).map((field) => {
-			// field[0] is key, field[1] is value
-			let keyValue = field[0];
-
-			if (keyValue === 'thiefId') {
-				if(isAdmin && results.thiefId !== field[1] && !mergeDisabled) {
-					results.thiefIdMap = [results.thiefId, field[1]];
+		let newThiefInfo = { ...thiefInfo };
+		let results = { thiefId: url.searchParams.get('thiefId') };
+		for (const [key, value] of Object.entries(submitData)) {
+			let oldVals = [...thiefInfo[key]];
+			let newVals = value.split(',');
+			let delVals = [];
+			let addVals = [];
+			
+			if (key === 'thiefId') {
+				if(isAdmin && results.thiefId !== value && !mergeDisabled) {
+					results.thiefIdMap = [results.thiefId, value];
 					results.thiefId = "merge";
 				}
 			}
 			else {
-				let newValues = field[1].split(',');
-				let oldValues = thiefInfo[`${field[0]}`];
-				newThiefInfo[keyValue] = oldValues.slice();
-
-				results[keyValue] = [];
-				oldValues.forEach(oldVal => {
-					if (!newValues.includes(oldVal)) {
-						results[keyValue].push([oldVal, '']);
-						newThiefInfo[keyValue] = newThiefInfo[keyValue].filter(value => value !== oldVal);
+				for (let i = 0; i < oldVals.length; i++) {
+					if (!newVals.includes(oldVals[i])) {
+						delVals.push(oldVals[i]);
 					}
-				});
-				newValues.forEach(newVal => {
-					if (!oldValues.includes(newVal)) {
-						results[keyValue].push(['', newVal]);
-						if (!newThiefInfo[keyValue].includes(newVal)) {
-							newThiefInfo[keyValue].push(newVal);
-						}
+				}
+				for (let i = 0; i < newVals.length; i++) {
+					if (!oldVals.includes(newVals[i])) {
+						addVals.push(newVals[i]);
 					}
-				});
+				}
 			}
-			DebugLogs('Submit Changes', consoleMessages, debug);
-		});
+			
+			newThiefInfo[key] = [...newVals];
+			results[key] = { addVals: addVals, delVals: delVals }
+		}
 		setThiefInfo(newThiefInfo);
+		DebugLogs('Thief edit changes', results, debug)
 		return results;
 	};
 
