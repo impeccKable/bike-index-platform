@@ -17,7 +17,7 @@ async function put(body: any) {
 	if (thiefId == 'new') {
 		// (new thief, get next thief_id)
 		thiefId = (await db.one("SELECT nextval('next_thief_id')"))['nextval'];
-		addOrNew = 'add';
+		addOrNew = 'new';
 	}
 	thiefId = parseInt(thiefId);
 	for (let field of fields) {
