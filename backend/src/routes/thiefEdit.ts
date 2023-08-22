@@ -13,9 +13,11 @@ async function get(query: any) {
 
 async function put(body: any) {
 	let thiefId = body.thiefId;
+	let addOrNew = 'add';
 	if (thiefId == 'new') {
 		// (new thief, get next thief_id)
 		thiefId = (await db.one("SELECT nextval('next_thief_id')"))['nextval'];
+		addOrNew = 'add';
 	}
 	thiefId = parseInt(thiefId);
 	for (let field of fields) {
@@ -26,10 +28,22 @@ async function put(body: any) {
 		for (let delVal of delVals) {
 			if (delVal === '') { continue; }
 			deleteThiefData(table, thiefId, delVal);
+			try {
+				await logHistory({ user_uid: "someUser", changed_thief_id: thiefId, data_type: `${table}`, data: `${delVal}` }, 'delete');
+			} catch (err) {
+				console.log('Error logging thief history:', err);
+				throw err;
+			}
 		}
 		for (let addVal of addVals) {
 			if (addVal === '') { continue; }
 			insertThiefData(table, thiefId, addVal);
+			try {
+				await logHistory({ user_uid: "someUser", changed_thief_id: thiefId, data_type: `${table}`, data: `${addVal}` }, addOrNew);
+			} catch (err) {
+				console.log('Error logging thief history:', err);
+				throw err;
+			}
 		}
 	}
 	return thiefId;
