@@ -1,6 +1,6 @@
 import express from 'express';
 import { db } from '../config';
-import { fieldToTable, fields, getThiefData } from '../thiefData';
+import { fieldToTable, fields, getThiefData, MergeThieves } from '../thiefData';
 import { uploadImage, deleteImage, getImage, ImageUploadError, ImageDeletionError, ImageGetError} from '../imageOperation';
 import multer from 'multer';
 import { insertThiefData, deleteThiefData } from '../thiefData';
@@ -16,6 +16,15 @@ async function put(body: any) {
 	if (thiefId == 'new') {
 		// (new thief, get next thief_id)
 		thiefId = (await db.one("SELECT nextval('next_thief_id')"))['nextval'];
+	}
+	
+	if (thiefId === 'merge') {
+		//return body.thiefIdMap[0];
+		let newThiefId = body.thiefIdMap[1]; 
+		if (body.thiefIdMap[0] !== body.thiefIdMap[1]) {
+			newThiefId = await MergeThieves(body);		
+		}
+		body.thiefId, thiefId = newThiefId;
 	}
 	thiefId = parseInt(thiefId);
 	for (let field of fields) {
