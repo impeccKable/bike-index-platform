@@ -107,3 +107,61 @@ export async function deleteThiefData(table: string, thiefId: string, oldVal: st
 	});
 }
 
+
+// Summary: Takes the content from one thief and merges it into another based on the
+//			body arguments under "thiefIdMap". As part of the merge process first a check is made
+//			to see if the field from the source thief already exists in the new thief if it does
+//			then the field is deleted if not then the field is added to the new location. 
+//			Once all fields are merged the source thief is deleted. all updates and deletes are 
+//			logged to the console.
+// Returns: the remaining thief of the two
+//  Params:
+//		- 'body': object of thief edit form data
+// Remarks:
+//		- body.thiefIdMap[0]: thiefID that will go away 
+//		- body.thiefIdMap[1]: thiefID recieving new content
+export async function MergeThieves(body: any) {
+	try {
+		console.log(`Merging Thief: ${body.thiefIdMap[0]} into Thief: ${body.thiefIdMap[1]}`);
+		Object.entries(fieldToTable).map(async (table)  => {
+			// table[1]: name of table/column
+			let i = 0;
+			//1.  From the current table, query for all rows with the old thief id
+			let tableEntries = await db.any(`SELECT thief_id, ${table[1]} FROM ${table[1]} WHERE thief_id = $1`, [`${body.thiefIdMap[0]}`]);
+	
+			//2.  iterate rows returned if greater than 0 and for each one first check if
+			//	  the row already exists for the new id.
+			tableEntries.map(async (row:any)=>{
+				//row[table[1]]: returns column value of current row.
+				console.log(`Table: ${table[1]}, Entry: ${i}, RID: ${row.thief_id}, RVal: ${row[table[1]]}, ${i} of ${tableEntries.length}`);
+				++i;
+	
+				// query for row existng container current id / value pair 
+				let isDuplicate = await db.any(`SELECT thief_id, ${table[1]} FROM ${table[1]} WHERE thief_id = $1 AND ${table[1]} = '${row[table[1]]}'`, [body.thiefIdMap[1]]);
+				// update if there is no duplicate
+				if (isDuplicate.length <= 0) {
+					// update
+					console.log(`UPDATED Table ${table[1]}. Set thief_id to: '${body.thiefIdMap[1]}' where thief_id was: '${body.thiefIdMap[0]}' and the column '${table[1]}' was '${row[table[1]]}'`);
+					await db.any(`UPDATE ${table[1]} SET thief_id = $1 WHERE thief_id = $2 AND ${table[1]} = '${row[table[1]]}'`
+					,[body.thiefIdMap[1], body.thiefIdMap[0]]);
+				}
+				// delete if there is already an entry
+				else {
+					// delete
+					console.log(`DELETED Row from ${table[1]} table where the thief_id was '${body.thiefIdMap[0]}'and the ${table[1]} was '${row[table[1]]}' Because its Duplicate Entry`);
+					await db.any(`DELETE FROM ${table[1]} WHERE thief_id = $1 AND ${table[1]} = $2`
+					,[body.thiefIdMap[0], row[table[1]]]);
+				}
+			});
+		});
+	
+		console.log(`DELETED Thief with ID '${[body.thiefIdMap[0]]}'. No Longer Needed After Merge.`);
+		// delete old thief entirely
+		await db.none(`DELETE FROM thief WHERE thief_id = $1`, [body.thiefIdMap[0]]);
+	
+		return body.thiefIdMap[1];
+	}
+	catch (exc) {
+			console.log(`[ backend.src.thiefEdit.ts.MergeThieves() ] Error Attempting To Merge Thieves ${body.thiefIdMap[0]} into ${body.thiefIdMap[1]}. Error Message: ${exc}`);
+	}
+}
