@@ -8,14 +8,16 @@ import { debugState } from '../services/Recoil';
 import LoadingIcon from '../components/LoadingIcon';
 import DebugLogs from '../services/DebugLogs';
 import TextWindow from '../components/TextWindow';
+import { useAuth } from '../services/AuthProvider';
 
 //Add dynamically displayed password field to form to re-authenticate for email changes
 //Add admin view and regular view
+//[x] Redirect to user page if user is not admin and is not viewing their own page
+//[ ] Only admin can change role, approved, and banned
 //Add success and failure dialogs
-//Add null checks for response data
-//Sign-up page should require all fields or submit ""
-//Change line 106 to handle null fields returned
-
+//Move 128-131 functionality to backend
+// -More specifically, the backend should check the user token for admin status or readWrite
+// -If admin, return any user, if readWrite, return user info for their own ID and change url params to match
 
 export default function UserEdit() {
 	const [isLoadingInit, setIsLoadingInit] = useState(true);
@@ -24,6 +26,8 @@ export default function UserEdit() {
 	const [selectedRole, setSelectedRole] = useState('readWrite');
 	const [selectedApproved, setSelectedApproved] = useState('true');
 	const [selectedBanned, setSelectedBanned] = useState('false');
+	const {user} = useAuth();
+	const [admin, setAdmin] = useState(user?.bikeIndex.role === 'admin');
 	const debug = useRecoilValue(debugState);
 	const url = new URL(window.location.href);
 	const pageName = "User Edit";
@@ -121,7 +125,12 @@ export default function UserEdit() {
 	}
 	useEffect(() => {
 		DebugLogs('UserEdit Component', '', debug);
+		if(user===null){ return; }
 		let userId = url.searchParams.get('userId');
+		// If user is not an admin and is not viewing their own page, redirect to their own page
+		if (user.bikeIndex.role!='admin'&&userId!=user.firebase.uid) {
+			window.location.href = '/user?userId=' + user.firebase.uid;
+		}
 		if (userId === 'new') {
 			setIsLoadingInit(false);
 			userInfo.userId = 'new';
@@ -130,7 +139,13 @@ export default function UserEdit() {
 		} else if (userId) {
 			async_get(userId);
 		}
-	}, []);
+		
+	}, [user]);
+
+	useEffect(() => {
+		console.log(user?.bikeIndex.role);
+		setAdmin(user?.bikeIndex.role === 'admin');
+	}, [user]);
 
 	let isLoading = isLoadingInit || isLoadingSubmit;
 	return (
@@ -147,7 +162,7 @@ export default function UserEdit() {
 					<FormInput  label="Title"          name="title"      defaultValue={userInfo.title}      			disabled={isLoading} />
 					<FormInput  label="Organization"   name="org"        defaultValue={userInfo.org}        			disabled={isLoading} />
 					<FormInput  label="Phone"          name="phone"      defaultValue={userInfo.phone}      			disabled={isLoading} type="phone"/>
-					<FormInput  label="Role"           name="role"       value={selectedRole}       disabled={isLoading} type="select" onChange={(event: any) => {
+					<FormInput  label="Role"           name="role"       value={selectedRole}       disabled={isLoading||!admin} type="select" onChange={(event: any) => {
 							userInfo.role = event.target[event.target.selectedIndex].value;
 							setSelectedRole(event.target[event.target.selectedIndex].value);
 						}}>
@@ -155,7 +170,7 @@ export default function UserEdit() {
                     	<option value="readWrite"> readWrite  </option>
                     	<option value="readOnly">  readOnly   </option>
                 	</FormInput>
-					<FormInput  label="Approved"       name="approved"   value={selectedApproved}   disabled={isLoading} type="select" onChange={(event: any) => {
+					<FormInput  label="Approved"       name="approved"   value={selectedApproved}   disabled={isLoading||!admin} type="select" onChange={(event: any) => {
 							event.target[event.target.selectedIndex].value === "true" ?
 							userInfo.approved = true:
 							userInfo.approved = false;
@@ -164,7 +179,7 @@ export default function UserEdit() {
                     	<option value="true">      Approved   </option>
                     	<option value="false">     Unapproved </option>
                 	</FormInput>
-					<FormInput  label="Banned"         name="banned"     value={selectedBanned}     disabled={isLoading} type="select" onChange={(event: any) => {
+					<FormInput  label="Banned"         name="banned"     value={selectedBanned}     disabled={isLoading||!admin} type="select" onChange={(event: any) => {
 							event.target[event.target.selectedIndex].value === "true" ?
 							userInfo.banned = true :
 							userInfo.banned = false;

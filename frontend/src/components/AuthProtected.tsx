@@ -1,7 +1,6 @@
 import { useAuth } from "../services/AuthProvider";
 import { Navigate } from "react-router-dom";
 import { useEffect } from "react";
-import { useNavigate } from "../../node_modules/react-router-dom/dist/index";
 
 export function AuthProtected({ children }: any) {
 	const { user, loading }: any = useAuth();

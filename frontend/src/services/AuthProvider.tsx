@@ -17,7 +17,6 @@ import React, { useState, useContext, useEffect } from 'react';
 import { httpClient } from './HttpClient';
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { debugState, isAdmin } from '../services/Recoil';
-import { useNavigate } from 'react-router-dom';
 import { devState } from '../services/Recoil';
 
 const AuthContext = React.createContext<AuthContextProps | null>(null);
@@ -58,6 +57,7 @@ export function AuthProvider({ children }: any) {
 		console.log('AuthProvider');
 	}
 
+	//Bailey, C. (2023, June 7th) Doggr source code (Version 1.0.0) [Source code].
 	async function updateAxios(token: string) {
 		console.log(`token: ...${token.slice(-10)}`);
 		httpClient.interceptors.request.use(
