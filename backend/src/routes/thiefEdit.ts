@@ -4,6 +4,7 @@ import { fieldToTable, fields, getThiefData } from '../thiefData';
 import { uploadImage, deleteImage, getFile, ImageUploadError, ImageDeletionError, ImageGetError } from '../imageOperation';
 import multer from 'multer';
 import { insertThiefData, deleteThiefData } from '../thiefData';
+import { logHistory } from './history';
 
 const upload = multer();
 
