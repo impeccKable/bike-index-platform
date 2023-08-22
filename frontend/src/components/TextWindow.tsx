@@ -1,23 +1,14 @@
-
 import { httpClient } from '../services/HttpClient';
-import { isAdmin } from '../services/Recoil';
 import { useState, useEffect } from 'react';
 import LoadingIcon from './LoadingIcon';
-import { useRecoilValue } from 'recoil';
 
 export default function TextWindow(props: any) {
-	// const [adminStatus, setAdminStatus] = useState(useRecoilValue(isAdmin));
-	// const [adminStatus, setAdminStatus] = useState(false);
 	const [adminStatus, setAdminStatus] = useState(JSON.parse(localStorage.getItem("user")??"")?.bikeIndex?.role?.toLowerCase() === 'admin' ?? false);
 	const [preview, setPreview] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
-	// const [showSettings, setShowSettings] = useState(false);
 	const [message, setMessage] = useState("");
 	const [isHidden, setIsHidden] = useState(false);
 	const [verbiage, setVerbiage] = useState("");
-	// const [label, setLabel] = useState("");
-	//const user = localStorage.setItem('user', JSON.stringify(newUser));
-
 
 	useEffect(() => {
 		async function getTextContent() {
@@ -96,31 +87,9 @@ export default function TextWindow(props: any) {
 						className="fancy-button fancy-button-end"
 						onClick={() => {updateData({ishidden: true}); setIsHidden(true)}}
 					>⊠</button>
-					{/* <button
-						title='Text Window Settings'
-						className="fancy-button fancy-button-end"
-						onClick={() => {setShowSettings(true)}}
-					>⚙</button> */}
 				</div>
 			</>}
 			<div className='message'>{message}</div>
-			{/* { showSettings &&
-			<div className="modal">
-				<div className="modal-content">
-					<span className="close" onClick={() => {setShowSettings(false)}}>×</span>
-					<h4>Label Name:</h4>
-					<input
-						type='text'
-						id="SetLabel"
-						value={label}
-						onChange={(event:any) => {setLabel(event.target.value)}}
-					></input>
-					<button
-						onClick={() => {updateData({label: label}); setShowSettings(false)}}
-					>Save</button>
-				</div>
-			</div>
-			} */}
 		</div>
 		</>
 	)
