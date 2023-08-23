@@ -250,14 +250,18 @@ Schedule
 			User Edit
 				[x] Make users not approved by default
 				[x] Frontend
-				[ ] Approve users
+				[x] Approve users
 			Roles
-				[ ] Ability to change user roles
+				[x] Ability to change user roles
 				Admin Features	
-					[ ] View UserList and change user values
-					[ ] Approve users, ban users, change bikeIndex values(except email)
-					[ ] Upload .csv
-					[ ] Change description/text-blurb boxes on pages
+					[x] View UserList and change user values
+					[x] Approve users, ban users, change bikeIndex values(except email)
+					[x] Upload .csv
+					[x] Change description/text-blurb boxes on pages
+				ReadWrite User
+					[x] Only own UserEdit should be accessible
+					[x] Can't change Approved/Role/Banned
+					[ ] Cannot visit Data page
 			Login & Sign up
 				[x] Make registration and image submission clearer (load icon somewhere else?),
 				[x] Simplify login logic

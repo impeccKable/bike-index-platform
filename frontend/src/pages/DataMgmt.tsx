@@ -1,14 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { Form, FormButton } from "../components/Form";
 import { httpClient } from "../services/HttpClient";
 import LoadingIcon from '../components/LoadingIcon';
+import { useAuth } from "../services/AuthProvider";
 
 export default function DataMgmt() {
 	const [newDataCnts, setNewDataCnts]: any = useState(null);
 	const [isFileSelected, setIsFileSelected] = useState(false);
 	const [isLoadingImport, setIsLoadingImport] = useState(false);
 	const [isLoadingExport, setIsLoadingExport] = useState(false);
+	const { user } = useAuth();
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		if(!user) return;
+		if (user?.bikeIndex.role !== "admin") {
+			navigate("/thieves");
+		}
+	}, [user]);
 
 	async function handleImport(e: any) {
 		try {

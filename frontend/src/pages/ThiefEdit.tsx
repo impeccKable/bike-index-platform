@@ -15,7 +15,7 @@ import { debugState } from '../services/Recoil';
 import LoadingIcon from '../components/LoadingIcon';
 import DebugLogs from '../services/DebugLogs';
 import TextWindow from '../components/TextWindow';
-
+import { useAuth } from '../services/AuthProvider';
 
 export default function ThiefEdit() {
 	const [searchParams, setSearchParams] = useSearchParams();
@@ -25,6 +25,8 @@ export default function ThiefEdit() {
 	const [renderImageFiles, setRenderImageFiles] = useState<(File | string)[]>([]);
 	const [newImages, setNewImages] = useState<(File | string)[]>([]);
 	const [deletedImages, setDeletedImages] = useState<(File | string)[]>([]);
+	const {user} = useAuth();
+	const [admin, setAdmin] = useState(user?.bikeIndex.role === 'admin');
 	const debug = useRecoilValue(debugState);
 	const url = new URL(window.location.href);
 	const pageName = "Thief Edit";
@@ -151,6 +153,11 @@ export default function ThiefEdit() {
 			async_get(thiefId);
 		}
 	}, []);
+	
+	useEffect(() => {
+		console.log(user?.bikeIndex.role);
+		setAdmin(user?.bikeIndex.role === 'admin');
+	}, [user]);
 
 	let isLoading = isLoadingInit || isLoadingSubmit;
 	return (
@@ -159,7 +166,7 @@ export default function ThiefEdit() {
 			<main>
 				<div className="title">
 					<h1>{pageName}<LoadingIcon when={isLoadingInit} delay={1} /></h1>
-					<button onClick={handleHisotryClick}>History</button>
+					{admin&&<button onClick={handleHisotryClick}>History</button>}
 				</div>
 
 				<TextWindow pageName={pageName} />

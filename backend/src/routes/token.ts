@@ -21,10 +21,13 @@ export async function validToken(req: express.Request): Promise<string> {
 const router = express.Router();
 router.post("/", async (req: express.Request, res: express.Response) => {
 	try {
-		return res.json(validToken(req));
-	} catch (err) {
+		return res.json(await validToken(req));
+	} catch (err:any) {
 		console.error(err);
-		res.status(404);
+		if(err.message === "No token in header") {
+			return res.status(500).send("No token in header");
+		}
+		return res.status(401).send("Failed to authorize");
 	}
 });
 export default router;
