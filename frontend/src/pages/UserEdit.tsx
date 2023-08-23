@@ -136,7 +136,7 @@ export default function UserEdit() {
 		if(user===null){ return; }
 		let userId = url.searchParams.get('userId');
 		// If user is not an admin and is not viewing their own page, redirect to their own page
-		if (user.bikeIndex.role!='admin'&&userId!=user.firebase.uid) {
+		if (user.bikeIndex.role!=='admin'&&userId!==user.firebase.uid) {
 			window.location.href = '/user?userId=' + user.firebase.uid;
 		}
 		if (userId === 'new') {
@@ -200,7 +200,8 @@ export default function UserEdit() {
                     	<option value="false">     Unbanned </option>
                 	</FormInput>
     				<div className="form-btns">
-						<LinkButton type="button" to="back">Back</LinkButton>
+						{admin?<LinkButton type="button" to="back">Back</LinkButton>:
+						<LinkButton type="button" to="/thieves">Back</LinkButton>}
 						<FormButton type="submit" disabled={isLoading}>Submit</FormButton>
 						<LoadingIcon when={isLoadingSubmit} style={{margin: 0}}/>
 					</div>
