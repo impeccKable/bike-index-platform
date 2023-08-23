@@ -96,12 +96,14 @@ export function AuthProvider({ children }: any) {
 		}
 
 		await updateAxios(user.firebase.stsTokenManager.accessToken);
-		httpClient.post('/token', {}).then((res: any) => {
-			if (res.status !== 200) {
-				handleLogout();
-			}
+		httpClient.post('/token', {})
+			.then((res: any) => {
+			}).catch((err: any) => {
+				console.log(err);
+				if (err.response.status !== 200) {
+					handleLogout();
+				}
 		});
-
 	};
 
 	function retrieveUser() {
