@@ -5,6 +5,7 @@ import { uploadImage, deleteImage, getFile, ImageUploadError, ImageDeletionError
 import multer from 'multer';
 import { insertThiefData, deleteThiefData } from '../thiefData';
 import { logHistory } from './history';
+import { validToken } from './token';
 
 const upload = multer();
 
@@ -12,7 +13,7 @@ async function get(query: any) {
 	return getThiefData([parseInt(query.thiefId)]);
 };
 
-async function put(body: any) {
+async function put(body: any, uid: string) {
 	let addOrNew = 'add';
 	let thiefId = body.thiefId;
 	if (thiefId == 'new') {
@@ -30,7 +31,7 @@ async function put(body: any) {
 			if (delVal === '') { continue; }
 			deleteThiefData(table, thiefId, delVal);
 			try {
-				await logHistory({ user_uid: "someUser", changed_thief_id: thiefId, data_type: `${table}`, data: `${delVal}` }, 'delete');
+				await logHistory({ user_uid: uid, changed_thief_id: thiefId, data_type: `${table}`, data: `${delVal}` }, 'delete');
 			} catch (err) {
 				console.log('Error logging thief history:', err);
 				throw err;
@@ -40,7 +41,7 @@ async function put(body: any) {
 			if (addVal === '') { continue; }
 			insertThiefData(table, thiefId, addVal);
 			try {
-				await logHistory({ user_uid: "someUser", changed_thief_id: thiefId, data_type: `${table}`, data: `${addVal}` }, addOrNew);
+				await logHistory({ user_uid: uid, changed_thief_id: thiefId, data_type: `${table}`, data: `${addVal}` }, addOrNew);
 			} catch (err) {
 				console.log('Error logging thief history:', err);
 				throw err;
@@ -70,8 +71,16 @@ router.get('/', async (req: express.Request, res: express.Response) => {
 
 router.put('/', upload.array('newImages'), async (req: express.Request, res: express.Response) => {
 	try {
+		const uid: string | boolean = await validToken(req);
+		let validUid = '';
+		if (uid === false) {
+			console.log('Token expired or not valid');
+			return;
+		} else if (typeof uid === 'string') {
+			validUid = uid;
+		}
 		const parsedBody = JSON.parse(req.body.body);
-		const thiefId = await put(parsedBody);
+		const thiefId = await put(parsedBody, validUid);
 
 		const promises = [];
 		if (req.files && req.files.length !== 0) {
@@ -79,10 +88,10 @@ router.put('/', upload.array('newImages'), async (req: express.Request, res: exp
 			if (parsedBody.thiefId === 'new') {
 				addOrNew = 'new';
 			}
-			promises.push(uploadImage(req.files as Express.Multer.File[], thiefId, addOrNew));
+			promises.push(uploadImage(req.files as Express.Multer.File[], thiefId, addOrNew, validUid));
 		}
 		if (req.body.deletedImages) {
-			promises.push(deleteImage(JSON.parse(req.body.deletedImages), thiefId));
+			promises.push(deleteImage(JSON.parse(req.body.deletedImages), thiefId, validUid));
 		}
 		await Promise.all(promises);
 

@@ -92,7 +92,7 @@ export async function GetUserBySearchType(key: string, type: string, page: numbe
 	}
 }
 
-export async function PutUserInfo(userInfo: any) {
+export async function PutUserInfo(userInfo: any, uid: string) {
 	try {
 		for (let key in userInfo) {
 			if (key === "userid") {
@@ -100,7 +100,7 @@ export async function PutUserInfo(userInfo: any) {
 			}
 			await db.any(`UPDATE bi_user SET ${key} = ($1) WHERE user_uid = ($2);`, [userInfo[key], userInfo.userid]);
 			try {
-				await logHistory({ user_uid: "someUser", changed_user_uid: userInfo.userid, data_type: `${key}`, data: `${userInfo[key]}` }, 'update');
+				await logHistory({ user_uid: uid, changed_user_uid: userInfo.userid, data_type: `${key}`, data: `${userInfo[key]}` }, 'update');
 			} catch (err) {
 				console.log('Error while logging user history:', err);
 				throw err;

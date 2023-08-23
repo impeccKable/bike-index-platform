@@ -24,10 +24,10 @@ const header = {
 	'ID': {},
 	'Time': {},
 	'User': { maxWidth: "6rem", minWidth: "6rem" },
-	'Action': { maxWidth: "3rem", minWidth: "3rem" },
+	'Action': {},
 	'Changed Thief': { maxWidth: "4rem", minWidth: "4rem" },
-	'Changed User': { maxWidth: "4rem", minWidth: "4rem" },
-	'Type': { maxWidth: "4rem", minWidth: "4rem" },
+	'Changed User': {},
+	'Type': { maxWidth: "5rem", minWidth: "5rem" },
 	'Data': {},
 }
 
