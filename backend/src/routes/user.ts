@@ -1,6 +1,7 @@
 import express from "express";
 import { GetAllUsers, GetUserByID, GetUserBySearchType, PutUserInfo } from "../userData";
 import multer from 'multer';
+import { validToken } from "./token";
 
 const upload = multer();
 
@@ -12,16 +13,17 @@ router.get("/", async (req: express.Request, res: express.Response) => {
 		let key = req.query.searchKey;
 		let type = req.query.searchType;
 		let userId = req.query.userId;
+		const page = typeof req.query.page === 'string' ? parseInt(req.query.page, 10) : 1;
 
 		if (userId) {
 			console.log("user id route");
-			return res.json(await GetUserByID(userId.toString()));
+			return res.json(await GetUserByID(userId.toString(), page));
 		}
 		else if (!type || !key || key === "All") {
 			console.log("All user route");
-			return res.json(await GetAllUsers());
+			return res.json(await GetAllUsers(page));
 		}
-		return res.json(await GetUserBySearchType(key.toString(), type.toString()));
+		return res.json(await GetUserBySearchType(key.toString(), type.toString(), page));
 	} catch (exc) {
 		console.log(`[ backend.src.user.ts.get('/') Error Attempting To Get All Users. Message: ${exc} ]`)
 	}
@@ -29,7 +31,8 @@ router.get("/", async (req: express.Request, res: express.Response) => {
 
 router.put("/", async (req: express.Request, res: express.Response) => {
 	try {
-		return res.json(await PutUserInfo(req.body));
+		const uid: string = await validToken(req);
+		return res.json(await PutUserInfo(req.body, uid));
 	} catch (exc) {
 		console.log(`[ backend.src.user.ts.put('/') Error Attempting To Put UserInfo. Message: ${exc} ]`)
 	}

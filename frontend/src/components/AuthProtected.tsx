@@ -22,7 +22,7 @@ export function AuthProtected({ children }: any) {
 		console.log(user);
 	}, [loading]);
 
-	if (!loading&&!user) {
+	if (!loading && !user) {
 		return <Navigate to="/" replace />;
 	} else if (loading) {
 		return <div>Loading...</div>;
