@@ -50,7 +50,7 @@ const s3ParamsBase = {
 export async function uploadImage(uploadedFiles: Express.Multer.File[], thiefId: number, action: string, uid: string) {
 	const promises = uploadedFiles.map(async (file) => {
 		const folderName = getFolderName(file.mimetype);
-		const key = `thievs/${thiefId}/${folderName}/${file.originalname}`;
+		const key = `thieves/${thiefId}/${folderName}/${file.originalname}`;
 		const params = {
 			...s3ParamsBase,
 			Key: key,
@@ -107,7 +107,7 @@ export async function deleteImage(deletedFile: string[], thiefId: number, uid: s
 
 // get images from S3 bucket
 export async function getFile(thiefId: string): Promise<string[]> {
-	const prefix = `thievs/${thiefId}/`;
+	const prefix = `thieves/${thiefId}/`;
 
 	const params = {
 		...s3ParamsBase,
