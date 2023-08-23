@@ -15,9 +15,10 @@ import {
 } from 'firebase/auth';
 import React, { useState, useContext, useEffect } from 'react';
 import { httpClient } from './HttpClient';
-import { useRecoilValue, useRecoilState } from 'recoil';
+import { useRecoilValue} from 'recoil';
 import { debugState, isAdmin } from '../services/Recoil';
 import { devState } from '../services/Recoil';
+import { useNavigate } from 'react-router-dom';
 
 const AuthContext = React.createContext<AuthContextProps | null>(null);
 
@@ -50,7 +51,6 @@ export type AuthContextProps = {
 
 export function AuthProvider({ children }: any) {
 	const [user, setUser] = useState<UserInfo | null>(null);
-	const devMode = useRecoilValue(devState);
 	const [loading, setLoading] = useState(true);
 
 	if (useRecoilValue(debugState) == true) {
@@ -113,12 +113,7 @@ export function AuthProvider({ children }: any) {
 
 	//Login handler function, can throw an error if user is banned, not verified, or if the password is incorrect
 	async function handleLogin(email: string, password: string) {
-		let login;
-		if (devMode) {
-			login = await signInWithEmailAndPassword(auth, 'email@email.com', 'password');
-		} else {
-			login = await signInWithEmailAndPassword(auth, email, password);
-		}
+		const	login = await signInWithEmailAndPassword(auth, email, password);
 		const user = {
 			firebase: login.user,
 			bikeIndex: (await httpClient.post('/login', { uid: login.user.uid }))

@@ -13,6 +13,7 @@ function Navbar() {
 			<LinkButton to="/thieves">Thieves</LinkButton>
 			<LinkButton to="/users">Users</LinkButton>
 			{admin&&<LinkButton to="/data">Data</LinkButton>}
+			{admin&&<LinkButton to="/history">History</LinkButton>}
 			<LinkButton to="/about">About</LinkButton>
 			<LinkButton to="/logout">Logout</LinkButton>
 		</nav>
