@@ -31,15 +31,8 @@ router.get("/", async (req: express.Request, res: express.Response) => {
 
 router.put("/", async (req: express.Request, res: express.Response) => {
 	try {
-		const uid: string | boolean = await validToken(req);
-		let validUid = '';
-		if (uid === false) {
-			console.log('Token expired or not valid');
-			return;
-		} else if (typeof uid === 'string') {
-			validUid = uid;
-		}
-		return res.json(await PutUserInfo(req.body, validUid));
+		const uid: string = await validToken(req);
+		return res.json(await PutUserInfo(req.body, uid));
 	} catch (exc) {
 		console.log(`[ backend.src.user.ts.put('/') Error Attempting To Put UserInfo. Message: ${exc} ]`)
 	}

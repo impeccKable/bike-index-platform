@@ -71,16 +71,9 @@ router.get('/', async (req: express.Request, res: express.Response) => {
 
 router.put('/', upload.array('newImages'), async (req: express.Request, res: express.Response) => {
 	try {
-		const uid: string | boolean = await validToken(req);
-		let validUid = '';
-		if (uid === false) {
-			console.log('Token expired or not valid');
-			return;
-		} else if (typeof uid === 'string') {
-			validUid = uid;
-		}
+		const uid: string = await validToken(req);
 		const parsedBody = JSON.parse(req.body.body);
-		const thiefId = await put(parsedBody, validUid);
+		const thiefId = await put(parsedBody, uid);
 
 		const promises = [];
 		if (req.files && req.files.length !== 0) {
@@ -88,10 +81,10 @@ router.put('/', upload.array('newImages'), async (req: express.Request, res: exp
 			if (parsedBody.thiefId === 'new') {
 				addOrNew = 'new';
 			}
-			promises.push(uploadImage(req.files as Express.Multer.File[], thiefId, addOrNew, validUid));
+			promises.push(uploadImage(req.files as Express.Multer.File[], thiefId, addOrNew, uid));
 		}
 		if (req.body.deletedImages) {
-			promises.push(deleteImage(JSON.parse(req.body.deletedImages), thiefId, validUid));
+			promises.push(deleteImage(JSON.parse(req.body.deletedImages), thiefId, uid));
 		}
 		await Promise.all(promises);
 
