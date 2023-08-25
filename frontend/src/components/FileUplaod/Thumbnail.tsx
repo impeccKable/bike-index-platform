@@ -82,7 +82,7 @@ export function Thumbnail(props: ThumbnailProps) {
 	return (
 		<div>
 			<img
-				className={`thumbnail${props.isNew?' red-bordered':''}`}
+				className={`thumbnail ${props.isNew ? ' red-bordered' : ''}`}
 				key={props.index}
 				src={icon !== undefined ? icon : imageUrl}
 				onClick={handleImageClick}

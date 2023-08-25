@@ -49,6 +49,7 @@ export default function ThiefEdit() {
 		bikeSerial: false,
 		phrase: false,
 		note: false,
+		file: false,
 	});
 
 	// thiefInfo at beginning
@@ -111,7 +112,7 @@ export default function ThiefEdit() {
 
 		setIsLoadingSubmit(false);
 		setWasSubmitted(true);
-		setClearByParts({master: false,name: false,email: false,url: false,addr: false,phone: false,bikeSerial: false,phrase: false,note: false});
+		setClearByParts({master: false,name: false,email: false,url: false,addr: false,phone: false,bikeSerial: false,phrase: false,note: false, file: false});
 		setTimeout(() => {
 			setWasSubmitted(false);
 		}, 3000);
@@ -251,6 +252,8 @@ export default function ThiefEdit() {
 						setNewImages={setNewImages}
 						deletedImages={deletedImages}
 						setDeletedImages={setDeletedImages}
+						setNotChanged={setNotChanged}
+						clearAll={clearByParts.file}
 					/>
 					<div className="form-btns">
 						<LinkButton type="button" to="back">Back</LinkButton>

@@ -64,7 +64,7 @@ export function MultiField(props: MultiFieldProps) {
 	const [values, setValues] = useState(['']);
 	const [collapsed, setCollapsed] = useState(false);
 	const [edited, setEdited] = useState(false);
-	const [changedIndices, setChangedIndices] = useState<number[]>([]);;
+	const [changedIndices, setChangedIndices] = useState<number[]>([]);
 
 	useEffect(() => {
 		if (rest.data) {
@@ -118,6 +118,7 @@ export function MultiField(props: MultiFieldProps) {
 		if (values.length >= 1 && values[0] !== '') {
 			updateValues(['']);
 			DisableParentSubmit(false);
+			setEdited(true)
 		}
 	}
 	function updateValues(newValues: string[]) {
