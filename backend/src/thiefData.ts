@@ -1,6 +1,6 @@
 import { db } from './config';
 
-export const fieldToTable: {[key: string]: string} = {
+export const fieldToTable: { [key: string]: string } = {
 	"name":       "name",
 	"email":      "email",
 	"url":        "url",
@@ -34,7 +34,7 @@ export async function getThiefData(thiefIds: number[]) {
 	// 		email: [{ thief_id: 1, email: "..." }, ...],
 	// 	   ...
 	// 	}
-	let results: {[key: string]: any[]} = {};
+	let results: { [key: string]: any[] } = {};
 	for (let i = 0; i < fields.length; i++) {
 		results[fields[i]] = values[i];
 	}
@@ -47,7 +47,7 @@ export async function getThiefData(thiefIds: number[]) {
 	let thieves: any = [];
 	for (let thiefId of thiefIds) {
 		// Construct the thief object
-		let thief: {[key: string]: any} = {
+		let thief: { [key: string]: any } = {
 			thiefId: thiefId,
 		};
 		for (let field of fields) {
@@ -73,11 +73,11 @@ function standardizePhoneNum(text: string): string {
 	let output = '';
 	let i;
 	for (i = 1; i <= digits.length; i++) { // 1-based index
-		if (i == 5 ) { output = '-'  + output; }
-		if (i == 8 ) { output = ') ' + output; }
+		if (i == 5)  { output = '-'  + output; }
+		if (i == 8)  { output = ') ' + output; }
 		if (i == 11) { output = ' '  + output; }
-		output = digits[i-1] + output;
-		if (i == 10) { output = '('  + output; }
+		output = digits[i - 1] + output;
+		if (i == 10) { output = '(' + output; }
 	}
 	if (i == 9 || i == 10) { output = '(' + output; }
 	if (i >= 12) { output = '+' + output; }

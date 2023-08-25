@@ -1,19 +1,25 @@
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import { Form, MultiField, FormInput, FormButton, LinkButton } from '../components/Form';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { httpClient } from '../services/HttpClient';
 import { useRecoilValue } from 'recoil';
 import { debugState } from '../services/Recoil';
 import LoadingIcon from '../components/LoadingIcon';
 import DebugLogs from '../services/DebugLogs';
 import TextWindow from '../components/TextWindow';
+import { useAuth } from '../services/AuthProvider';
 
 //Add dynamically displayed password field to form to re-authenticate for email changes
 //Add admin view and regular view
+//[x] Redirect to user page if user is not admin and is not viewing their own page
+//[ ] Only admin can change role, approved, and banned
 //Add success and failure dialogs
-//Sign-up page should require all fields or submit ""
-
+//Move 128-131 functionality to backend
+// -More specifically, the backend should check the user token for admin status or readWrite
+// -If admin, return any user, if readWrite, return user info for their own ID and change url params to match
+//make note of serviceProvider.json in readme install notes
+//make note of .env in readme install notes
 
 export default function UserEdit() {
 	const [isLoadingInit, setIsLoadingInit] = useState(true);
@@ -22,9 +28,12 @@ export default function UserEdit() {
 	const [selectedRole, setSelectedRole] = useState('readWrite');
 	const [selectedApproved, setSelectedApproved] = useState('true');
 	const [selectedBanned, setSelectedBanned] = useState('false');
+	const {user} = useAuth();
+	const [admin, setAdmin] = useState(user?.bikeIndex.role === 'admin');
 	const debug = useRecoilValue(debugState);
 	const url = new URL(window.location.href);
 	const pageName = "User Edit";
+	const navigate = useNavigate();
 
 	// Admins can view other users but users can only view their own page
 	const [userInfo, setUserInfo] = useState({
@@ -40,13 +49,18 @@ export default function UserEdit() {
 		banned: false, //Only visible to admins
 	});
 
+	function handleHisotryClick() {
+		const userId = userInfo.userid;
+		navigate(`/history?userId=${userId}`);
+	}
+
 	async function handleFormSubmit(e: any) {
 		setIsLoadingSubmit(true);
 		e.preventDefault();
 		let results = CompareResults(e.dataDict);
 		console.log(results);
 
-        const res = await httpClient.put('/user', results)
+		const res = await httpClient.put('/user', results)
 			.catch(err => {
 				DebugLogs('User put error', err.message, debug);
 			});
@@ -64,7 +78,7 @@ export default function UserEdit() {
 			userid: url.searchParams.get('userId'),
 		};
 		const consoleMessages: any = [];
-		const newUserInfo = {...userInfo};
+		const newUserInfo = { ...userInfo };
 
 		// need to split this one
 		Object.entries(submitData).map((field) => {
@@ -77,10 +91,10 @@ export default function UserEdit() {
 				newUserInfo[keyValue] = oldValue;
 
 				results[keyValue] = [];
-				if (newValue===oldValue) {
+				if (newValue === oldValue) {
 					results[keyValue] = oldValue;
 				}
-				if (!(oldValue===newValue)) {
+				if (!(oldValue === newValue)) {
 					results[keyValue] = newValue;
 					if (!(newUserInfo[keyValue] === newValue)) {
 						newUserInfo[keyValue] = newValue;
@@ -101,8 +115,8 @@ export default function UserEdit() {
 			DebugLogs('User get error', err.message, debug);
 			return;
 		}
-		Object.entries(res.data[0]).map((atr) => {
-			if(atr[1]===null){
+		Object.entries(res.data.data[0]).map((atr) => {
+			if (atr[1] === null) {
 				atr[1] = '';
 			}
 			if (atr[0].localeCompare('userId') && atr[1].length === 0) {
@@ -119,7 +133,12 @@ export default function UserEdit() {
 	}
 	useEffect(() => {
 		DebugLogs('UserEdit Component', '', debug);
+		if(user===null){ return; }
 		let userId = url.searchParams.get('userId');
+		// If user is not an admin and is not viewing their own page, redirect to their own page
+		if (user.bikeIndex.role!=='admin'&&userId!==user.firebase.uid) {
+			window.location.href = '/user?userId=' + user.firebase.uid;
+		}
 		if (userId === 'new') {
 			setIsLoadingInit(false);
 			userInfo.userId = 'new';
@@ -128,14 +147,23 @@ export default function UserEdit() {
 		} else if (userId) {
 			async_get(userId);
 		}
-	}, []);
+		
+	}, [user]);
+
+	useEffect(() => {
+		console.log(user?.bikeIndex.role);
+		setAdmin(user?.bikeIndex.role === 'admin');
+	}, [user]);
 
 	let isLoading = isLoadingInit || isLoadingSubmit;
 	return (
 		<div className="formal thiefedit-page">
 			<Navbar />
 			<main>
-				<h1>{pageName}<LoadingIcon when={isLoadingInit} delay={1}/></h1>
+				<div className="title">
+					<h1>{pageName}<LoadingIcon when={isLoadingInit} delay={1} /></h1>
+					{admin&&<button onClick={handleHisotryClick}>History</button>}
+				</div>
 				<TextWindow pageName={pageName}/>
 				<Form onSubmit={handleFormSubmit}>
 					<FormInput  label="User UID"       name="userid"     value={userInfo.userid}     			disabled={true}/>
@@ -145,7 +173,7 @@ export default function UserEdit() {
 					<FormInput  label="Title"          name="title"      defaultValue={userInfo.title}      			disabled={isLoading} />
 					<FormInput  label="Organization"   name="org"        defaultValue={userInfo.org}        			disabled={isLoading} />
 					<FormInput  label="Phone"          name="phone"      defaultValue={userInfo.phone}      			disabled={isLoading} type="phone"/>
-					<FormInput  label="Role"           name="role"       value={selectedRole}       disabled={isLoading} type="select" onChange={(event: any) => {
+					<FormInput  label="Role"           name="role"       value={selectedRole}       disabled={isLoading||!admin} type="select" onChange={(event: any) => {
 							userInfo.role = event.target[event.target.selectedIndex].value;
 							setSelectedRole(event.target[event.target.selectedIndex].value);
 						}}>
@@ -153,7 +181,7 @@ export default function UserEdit() {
                     	<option value="readWrite"> readWrite  </option>
                     	<option value="readOnly">  readOnly   </option>
                 	</FormInput>
-					<FormInput  label="Approved"       name="approved"   value={selectedApproved}   disabled={isLoading} type="select" onChange={(event: any) => {
+					<FormInput  label="Approved"       name="approved"   value={selectedApproved}   disabled={isLoading||!admin} type="select" onChange={(event: any) => {
 							event.target[event.target.selectedIndex].value === "true" ?
 							userInfo.approved = true:
 							userInfo.approved = false;
@@ -162,7 +190,7 @@ export default function UserEdit() {
                     	<option value="true">      Approved   </option>
                     	<option value="false">     Unapproved </option>
                 	</FormInput>
-					<FormInput  label="Banned"         name="banned"     value={selectedBanned}     disabled={isLoading} type="select" onChange={(event: any) => {
+					<FormInput  label="Banned"         name="banned"     value={selectedBanned}     disabled={isLoading||!admin} type="select" onChange={(event: any) => {
 							event.target[event.target.selectedIndex].value === "true" ?
 							userInfo.banned = true :
 							userInfo.banned = false;
@@ -172,7 +200,8 @@ export default function UserEdit() {
                     	<option value="false">     Unbanned </option>
                 	</FormInput>
     				<div className="form-btns">
-						<LinkButton type="button" to="back">Back</LinkButton>
+						{admin?<LinkButton type="button" to="back">Back</LinkButton>:
+						<LinkButton type="button" to="/thieves">Back</LinkButton>}
 						<FormButton type="submit" disabled={isLoading}>Submit</FormButton>
 						<LoadingIcon when={isLoadingSubmit} style={{margin: 0}}/>
 					</div>

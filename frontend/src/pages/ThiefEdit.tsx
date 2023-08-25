@@ -1,13 +1,21 @@
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
-import { Form, MultiField, FormInput, FormButton, LinkButton } from '../components/Form';
-import { ImageUpload } from '../components/ImageUplaod/ImageUpload';
+import {
+	Form,
+	MultiField,
+	FormInput,
+	FormButton,
+	LinkButton,
+} from '../components/Form';
+import { FileUpload } from '../components/FileUplaod/FileUpload';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { httpClient } from '../services/HttpClient';
 import { useRecoilValue } from 'recoil';
 import { debugState } from '../services/Recoil';
 import LoadingIcon from '../components/LoadingIcon';
 import DebugLogs from '../services/DebugLogs';
 import TextWindow from '../components/TextWindow';
+import { useAuth } from '../services/AuthProvider';
 import Modal from '../components/Modal';
 
 
@@ -16,10 +24,11 @@ export default function ThiefEdit() {
 	const [isLoadingInit, setIsLoadingInit] = useState(true);
 	const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
 	const [wasSubmitted, setWasSubmitted] = useState(false);
-	const fakeIamges = ["https://t0.gstatic.com/licensed-image?q=tbn:ANd9GcQkrjYxSfSHeCEA7hkPy8e2JphDsfFHZVKqx-3t37E4XKr-AT7DML8IwtwY0TnZsUcQ", "https://hips.hearstapps.com/hmg-prod/images/beautiful-smooth-haired-red-cat-lies-on-the-sofa-royalty-free-image-1678488026.jpg?crop=0.88847xw:1xh;center,top&resize=1200:*", "https://programmerhumor.io/wp-content/uploads/2021/06/programmerhumor-io-python-memes-backend-memes-41e437ca7369eb4.jpg"]
 	const [renderImageFiles, setRenderImageFiles] = useState<(File | string)[]>([]);
 	const [newImages, setNewImages] = useState<(File | string)[]>([]);
 	const [deletedImages, setDeletedImages] = useState<(File | string)[]>([]);
+	const {user} = useAuth();
+	const [admin, setAdmin] = useState(user?.bikeIndex.role === 'admin');
 	const debug = useRecoilValue(debugState);
 	const [showClearModal, setShowClearModal] = useState(false);
 	const [showMergeModal, setShowMergeModal] = useState(false);
@@ -28,6 +37,7 @@ export default function ThiefEdit() {
 	const [mergeDisabled, setMergeDisabled] = useState(true);
 	const url = new URL(window.location.href);
 	const pageName = "Thief Edit";
+	const navigate = useNavigate();
 
 	const [clearByParts, setClearByParts] = useState({
 		master: false,
@@ -53,6 +63,11 @@ export default function ThiefEdit() {
 		phrase: [''],
 		note: [''],
 	});
+
+	function handleHisotryClick() {
+		const thiefId = thiefInfo.thiefId;
+		navigate(`/history?thiefId=${thiefId}`);
+	}
 
 	
 
@@ -195,16 +210,24 @@ export default function ThiefEdit() {
 			async_get(thiefId);
 		}
 	}, []);
+	
+	useEffect(() => {
+		console.log(user?.bikeIndex.role);
+		setAdmin(user?.bikeIndex.role === 'admin');
+	}, [user]);
 
 	let isLoading = isLoadingInit || isLoadingSubmit;
 	return (
 		<div className="formal thiefedit-page">
 			<Navbar />
 			<main>
+				<div className="title">
 				<span className={notChanged ? '' : 'unsaved-changes'}>
 					<h1>{pageName}<LoadingIcon when={isLoadingInit} delay={1}/></h1>
 					<h3>{notChanged ? '' : "* Unsaved Changes"}</h3>
 				</span>
+				{admin&&<button onClick={handleHisotryClick}>History</button>}
+				</div>
 				<TextWindow pageName={pageName}/>
 				<button type="button" onClick={()=>{setShowClearModal(!showClearModal);}}>Clear All</button>
 				{isAdmin && <button type="button" className="btn-danger" onClick={()=>{mergeDisabled ? setShowMergeModal(true) : setMergeDisabled(true); setThiefId(thiefInfo.thiefId);}}>{mergeDisabled ? 'Edit ID' : 'Undo Edit ID' }</button>}
@@ -218,11 +241,11 @@ export default function ThiefEdit() {
 					<MultiField clearAll={clearByParts.bikeSerial} disableSubmit={setNotChanged} label="Bike Serial" name="bikeSerial" data={thiefInfo.bikeSerial} disabled={isLoading} component={FormInput}/>
 					<MultiField clearAll={clearByParts.phrase} disableSubmit={setNotChanged} label="Phrase"      name="phrase"     data={thiefInfo.phrase}     disabled={isLoading} component={FormInput} type="textarea"/>
 					<MultiField clearAll={clearByParts.note} disableSubmit={setNotChanged} label="Notes"       name="note"       data={thiefInfo.note}       disabled={isLoading} component={FormInput} type="textarea"/>
-					<ImageUpload
-						label="Images"
+					<FileUpload
+						label="Files"
 						isLoading={isLoading}
 						renderImageFiles={renderImageFiles}
-						disableSubmit={setNotChanged}
+					
 						setRenderImageFiles={setRenderImageFiles}
 						newImages={newImages}
 						setNewImages={setNewImages}
@@ -232,7 +255,7 @@ export default function ThiefEdit() {
 					<div className="form-btns">
 						<LinkButton type="button" to="back">Back</LinkButton>
 						<FormButton type="submit" disabled={isLoading || notChanged}>Submit</FormButton>
-						<LoadingIcon when={isLoadingSubmit} style={{margin: 0}}/>
+						<LoadingIcon when={isLoadingSubmit} style={{ margin: 0 }} />
 					</div>
 					{wasSubmitted && <div className="form-btns">Submitted!</div>}
 				</Form>
