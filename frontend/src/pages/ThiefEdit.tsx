@@ -245,7 +245,6 @@ export default function ThiefEdit() {
 						label="Files"
 						isLoading={isLoading}
 						renderImageFiles={renderImageFiles}
-					
 						setRenderImageFiles={setRenderImageFiles}
 						newImages={newImages}
 						setNewImages={setNewImages}
