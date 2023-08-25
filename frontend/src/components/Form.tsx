@@ -64,6 +64,7 @@ export function MultiField(props: MultiFieldProps) {
 	const [values, setValues] = useState(['']);
 	const [collapsed, setCollapsed] = useState(false);
 	const [edited, setEdited] = useState(false);
+	const [changedIndices, setChangedIndices] = useState<number[]>([]);;
 
 	useEffect(() => {
 		if (rest.data) {
@@ -86,6 +87,9 @@ export function MultiField(props: MultiFieldProps) {
 		if (!e.target.classList.value.includes('red-bordered')) {
 			e.target.classList.add('red-bordered');
 			setEdited(true);
+			if (!changedIndices.includes(idx)) {
+				setChangedIndices([...changedIndices, idx]);
+			}
 		}
 
 		let newValues = [...values];
@@ -141,6 +145,7 @@ export function MultiField(props: MultiFieldProps) {
 						<Component
 							name={name}
 							value={values[0]}
+							className={changedIndices.includes(1) ? 'red-bordered' : ''}
 							onChange={(e: any) => handleInput(e, 0)}
 							{...rest}
 						/>
@@ -157,6 +162,7 @@ export function MultiField(props: MultiFieldProps) {
 						<Component
 							name={idx == 0 ? name : name + idx}
 							value={value}
+							className={changedIndices.includes(idx) ? 'red-bordered' : ''}
 							onChange={(e: any) => handleInput(e, idx)}
 							{...rest}
 						/>
