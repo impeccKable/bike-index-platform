@@ -30,15 +30,6 @@ async function put(body: any, uid: string) {
 		}
 		body.thiefId, thiefId = newThiefId;
 	}
-	
-	if (thiefId === 'merge') {
-		//return body.thiefIdMap[0];
-		let newThiefId = body.thiefIdMap[1]; 
-		if (body.thiefIdMap[0] !== body.thiefIdMap[1]) {
-			newThiefId = await MergeThieves(body);		
-		}
-		body.thiefId, thiefId = newThiefId;
-	}
 	thiefId = parseInt(thiefId);
 	for (let field of fields) {
 		if (!body[field]) { continue; }
