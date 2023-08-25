@@ -55,7 +55,6 @@ export default function TextWindow(props: any) {
 	}
 	// Show the edit window
 	return (
-		<>
 		<div className="text-window">
 			{isHidden ? <>
 				<div className='edit'>
@@ -76,21 +75,20 @@ export default function TextWindow(props: any) {
 						title='Save Text Changes'
 						className="fancy-button"
 						onClick={() => {updateData({body: verbiage})}}
-					>✔</button>
+					>Save</button>
 					<button
 						title='Preview'
 						className="fancy-button"
 						onClick={() => {setPreview(true);}}
-					>👁</button>
+					>Preview</button>
 					<button
 						title='Disable Verbiage'
 						className="fancy-button fancy-button-end"
 						onClick={() => {updateData({ishidden: true}); setIsHidden(true)}}
-					>⊠</button>
+					>Disable</button>
 				</div>
 			</>}
 			<div className='message'>{message}</div>
 		</div>
-		</>
 	)
 }
