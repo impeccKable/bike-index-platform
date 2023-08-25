@@ -117,8 +117,7 @@ export default function ThiefEdit() {
 		}, 3000);
 
 		if (clearAll) {
-			//window.location.href.split("thief")[0]
-			window.location.replace(`${window.location.href.split("thief")[0]}thiefs?searchType=all&searchText=`);
+			navigate('/thieves?searchType=all&searchText=');
 		}
 		else {
 			window.location.reload();
@@ -128,7 +127,7 @@ export default function ThiefEdit() {
 	function CompareResults(submitData: any) {
 		let newThiefInfo = { ...thiefInfo };
 		let results = { thiefId: url.searchParams.get('thiefId') };
-		debugger;
+
 		for (const [key, value] of Object.entries(submitData)) {
 			if (key === 'thiefId') {
 				if(isAdmin && results.thiefId !== value && !mergeDisabled) {
@@ -222,25 +221,27 @@ export default function ThiefEdit() {
 			<Navbar />
 			<main>
 				<div className="title">
-				<span className={notChanged ? '' : 'unsaved-changes'}>
 					<h1>{pageName}<LoadingIcon when={isLoadingInit} delay={1}/></h1>
-					<h3>{notChanged ? '' : "* Unsaved Changes"}</h3>
-				</span>
-				{admin&&<button onClick={handleHisotryClick}>History</button>}
+					{admin&&<button onClick={handleHisotryClick}>History</button>}
 				</div>
 				<TextWindow pageName={pageName}/>
-				<button type="button" onClick={()=>{setShowClearModal(!showClearModal);}}>Clear All</button>
-				{isAdmin && <button type="button" className="btn-danger" onClick={()=>{mergeDisabled ? setShowMergeModal(true) : setMergeDisabled(true); setThiefId(thiefInfo.thiefId);}}>{mergeDisabled ? 'Edit ID' : 'Undo Edit ID' }</button>}
+				<div>
+					<button type="button" onClick={()=>{setShowClearModal(!showClearModal);}}>Clear All</button>
+					{isAdmin && <button type="button" className="btn-danger" onClick={()=>{mergeDisabled ? setShowMergeModal(true) : setMergeDisabled(true); setThiefId(thiefInfo.thiefId);}}>{mergeDisabled ? 'Edit ID' : 'Undo Edit ID' }</button>}
+				</div>				
+				<span className={notChanged ? '' : 'unsaved-changes'}>
+						<h3>{notChanged ? '' : "* Unsaved Changes"}</h3>
+					</span>
 				<Form onSubmit={(e)=> {handleFormSubmit(e, clearByParts.master)}}>
 					<FormInput  label="Thief ID" type="number" name="thiefId" value={thiefId} disabled={(!isAdmin || mergeDisabled)} onChange={(event: any) => {setThiefId(event.target.value);setNotChanged(false);}}/>
-					<MultiField clearAll={clearByParts.name} disableSubmit={setNotChanged} label="Name"        name="name"       data={thiefInfo.name}       disabled={isLoading} component={FormInput}/>
-					<MultiField clearAll={clearByParts.email} disableSubmit={setNotChanged} label="Email"       name="email"      data={thiefInfo.email}      disabled={isLoading} component={FormInput}/>
-					<MultiField clearAll={clearByParts.url} disableSubmit={setNotChanged} label="Url"         name="url"        data={thiefInfo.url}        disabled={isLoading} component={FormInput}/>
-					<MultiField clearAll={clearByParts.addr} disableSubmit={setNotChanged} label="Address"     name="addr"       data={thiefInfo.addr}       disabled={isLoading} component={FormInput}/>
-					<MultiField clearAll={clearByParts.phone} disableSubmit={setNotChanged} label="Phone"       name="phone"      data={thiefInfo.phone}      disabled={isLoading} component={FormInput} type="phone"/>
-					<MultiField clearAll={clearByParts.bikeSerial} disableSubmit={setNotChanged} label="Bike Serial" name="bikeSerial" data={thiefInfo.bikeSerial} disabled={isLoading} component={FormInput}/>
-					<MultiField clearAll={clearByParts.phrase} disableSubmit={setNotChanged} label="Phrase"      name="phrase"     data={thiefInfo.phrase}     disabled={isLoading} component={FormInput} type="textarea"/>
-					<MultiField clearAll={clearByParts.note} disableSubmit={setNotChanged} label="Notes"       name="note"       data={thiefInfo.note}       disabled={isLoading} component={FormInput} type="textarea"/>
+					<MultiField clearAll={clearByParts.name} 		disableSubmit={setNotChanged} label="Name"        name="name"       data={thiefInfo.name}       disabled={isLoading} component={FormInput}/>
+					<MultiField clearAll={clearByParts.email}		disableSubmit={setNotChanged} label="Email"       name="email"      data={thiefInfo.email}      disabled={isLoading} component={FormInput}/>
+					<MultiField clearAll={clearByParts.url} 		disableSubmit={setNotChanged} label="Url"         name="url"        data={thiefInfo.url}        disabled={isLoading} component={FormInput}/>
+					<MultiField clearAll={clearByParts.addr} 		disableSubmit={setNotChanged} label="Address"     name="addr"       data={thiefInfo.addr}       disabled={isLoading} component={FormInput}/>
+					<MultiField clearAll={clearByParts.phone} 		disableSubmit={setNotChanged} label="Phone"       name="phone"      data={thiefInfo.phone}      disabled={isLoading} component={FormInput} type="phone"/>
+					<MultiField clearAll={clearByParts.bikeSerial} 	disableSubmit={setNotChanged} label="Bike Serial" name="bikeSerial" data={thiefInfo.bikeSerial} disabled={isLoading} component={FormInput}/>
+					<MultiField clearAll={clearByParts.phrase} 		disableSubmit={setNotChanged} label="Phrase"      name="phrase"     data={thiefInfo.phrase}     disabled={isLoading} component={FormInput} type="textarea"/>
+					<MultiField clearAll={clearByParts.note} 		disableSubmit={setNotChanged} label="Notes"       name="note"       data={thiefInfo.note}       disabled={isLoading} component={FormInput} type="textarea"/>
 					<FileUpload
 						label="Files"
 						isLoading={isLoading}
