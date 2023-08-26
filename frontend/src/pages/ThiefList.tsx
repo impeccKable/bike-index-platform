@@ -105,6 +105,7 @@ export default function ThiefList() {
 						}}
 					>
 						<option value="all">All</option>
+						<option value="thief">ID</option>
 						<option value="name">Name</option>
 						<option value="phone">Phone Number</option>
 						<option value="email">Email</option>
