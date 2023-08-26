@@ -1,15 +1,17 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Thumbnail } from './Thumbnail';
 
 interface FileUploadProps {
 	label: string;
 	isLoading: boolean;
 	renderImageFiles: (File | string)[];
-	setRenderImageFiles: (iamges: (File | string)[]) => void;
+	setRenderImageFiles: (images: (File | string)[]) => void;
 	newImages: (File | string)[];
 	setNewImages: (newImages: (File | string)[]) => void;
 	deletedImages: (File | string)[];
 	setDeletedImages: (deletedImages: (File | string)[]) => void;
+	setNotChanged: (changed: boolean) => void;
+	clearAll: boolean;
 }
 
 function processFilename(filename: string): string {
@@ -29,7 +31,7 @@ function sanitize(filename: string): string {
 	return filename.replace(/[^a-zA-Z0-9!_.*()'-]/g, '-');
 }
 
-function extractObjectKeyForS3Deletion(deletedImage: string | File): string {
+export function extractObjectKeyForS3Deletion(deletedImage: string | File): string {
 	if (deletedImage instanceof File) {
 		return deletedImage.name;
 	} else {
@@ -44,6 +46,7 @@ export function FileUpload(props: FileUploadProps) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	const [currentViewing, setCurrentViewing] = useState<File | string | null>(null);
+	const [edited, setEdited] = useState(false);
 	const maxSize = 1024 * 1024 * 25;
 	const fileTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf', 'text/plain', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
 	const fileInputRef = useRef<HTMLInputElement>(null);
@@ -91,6 +94,8 @@ export function FileUpload(props: FileUploadProps) {
 		props.setRenderImageFiles([...props.renderImageFiles, newFile]);
 		props.setNewImages([...props.newImages, newFile]);
 		setIsModalOpen(false);
+		props.setNotChanged(false);
+		setEdited(true);
 	}
 
 	// removes the file from the renderImageFiles and newImages arrays in the parent component
@@ -109,14 +114,35 @@ export function FileUpload(props: FileUploadProps) {
 		props.setRenderImageFiles(newFileList);
 
 		setCurrentViewing(null);
+		props.setNotChanged(false);
+		setEdited(true);
 	}
+
+	function removeAllFile() {
+		props.renderImageFiles.forEach((deletedFile) => {
+			if (props.newImages.includes(deletedFile)) {
+				props.setNewImages(props.newImages.filter(file => file !== deletedFile));
+			} else {
+				props.setDeletedImages([...props.deletedImages, extractObjectKeyForS3Deletion(deletedFile)]);
+			}
+		})
+		props.setRenderImageFiles([]);
+		setEdited(true);
+	}
+
+	useEffect(() => {
+		if (props.clearAll) {
+			removeAllFile();
+		}
+	}, [props.clearAll])
 
 	return (
 		<>
-			<label>{props.label}</label>
+			<label className={edited ? 'unsaved-changes' : ''}>{props.label}</label>
 			<div className="upload-file-field">
 				{props.renderImageFiles.map((item, index) => (<Thumbnail key={index} file={item} index={index} handleNext={() => handleNext(index)} isLoading={props.isLoading}
-					handlePrev={() => handlePrev(index)} handleDelete={() => handleDelete(index)} currentViewing={currentViewing} setCurrentViewing={setCurrentViewing} />))}
+					handlePrev={() => handlePrev(index)} handleDelete={() => handleDelete(index)} currentViewing={currentViewing} setCurrentViewing={setCurrentViewing}
+					isNew={props.newImages.includes(item) ? true : false} />))}
 				<button className={`file-upload-btn ${props.renderImageFiles.length > 0 ? 'expanded' : ''}`} type="button" onClick={handleAddButton}>
 					＋
 				</button>
