@@ -23,11 +23,13 @@ const get = async (query: any) => {
 					SELECT thief_id, 0 as distance
 					FROM ${table} 
 					WHERE CAST(thief_id AS TEXT) = $1
+					GROUP BY thief_id
 				),
 				ExactMatches AS (
 					SELECT thief_id, 0 as distance
 					FROM ${table} 
 					WHERE ${table} ILIKE $2
+					GROUP BY thief_id
 				),
 				SimilarMatches AS (
 						SELECT thief_id, MIN(levenshtein(${table}, $1)) as distance
