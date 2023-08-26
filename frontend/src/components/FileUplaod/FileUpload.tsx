@@ -31,7 +31,7 @@ function sanitize(filename: string): string {
 	return filename.replace(/[^a-zA-Z0-9!_.*()'-]/g, '-');
 }
 
-function extractObjectKeyForS3Deletion(deletedImage: string | File): string {
+export function extractObjectKeyForS3Deletion(deletedImage: string | File): string {
 	if (deletedImage instanceof File) {
 		return deletedImage.name;
 	} else {
@@ -134,8 +134,7 @@ export function FileUpload(props: FileUploadProps) {
 		if (props.clearAll) {
 			removeAllFile();
 		}
-	}, [props.clearAll]);
-
+	}, [props.clearAll])
 
 	return (
 		<>
