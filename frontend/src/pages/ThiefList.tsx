@@ -19,7 +19,7 @@ export interface Thief extends React.HTMLInputElement {
 }
 
 const header = {
-	'ID': { maxWidth: "2rem", minWidth: "2rem" },
+	'ID': {},
 	'Name': { maxWidth: "12rem", minWidth: "12rem" },
 	'Phone': { maxWidth: "6rem", minWidth: "6rem" },
 	'Email': { maxWidth: "14rem", minWidth: "14rem" },
