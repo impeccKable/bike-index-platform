@@ -118,10 +118,6 @@ export function FileUpload(props: FileUploadProps) {
 		setEdited(true);
 	}
 
-	if (props.clearAll) {
-		removeAllFile();
-	}
-
 	function removeAllFile() {
 		props.renderImageFiles.forEach((deletedFile) => {
 			if (props.newImages.includes(deletedFile)) {
@@ -132,8 +128,13 @@ export function FileUpload(props: FileUploadProps) {
 		})
 		props.setRenderImageFiles([]);
 		setEdited(true);
-		props.clearAll = false;
 	}
+
+	useEffect(() => {
+		if (props.clearAll) {
+			removeAllFile();
+		}
+	}, [props.clearAll]);
 
 
 	return (
