@@ -19,7 +19,12 @@ const get = async (query: any) => {
 	const queryForTable = (table: string) => {
 		if (isSearchTextValid) {
 			return `
-				WITH ExactMatches AS (
+				WITH IDMatches AS (
+					SELECT thief_id, 0 as distance
+					FROM ${table} 
+					WHERE CAST(thief_id AS TEXT) = $1
+				),
+				ExactMatches AS (
 					SELECT thief_id, 0 as distance
 					FROM ${table} 
 					WHERE ${table} ILIKE $2
@@ -29,8 +34,11 @@ const get = async (query: any) => {
 						FROM ${table}
 						WHERE levenshtein(${table}, $1) <= 2
 						AND thief_id NOT IN (SELECT thief_id FROM ExactMatches)
+						AND thief_id NOT IN (SELECT thief_id FROM IDMatches)
 						GROUP BY thief_id
 				)
+				SELECT * FROM IDMatches
+				UNION ALL
 				SELECT * FROM ExactMatches 
 				UNION ALL
 				SELECT * FROM SimilarMatches 
@@ -42,6 +50,25 @@ const get = async (query: any) => {
 				GROUP BY thief_id`;
 		}
 	};
+
+	const getScoresForThiefId = async (table: string) => {
+    try {
+        const params = [searchText];
+        const idMatchQuery = `
+            SELECT DISTINCT thief_id
+            FROM ${table}
+						${isSearchTextValid ? `WHERE CAST(thief_id AS TEXT) = $1` : ''}`;
+
+				const result = await db.any(idMatchQuery, params);
+
+        result.forEach((item: any) => {
+                scores.set(item.thief_id, 0);
+        });
+
+    } catch (err) {
+        console.error('Error querying for thief_id', err);
+    }
+};
 
 	const getScores = async (table: string) => {
 		try {
@@ -57,6 +84,8 @@ const get = async (query: any) => {
 
 	if (searchType === "all") {
 		await Promise.all(Object.values(fieldToTable).map(getScores));
+	} else if (searchType === 'thief') {
+		await Promise.all(Object.values(fieldToTable).map(getScoresForThiefId));
 	} else {
 		const table = fieldToTable[searchType];
 		if (!table) {

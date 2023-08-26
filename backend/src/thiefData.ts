@@ -1,14 +1,14 @@
 import { db } from './config';
 
 export const fieldToTable: { [key: string]: string } = {
-	"name":       "name",
-	"email":      "email",
-	"url":        "url",
-	"addr":       "addr",
-	"phone":      "phone",
-	"bikeSerial": "bike_serial",
-	"phrase":     "phrase",
-	"note":       "note",
+	"name":				"name",
+	"email":			"email",
+	"url":				"url",
+	"addr":				"addr",
+	"phone":			"phone",
+	"bikeSerial":	"bike_serial",
+	"phrase":			"phrase",
+	"note":				"note",
 };
 export const fields = Object.keys(fieldToTable);
 export const tables = Object.values(fieldToTable);
