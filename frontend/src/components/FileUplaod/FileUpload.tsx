@@ -136,6 +136,7 @@ export function FileUpload(props: FileUploadProps) {
 		}
 	}, [props.clearAll])
 
+
 	return (
 		<>
 			<label className={edited ? 'unsaved-changes' : ''}>{props.label}</label>
@@ -144,7 +145,7 @@ export function FileUpload(props: FileUploadProps) {
 					handlePrev={() => handlePrev(index)} handleDelete={() => handleDelete(index)} currentViewing={currentViewing} setCurrentViewing={setCurrentViewing}
 					isNew={props.newImages.includes(item) ? true : false} />))}
 				<button className={`file-upload-btn ${props.renderImageFiles.length > 0 ? 'expanded' : ''}`} type="button" onClick={handleAddButton}>
-					＋
+					+
 				</button>
 				<input type="file" onChange={handleSelectFileChange} ref={fileInputRef} />
 			</div>

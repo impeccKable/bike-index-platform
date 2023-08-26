@@ -60,8 +60,11 @@ export function MultiField(props: MultiFieldProps) {
 	if (useRecoilValue(debugState) == true) {
 		console.log("MultiField");
 	}
-	const { label, name, component: Component, onChange, ...rest } = props;
+	const { label, name, component: Component, onChange, disableSubmit, clearAll, ...rest } = props;
 	const [values, setValues] = useState(['']);
+	const [collapsed, setCollapsed] = useState(false);
+	const [edited, setEdited] = useState(false);
+	const [changedIndices, setChangedIndices] = useState<number[]>([]);
 
 	useEffect(() => {
 		if (rest.data) {
@@ -69,14 +72,35 @@ export function MultiField(props: MultiFieldProps) {
 		}
 	}, [rest.data]);
 
+	if (clearAll) {
+		removeAllFields();
+	}
+
+	function DisableParentSubmit (state: boolean) {
+		if (disableSubmit) {
+			disableSubmit(state);
+		}
+	}
+
 	function handleInput(e: any, idx: number) {
+
+		if (!e.target.classList.value.includes('red-bordered')) {
+			e.target.classList.add('red-bordered');
+			setEdited(true);
+			if (!changedIndices.includes(idx)) {
+				setChangedIndices([...changedIndices, idx]);
+			}
+		}
+
 		let newValues = [...values];
 		newValues[idx] = e.target.value;
 		updateValues(newValues);
+		DisableParentSubmit(false);
 	}
 	function addField(idx: number) {
 		let newValues = [...values];
 		newValues.splice(idx + 1, 0, ''); // insert a new empty field
+		setCollapsed(newValues.length > 7);
 		updateValues(newValues);
 	}
 
@@ -86,7 +110,16 @@ export function MultiField(props: MultiFieldProps) {
 		if (newValues.length === 0) {
 			newValues = [''];
 		}
+		setEdited(true);
 		updateValues(newValues);
+		DisableParentSubmit(false);
+	}
+	function removeAllFields() {
+		if (values.length >= 1 && values[0] !== '') {
+			updateValues(['']);
+			DisableParentSubmit(false);
+			setEdited(true)
+		}
 	}
 	function updateValues(newValues: string[]) {
 		setValues(newValues);
@@ -104,20 +137,41 @@ export function MultiField(props: MultiFieldProps) {
 	}
 	return (
 		<>
-			<label>{label}</label>
+			<label className={edited ? 'unsaved-changes' : ''}>{label}</label>
 			<ol className='multi-field'>
+				{collapsed ? 
+				<>
+				<li><button hidden={values.length < 3} id="ExpBtn" type="button" onClick={()=>{setCollapsed(!collapsed)}}>Expand</button></li>
+				<li key={name}>
+						<Component
+							name={name}
+							value={values[0]}
+							className={changedIndices.includes(1) ? 'red-bordered' : ''}
+							onChange={(e: any) => handleInput(e, 0)}
+							{...rest}
+						/>
+						<button type="button" onClick={() => addField(0)}>+</button>
+						<button type="button" onClick={() => removeField(0)}>-</button>
+				</li>
+				<li>{values.length > 1 ? <>• • •</> : <></>}</li>
+				</>
+				:
+				<>
+				<button hidden={values.length < 3} id="ClpBtn" type="button"  onClick={()=>{setCollapsed(!collapsed)}}>Collapse</button>
 				{values.map((value: string, idx: number) => (
 					<li key={idx == 0 ? name : name + idx}>
 						<Component
 							name={idx == 0 ? name : name + idx}
 							value={value}
+							className={changedIndices.includes(idx) ? 'red-bordered' : ''}
 							onChange={(e: any) => handleInput(e, idx)}
 							{...rest}
 						/>
-						<button type="button" onClick={() => addField(idx)}>＋</button>
-						<button type="button" onClick={() => removeField(idx)}>－</button>
+						<button type="button" onClick={() => addField(idx)}>+</button>
+						<button type="button" onClick={() => removeField(idx)}>-</button>
 					</li>
 				))}
+				</>}
 			</ol>
 		</>
 	);

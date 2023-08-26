@@ -267,9 +267,10 @@ nav button:hover {
 	margin: 0 0 0 0.25rem;
 	background-color: #303030;
 	color: #a0a0a0;
-	font-weight: 900;
+	/* font-weight: 900; */
 	user-select: none;
 	outline: none;
+	font-size: 15px;
 }
 .multi-field button:hover,
 .file-upload-btn:hover {
