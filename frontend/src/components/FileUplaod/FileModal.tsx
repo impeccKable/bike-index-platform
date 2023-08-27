@@ -5,6 +5,7 @@ interface FileModalProps {
 	handlePrev: () => void;
 	handleDelete: () => void;
 	icon: string | undefined;
+	fileName?: string;
 }
 
 // component for display image in a single image in a modal
@@ -22,12 +23,16 @@ export function FileModal(props: FileModalProps) {
 		<div className="image-modal">
 			<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
 				rel="stylesheet"></link>
-			<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.12.313/build/pdf.min.js"></script>
+			{/* <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.12.313/build/pdf.min.js"></script> */}
 			<div className="modal" onClick={props.handleClose}>
 				<div className="modal-content">
 					<span title="Close" className="modal-btn close" onClick={props.handleClose}>&#215;</span>
-					{/* {props.isPdf ? <img src={props.imageUrl} width="640" height="480" type="application/pdf" /> : <img src={props.imageUrl} alt={`Image $eprops.index}`} onClick={handleClickImage} />} */}
-					<img src={props.icon !== undefined ? props.icon : props.imageUrl} alt={`Image $eprops.index}`} onClick={handleClickImage} />
+						<div>
+							{props.icon !== undefined && (
+								<span className="overlay-text">{props.fileName}</span>
+							)}
+							<img src={props.icon !== undefined ? props.icon : props.imageUrl} alt={`Image $eprops.index}`} onClick={handleClickImage} />
+						</div>
 				</div>
 			</div>
 			<div className="image-modal-btns">
