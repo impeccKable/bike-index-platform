@@ -185,10 +185,23 @@ nav button:hover {
 
 /* ============= Custom ============= */
 
+.btn-danger {
+	background-color: #690000;
+}
+
+.btn-danger:hover {
+	background-color: #8b0000;
+}
+
+#ExpBtn, 
+#ClpBtn {
+	width: 100%;
+	margin-left: 0;
+}
+
 .text-window .edit {
 	display: flex;
 	justify-content: center;
-	margin: auto;
 	max-width: 40rem;
 }
 .text-window .edit textarea {
@@ -197,7 +210,7 @@ nav button:hover {
 }
 .text-window .edit .fancy-button {
 	margin: 0px;
-	font-size: 1.5rem;
+	font-size: .9rem;
 	padding: 0.5rem;
 	border-radius: 0;
 	border-right-color: #3f7dc9;
@@ -218,6 +231,30 @@ nav button:hover {
 }
 .text-window .modal-content button {
 	margin-top: 1rem;
+}
+
+.red-bordered {
+	border-style: solid;
+	border-width: thin;
+	border-color: #ff0c00bd;
+}
+
+.unsaved-changes {
+	display: flex;
+	align-items: center;
+	color: darkred;
+	font-weight: bold;
+}
+
+.warning-modal .modal-content {
+	display: block;
+	padding-top: 0;
+	background-color: #303030;
+	font-weight: 400;
+}
+
+.warning-modal .modal-btn {
+	background-color: #690000;
 }
 
 
