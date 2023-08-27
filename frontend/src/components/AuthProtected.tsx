@@ -6,19 +6,8 @@ import { httpClient } from "../services/HttpClient";
 
 export function AuthProtected({ children }: any) {
 	const { user, loading }: any = useAuth();
-	let response = null;
 
-	useEffect(() => {
-		httpClient.post("/token").then((res)=>{
-			response = res;
-			console.log(response);
-			//Possibly change to !==200
-			if(response.status===404){
-				<Navigate to="/logout" replace/>;
-			}
-		}).catch((err:any) =>
-			{console.log(err);}
-		);
+	useEffect(() => {	
 		console.log(user);
 	}, [loading]);
 

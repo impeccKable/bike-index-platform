@@ -8,12 +8,18 @@ import { debugState } from '../services/Recoil';
 import LoadingIcon from '../components/LoadingIcon';
 import DebugLogs from '../services/DebugLogs';
 import TextWindow from '../components/TextWindow';
+import { useAuth } from '../services/AuthProvider';
 
 //Add dynamically displayed password field to form to re-authenticate for email changes
 //Add admin view and regular view
+//[x] Redirect to user page if user is not admin and is not viewing their own page
+//[ ] Only admin can change role, approved, and banned
 //Add success and failure dialogs
-//Sign-up page should require all fields or submit ""
-
+//Move 128-131 functionality to backend
+// -More specifically, the backend should check the user token for admin status or readWrite
+// -If admin, return any user, if readWrite, return user info for their own ID and change url params to match
+//make note of serviceProvider.json in readme install notes
+//make note of .env in readme install notes
 
 export default function UserEdit() {
 	const [isLoadingInit, setIsLoadingInit] = useState(true);
@@ -22,6 +28,8 @@ export default function UserEdit() {
 	const [selectedRole, setSelectedRole] = useState('readWrite');
 	const [selectedApproved, setSelectedApproved] = useState('true');
 	const [selectedBanned, setSelectedBanned] = useState('false');
+	const {user} = useAuth();
+	const [admin, setAdmin] = useState(user?.bikeIndex.role === 'admin');
 	const debug = useRecoilValue(debugState);
 	const url = new URL(window.location.href);
 	const pageName = "User Edit";
@@ -121,11 +129,16 @@ export default function UserEdit() {
 		setSelectedBanned(userInfo.banned.toString());
 		setIsLoadingInit(false);
 		setIsLoadingSubmit(false);
-		DebugLogs('User get response', res.data.data, debug);
+		DebugLogs('User get response', res.data, debug);
 	}
 	useEffect(() => {
 		DebugLogs('UserEdit Component', '', debug);
+		if(user===null){ return; }
 		let userId = url.searchParams.get('userId');
+		// If user is not an admin and is not viewing their own page, redirect to their own page
+		if (user.bikeIndex.role!=='admin'&&userId!==user.firebase.uid) {
+			window.location.href = '/user?userId=' + user.firebase.uid;
+		}
 		if (userId === 'new') {
 			setIsLoadingInit(false);
 			userInfo.userId = 'new';
@@ -134,7 +147,13 @@ export default function UserEdit() {
 		} else if (userId) {
 			async_get(userId);
 		}
-	}, []);
+		
+	}, [user]);
+
+	useEffect(() => {
+		console.log(user?.bikeIndex.role);
+		setAdmin(user?.bikeIndex.role === 'admin');
+	}, [user]);
 
 	let isLoading = isLoadingInit || isLoadingSubmit;
 	return (
@@ -143,47 +162,48 @@ export default function UserEdit() {
 			<main>
 				<div className="title">
 					<h1>{pageName}<LoadingIcon when={isLoadingInit} delay={1} /></h1>
-					<button onClick={handleHisotryClick}>History</button>
+					{admin&&<button onClick={handleHisotryClick}>History</button>}
 				</div>
-				<TextWindow pageName={pageName} />
+				<TextWindow pageName={pageName}/>
 				<Form onSubmit={handleFormSubmit}>
-					<FormInput label="User UID" name="userid" value={userInfo.userid} disabled={true} />
-					<FormInput label="Email" name="email" value={userInfo.email} disabled={true} />
-					<FormInput label="First Name" name="first_name" defaultValue={userInfo.first_name} disabled={isLoading} />
-					<FormInput label="Last Name" name="last_name" defaultValue={userInfo.last_name} disabled={isLoading} />
-					<FormInput label="Title" name="title" defaultValue={userInfo.title} disabled={isLoading} />
-					<FormInput label="Organization" name="org" defaultValue={userInfo.org} disabled={isLoading} />
-					<FormInput label="Phone" name="phone" defaultValue={userInfo.phone} disabled={isLoading} type="phone" />
-					<FormInput label="Role" name="role" value={selectedRole} disabled={isLoading} type="select" onChange={(event: any) => {
-						userInfo.role = event.target[event.target.selectedIndex].value;
-						setSelectedRole(event.target[event.target.selectedIndex].value);
-					}}>
-						<option value="admin">     Admin      </option>
-						<option value="readWrite"> readWrite  </option>
-						<option value="readOnly">  readOnly   </option>
-					</FormInput>
-					<FormInput label="Approved" name="approved" value={selectedApproved} disabled={isLoading} type="select" onChange={(event: any) => {
-						event.target[event.target.selectedIndex].value === "true" ?
-							userInfo.approved = true :
+					<FormInput  label="User UID"       name="userid"     value={userInfo.userid}     			disabled={true}/>
+					<FormInput  label="Email"          name="email"      value={userInfo.email}      			disabled={true}      />
+					<FormInput  label="First Name"     name="first_name" defaultValue={userInfo.first_name} 			disabled={isLoading} />
+					<FormInput  label="Last Name"      name="last_name"  defaultValue={userInfo.last_name}  			disabled={isLoading} />
+					<FormInput  label="Title"          name="title"      defaultValue={userInfo.title}      			disabled={isLoading} />
+					<FormInput  label="Organization"   name="org"        defaultValue={userInfo.org}        			disabled={isLoading} />
+					<FormInput  label="Phone"          name="phone"      defaultValue={userInfo.phone}      			disabled={isLoading} type="phone"/>
+					<FormInput  label="Role"           name="role"       value={selectedRole}       disabled={isLoading||!admin} type="select" onChange={(event: any) => {
+							userInfo.role = event.target[event.target.selectedIndex].value;
+							setSelectedRole(event.target[event.target.selectedIndex].value);
+						}}>
+                    	<option value="admin">     Admin      </option>
+                    	<option value="readWrite"> readWrite  </option>
+                    	<option value="readOnly">  readOnly   </option>
+                	</FormInput>
+					<FormInput  label="Approved"       name="approved"   value={selectedApproved}   disabled={isLoading||!admin} type="select" onChange={(event: any) => {
+							event.target[event.target.selectedIndex].value === "true" ?
+							userInfo.approved = true:
 							userInfo.approved = false;
-						setSelectedApproved(event.target[event.target.selectedIndex].value);
-					}}>
-						<option value="true">      Approved   </option>
-						<option value="false">     Unapproved </option>
-					</FormInput>
-					<FormInput label="Banned" name="banned" value={selectedBanned} disabled={isLoading} type="select" onChange={(event: any) => {
-						event.target[event.target.selectedIndex].value === "true" ?
+							setSelectedApproved(event.target[event.target.selectedIndex].value);
+						}}>
+                    	<option value="true">      Approved   </option>
+                    	<option value="false">     Unapproved </option>
+                	</FormInput>
+					<FormInput  label="Banned"         name="banned"     value={selectedBanned}     disabled={isLoading||!admin} type="select" onChange={(event: any) => {
+							event.target[event.target.selectedIndex].value === "true" ?
 							userInfo.banned = true :
 							userInfo.banned = false;
-						setSelectedBanned(event.target[event.target.selectedIndex].value);
-					}}>
-						<option value="true">      Banned   </option>
-						<option value="false">     Unbanned </option>
-					</FormInput>
-					<div className="form-btns">
-						<LinkButton type="button" to="back">Back</LinkButton>
+							setSelectedBanned(event.target[event.target.selectedIndex].value);
+						}}>
+                    	<option value="true">      Banned   </option>
+                    	<option value="false">     Unbanned </option>
+                	</FormInput>
+    				<div className="form-btns">
+						{admin?<LinkButton type="button" to="back">Back</LinkButton>:
+						<LinkButton type="button" to="/thieves">Back</LinkButton>}
 						<FormButton type="submit" disabled={isLoading}>Submit</FormButton>
-						<LoadingIcon when={isLoadingSubmit} style={{ margin: 0 }} />
+						<LoadingIcon when={isLoadingSubmit} style={{margin: 0}}/>
 					</div>
 					{wasSubmitted && <div className="form-btns">Submitted!</div>}
 				</Form>
