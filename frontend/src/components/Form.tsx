@@ -137,7 +137,7 @@ export function MultiField(props: MultiFieldProps) {
 	}
 	return (
 		<>
-			<label className={edited ? 'unsaved-changes' : ''}>{label}</label>
+			<label>{label}</label>
 			<ol className='multi-field'>
 				{collapsed ? 
 				<>
@@ -150,8 +150,8 @@ export function MultiField(props: MultiFieldProps) {
 							onChange={(e: any) => handleInput(e, 0)}
 							{...rest}
 						/>
-						<button type="button" onClick={() => addField(0)}>＋</button>
-						<button type="button" onClick={() => removeField(0)}>－</button>
+						<button type="button" onClick={() => addField(0)}>+</button>
+						<button type="button" onClick={() => removeField(0)}>-</button>
 				</li>
 				<li>{values.length > 1 ? <>• • •</> : <></>}</li>
 				</>
@@ -167,8 +167,8 @@ export function MultiField(props: MultiFieldProps) {
 							onChange={(e: any) => handleInput(e, idx)}
 							{...rest}
 						/>
-						<button type="button" onClick={() => addField(idx)}>＋</button>
-						<button type="button" onClick={() => removeField(idx)}>－</button>
+						<button type="button" onClick={() => addField(idx)}>+</button>
+						<button type="button" onClick={() => removeField(idx)}>-</button>
 					</li>
 				))}
 				</>}

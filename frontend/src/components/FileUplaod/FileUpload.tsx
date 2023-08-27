@@ -31,7 +31,7 @@ function sanitize(filename: string): string {
 	return filename.replace(/[^a-zA-Z0-9!_.*()'-]/g, '-');
 }
 
-function extractObjectKeyForS3Deletion(deletedImage: string | File): string {
+export function extractObjectKeyForS3Deletion(deletedImage: string | File): string {
 	if (deletedImage instanceof File) {
 		return deletedImage.name;
 	} else {
@@ -134,7 +134,7 @@ export function FileUpload(props: FileUploadProps) {
 		if (props.clearAll) {
 			removeAllFile();
 		}
-	}, [props.clearAll]);
+	}, [props.clearAll])
 
 
 	return (
@@ -145,7 +145,7 @@ export function FileUpload(props: FileUploadProps) {
 					handlePrev={() => handlePrev(index)} handleDelete={() => handleDelete(index)} currentViewing={currentViewing} setCurrentViewing={setCurrentViewing}
 					isNew={props.newImages.includes(item) ? true : false} />))}
 				<button className={`file-upload-btn ${props.renderImageFiles.length > 0 ? 'expanded' : ''}`} type="button" onClick={handleAddButton}>
-					＋
+					+
 				</button>
 				<input type="file" onChange={handleSelectFileChange} ref={fileInputRef} />
 			</div>
