@@ -137,7 +137,7 @@ export function MultiField(props: MultiFieldProps) {
 	}
 	return (
 		<>
-			<label>{label}</label>
+			<label className={edited ? 'unsaved-changes' : ''}>{label}</label>
 			<ol className='multi-field'>
 				{collapsed ? 
 				<>
