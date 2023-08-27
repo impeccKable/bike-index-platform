@@ -43,31 +43,57 @@ export default function Signup() {
 					.catch((err: any) => {
 						DebugLogs('Sign up post error', err, debug)
 						auth?.handleDelete(user);
+						throw new Error(err);
 					});
 			}
 		};
-		f();
-
+		
+		try{
+			f();
+		} catch (err) {
+			errorHandler(err);			
+		}
+		
 		setSubmitted(true);
+		return false;
 	}
+
+	function handleEnterKey(e){
+		if (e.key === "Enter"){
+			e.preventDefault();
+			document.getElementById("sign-up-submit").click();
+			return(false);
+		}
+	}
+
+	function errorHandler(err:any) {
+		console.log(err);
+		
+	}
+	
+	
+
+
+
 	return (
 		<div className="notecard signup-page">
 			<h1>Sign Up</h1>
 			<div className="card">
 				<Form onSubmit={handleFormSubmit}>
-					<FormInput label="First name"      name="first"    required placeholder="John"  />
-					<FormInput label="Last name"       name="last"     required placeholder="Doe"   />
-					<FormInput label="Title"           name="title"             placeholder="Mayor" />
-					<FormInput label="Organization"    name="org"                                   />
-					<FormInput label="Phone"           name="phone"             placeholder="+1 (222) 333-4444"   type="phone" />
-					<FormInput label="Email"           name="email"    required placeholder="email@example.com" type="email" />
-					<FormInput label="Password"        name="password" required type="password"     />
-					<FormInput label="Verify password" name="verify"   required type="password"     />
+					<FormInput label="First name"      name="first"    required placeholder="John"  onKeyPress={handleEnterKey}/>
+					<FormInput label="Last name"       name="last"     required placeholder="Doe"   onKeyPress={handleEnterKey}/>
+					<FormInput label="Title"           name="title"             placeholder="Mayor" onKeyPress={handleEnterKey}/>
+					<FormInput label="Organization"    name="org"                                   onKeyPress={handleEnterKey}/>
+					<FormInput label="Phone"           name="phone"             placeholder="+1 (222) 333-4444"   type="phone" onKeyPress={handleEnterKey}/>
+					<FormInput label="Email"           name="email"    required placeholder="email@example.com" type="email" onKeyPress={handleEnterKey}/>
+					<FormInput label="Password"        name="password" required type="password"     onKeyPress={handleEnterKey}/>
+					<FormInput label="Verify password" name="verify"   required type="password"     onKeyPress={handleEnterKey}/>
 					<div className="form-btns">
 						<LinkButton to="..">Back</LinkButton>
-						<FormButton type="submit">Submit</FormButton>
+						<FormButton type="submit" id="sign-up-submit">Submit</FormButton>
 					</div>
 				</Form>
+				<div id="sign-up-alert"/>
 				{submitted && (
 					<div>
 						<p>
