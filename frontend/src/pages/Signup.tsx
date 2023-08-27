@@ -21,10 +21,12 @@ export default function Signup() {
 		setPasswordMismatch(false);
 		if (e.dataDict.password !== e.dataDict.verify) {
 			setPasswordMismatch(true);
+			document.getElementById("sign-up-alert").innerHTML = "Passwords did not match, please re-enter passwords";
 			return;
 		}
 
 		async function f() {
+			try{
 			const user = await auth?.handleSignUp(
 				e.dataDict.email,
 				e.dataDict.password
@@ -46,15 +48,16 @@ export default function Signup() {
 						throw new Error(err);
 					});
 			}
+			setSubmitted(true);
+			document.getElementById("sign-up-alert").innerHTML = 
+				`Your request to sign up has been submitted!
+				Please check your inbox for a verification email.
+				We will review your application and get back to you.`;
+			} catch (error:any) {
+				errorHandler(error);
+			}
 		};
-		
-		try{
-			f();
-		} catch (err) {
-			errorHandler(err);			
-		}
-		
-		setSubmitted(true);
+		f();		
 		return false;
 	}
 
@@ -67,13 +70,13 @@ export default function Signup() {
 	}
 
 	function errorHandler(err:any) {
-		console.log(err);
-		
+		console.log(err.message);
+		if (err.message.includes("email-already-in-use")) {
+			document.getElementById("sign-up-alert").innerHTML = "Email already in use, please use a different email";
+		} else if (err.message.includes("weak-password")) {
+			document.getElementById("sign-up-alert").innerHTML = "Password is too weak, please use a stronger password";
+		} 
 	}
-	
-	
-
-
 
 	return (
 		<div className="notecard signup-page">
@@ -94,18 +97,6 @@ export default function Signup() {
 					</div>
 				</Form>
 				<div id="sign-up-alert"/>
-				{submitted && (
-					<div>
-						<p>
-						Your request to sign up has been submitted!
-						Please check your inbox for a verification email.
-						We will review your application and get back to you.
-						</p>
-					</div>
-				)}
-				{passwordMismatch && (
-					<div><p>Passwords did not match, please try again</p></div>
-				)}
 			</div>
 		</div>
 	);

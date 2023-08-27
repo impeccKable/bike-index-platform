@@ -144,6 +144,7 @@ export function AuthProvider({ children }: any) {
 			return userData.user;
 		} catch (err) {
 			console.error(err);
+			throw new Error(err);
 		}
 		return '';
 	};
