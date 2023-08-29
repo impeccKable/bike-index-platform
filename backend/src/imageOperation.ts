@@ -5,7 +5,7 @@ import {
 	ListObjectsCommand,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { config, s3Client } from './config';
+import { db, config, s3Client } from './config';
 import { logHistory } from './routes/history';
 
 
@@ -62,6 +62,7 @@ export async function uploadImage(uploadedFiles: Express.Multer.File[], thiefId:
 		try {
 			await s3Client.send(new PutObjectCommand(params));
 			console.log(`Uploaded ${key} to ${config.bucketName}`);
+			db.none(`INSERT INTO file VALUES ($1, $2)`, [thiefId, key]);
 		} catch (err) {
 			throw new ImageUploadError(`Error uploading ${key} to S3: ${err}`);
 		}
@@ -89,6 +90,7 @@ export async function deleteImage(deletedFile: string[], thiefId: number, uid: s
 		try {
 			await s3Client.send(new DeleteObjectCommand(params));
 			console.log(`Deleting object ${filename} from bucket ${config.bucketName}`);
+			db.none(`DELETE FROM file WHERE thief_id = $1 AND file = $2`, [thiefId, filename]);
 		} catch (err) {
 			throw new ImageDeletionError(`Error deleting object from s3: ${err}`);
 		}
