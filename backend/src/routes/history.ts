@@ -42,7 +42,7 @@ const get = async (query: any) => {
 
 	const queryWithUserTable = `
 			SELECT
-				h.id,
+				h.history_id,
 				TO_CHAR(h.datetime, 'YYYY-MM-DD HH24:MI:SS') as datetime,
 				u.first_name || ' ' || u.last_name as user_name,
 				h.action,
@@ -53,21 +53,9 @@ const get = async (query: any) => {
 			FROM history h
 			JOIN bi_user u ON h.user_uid = u.user_uid`;
 
-	const queryWithNoUserTable = `
-			SELECT
-				history_id,
-				TO_CHAR(datetime, 'YYYY-MM-DD HH24:MI:SS') as datetime,
-				user_uid as user_name,
-				action,
-				changed_thief_id,
-				changed_user_uid,
-				data_type,
-				data
-			FROM history`;
-
 	const whereClause = (thiefId || userId) ? `WHERE ${whereForId}` : '';
 	const orderByAndLimit = `ORDER BY datetime DESC LIMIT $1 OFFSET $2`;
-	const completeQuery = `${queryWithNoUserTable} ${whereClause} ${orderByAndLimit}`;
+	const completeQuery = `${queryWithUserTable} ${whereClause} ${orderByAndLimit}`;
 
 	let countBase = 'SELECT COUNT(*) FROM history';
 	const countParams = [];

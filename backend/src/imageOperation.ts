@@ -47,10 +47,10 @@ const s3ParamsBase = {
 }
 
 // upload images to S3 bucket
-export async function uploadImage(uploadedFiles: Express.Multer.File[], thiefId: number, action: string) {
+export async function uploadImage(uploadedFiles: Express.Multer.File[], thiefId: number, action: string, uid: string) {
 	const promises = uploadedFiles.map(async (file) => {
 		const folderName = getFolderName(file.mimetype);
-		const key = `thievs/${thiefId}/${folderName}/${file.originalname}`;
+		const key = `thieves/${thiefId}/${folderName}/${file.originalname}`;
 		const params = {
 			...s3ParamsBase,
 			Key: key,
@@ -67,7 +67,7 @@ export async function uploadImage(uploadedFiles: Express.Multer.File[], thiefId:
 		}
 
 		try {
-			await logHistory({ user_uid: 'someUser', changed_thief_id: thiefId, data_type: 'file', data: `${file.originalname}` }, action);
+			await logHistory({ user_uid: uid, changed_thief_id: thiefId, data_type: 'file', data: `${file.originalname}` }, action);
 		} catch (err) {
 			console.log('Error while logging history:', err);
 			throw err;
@@ -78,7 +78,7 @@ export async function uploadImage(uploadedFiles: Express.Multer.File[], thiefId:
 }
 
 // delete images from S3 bucket
-export async function deleteImage(deletedFile: string[], thiefId: number) {
+export async function deleteImage(deletedFile: string[], thiefId: number, uid: string) {
 	const promises = deletedFile.map(async filename => {
 		const key = filename;
 		const params = {
@@ -94,7 +94,7 @@ export async function deleteImage(deletedFile: string[], thiefId: number) {
 		}
 
 		try {
-			await logHistory({ user_uid: 'someUser', changed_thief_id: thiefId, data_type: 'file', data: `${filename}` }, 'delete');
+			await logHistory({ user_uid: uid, changed_thief_id: thiefId, data_type: 'file', data: `${filename}` }, 'delete');
 		} catch (err) {
 			console.log('Error while logging history:', err);
 			throw err;
@@ -107,7 +107,7 @@ export async function deleteImage(deletedFile: string[], thiefId: number) {
 
 // get images from S3 bucket
 export async function getFile(thiefId: string): Promise<string[]> {
-	const prefix = `thievs/${thiefId}/`;
+	const prefix = `thieves/${thiefId}/`;
 
 	const params = {
 		...s3ParamsBase,
