@@ -9,23 +9,23 @@ import { db, config, s3Client } from './config';
 import { logHistory } from './routes/history';
 
 
-// custom error class for image errors
-export class ImageUploadError extends Error {
+// custom error class for file errors
+export class FileUploadError extends Error {
 	constructor(message: string) {
 		super(message);
-		this.name = 'ImageUploadError';
+		this.name = 'FileUploadError';
 	}
 }
-export class ImageDeletionError extends Error {
+export class FileDeletionError extends Error {
 	constructor(message: string) {
 		super(message);
-		this.name = 'ImageDeletionError';
+		this.name = 'FileDeletionError';
 	}
 }
-export class ImageGetError extends Error {
+export class FileGetError extends Error {
 	constructor(message: string) {
 		super(message);
-		this.name = 'ImageGetError';
+		this.name = 'FileGetError';
 	}
 }
 
@@ -46,8 +46,8 @@ const s3ParamsBase = {
 	Bucket: config.bucketName,
 }
 
-// upload images to S3 bucket
-export async function uploadImage(uploadedFiles: Express.Multer.File[], thiefId: number, action: string, uid: string) {
+// upload files to S3 bucket
+export async function uploadFile(uploadedFiles: Express.Multer.File[], thiefId: number, action: string, uid: string) {
 	const promises = uploadedFiles.map(async (file) => {
 		const folderName = getFolderName(file.mimetype);
 		const key = `thieves/${thiefId}/${folderName}/${file.originalname}`;
@@ -60,11 +60,12 @@ export async function uploadImage(uploadedFiles: Express.Multer.File[], thiefId:
 		};
 
 		try {
-			await s3Client.send(new PutObjectCommand(params));
+			const response = await s3Client.send(new PutObjectCommand(params));
 			console.log(`Uploaded ${key} to ${config.bucketName}`);
+			console.log(`AWS S3 Response`, JSON.stringify(response, null, 2));
 			db.none(`INSERT INTO file VALUES ($1, $2)`, [thiefId, key]);
 		} catch (err) {
-			throw new ImageUploadError(`Error uploading ${key} to S3: ${err}`);
+			throw new FileUploadError(`Error uploading ${key} to S3: ${err}`);
 		}
 
 		try {
@@ -78,8 +79,8 @@ export async function uploadImage(uploadedFiles: Express.Multer.File[], thiefId:
 	await Promise.all(promises);
 }
 
-// delete images from S3 bucket
-export async function deleteImage(deletedFile: string[], thiefId: number, uid: string) {
+// delete files from S3 bucket
+export async function deleteFile(deletedFile: string[], thiefId: number, uid: string) {
 	const promises = deletedFile.map(async filename => {
 		const key = filename;
 		const params = {
@@ -88,11 +89,12 @@ export async function deleteImage(deletedFile: string[], thiefId: number, uid: s
 		};
 
 		try {
-			await s3Client.send(new DeleteObjectCommand(params));
+			const response = await s3Client.send(new DeleteObjectCommand(params));
+			console.log(`AWS S3 Response`, JSON.stringify(response, null, 2));
 			console.log(`Deleting object ${filename} from bucket ${config.bucketName}`);
 			db.none(`DELETE FROM file WHERE thief_id = $1 AND file = $2`, [thiefId, filename]);
 		} catch (err) {
-			throw new ImageDeletionError(`Error deleting object from s3: ${err}`);
+			throw new FileDeletionError(`Error deleting object from s3: ${err}`);
 		}
 
 		try {
@@ -107,7 +109,7 @@ export async function deleteImage(deletedFile: string[], thiefId: number, uid: s
 	await Promise.all(promises);
 }
 
-// get images from S3 bucket
+// get files from S3 bucket
 export async function getFile(thiefId: string): Promise<string[]> {
 	const prefix = `thieves/${thiefId}/`;
 
@@ -121,7 +123,7 @@ export async function getFile(thiefId: string): Promise<string[]> {
 		// get the meta data from s3 bucket to extract keys to generate temporary urls
 		response = await s3Client.send(new ListObjectsCommand(params));
 	} catch (err) {
-		throw new ImageGetError(`Error getting object list from s3: ${err}`);
+		throw new FileGetError(`Error getting object list from s3: ${err}`);
 	}
 
 	// extract keys from response
@@ -142,7 +144,7 @@ async function getTempFileUrl(keys: (string | undefined)[]): Promise<string[]> {
 		try {
 			return await getSignedUrl(s3Client, new GetObjectCommand(params), { expiresIn: 3600 });
 		} catch (err) {
-			throw new ImageGetError(`Error getting signed URL for key ${key}: ${err}`);
+			throw new FileGetError(`Error getting signed URL for key ${key}: ${err}`);
 		}
 	})
 
