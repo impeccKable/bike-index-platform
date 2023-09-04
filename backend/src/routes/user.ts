@@ -1,6 +1,7 @@
 import express from "express";
 import { GetAllUsers, GetUserByID, GetUserBySearchType, PutUserInfo } from "../userData";
 import multer from 'multer';
+import { validToken } from "./token";
 
 const upload = multer();
 
@@ -30,7 +31,8 @@ router.get("/", async (req: express.Request, res: express.Response) => {
 
 router.put("/", async (req: express.Request, res: express.Response) => {
 	try {
-		return res.json(await PutUserInfo(req.body));
+		const uid: string = await validToken(req);
+		return res.json(await PutUserInfo(req.body, uid));
 	} catch (exc) {
 		console.log(`[ backend.src.user.ts.put('/') Error Attempting To Put UserInfo. Message: ${exc} ]`)
 	}

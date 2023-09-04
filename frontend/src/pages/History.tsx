@@ -5,9 +5,10 @@ import DebugLogs from "../services/DebugLogs"
 import { useRecoilValue } from 'recoil';
 import { debugState } from '../services/Recoil';
 import LinkTable from '../components/LinkTable';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import TextWindow from '../components/TextWindow';
 import LoadingIcon from '../components/LoadingIcon';
+import { useAuth } from '../services/AuthProvider';
 
 type History = {
 	history_id: number;
@@ -24,10 +25,10 @@ const header = {
 	'ID': {},
 	'Time': {},
 	'User': { maxWidth: "6rem", minWidth: "6rem" },
-	'Action': { maxWidth: "3rem", minWidth: "3rem" },
+	'Action': {},
 	'Changed Thief': { maxWidth: "4rem", minWidth: "4rem" },
-	'Changed User': { maxWidth: "4rem", minWidth: "4rem" },
-	'Type': { maxWidth: "4rem", minWidth: "4rem" },
+	'Changed User': {},
+	'Type': { maxWidth: "5rem", minWidth: "5rem" },
 	'Data': {},
 }
 
@@ -38,12 +39,17 @@ export default function History() {
 	const [userId, setUserId] = useState<string | null>(null);
 	const [pagemeta, setpagemeta] = useState({ totalRows: 0, totalPages: 0 });
 	const [isLoading, setIsLoading] = useState(true);
+	const { user } = useAuth();
 	const pageName = "History Log";
 	const debug = useRecoilValue(debugState);
 	const location = useLocation();
-
+	const navigate = useNavigate();
 
 	useEffect(() => {
+        if(!user) return;
+        if(user?.bikeIndex.role !== "admin") {
+            navigate(-1);            
+        }
 		const queryParams = new URLSearchParams(location.search);
 		const thiefId = queryParams.get('thiefId');
 		const userId = queryParams.get('userId');

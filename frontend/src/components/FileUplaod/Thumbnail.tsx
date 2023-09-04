@@ -4,11 +4,13 @@ import pdfIcon from '../../assets/pdf.png';
 import docIcon from '../../assets/doc.png';
 import txtIco from '../../assets/txt.png';
 import xlsIcon from '../../assets/xls.png';
+import { extractObjectKeyForS3Deletion } from './FileUpload';
 
 
 interface ThumbnailProps {
 	file: string | File;
 	index: number;
+	isNew?: boolean;
 	isLoading: boolean;
 	handleNext: () => void;
 	handlePrev: () => void;
@@ -45,18 +47,28 @@ function getIconForFileType(file: string | File): string | undefined {
 	}
 }
 
+function extractFileName(fileName: string): string {
+	const parts = fileName.split('/');
+	let name = parts[parts.length - 1];
+	const extension = name.split('.').pop();
+	name = name.replace(/-[^-]*$/, '');
+  return `${name}.${extension}`;
+}
 
 // this component is responsible for displaying a single thumbnail image
 // and also takes care of displaying the ImageModal when a thumbnail is clicked
 export function Thumbnail(props: ThumbnailProps) {
 	const [imageUrl, setImageUrl] = useState('');
 	const [icon, setIcon] = useState<string | undefined>(undefined);
+	const [fileName, setFileName] = useState('');
 
 	useEffect(() => {
 		if (typeof props.file === 'string') {
 			setImageUrl(props.file);
 			setIcon(getIconForFileType(props.file))
+			setFileName(extractFileName(extractObjectKeyForS3Deletion(props.file)));
 		} else {
+			setFileName(extractFileName(props.file.name));
 			const createdUrl = URL.createObjectURL(props.file);
 			setImageUrl(createdUrl);
 			setIcon(getIconForFileType(props.file))
@@ -81,7 +93,7 @@ export function Thumbnail(props: ThumbnailProps) {
 	return (
 		<div>
 			<img
-				className="thumbnail"
+				className={`thumbnail ${props.isNew ? ' red-bordered' : ''}`}
 				key={props.index}
 				src={icon !== undefined ? icon : imageUrl}
 				onClick={handleImageClick}
@@ -94,6 +106,7 @@ export function Thumbnail(props: ThumbnailProps) {
 					handlePrev={props.handlePrev}
 					handleDelete={props.handleDelete}
 					icon={icon}
+					fileName={fileName}
 				/>
 			)}
 		</div>

@@ -17,6 +17,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { httpClient } from './HttpClient';
 import { useRecoilValue} from 'recoil';
 import { debugState, isAdmin } from '../services/Recoil';
+import { devState } from '../services/Recoil';
 import { useNavigate } from 'react-router-dom';
 
 const AuthContext = React.createContext<AuthContextProps | null>(null);
@@ -56,6 +57,7 @@ export function AuthProvider({ children }: any) {
 		console.log('AuthProvider');
 	}
 
+	//Bailey, C. (2023, June 7th) Doggr source code (Version 1.0.0) [Source code].
 	async function updateAxios(token: string) {
 		console.log(`token: ...${token.slice(-10)}`);
 		httpClient.interceptors.request.use(
@@ -94,12 +96,14 @@ export function AuthProvider({ children }: any) {
 		}
 
 		await updateAxios(user.firebase.stsTokenManager.accessToken);
-		httpClient.post('/token', {}).then((res: any) => {
-			if (res.status !== 200) {
-				handleLogout();
-			}
+		httpClient.post('/token', {})
+			.then((res: any) => {
+			}).catch((err: any) => {
+				console.log(err);
+				if (err.response.status !== 200) {
+					handleLogout();
+				}
 		});
-
 	};
 
 	function retrieveUser() {
@@ -140,6 +144,7 @@ export function AuthProvider({ children }: any) {
 			return userData.user;
 		} catch (err) {
 			console.error(err);
+			throw new Error(err);
 		}
 		return '';
 	};
