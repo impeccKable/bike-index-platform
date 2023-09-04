@@ -17,6 +17,7 @@ import DebugLogs from '../services/DebugLogs';
 import TextWindow from '../components/TextWindow';
 import { useAuth } from '../services/AuthProvider';
 import Modal from '../components/Modal';
+import { AxiosError } from 'axios';
 
 
 export default function ThiefEdit() {
@@ -35,6 +36,7 @@ export default function ThiefEdit() {
 	const [isAdmin, setIsAdmin] = useState(JSON.parse(localStorage.getItem("user")??"")?.bikeIndex?.role?.toString() === 'admin' ?? false);
 	const [thiefId, setThiefId] = useState('');
 	const [mergeDisabled, setMergeDisabled] = useState(true);
+	const [submissionFailed, setSubmissionFailed] = useState(false);
 	const url = new URL(window.location.href);
 	const pageName = "Thief Edit";
 	const navigate = useNavigate();
@@ -93,9 +95,20 @@ export default function ThiefEdit() {
 		}
 
 		const res = await httpClient.put('/thief', formData)
-			.catch(err => {
-				DebugLogs('Thief put error', err.message, debug);
+			.catch((err: AxiosError) => {
+				if (err.response) {
+					DebugLogs('Thief put error: Server Response', err.response.data, debug);
+				} else if (err.request) {
+					DebugLogs('Thief put error: No Response', err.request, debug);
+				} else {
+					DebugLogs('Thief put error: Request Setup Error', err.message, debug);
+				}
+				setIsLoadingInit(false);
+				setIsLoadingSubmit(false);
+				setSubmissionFailed(true);
 			});
+
+			console.log('theif put', res)
 
 		if (res) {
 			if (thiefInfo.thiefId === 'new') {
@@ -260,7 +273,8 @@ export default function ThiefEdit() {
 						<FormButton type="submit" disabled={isLoading || notChanged}>Submit</FormButton>
 						<LoadingIcon when={isLoadingSubmit} style={{ margin: 0 }} />
 					</div>
-					{wasSubmitted && <div className="form-btns">Submitted!</div>}
+					{/* {wasSubmitted && <div className="form-btns">Submitted!</div>} */}
+					{submissionFailed && <div className="form-btns" style={{ color: 'red' }}>Something went wrong. Please try again.</div>}
 				</Form>
 			</main>
 			{showClearModal && <Modal 
