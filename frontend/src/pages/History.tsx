@@ -24,12 +24,22 @@ type History = {
 const header = {
 	'ID': {},
 	'Time': {},
-	'User': { maxWidth: "6rem", minWidth: "6rem" },
+	'User': {},
 	'Action': {},
 	'Changed Thief': { maxWidth: "4rem", minWidth: "4rem" },
 	'Changed User': {},
 	'Type': { maxWidth: "5rem", minWidth: "5rem" },
 	'Data': {},
+}
+
+function formatDateToLocalTime(date: Date) {
+	const yyyy = date.getFullYear();
+	const MM = String(date.getMonth() + 1).padStart(2, '0');
+	const dd = String(date.getDate()).padStart(2, '0');
+	const HH = String(date.getHours()).padStart(2, '0');
+	const MI = String(date.getMinutes()).padStart(2, '0');
+	const SS = String(date.getSeconds()).padStart(2, '0');
+	return `${yyyy}-${MM}-${dd} ${HH}:${MI}:${SS}`;
 }
 
 export default function History() {
@@ -73,7 +83,7 @@ export default function History() {
 				const historyList: Array<History> = res.data.data.map((history: History) => {
 					return {
 						historyId: history.history_id,
-						datetime: history.datetime,
+						datetime: formatDateToLocalTime(new Date(history.datetime)),
 						user: history.user_name,
 						action: history.action,
 						changed_thief: history.changed_thief_id,
