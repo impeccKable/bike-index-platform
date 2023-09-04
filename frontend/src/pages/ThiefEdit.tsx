@@ -94,7 +94,37 @@ export default function ThiefEdit() {
 			formData.append('deletedImages', JSON.stringify(deletedImages));
 		}
 
-		const res = await httpClient.put('/thief', formData)
+		await httpClient.put('/thief', formData)
+			.then((res) => {
+				console.log('theif put', res)
+
+				if (res) {
+					if (thiefInfo.thiefId === 'new') {
+						setThiefInfo(prevThiefInfo => {
+							return { ...prevThiefInfo, thiefId: res.data.thiefId }
+						})
+					}
+					setDeletedImages([]);
+					setNewImages([]);
+				}
+		
+				url.searchParams.set('thiefId', res.data.thiefId);
+				window.history.replaceState({ path: url.href }, '', url.href);
+		
+				setIsLoadingSubmit(false);
+				setWasSubmitted(true);
+				setClearByParts({master: false,name: false,email: false,url: false,addr: false,phone: false,bikeSerial: false,phrase: false,note: false, file: false});
+				setTimeout(() => {
+					setWasSubmitted(false);
+				}, 3000);
+		
+				if (clearAll) {
+					navigate('/thieves?searchType=all&searchText=');
+				}
+				else {
+					window.location.reload();
+				}
+			})
 			.catch((err: AxiosError) => {
 				if (err.response) {
 					DebugLogs('Thief put error: Server Response', err.response.data, debug);
@@ -107,39 +137,9 @@ export default function ThiefEdit() {
 				setIsLoadingSubmit(false);
 				setSubmissionFailed(true);
 			});
-
-			console.log('theif put', res)
-
-		if (res) {
-			if (thiefInfo.thiefId === 'new') {
-				setThiefInfo(prevThiefInfo => {
-					return { ...prevThiefInfo, thiefId: res.data.thiefId }
-				})
-			}
-			setDeletedImages([]);
-			setNewImages([]);
-		}
-
-		url.searchParams.set('thiefId', res.data.thiefId);
-		window.history.replaceState({ path: url.href }, '', url.href);
-
-		setIsLoadingSubmit(false);
-		setWasSubmitted(true);
-		setClearByParts({master: false,name: false,email: false,url: false,addr: false,phone: false,bikeSerial: false,phrase: false,note: false, file: false});
-		setTimeout(() => {
-			setWasSubmitted(false);
-		}, 3000);
-
-		if (clearAll) {
-			navigate('/thieves?searchType=all&searchText=');
-		}
-		else {
-			window.location.reload();
-		}
 	}
 
 	function CompareResults(submitData: any) {
-		let newThiefInfo = { ...thiefInfo };
 		let results = { thiefId: url.searchParams.get('thiefId') };
 
 		for (const [key, value] of Object.entries(submitData)) {
@@ -167,11 +167,9 @@ export default function ThiefEdit() {
 					}
 				}
 
-				newThiefInfo[key] = [...newVals];
 				results[key] = { addVals: addVals, delVals: delVals }
 			}
 		}
-		setThiefInfo(newThiefInfo);
 		DebugLogs('Thief edit changes', results, debug)
 		return results;
 	};
