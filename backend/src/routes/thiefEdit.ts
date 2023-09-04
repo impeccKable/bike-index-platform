@@ -107,7 +107,7 @@ router.put('/', upload.array('newImages'), async (req: express.Request, res: exp
 			res.status(422).send("Error deleting file");
 		} else {
 			console.error('thiefEdit put error', err);
-			res.status(500);
+			res.status(500).send("Internal server error")
 		}
 	}
 });
