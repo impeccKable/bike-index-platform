@@ -21,7 +21,7 @@ export const logHistory = async (data: UserInput, action: string) => {
 	}
 }
 
-const MAX_ROW = 24;
+const MAX_ROW = 20;
 
 const get = async (query: any) => {
 	const page = query.page || 1;
