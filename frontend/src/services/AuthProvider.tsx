@@ -60,7 +60,7 @@ export function AuthProvider({ children }: any) {
 	//Bailey, C. (2023, June 7th) Doggr source code (Version 1.0.0) [Source code].
 	async function updateAxios(token: string) {
 		console.log(`token: ...${token.slice(-10)}`);
-		httpClient.interceptors.request.use(
+		const interceptor = (httpClient.interceptors.request.use(
 			async (config: any) => {
 				// @ts-ignore
 				config.headers = {
@@ -74,7 +74,8 @@ export function AuthProvider({ children }: any) {
 				console.error('REJECTED TOKEN PROMISE');
 				Promise.reject(error);
 			}
-		);
+		));
+		httpClient.interceptors.request.eject(interceptor-1);
 	};
 
 	function updateUser(newUser: UserInfo | null) {
