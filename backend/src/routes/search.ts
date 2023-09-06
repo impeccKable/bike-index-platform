@@ -3,7 +3,7 @@ import { db } from "../config";
 import { fieldToTable, getThiefData } from "../thiefData";
 import { validToken } from "./token";
 
-const MAX_ROW = 24;
+const MAX_ROW = 20;
 
 const get = async (query: any) => {
 	const { searchType, searchText, page = 1 } = query;

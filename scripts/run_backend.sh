@@ -1,7 +1,7 @@
 #!/bin/bash
 
-(cd ../backend && npm install) > backend.out 2>&1
-nohup npm --prefix ../backend start >> backend.out 2>&1 &
+(cd ../backend && npm install) 2>&1 | while read line; do echo "$(TZ='America/Los_Angeles' date) $line"; done > backend.out &
+nohup sh -c 'npm --prefix ../backend start 2>&1 | while read line; do echo "$(TZ='America/Los_Angeles' date) $line"; done' >> backend.out &
 
 # nohup --- no hang up to keep process running
 # --prefix --- specify what directory the command should be run

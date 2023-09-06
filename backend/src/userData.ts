@@ -13,7 +13,7 @@ const types: any = {
 	banned: true
 }
 
-const MAX_ROW = 24;
+const MAX_ROW = 20;
 
 async function getTotal(table: string, condition = '', values: any[]): Promise<number> {
 	const query = `SELECT COUNT(*) FROM ${table} ${condition}`;

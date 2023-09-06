@@ -9,6 +9,7 @@ export const fieldToTable: { [key: string]: string } = {
 	"bikeSerial": "bike_serial",
 	"phrase":     "phrase",
 	"note":       "note",
+	"file":				"file"
 };
 export const fields = Object.keys(fieldToTable);
 export const tables = Object.values(fieldToTable);
@@ -27,6 +28,7 @@ export async function getThiefData(thiefIds: number[]) {
 		db.any("SELECT thief_id, bike_serial FROM bike_serial WHERE thief_id in ($1:csv)", [thiefIds]),
 		db.any("SELECT thief_id, phrase      FROM phrase      WHERE thief_id in ($1:csv)", [thiefIds]),
 		db.any("SELECT thief_id, note        FROM note        WHERE thief_id in ($1:csv)", [thiefIds]),
+		db.any("SELECT thief_id, file        FROM file        WHERE thief_id in ($1:csv)", [thiefIds]),
 	]);
 	// Combine results into dictionary of arrays:
 	// 	results = {

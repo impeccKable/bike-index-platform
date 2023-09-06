@@ -21,7 +21,7 @@ export const logHistory = async (data: UserInput, action: string) => {
 	}
 }
 
-const MAX_ROW = 24;
+const MAX_ROW = 20;
 
 const get = async (query: any) => {
 	const page = query.page || 1;
@@ -43,15 +43,15 @@ const get = async (query: any) => {
 	const queryWithUserTable = `
 			SELECT
 				h.history_id,
-				TO_CHAR(h.datetime, 'YYYY-MM-DD HH24:MI:SS') as datetime,
-				u.first_name || ' ' || u.last_name as user_name,
+				h.datetime as datetime,
+				COALESCE(u.first_name || ' ' || u.last_name, 'DELETED USER') as user_name,
 				h.action,
 				h.changed_thief_id,
 				h.changed_user_uid,
 				h.data_type,
 				h.data
 			FROM history h
-			JOIN bi_user u ON h.user_uid = u.user_uid`;
+			LEFT JOIN bi_user u ON h.user_uid = u.user_uid`;
 
 	const whereClause = (thiefId || userId) ? `WHERE ${whereForId}` : '';
 	const orderByAndLimit = `ORDER BY datetime DESC LIMIT $1 OFFSET $2`;

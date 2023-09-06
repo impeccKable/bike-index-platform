@@ -119,15 +119,18 @@ export function FileUpload(props: FileUploadProps) {
 	}
 
 	function removeAllFile() {
-		props.renderImageFiles.forEach((deletedFile) => {
-			if (props.newImages.includes(deletedFile)) {
-				props.setNewImages(props.newImages.filter(file => file !== deletedFile));
-			} else {
-				props.setDeletedImages([...props.deletedImages, extractObjectKeyForS3Deletion(deletedFile)]);
-			}
-		})
-		props.setRenderImageFiles([]);
-		setEdited(true);
+		if (props.renderImageFiles.length > 0) {
+			props.renderImageFiles.forEach((deletedFile) => {
+				if (props.newImages.includes(deletedFile)) {
+					props.setNewImages(props.newImages.filter(file => file !== deletedFile));
+				} else {
+					props.setDeletedImages([...props.deletedImages, extractObjectKeyForS3Deletion(deletedFile)]);
+				}
+			})
+			props.setRenderImageFiles([]);
+			setEdited(true);
+			props.setNotChanged(false);
+		}
 	}
 
 	useEffect(() => {
