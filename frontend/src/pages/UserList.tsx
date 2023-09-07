@@ -121,7 +121,6 @@ export default function UserList() {
 						<option value="org">Organization</option>
 					</FormInput>
 					<FormInput {...SearchInputProps} onChange={(event: any) => { setSearchText(event.target.value); }} />
-					<LinkButton className="AddThiefButton" to="/user?userId=new">Add New</LinkButton>
 				</div>
 				{<LinkTable header={tableHeaders} data={userData} pagemeta={pagemeta} page={page} setpage={setpage} linkBase="/user?userId="></LinkTable>}
 			</main>

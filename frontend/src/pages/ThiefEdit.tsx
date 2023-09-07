@@ -17,6 +17,7 @@ import DebugLogs from '../services/DebugLogs';
 import TextWindow from '../components/TextWindow';
 import { useAuth } from '../services/AuthProvider';
 import Modal from '../components/Modal';
+import { AxiosError } from 'axios';
 
 
 export default function ThiefEdit() {
@@ -35,6 +36,7 @@ export default function ThiefEdit() {
 	const [isAdmin, setIsAdmin] = useState(JSON.parse(localStorage.getItem("user")??"")?.bikeIndex?.role?.toString() === 'admin' ?? false);
 	const [thiefId, setThiefId] = useState('');
 	const [mergeDisabled, setMergeDisabled] = useState(true);
+	const [submissionFailed, setSubmissionFailed] = useState(false);
 	const url = new URL(window.location.href);
 	const pageName = "Thief Edit";
 	const navigate = useNavigate();
@@ -92,41 +94,52 @@ export default function ThiefEdit() {
 			formData.append('deletedImages', JSON.stringify(deletedImages));
 		}
 
-		const res = await httpClient.put('/thief', formData)
-			.catch(err => {
-				DebugLogs('Thief put error', err.message, debug);
+		await httpClient.put('/thief', formData)
+			.then((res) => {
+				console.log('theif put', res)
+
+				if (res) {
+					if (thiefInfo.thiefId === 'new') {
+						setThiefInfo(prevThiefInfo => {
+							return { ...prevThiefInfo, thiefId: res.data.thiefId }
+						})
+					}
+					setDeletedImages([]);
+					setNewImages([]);
+				}
+		
+				url.searchParams.set('thiefId', res.data.thiefId);
+				window.history.replaceState({ path: url.href }, '', url.href);
+		
+				setIsLoadingSubmit(false);
+				setWasSubmitted(true);
+				setClearByParts({master: false,name: false,email: false,url: false,addr: false,phone: false,bikeSerial: false,phrase: false,note: false, file: false});
+				setTimeout(() => {
+					setWasSubmitted(false);
+				}, 3000);
+		
+				if (clearAll) {
+					navigate('/thieves?searchType=all&searchText=');
+				}
+				else {
+					window.location.reload();
+				}
+			})
+			.catch((err: AxiosError) => {
+				if (err.response) {
+					DebugLogs('Thief put error: Server Response', err.response.data, debug);
+				} else if (err.request) {
+					DebugLogs('Thief put error: No Response', err.request, debug);
+				} else {
+					DebugLogs('Thief put error: Request Setup Error', err.message, debug);
+				}
+				setIsLoadingInit(false);
+				setIsLoadingSubmit(false);
+				setSubmissionFailed(true);
 			});
-
-		if (res) {
-			if (thiefInfo.thiefId === 'new') {
-				setThiefInfo(prevThiefInfo => {
-					return { ...prevThiefInfo, thiefId: res.data.thiefId }
-				})
-			}
-			setDeletedImages([]);
-			setNewImages([]);
-		}
-
-		url.searchParams.set('thiefId', res.data.thiefId);
-		window.history.replaceState({ path: url.href }, '', url.href);
-
-		setIsLoadingSubmit(false);
-		setWasSubmitted(true);
-		setClearByParts({master: false,name: false,email: false,url: false,addr: false,phone: false,bikeSerial: false,phrase: false,note: false, file: false});
-		setTimeout(() => {
-			setWasSubmitted(false);
-		}, 3000);
-
-		if (clearAll) {
-			navigate('/thieves?searchType=all&searchText=');
-		}
-		else {
-			window.location.reload();
-		}
 	}
 
 	function CompareResults(submitData: any) {
-		let newThiefInfo = { ...thiefInfo };
 		let results = { thiefId: url.searchParams.get('thiefId') };
 
 		for (const [key, value] of Object.entries(submitData)) {
@@ -154,11 +167,9 @@ export default function ThiefEdit() {
 					}
 				}
 
-				newThiefInfo[key] = [...newVals];
 				results[key] = { addVals: addVals, delVals: delVals }
 			}
 		}
-		setThiefInfo(newThiefInfo);
 		DebugLogs('Thief edit changes', results, debug)
 		return results;
 	};
@@ -260,7 +271,8 @@ export default function ThiefEdit() {
 						<FormButton type="submit" disabled={isLoading || notChanged}>Submit</FormButton>
 						<LoadingIcon when={isLoadingSubmit} style={{ margin: 0 }} />
 					</div>
-					{wasSubmitted && <div className="form-btns">Submitted!</div>}
+					{/* {wasSubmitted && <div className="form-btns">Submitted!</div>} */}
+					{submissionFailed && <div className="form-btns" style={{ color: 'red' }}>Something went wrong. Please try again.</div>}
 				</Form>
 			</main>
 			{showClearModal && <Modal 

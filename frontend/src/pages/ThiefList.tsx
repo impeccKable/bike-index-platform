@@ -114,11 +114,12 @@ export default function ThiefList() {
 						<option value="bikeSerial">Bike Serial</option>
 						<option value="phrase">Phrase</option>
 						<option value="note">Note</option>
+						<option value="file">File</option>
 					</select>
 					<label htmlFor="ThiefSearch">Search</label>
 					<input
 						id="ThiefSearch"
-						type={searchType}
+						type={searchType === 'file' ? 'text' : searchType}
 						required
 						value={searchText}
 						onChange={(event: any) => {

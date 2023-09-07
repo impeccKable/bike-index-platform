@@ -129,6 +129,7 @@ export function FileUpload(props: FileUploadProps) {
 			})
 			props.setRenderImageFiles([]);
 			setEdited(true);
+			props.setNotChanged(false);
 		}
 	}
 

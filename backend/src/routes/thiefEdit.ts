@@ -1,7 +1,7 @@
 import express from 'express';
 import { db } from '../config';
 import { fieldToTable, fields, getThiefData, MergeThieves } from '../thiefData';
-import { uploadImage, deleteImage, getFile, ImageUploadError, ImageDeletionError, ImageGetError } from '../imageOperation';
+import { uploadFile, deleteFile, getFile, FileUploadError, FileDeletionError, FileGetError } from '../fileOperation';
 import multer from 'multer';
 import { insertThiefData, deleteThiefData } from '../thiefData';
 import { logHistory } from './history';
@@ -68,11 +68,11 @@ router.get('/', async (req: express.Request, res: express.Response) => {
 			imageUrls: await getFile(req.query.thiefId as string),
 		});
 	} catch (err) {
-		if (err instanceof ImageGetError) {
-			console.log('ImageGetError', err);
-			res.status(400).send("Error getting image");
+		if (err instanceof FileGetError) {
+			console.log('File Get Error', err);
+			res.status(400).send("Error getting file");
 		} else {
-			console.error(err);
+			console.error('thiefEdit get error', err);
 			res.status(500);
 		}
 	}
@@ -90,24 +90,24 @@ router.put('/', upload.array('newImages'), async (req: express.Request, res: exp
 			if (parsedBody.thiefId === 'new') {
 				addOrNew = 'new';
 			}
-			promises.push(uploadImage(req.files as Express.Multer.File[], thiefId, addOrNew, uid));
+			promises.push(uploadFile(req.files as Express.Multer.File[], thiefId, addOrNew, uid));
 		}
 		if (req.body.deletedImages) {
-			promises.push(deleteImage(JSON.parse(req.body.deletedImages), thiefId, uid));
+			promises.push(deleteFile(JSON.parse(req.body.deletedImages), thiefId, uid));
 		}
 		await Promise.all(promises);
 
 		res.status(200).json({ thiefId });
 	} catch (err) {
-		if (err instanceof ImageUploadError) {
-			console.error(err);
+		if (err instanceof FileUploadError) {
+			console.error('File upload error', err);
 			res.status(422).send("Error uploading file");
-		} else if (err instanceof ImageDeletionError) {
-			console.error(err);
+		} else if (err instanceof FileDeletionError) {
+			console.error('File delete error', err);
 			res.status(422).send("Error deleting file");
 		} else {
-			console.error(err);
-			res.status(500);
+			console.error('thiefEdit put error', err);
+			res.status(500).send("Internal server error")
 		}
 	}
 });

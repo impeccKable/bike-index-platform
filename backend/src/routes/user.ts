@@ -16,11 +16,11 @@ router.get("/", async (req: express.Request, res: express.Response) => {
 		const page = typeof req.query.page === 'string' ? parseInt(req.query.page, 10) : 1;
 
 		if (userId) {
-			console.log("user id route");
+			// console.log("user id route");
 			return res.json(await GetUserByID(userId.toString(), page));
 		}
 		else if (!type || !key || key === "All") {
-			console.log("All user route");
+			// console.log("All user route");
 			return res.json(await GetAllUsers(page));
 		}
 		return res.json(await GetUserBySearchType(key.toString(), type.toString(), page));

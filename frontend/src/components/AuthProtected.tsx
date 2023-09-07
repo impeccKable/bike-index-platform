@@ -7,7 +7,7 @@ import { httpClient } from "../services/HttpClient";
 export function AuthProtected({ children }: any) {
 	const { user, loading }: any = useAuth();
 
-	useEffect(() => {	
+	useEffect(() => {
 		console.log(user);
 	}, [loading]);
 
