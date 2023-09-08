@@ -12,8 +12,6 @@ Created by:
 
 This tool is a web-based interface to access and modify data regarding bike thieves. The core functionality is being able to create, edit, and search through the thief info. The info is mostly text-based, but it is also possible to attach auxillary files such as images and pdfs to each thief. Admin users also have the ability to import and export the text data via `.csv` files. The tool requires authentication through a login screen, and the accounts are created or verified by an admin through a user managment interface.
 
-![Screenshot of the search page](/docs/screenshot.png "Screenshot of the search page")
-
 ## Technologies Used
 
 The tool is made in [TypeScript](https://www.typescriptlang.org/) and uses [Node.js](https://nodejs.org/en/about) with [React Express](https://www.react.express/). It consists of a frontend and backend (which can later be used as an API if needed). It is currently hosted using [Amazon AWS](https://aws.amazon.com/) services, with an [EC2](https://aws.amazon.com/ec2/) server, [RDS](https://aws.amazon.com/rds/) database, and [S3](https://aws.amazon.com/s3/) bucket.
